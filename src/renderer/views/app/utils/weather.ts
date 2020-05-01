@@ -22,7 +22,7 @@ const getForWeek = (items: IOpenWeatherItem[]) => {
     const hours = date.getHours();
     const dateStr = date.toLocaleDateString();
     const el: IForecastItem = list.find(
-      e => e.date.toLocaleDateString() === dateStr,
+      (e) => e.date.toLocaleDateString() === dateStr,
     );
 
     if (el != null && el.nightTemp != null) continue;

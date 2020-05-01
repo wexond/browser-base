@@ -89,9 +89,9 @@ export class DialogStore {
   public hide(data: any = null) {
     if (this.visible) {
       this.visible = false;
+      this.onHide(data);
 
       setTimeout(() => {
-        this.onHide(data);
         ipcRenderer.send(`hide-${this.id}`);
       });
     }

@@ -63,7 +63,7 @@ export class TabGroupsStore {
   }
 
   public getGroupById(id: number) {
-    return this.list.find(x => x.id === id);
+    return this.list.find((x) => x.id === id);
   }
 
   @action

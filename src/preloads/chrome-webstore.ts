@@ -36,9 +36,11 @@ export const injectChromeWebstoreInstallButton = () => {
   document.addEventListener('DOMNodeInserted', (event: any) => {
     setTimeout(() => {
       // eslint-disable-next-line @typescript-eslint/no-use-before-define
-      Array.from(document.getElementsByClassName('a-na-d-K-ea')).forEach(el => {
-        el.parentNode.removeChild(el);
-      });
+      Array.from(document.getElementsByClassName('a-na-d-K-ea')).forEach(
+        (el) => {
+          el.parentNode.removeChild(el);
+        },
+      );
     }, 10);
   });
 

@@ -23,7 +23,7 @@ export class Store extends DialogStore {
 
     (async () => {
       this.folders = await ipcRenderer.invoke('bookmarks-get-folders');
-      this.currentFolder = this.folders.find(x => x.static === 'main');
+      this.currentFolder = this.folders.find((x) => x.static === 'main');
     })();
   }
 

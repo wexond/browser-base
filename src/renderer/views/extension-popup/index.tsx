@@ -73,10 +73,14 @@ const createWebview = (url: string, inspect: boolean) => {
     }
   });
 
-  webview.addEventListener('ipc-message', e => {
+  webview.addEventListener('ipc-message', (e) => {
     if (e.channel === 'webview-size') {
-      const [width, height] = e.args;
-      container.style.width = (width < 10 ? 200 : width) + 'px';
+      let [width, height] = e.args;
+
+      width = width === 0 ? 1 : width;
+      height = height === 0 ? 1 : height;
+
+      container.style.width = width + 'px';
       container.style.height = height + 'px';
 
       ipcRenderer.send(`bounds-${getWebContentsId()}`, width + 32, height + 40);

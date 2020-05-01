@@ -12,9 +12,3 @@ export const BROWSER_ACTION_METHODS: BrowserActionChangeType[] = [
   'setIcon',
   'setBadgeBackgroundColor',
 ];
-
-// TODO(sentialx): remove after upgrading to Electron 10
-export interface Electron10Extension extends Electron.Extension {
-  manifest: chrome.runtime.Manifest;
-  path: string;
-}

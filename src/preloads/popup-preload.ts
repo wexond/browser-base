@@ -3,8 +3,10 @@ import { ipcRenderer } from 'electron';
 const updateBounds = () => {
   ipcRenderer.sendToHost(
     'webview-size',
-    document.body.offsetWidth,
-    document.body.offsetHeight,
+    document.documentElement.offsetWidth ||
+      document.documentElement.scrollWidth,
+    document.documentElement.offsetHeight ||
+      document.documentElement.scrollHeight,
   );
 };
 
@@ -19,6 +21,10 @@ window.addEventListener('load', () => {
   resizeObserver.observe(document.body);
 });
 
-window.addEventListener('blur', () => {
+const close = () => {
   ipcRenderer.sendToHost('webview-blur');
-});
+};
+
+window.addEventListener('blur', close);
+
+window.close = close;

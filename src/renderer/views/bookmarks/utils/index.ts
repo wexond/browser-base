@@ -32,9 +32,9 @@ export const addImported = async (
       let folder: IBookmark = null;
 
       if (item.nsRoot === 'toolbar') {
-        folder = store.list.find(x => x.static === 'main');
+        folder = store.list.find((x) => x.static === 'main');
       } else {
-        folder = store.list.find(x => x.static === 'other');
+        folder = store.list.find((x) => x.static === 'other');
       }
 
       if (folder) {

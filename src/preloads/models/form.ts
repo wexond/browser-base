@@ -45,7 +45,7 @@ export class Form {
       `input[form=${id}], select[form=${id}]`,
     ) as FormField[];
 
-    return [...inside, ...outside].filter(el => this.validateField(el));
+    return [...inside, ...outside].filter((el) => this.validateField(el));
   }
 
   public validateField(field: FormField) {
@@ -99,14 +99,14 @@ export class Form {
   }
 
   public get usernameField() {
-    return this.fields.find(r => {
+    return this.fields.find((r) => {
       const name = r.getAttribute('name');
       return name === 'username' || name === 'login' || 'email';
     });
   }
 
   public get passwordField() {
-    return this.fields.find(r => {
+    return this.fields.find((r) => {
       const typeAttr = r.getAttribute('type');
       const name = r.getAttribute('name');
       return typeAttr === 'password' && name === 'password';

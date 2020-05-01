@@ -35,7 +35,6 @@ export class ExtensionPopup extends Dialog {
     });
 
     this.webContents.on('will-attach-webview', (e, webPreferences, params) => {
-      webPreferences.additionalArguments = ['--session-id=1'];
       webPreferences.sandbox = true;
       webPreferences.nodeIntegration = false;
       webPreferences.contextIsolation = true;

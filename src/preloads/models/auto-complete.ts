@@ -32,7 +32,7 @@ export class AutoComplete {
   public loadForms = () => {
     const forms = searchElements(document, 'form') as HTMLFormElement[];
 
-    this.forms = forms.map(el => new Form(el));
+    this.forms = forms.map((el) => new Form(el));
   };
 
   public onWindowMouseDown = () => {

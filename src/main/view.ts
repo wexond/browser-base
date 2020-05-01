@@ -204,6 +204,7 @@ export class View {
       ) {
         this.webContents.zoomFactor = newZoomFactor;
         this.emitEvent('zoom-updated', this.webContents.zoomFactor);
+        window.viewManager.emitZoomUpdate();
       } else {
         e.preventDefault();
       }
@@ -224,6 +225,14 @@ export class View {
         callback(true);
       },
     );
+
+    this.webContents.addListener('media-started-playing', () => {
+      this.emitEvent('media-playing', true);
+    });
+
+    this.webContents.addListener('media-paused', () => {
+      this.emitEvent('media-paused', true);
+    });
 
     if (url.startsWith(NEWTAB_URL)) this.isNewTab = true;
 

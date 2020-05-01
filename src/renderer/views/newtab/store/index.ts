@@ -151,7 +151,7 @@ export class Store {
         'topSitesVisible',
         'imageVisible',
       ].forEach(
-        x =>
+        (x) =>
           ((this as any)[x] =
             localStorage.getItem(x) == null
               ? (this as any)[x]
@@ -202,19 +202,19 @@ export class Store {
     }
 
     fetch(url)
-      .then(response => Promise.all([response.url, response.blob()]))
+      .then((response) => Promise.all([response.url, response.blob()]))
       .then(([resource, blob]) => {
         this.image = URL.createObjectURL(blob);
 
         return resource;
       })
-      .then(imgUrl => {
+      .then((imgUrl) => {
         if (isNewUrl) {
           localStorage.setItem('imageURL', imgUrl);
           localStorage.setItem('imageDate', new Date().toString());
         }
       })
-      .catch(e => console.error(e));
+      .catch((e) => console.error(e));
   }
 
   public async updateNews() {

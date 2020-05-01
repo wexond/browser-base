@@ -41,7 +41,7 @@ export const App = hot(
           <UIStyle />
           <Title>{store.domain} wants to:</Title>
           <Permissions>
-            {store.permissions.map(item => (
+            {store.permissions.map((item) => (
               <Permission key={item}>{getText(item)}</Permission>
             ))}
           </Permissions>

@@ -26,6 +26,8 @@ import {
   ICON_MORE,
   ICON_SEARCH,
   ICON_DASHBOARD,
+  ICON_MAGNIFY_PLUS,
+  ICON_MAGNIFY_MINUS,
 } from '~/renderer/constants/icons';
 import { isDialogVisible } from '../../utils/dialogs';
 import { isURL } from '~/utils';
@@ -53,6 +55,7 @@ const onKeyClick = () => {
 
 let starRef: HTMLDivElement = null;
 let menuRef: HTMLDivElement = null;
+let zoomRef: HTMLDivElement = null;
 
 const showAddBookmarkDialog = async () => {
   if (!(await isDialogVisible('addBookmarkDialog'))) {
@@ -65,8 +68,15 @@ const showAddBookmarkDialog = async () => {
   }
 };
 
+const showZoomDialog = async () => {
+  if (!(await isDialogVisible('zoomDialog')) && store.zoomFactor != 1) {
+    const { right, bottom } = zoomRef.getBoundingClientRect();
+    ipcRenderer.send(`show-zoom-dialog-${store.windowId}`, right, bottom);
+  }
+};
+
 const showMenuDialog = async () => {
-  if (!(await isDialogVisible('menu'))) {
+  if (!(await isDialogVisible('menuDialog'))) {
     const { right, bottom } = menuRef.getBoundingClientRect();
     ipcRenderer.send(`show-menu-dialog-${store.windowId}`, right, bottom);
   }
@@ -76,12 +86,27 @@ ipcRenderer.on('show-add-bookmark-dialog', () => {
   showAddBookmarkDialog();
 });
 
+ipcRenderer.on('show-zoom-dialog', () => {
+  showZoomDialog();
+});
+
 ipcRenderer.on('show-menu-dialog', () => {
   showMenuDialog();
 });
 
+ipcRenderer.on('zoom-factor-updated', (e, zoomFactor, showDialog) => {
+  store.zoomFactor = zoomFactor;
+  if (!store.dialogsVisibility['zoom'] && showDialog) {
+    showZoomDialog();
+  }
+});
+
 const onStarClick = (e: React.MouseEvent<HTMLDivElement>) => {
   showAddBookmarkDialog();
+};
+
+const onZoomClick = (e: React.MouseEvent<HTMLDivElement>) => {
+  showZoomDialog();
 };
 
 const onMenuClick = async () => {
@@ -320,6 +345,18 @@ export const Toolbar = observer(() => {
 
         {hasCredentials && (
           <ToolbarButton icon={ICON_KEY} size={16} onClick={onKeyClick} />
+        )}
+        {(store.dialogsVisibility['zoom'] || store.zoomFactor !== 1) && (
+          <ToolbarButton
+            divRef={(r) => (zoomRef = r)}
+            toggled={store.dialogsVisibility['zoom']}
+            icon={
+              store.zoomFactor >= 1 ? ICON_MAGNIFY_PLUS : ICON_MAGNIFY_MINUS
+            }
+            size={18}
+            dense
+            onMouseDown={onZoomClick}
+          />
         )}
         <ToolbarButton
           divRef={(r) => (starRef = r)}

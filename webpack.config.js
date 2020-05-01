@@ -56,7 +56,7 @@ const preloadConfig = getConfig({
 
 if (process.env.START === '1') {
   mainConfig.plugins.push({
-    apply: compiler => {
+    apply: (compiler) => {
       compiler.hooks.afterEmit.tap('AfterEmitPlugin', () => {
         if (electronProcess) {
           try {

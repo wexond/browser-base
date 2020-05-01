@@ -7,7 +7,7 @@ import store from '../../store';
 export const Tabs = observer(() => {
   return (
     <React.Fragment>
-      {store.tabs.list.map(item => (
+      {store.tabs.list.map((item) => (
         <Tab key={item.id} tab={item} />
       ))}
     </React.Fragment>

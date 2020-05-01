@@ -99,7 +99,7 @@ export const ContextMenuItem = styled.div`
     }
 
     ${icon &&
-      `
+    `
       padding-left: ${16 + iconSize + 12}px;
       &:before {
         content: '';

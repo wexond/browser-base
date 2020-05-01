@@ -28,7 +28,7 @@ export const registerProtocol = (session: Electron.Session) => {
         });
       }
     },
-    error => {
+    (error) => {
       if (error) console.error(error);
     },
   );
@@ -47,7 +47,7 @@ export const registerProtocol = (session: Electron.Session) => {
 
         callback({ path: join(__dirname, parsed.path) });
       },
-      error => {
+      (error) => {
         if (error) console.error(error);
       },
     );
