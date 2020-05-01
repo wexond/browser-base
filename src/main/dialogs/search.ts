@@ -12,7 +12,6 @@ const WIDTH = 800;
 const HEIGHT = 80;
 
 export class SearchDialog extends PersistentDialog {
-  private lastHeight = 0;
   private isPreviewVisible = false;
 
   public data = {
@@ -57,10 +56,6 @@ export class SearchDialog extends PersistentDialog {
   }
 
   public async show(browserWindow: BrowserWindow) {
-    /*if (this.appWindow.dialogs.previewDialog.visible) {
-      this.appWindow.dialogs.previewDialog.hide(true);
-    }*/
-
     super.show(browserWindow, true, false);
 
     this.send('visible', true, {

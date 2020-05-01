@@ -1,6 +1,8 @@
-import { BrowserView, app, ipcMain } from 'electron';
+import { BrowserView, app, ipcMain, Dialog } from 'electron';
 import { join } from 'path';
 import { SearchDialog } from '../dialogs/search';
+import { PreviewDialog } from '../dialogs/preview';
+import { PersistentDialog } from '../dialogs/dialog';
 
 interface IDialogShowOptions {
   name: string;
@@ -8,6 +10,7 @@ interface IDialogShowOptions {
   bounds: Electron.Rectangle;
   hideTimeout?: number;
   devtools?: boolean;
+  onHide?: (dialog: IDialog) => void;
 }
 
 interface IDialog {
@@ -22,12 +25,13 @@ export class DialogsService {
   public browserViewDetails = new Map<number, boolean>();
   public dialogs: IDialog[] = [];
 
-  public searchBox: SearchDialog;
+  public persistentDialogs: PersistentDialog[] = [];
 
   public run() {
     this.createBrowserView();
 
-    this.searchBox = new SearchDialog();
+    this.persistentDialogs.push(new SearchDialog());
+    this.persistentDialogs.push(new PreviewDialog());
   }
 
   private createBrowserView() {
@@ -54,6 +58,7 @@ export class DialogsService {
     browserWindow,
     bounds,
     devtools,
+    onHide,
     hideTimeout,
   }: IDialogShowOptions): IDialog {
     const foundDialog = this.dialogs.find((x) => x.name === name);
@@ -110,6 +115,8 @@ export class DialogsService {
           browserView.webContents.loadURL('about:blank');
           this.browserViewDetails.set(browserView.id, false);
         }
+
+        if (onHide) onHide(dialog);
       },
     };
 
@@ -125,7 +132,9 @@ export class DialogsService {
   }
 
   public getBrowserViews = () => {
-    return this.browserViews.concat([this.searchBox.browserView]);
+    return this.browserViews.concat(
+      Array.from(this.persistentDialogs).map((x) => x.browserView),
+    );
   };
 
   public destroy = () => {
@@ -136,7 +145,19 @@ export class DialogsService {
     this.getBrowserViews().forEach((x) => x.webContents.send(channel, ...args));
   };
 
-  public isVisible = (name: string) => {
+  public get(name: string) {
+    return this.getDynamic(name) || this.getPersistent(name);
+  }
+
+  public getDynamic(name: string) {
     return this.dialogs.find((x) => x.name === name);
+  }
+
+  public getPersistent(name: string) {
+    return this.persistentDialogs.find((x) => x.name === name);
+  }
+
+  public isVisible = (name: string) => {
+    return this.getDynamic(name) || this.getPersistent(name)?.visible;
   };
 }

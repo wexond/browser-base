@@ -3,6 +3,10 @@ import { AppWindow } from '../windows';
 import { Application } from '../application';
 import { DIALOG_MARGIN_TOP, DIALOG_MARGIN } from '~/constants/design';
 import { showMenuDialog } from '../dialogs/menu';
+import { showTabPreviewDialog, PreviewDialog } from '../dialogs/preview';
+import { parse } from 'url';
+import { IFormFillData } from '~/interfaces';
+import { SearchDialog } from '../dialogs/search';
 
 export const runMessagingService = (appWindow: AppWindow) => {
   const { id } = appWindow;
@@ -37,12 +41,30 @@ export const runMessagingService = (appWindow: AppWindow) => {
   });
 
   ipcMain.on(`search-show-${id}`, (e, data) => {
-    Application.instance.dialogs.searchBox.data = data;
-    Application.instance.dialogs.searchBox.show(appWindow.win);
+    const dialog = Application.instance.dialogs.getPersistent(
+      'search',
+    ) as SearchDialog;
+    dialog.data = data;
+    dialog.show(appWindow.win);
   });
 
   ipcMain.handle(`is-dialog-visible-${id}`, (e, dialog) => {
     return Application.instance.dialogs.isVisible(dialog);
+  });
+
+  ipcMain.on(`show-tab-preview-${id}`, (e, tab) => {
+    const dialog = Application.instance.dialogs.getPersistent(
+      'preview',
+    ) as PreviewDialog;
+    dialog.tab = tab;
+    dialog.show(appWindow.win);
+  });
+
+  ipcMain.on(`hide-tab-preview-${id}`, (e, tab) => {
+    const dialog = Application.instance.dialogs.getPersistent(
+      'preview',
+    ) as PreviewDialog;
+    dialog.hide();
   });
 
   /*ipcMain.on(`find-show-${id}`, () => {

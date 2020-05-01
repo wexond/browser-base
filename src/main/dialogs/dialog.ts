@@ -30,9 +30,10 @@ export class PersistentDialog {
     height: 0,
   };
 
+  public name: string;
+
   private timeout: any;
   private hideTimeout: number;
-  private name: string;
 
   private loaded = false;
   private showCallback: any = null;

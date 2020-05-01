@@ -1,5 +1,6 @@
 import { AppWindow } from './windows/app';
 import { extensions } from 'electron-extensions';
+import { BrowserWindow } from 'electron';
 
 export class WindowsService {
   public list: AppWindow[] = [];
@@ -48,5 +49,9 @@ export class WindowsService {
 
   public findByBrowserView(webContentsId: number) {
     return this.list.find((x) => !!x.viewManager.views.get(webContentsId));
+  }
+
+  public fromBrowserWindow(browserWindow: BrowserWindow) {
+    return this.list.find((x) => x.id === browserWindow.id);
   }
 }

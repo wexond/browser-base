@@ -1,21 +1,22 @@
-import { AppWindow } from '../windows';
-import { MENU_WIDTH, TITLEBAR_HEIGHT } from '~/constants/design';
-import { Dialog } from '.';
+import { BrowserWindow } from 'electron';
+import { Application } from '../application';
+import {
+  DIALOG_MARGIN_TOP,
+  DIALOG_MARGIN,
+  TITLEBAR_HEIGHT,
+} from '~/constants/design';
+import { PersistentDialog } from './dialog';
 
-const WIDTH = MENU_WIDTH;
 const HEIGHT = 256;
 
-export class PreviewDialog extends Dialog {
+export class PreviewDialog extends PersistentDialog {
   public visible = false;
   public tab: { id?: number; x?: number } = {};
 
-  private timeout1: any;
-
-  constructor(appWindow: AppWindow) {
-    super(appWindow, {
+  constructor() {
+    super({
       name: 'preview',
       bounds: {
-        width: appWindow.win.getBounds().width,
         height: HEIGHT,
         y: TITLEBAR_HEIGHT,
       },
@@ -24,24 +25,21 @@ export class PreviewDialog extends Dialog {
   }
 
   public rearrange() {
-    const { width } = this.appWindow.win.getContentBounds();
+    const { width } = this.browserWindow.getContentBounds();
     super.rearrange({ width });
   }
 
-  public rearrangeDialogs(toggle: boolean) {
-    this.appWindow.dialogs.searchDialog.rearrangePreview(toggle);
-    this.appWindow.dialogs.findDialog.rearrangePreview(toggle);
-  }
+  public async show(browserWindow: BrowserWindow) {
+    super.show(browserWindow, false);
 
-  public async show() {
-    clearTimeout(this.timeout1);
-    this.rearrangeDialogs(true);
-
-    super.show(false);
-
-    const { id, url, title, errorURL } = this.appWindow.viewManager.views.get(
-      this.tab.id,
-    );
+    const {
+      id,
+      url,
+      title,
+      errorURL,
+    } = Application.instance.windows
+      .fromBrowserWindow(browserWindow)
+      .viewManager.views.get(this.tab.id);
 
     this.send('visible', true, {
       id,
@@ -52,11 +50,6 @@ export class PreviewDialog extends Dialog {
   }
 
   public hide(bringToTop = true) {
-    clearTimeout(this.timeout1);
-    this.timeout1 = setTimeout(() => {
-      this.rearrangeDialogs(false);
-    }, 210);
-
     super.hide(bringToTop);
   }
 }
