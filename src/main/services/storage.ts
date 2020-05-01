@@ -321,6 +321,7 @@ export class StorageService {
         }
       }
     }
+    Application.instance.windows.broadcast('reload-bookmarks');
   }
 
   public async updateBookmark(id: string, change: IBookmark) {
@@ -334,6 +335,16 @@ export class StorageService {
       query: { _id: id },
       value: change,
     });
+
+    if (change.parent) {
+      const parent = this.bookmarks.find((x) => x._id === change.parent);
+      if (!parent.children.includes(change._id))
+        await this.updateBookmark(parent._id, {
+          children: [...parent.children, change._id],
+        });
+    }
+
+    Application.instance.windows.broadcast('reload-bookmarks');
   }
 
   public async addBookmark(item: IBookmark): Promise<IBookmark> {
@@ -347,10 +358,11 @@ export class StorageService {
 
     if (item.isFolder) {
       item.children = item.children || [];
+    } else {
     }
 
     if (item.order === undefined) {
-      item.order = this.bookmarks.filter((x) => x.parent === null).length;
+      item.order = this.bookmarks.filter((x) => !Boolean(x.static)).length;
     }
 
     const doc = await this.insert<IBookmark>({ item, scope: 'bookmarks' });
@@ -363,6 +375,8 @@ export class StorageService {
     }
 
     this.bookmarks.push(doc);
+
+    Application.instance.windows.broadcast('reload-bookmarks');
 
     return doc;
   }

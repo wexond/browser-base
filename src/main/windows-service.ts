@@ -49,4 +49,10 @@ export class WindowsService {
   public findByBrowserView(webContentsId: number) {
     return this.list.find((x) => !!x.viewManager.views.get(webContentsId));
   }
+
+  public broadcast(channel: string, ...args: unknown[]) {
+    this.list.forEach((appWindow) =>
+      appWindow.win.webContents.send(channel, ...args),
+    );
+  }
 }

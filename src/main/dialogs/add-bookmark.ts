@@ -2,6 +2,7 @@ import { AppWindow } from '../windows';
 import { Dialog } from '.';
 import { DIALOG_MARGIN, DIALOG_MARGIN_TOP } from '~/constants/design';
 import { Application } from '../application';
+import { IBookmark } from '~/interfaces';
 
 const WIDTH = 366;
 
@@ -36,6 +37,23 @@ export class AddBookmarkDialog extends Dialog {
       bookmark,
       favicon,
     } = Application.instance.windows.current.viewManager.selected;
+
+    this.send('visible', true, {
+      url,
+      title,
+      bookmark,
+      favicon,
+    });
+  }
+
+  public async showForBookmark(data: {
+    url: string;
+    title: string;
+    bookmark?: IBookmark;
+    favicon?: string;
+  }) {
+    await super.show();
+    const { url, title, bookmark, favicon } = data;
 
     this.send('visible', true, {
       url,

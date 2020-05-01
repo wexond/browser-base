@@ -1,11 +1,12 @@
-import { ipcMain } from 'electron';
+import { ipcMain, IpcMainInvokeEvent } from 'electron';
 import { parse } from 'url';
 import { setPassword, deletePassword, getPassword } from 'keytar';
 
-import { IFormFillData } from '~/interfaces';
+import { IFormFillData, IBookmark } from '~/interfaces';
 import { AppWindow } from '../windows';
 import { getFormFillMenuItems } from '../utils';
 import { Application } from '../application';
+import * as bookmarkMenu from '../menus/bookmarks';
 
 export const runMessagingService = (appWindow: AppWindow) => {
   const { id } = appWindow;
@@ -244,6 +245,26 @@ export const runMessagingService = (appWindow: AppWindow) => {
     async (e, id: string, account: string) => {
       const password = await getPassword('wexond', account);
       e.sender.send(id, password);
+    },
+  );
+
+  ipcMain.handle(
+    `show-bookmarks-bar-dropdown-${id}`,
+    (
+      event: IpcMainInvokeEvent,
+      folderId: string,
+      bookmarks: IBookmark[],
+      { x, y }: { x: number; y: number },
+    ) => {
+      bookmarkMenu
+        .createDropdown(appWindow, folderId, bookmarks)
+        .popup({ x: Math.floor(x), y: Math.floor(y), window: appWindow.win });
+    },
+  );
+  ipcMain.handle(
+    `show-bookmarks-bar-context-menu-${id}`,
+    (event: IpcMainInvokeEvent, item: IBookmark) => {
+      bookmarkMenu.createMenu(appWindow, item).popup({ window: appWindow.win });
     },
   );
 };
