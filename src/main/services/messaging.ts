@@ -39,6 +39,10 @@ export const runMessagingService = (appWindow: AppWindow) => {
     appWindow.dialogs.findDialog.show();
   });
 
+  ipcMain.on(`find-in-page-${id}`, () => {
+    appWindow.send('find');
+  });
+
   ipcMain.on(`show-menu-dialog-${id}`, (e, left, top) => {
     appWindow.dialogs.menuDialog.left = left;
     appWindow.dialogs.menuDialog.top = top;
