@@ -12,9 +12,9 @@ export class Store extends DialogStore {
   public domain: string;
 
   public constructor() {
-    super();
+    super({ hideOnBlur: false });
 
-    ipcRenderer.on('request-permission', (e, { url, name, details }) => {
+    ipcRenderer.on('update-tab-info', (e, tabId, { url, name, details }) => {
       this.domain = getDomain(url);
       this.permissions = [];
 

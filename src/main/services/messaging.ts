@@ -77,17 +77,6 @@ export const runMessagingService = (appWindow: AppWindow) => {
     appWindow.send('find');
   });
 
-  // ipcMain.on(`show-menu-dialog-${id}`, (e, left, top) => {
-  //   appWindow.dialogs.menuDialog.left = left;
-  //   appWindow.dialogs.menuDialog.top = top;
-  //   appWindow.dialogs.menuDialog.show();
-  // });
-
-  // ipcMain.on(`search-show-${id}`, (e, data) => {
-  //   appWindow.dialogs.searchDialog.data = data;
-  //   appWindow.dialogs.searchDialog.show();
-  // });
-
   // ipcMain.on(`show-tab-preview-${id}`, (e, tab) => {
   //   appWindow.dialogs.previewDialog.tab = tab;
   //   appWindow.dialogs.previewDialog.show();

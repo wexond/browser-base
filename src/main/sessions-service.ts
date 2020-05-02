@@ -10,6 +10,7 @@ import { parseCrx } from '~/utils/crx';
 import { pathExists } from '~/utils/files';
 import { extractZip } from '~/utils/zip';
 import { extensions, _setFallbackSession } from 'electron-extensions';
+import { requestPermission } from './dialogs/permissions';
 
 // TODO: move windows list to the corresponding sessions
 export class SessionsService {
@@ -74,7 +75,8 @@ export class SessionsService {
             });
 
             if (!perm) {
-              const response = await window.dialogs.permissionsDialog.requestPermission(
+              const response = await requestPermission(
+                window.win,
                 permission,
                 webContents.getURL(),
                 details,

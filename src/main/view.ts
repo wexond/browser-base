@@ -37,6 +37,8 @@ export class View {
     text: '',
   };
 
+  public requestedPermission: any;
+
   private historyQueue = new Queue();
 
   private lastUrl = '';
