@@ -95,6 +95,20 @@ export class Store extends DialogStore {
     this.loadHistory();
 
     ipcRenderer.send(`can-show-${this.id}`);
+
+    this.onHide = (data) => {
+      ipcRenderer.send(`addressbar-update-input-${this.id}`, {
+        id: this.tabId,
+        text: this.inputRef.current.value,
+        selectionStart: this.inputRef.current.selectionStart,
+        selectionEnd: this.inputRef.current.selectionEnd,
+        ...data,
+      });
+
+      this.tabs = [];
+      this.inputRef.current.value = '';
+      this.suggestions.list = [];
+    };
   }
 
   public getCanSuggest(key: number) {
@@ -113,20 +127,6 @@ export class Store extends DialogStore {
     }
 
     return false;
-  }
-
-  public onHide(data: any = null) {
-    ipcRenderer.send(`addressbar-update-input-${this.id}`, {
-      id: this.tabId,
-      text: this.inputRef.current.value,
-      selectionStart: this.inputRef.current.selectionStart,
-      selectionEnd: this.inputRef.current.selectionEnd,
-      ...data,
-    });
-
-    this.tabs = [];
-    this.inputRef.current.value = '';
-    this.suggestions.list = [];
   }
 
   public async loadHistory() {

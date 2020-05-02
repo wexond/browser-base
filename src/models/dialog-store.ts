@@ -4,6 +4,12 @@ import { getTheme } from '~/utils/themes';
 import { ISettings } from '~/interfaces';
 import { DEFAULT_SETTINGS } from '~/constants';
 
+export declare interface DialogStore {
+  onVisibilityChange: (visible: boolean, ...args: any[]) => void;
+  onUpdateTabInfo: (tabId: number, data: any) => void;
+  onHide: (data: any) => void;
+}
+
 export class DialogStore {
   @observable
   public settings: ISettings = DEFAULT_SETTINGS;
@@ -60,6 +66,16 @@ export class DialogStore {
     ipcRenderer.on('update-settings', (e, settings: ISettings) => {
       this.settings = { ...this.settings, ...settings };
     });
+
+    ipcRenderer.on('update-tab-info', (e, tabId, data) =>
+      this.onUpdateTabInfo(tabId, data),
+    );
+
+    this.onHide = () => {};
+    this.onUpdateTabInfo = () => {};
+    this.onVisibilityChange = () => {};
+
+    this.send('loaded');
   }
 
   public async invoke(channel: string, ...args: any[]) {
@@ -83,8 +99,6 @@ export class DialogStore {
     return this._windowId;
   }
 
-  public onVisibilityChange(visible: boolean, ...args: any[]) {}
-
   public hide(data: any = null) {
     if (this.persistent && !this.visible) return;
 
@@ -95,6 +109,4 @@ export class DialogStore {
       this.send('hide');
     });
   }
-
-  public onHide(data: any = null) {}
 }

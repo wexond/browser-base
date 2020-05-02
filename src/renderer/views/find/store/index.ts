@@ -31,6 +31,18 @@ export class Store extends DialogStore {
     super({ hideOnBlur: false });
 
     this.init();
+
+    this.onUpdateTabInfo = (tabId, info) => {
+      this.tabId = tabId;
+      this.findInfo = info;
+    };
+
+    this.onHide = () => {
+      callViewMethod(this.tabId, 'stopFindInPage', 'clearSelection');
+      this.findInfo = defaultFindInfo;
+      this.sendInfo();
+      ipcRenderer.send(`window-focus-${this.windowId}`);
+    };
   }
 
   public async init() {
@@ -45,22 +57,10 @@ export class Store extends DialogStore {
         this.sendInfo();
       },
     );
-
-    ipcRenderer.on('update-tab-info', (e, tabId, info) => {
-      this.tabId = tabId;
-      this.findInfo = info;
-    });
   }
 
   public sendInfo() {
     this.send('update-tab-info', this.tabId, { ...this.findInfo });
-  }
-
-  public onHide() {
-    callViewMethod(this.tabId, 'stopFindInPage', 'clearSelection');
-    this.findInfo = defaultFindInfo;
-    this.sendInfo();
-    ipcRenderer.send(`window-focus-${this.windowId}`);
   }
 }
 

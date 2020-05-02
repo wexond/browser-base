@@ -228,7 +228,7 @@ export class DialogsService {
     });
 
     if (tabAssociation) {
-      dialog.browserView.webContents.once('dom-ready', () => {
+      dialog.on('loaded', () => {
         dialog._sendTabInfo(tabAssociation.tabId);
       });
 
