@@ -17,7 +17,7 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v1
         with:
-          node-version: 13
+          node-version: 14
 
       # - name: Install required build toolchain
       # if: matrix.os == 'ubuntu-latest'
@@ -28,6 +28,9 @@ jobs:
         env:
           ADBLOCK: true
 
+      - name: Get commit message
+        run: echo "::set-output name=message::$(git log --no-merges -1 --oneline)"
+
       - name: Build the app
         run: yarn ci-build
         env:
@@ -36,4 +39,4 @@ jobs:
           MAC_CERTS: ${{ secrets.mac_certs }}
           MAC_CERTS_PASSWORD: ${{ secrets.mac_certs_password }}
 
-          RELEASE: true
+          RELEASE: ${{ contains(steps.log.outputs.message, 'bump version') }}
