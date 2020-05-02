@@ -74,30 +74,29 @@ export class SessionsService {
               },
             });
 
-            // TODO:
-            // if (!perm) {
-            const response = await requestPermission(
-              window.win,
-              permission,
-              webContents.getURL(),
-              details,
-              webContents.id,
-            );
-
-            callback(response);
-
-            await Application.instance.storage.insert({
-              scope: 'permissions',
-              item: {
-                url: hostname,
+            if (!perm) {
+              const response = await requestPermission(
+                window.win,
                 permission,
-                type: response ? 1 : 2,
-                mediaTypes: JSON.stringify(details.mediaTypes) || '',
-              },
-            });
-            // } else {
-            //   callback(perm.type === 1);
-            // }
+                webContents.getURL(),
+                details,
+                webContents.id,
+              );
+
+              callback(response);
+
+              await Application.instance.storage.insert({
+                scope: 'permissions',
+                item: {
+                  url: hostname,
+                  permission,
+                  type: response ? 1 : 2,
+                  mediaTypes: JSON.stringify(details.mediaTypes) || '',
+                },
+              });
+            } else {
+              callback(perm.type === 1);
+            }
           } catch (e) {
             callback(false);
           }
