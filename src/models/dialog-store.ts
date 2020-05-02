@@ -13,8 +13,6 @@ export class DialogStore {
     return getTheme(this.settings.theme);
   }
 
-  private lastId = -1;
-
   private _windowId = -1;
 
   private persistent = false;
@@ -94,7 +92,7 @@ export class DialogStore {
     this.onHide(data);
 
     setTimeout(() => {
-      ipcRenderer.send(`hide-${this.id}`);
+      this.send('hide');
     });
   }
 

@@ -82,7 +82,7 @@ export class DialogsService {
       ? foundDialog.browserView
       : this.browserViews.find((x) => !this.browserViewDetails.get(x.id));
 
-    if (!browserView && !foundDialog) {
+    if (!browserView) {
       browserView = this.createBrowserView();
     }
 
@@ -100,10 +100,21 @@ export class DialogsService {
     bounds.x = Math.round(bounds.x);
     bounds.y = Math.round(bounds.y);
 
-    browserWindow.addBrowserView(browserView);
-    browserView.setBounds(bounds);
+    this.browserViewDetails.set(browserView.id, true);
 
-    if (foundDialog) return null;
+    if (foundDialog) {
+      browserWindow.addBrowserView(browserView);
+      browserView.setBounds(bounds);
+      return null;
+    }
+
+    browserWindow.addBrowserView(browserView);
+    browserView.setBounds({ x: 0, y: 0, width: 1, height: 1 });
+
+    browserView.webContents.once('dom-ready', () => {
+      browserView.setBounds(bounds);
+      browserView.webContents.focus();
+    });
 
     if (process.env.NODE_ENV === 'development') {
       browserView.webContents.loadURL(`http://localhost:4444/${name}.html`);
@@ -113,10 +124,8 @@ export class DialogsService {
       );
     }
 
-    browserView.webContents.focus();
-
     if (devtools) {
-      // browserView.webContents.openDevTools({ mode: 'detach' });
+      browserView.webContents.openDevTools({ mode: 'detach' });
     }
 
     const channels: string[] = [];
@@ -128,7 +137,7 @@ export class DialogsService {
       browserView,
       id: browserView.id,
       name,
-      tabIds: [tabAssociation.tabId],
+      tabIds: [tabAssociation?.tabId],
       _sendTabInfo: (tabId) => {
         if (tabAssociation.getTabInfo) {
           const data = tabAssociation.getTabInfo(tabId);
@@ -148,7 +157,7 @@ export class DialogsService {
 
         browserWindow.removeBrowserView(browserView);
 
-        if (dialog.tabIds.length > 0) return;
+        if (tabAssociation && dialog.tabIds.length > 0) return;
 
         ipcMain.removeAllListeners(`hide-${browserView.webContents.id}`);
         channels.forEach((x) => {
@@ -158,13 +167,15 @@ export class DialogsService {
 
         this.dialogs = this.dialogs.filter((x) => x.id !== dialog.id);
 
-        if (this.browserViews.length > 2) {
-          browserView.destroy();
-          this.browserViews.splice(2, 1);
-          this.browserViewDetails.delete(browserView.id);
+        this.browserViewDetails.set(browserView.id, false);
+
+        if (this.browserViews.length > 1) {
+          // TODO: garbage collect unused BrowserViews?
+          // this.browserViewDetails.delete(browserView.id);
+          // browserView.destroy();
+          // this.browserViews.splice(1, 1);
         } else {
           browserView.webContents.loadURL('about:blank');
-          this.browserViewDetails.set(browserView.id, false);
         }
 
         if (tabAssociation) {
@@ -211,8 +222,6 @@ export class DialogsService {
       appWindow.viewManager.on('removed', closeHandler);
       appWindow.viewManager.on('activated', activateHandler);
     }
-
-    this.browserViewDetails.set(browserView.id, true);
 
     ipcMain.on(`hide-${browserView.webContents.id}`, () => {
       dialog.hide();
