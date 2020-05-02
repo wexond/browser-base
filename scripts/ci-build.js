@@ -12,7 +12,7 @@ const getPlatform = () => {
   return process.platform;
 };
 
-const getEnv = name => process.env[name.toUpperCase()] || null;
+const getEnv = (name) => process.env[name.toUpperCase()] || null;
 
 const setEnv = (name, value) => {
   if (value) {
@@ -20,7 +20,7 @@ const setEnv = (name, value) => {
   }
 };
 
-const getInput = name => {
+const getInput = (name) => {
   return getEnv(`INPUT_${name}`);
 };
 
@@ -64,7 +64,9 @@ const getInput = name => {
       );
     }
 
-    const release = getEnv('release') === 'true' && getEnv('GH_TOKEN');
+    const release =
+      (getEnv('release') === 'true' || getEnv('release') === true) &&
+      getEnv('GH_TOKEN');
     const platform = getPlatform();
 
     if (platform === 'mac') {
