@@ -34,14 +34,6 @@ export class Store extends DialogStore {
   }
 
   public async init() {
-    const { occurrences, text, tabId } = await this.invoke('fetch');
-
-    this.findInfo = {
-      occurrences,
-      text,
-    };
-    this.tabId = tabId;
-
     if (this.findInputRef && this.findInputRef.current) {
       this.findInputRef.current.focus();
     }
@@ -54,18 +46,14 @@ export class Store extends DialogStore {
       },
     );
 
-    ipcRenderer.on('visibility-changed', (e, flag, tabId, findInfo) => {
-      if (flag) {
-        this.findInfo = findInfo;
-        this.tabId = tabId;
-      } else {
-        this.sendInfo();
-      }
+    ipcRenderer.on('update-tab-info', (e, tabId, info) => {
+      this.tabId = tabId;
+      this.findInfo = info;
     });
   }
 
   public sendInfo() {
-    this.send('set-find-info', this.tabId, { ...this.findInfo });
+    this.send('update-tab-info', this.tabId, { ...this.findInfo });
   }
 
   public onHide() {

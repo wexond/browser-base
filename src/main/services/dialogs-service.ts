@@ -1,10 +1,15 @@
-import { BrowserView, app, ipcMain, Dialog } from 'electron';
+import { BrowserView, app, ipcMain } from 'electron';
 import { join } from 'path';
 import { SearchDialog } from '../dialogs/search';
 import { PreviewDialog } from '../dialogs/preview';
 import { PersistentDialog } from '../dialogs/dialog';
 import { Application } from '../application';
-import { extensions } from 'electron-extensions';
+
+interface IDialogTabAssociation {
+  tabId?: number;
+  getTabInfo?: (tabId: number) => any;
+  setTabInfo?: (tabId: number, ...args: any[]) => void;
+}
 
 interface IDialogShowOptions {
   name: string;
@@ -12,8 +17,7 @@ interface IDialogShowOptions {
   bounds: Electron.Rectangle;
   hideTimeout?: number;
   devtools?: boolean;
-  associateTab?: boolean;
-  onVisibilityChange?: (visible: boolean, tabId: number) => any;
+  tabAssociation?: IDialogTabAssociation;
   onHide?: (dialog: IDialog) => void;
 }
 
@@ -22,6 +26,7 @@ interface IDialog {
   browserView: BrowserView;
   id: number;
   tabIds: number[];
+  _sendTabInfo: (tabId: number) => void;
   hide: (tabId?: number) => void;
   handle: (name: string, cb: (...args: any[]) => any) => void;
   on: (name: string, cb: (...args: any[]) => any) => void;
@@ -68,8 +73,7 @@ export class DialogsService {
       devtools,
       onHide,
       hideTimeout,
-      associateTab,
-      onVisibilityChange,
+      tabAssociation,
     } = options;
 
     const foundDialog = this.getDynamic(name);
@@ -86,10 +90,9 @@ export class DialogsService {
       browserWindow,
     );
 
-    const tab = appWindow.viewManager.selected;
-
-    if (foundDialog) {
-      foundDialog.tabIds.push(tab.id);
+    if (foundDialog && tabAssociation) {
+      foundDialog.tabIds.push(tabAssociation.tabId);
+      foundDialog._sendTabInfo(tabAssociation.tabId);
     }
 
     browserWindow.webContents.send('dialog-visibility-change', name, true);
@@ -99,11 +102,6 @@ export class DialogsService {
 
     browserWindow.addBrowserView(browserView);
     browserView.setBounds(bounds);
-
-    if (foundDialog) {
-      const data = onVisibilityChange && onVisibilityChange(true, tab.id);
-      browserView.webContents.send('visibility-changed', true, tab.id, data);
-    }
 
     if (foundDialog) return null;
 
@@ -130,7 +128,13 @@ export class DialogsService {
       browserView,
       id: browserView.id,
       name,
-      tabIds: [tab.id],
+      tabIds: [tabAssociation.tabId],
+      _sendTabInfo: (tabId) => {
+        if (tabAssociation.getTabInfo) {
+          const data = tabAssociation.getTabInfo(tabId);
+          browserView.webContents.send('update-tab-info', tabId, data);
+        }
+      },
       hide: (tabId) => {
         const { selectedId } = appWindow.viewManager;
 
@@ -163,7 +167,7 @@ export class DialogsService {
           this.browserViewDetails.set(browserView.id, false);
         }
 
-        if (associateTab) {
+        if (tabAssociation) {
           appWindow.viewManager.off('activated', activateHandler);
           appWindow.viewManager.off('activated', closeHandler);
         }
@@ -182,25 +186,17 @@ export class DialogsService {
       },
     };
 
-    if (associateTab) {
-      activateHandler = (tabId: number) => {
-        const visible = dialog.tabIds.includes(tabId);
+    if (tabAssociation) {
+      activateHandler = (id: number) => {
+        const visible = dialog.tabIds.includes(id);
         browserWindow.webContents.send(
           'dialog-visibility-change',
           name,
           visible,
         );
 
-        const data = onVisibilityChange && onVisibilityChange(visible, tabId);
-
-        browserView.webContents.send(
-          'visibility-changed',
-          visible,
-          tabId,
-          data,
-        );
-
         if (visible) {
+          dialog._sendTabInfo(id);
           browserWindow.removeBrowserView(browserView);
           browserWindow.addBrowserView(browserView);
         } else {
@@ -208,11 +204,9 @@ export class DialogsService {
         }
       };
 
-      closeHandler = (tabId: number) => {
-        dialog.hide(tabId);
+      closeHandler = (id: number) => {
+        dialog.hide(id);
       };
-
-      // TODO: handle tab removed
 
       appWindow.viewManager.on('removed', closeHandler);
       appWindow.viewManager.on('activated', activateHandler);
@@ -223,6 +217,18 @@ export class DialogsService {
     ipcMain.on(`hide-${browserView.webContents.id}`, () => {
       dialog.hide();
     });
+
+    if (tabAssociation) {
+      dialog.browserView.webContents.once('dom-ready', () => {
+        dialog._sendTabInfo(tabAssociation.tabId);
+      });
+
+      if (tabAssociation.setTabInfo) {
+        dialog.on('update-tab-info', (e, tabId, ...args) => {
+          tabAssociation.setTabInfo(tabId, ...args);
+        });
+      }
+    }
 
     this.dialogs.push(dialog);
 
