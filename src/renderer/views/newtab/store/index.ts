@@ -199,6 +199,7 @@ export class Store {
 
     if (!url || url == '') {
       url = 'https://picsum.photos/1920/1080';
+      isNewUrl = true;
     }
 
     fetch(url)
