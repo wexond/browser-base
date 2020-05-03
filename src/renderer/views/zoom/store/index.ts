@@ -10,29 +10,29 @@ export class Store extends DialogStore {
 
   public constructor() {
     super();
+    this.init();
+  }
+
+  public async init() {
+    const zoomFactorChange = reaction(
+      () => this.zoomFactor,
+      () => this.resetHideTimer(),
+    );
 
     ipcRenderer.on('zoom-factor-updated', (e, zoomFactor) => {
       this.zoomFactor = zoomFactor;
     });
 
-    const zoomFactorChange = reaction(
-      () => this.zoomFactor,
-      () => this.resetHideTimer()
-    )
-  }
+    const tabId = await this.invoke('tab-id');
+    this.zoomFactor = await ipcRenderer.invoke('get-tab-zoom', tabId);
 
-  public async onVisibilityChange(visible: boolean) {
-    this.visible = visible;
-    if (visible) {
-      this.resetHideTimer();
-    }
+    this.resetHideTimer();
   }
 
   public resetHideTimer() {
     clearTimeout(this.timer);
-    var context = this;
-    this.timer = setTimeout(function () {
-      context.hide();
+    this.timer = setTimeout(() => {
+      this.hide();
     }, 1500);
   }
 

@@ -1,34 +1,27 @@
-import { AppWindow } from '../windows';
-import { Dialog } from '.';
-import { DIALOG_MARGIN, DIALOG_MARGIN_TOP } from '~/constants/design';
+import { BrowserWindow } from 'electron';
+import { Application } from '../application';
+import { DIALOG_MARGIN_TOP, DIALOG_MARGIN } from '~/constants/design';
 
-const WIDTH = 280;
+export const showZoomDialog = (
+  browserWindow: BrowserWindow,
+  x: number,
+  y: number,
+) => {
+  const tabId = Application.instance.windows.fromBrowserWindow(browserWindow)
+    .viewManager.selectedId;
 
-export class ZoomDialog extends Dialog {
-  public visible = false;
+  const dialog = Application.instance.dialogs.show({
+    name: 'zoom',
+    browserWindow,
+    getBounds: () => ({
+      width: 280,
+      height: 100,
+      x: x - 280 + DIALOG_MARGIN,
+      y: y - DIALOG_MARGIN_TOP,
+    }),
+  });
 
-  public left = 0;
-  public top = 0;
+  if (!dialog) return;
 
-  constructor(appWindow: AppWindow) {
-    super(appWindow, {
-      name: 'zoom',
-      bounds: {
-        width: WIDTH,
-        height: 100,
-      },
-    });
-  }
-
-  public rearrange() {
-    super.rearrange({
-      x: Math.round(this.left - WIDTH + DIALOG_MARGIN),
-      y: Math.round(this.top - DIALOG_MARGIN_TOP),
-    });
-  }
-
-  public async show() {
-    await super.show();
-    this.send('visible', true);
-  }
-}
+  dialog.handle('tab-id', () => tabId);
+};

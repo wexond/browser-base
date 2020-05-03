@@ -11,6 +11,7 @@ import {
 } from '~/constants/web-contents';
 import { extensions } from 'electron-extensions';
 import { EventEmitter } from 'events';
+import { Application } from './application';
 
 export class ViewManager extends EventEmitter {
   public views = new Map<number, View>();
@@ -248,10 +249,13 @@ export class ViewManager extends EventEmitter {
   }
 
   public emitZoomUpdate(showDialog = true) {
-    this.window.dialogs.zoomDialog.send(
-      'zoom-factor-updated',
-      this.selected.webContents.zoomFactor,
-    );
+    Application.instance.dialogs
+      .getDynamic('zoom')
+      ?.browserView?.webContents?.send(
+        'zoom-factor-updated',
+        this.selected.webContents.zoomFactor,
+      );
+
     this.window.webContents.send(
       'zoom-factor-updated',
       this.selected.webContents.zoomFactor,

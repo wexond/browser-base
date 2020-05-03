@@ -1,6 +1,6 @@
 import { AppWindow } from './windows/app';
 import { extensions } from 'electron-extensions';
-import { BrowserWindow } from 'electron';
+import { BrowserWindow, ipcMain } from 'electron';
 
 export class WindowsService {
   public list: AppWindow[] = [];
@@ -35,6 +35,11 @@ export class WindowsService {
         return view.id;
       };
     }
+
+    ipcMain.handle('get-tab-zoom', (e, tabId) => {
+      return this.findByBrowserView(tabId).viewManager.views.get(tabId)
+        .webContents.zoomFactor;
+    });
   }
 
   public open(incognito = false) {

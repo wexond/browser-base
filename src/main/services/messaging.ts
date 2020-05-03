@@ -15,6 +15,7 @@ import { getFormFillMenuItems } from '../utils';
 import { showAddBookmarkDialog } from '../dialogs/add-bookmark';
 import { showExtensionDialog } from '../dialogs/extension-popup';
 import { showDownloadsDialog } from '../dialogs/downloads';
+import { showZoomDialog } from '../dialogs/zoom';
 
 export const runMessagingService = (appWindow: AppWindow) => {
   const { id } = appWindow;
@@ -97,14 +98,12 @@ export const runMessagingService = (appWindow: AppWindow) => {
     showDownloadsDialog(appWindow.win, left, top);
   });
 
+  ipcMain.on(`show-zoom-dialog-${id}`, (e, left, top) => {
+    showZoomDialog(appWindow.win, left, top);
+  });
+
   // ipcMain.on(`show-tabgroup-dialog-${id}`, (e, tabGroup) => {
   //   appWindow.dialogs.tabGroupDialog.edit(tabGroup);
-  // });
-
-  // ipcMain.on(`show-zoom-dialog-${id}`, (e, left, top) => {
-  //   appWindow.dialogs.zoomDialog.left = left;
-  //   appWindow.dialogs.zoomDialog.top = top;
-  //   appWindow.dialogs.zoomDialog.show();
   // });
 
   // ipcMain.on(`edit-tabgroup-${id}`, (e, tabGroup) => {
