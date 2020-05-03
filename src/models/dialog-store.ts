@@ -4,6 +4,12 @@ import { getTheme } from '~/utils/themes';
 import { ISettings } from '~/interfaces';
 import { DEFAULT_SETTINGS } from '~/constants';
 
+export declare interface DialogStore {
+  onVisibilityChange: (visible: boolean, ...args: any[]) => void;
+  onUpdateTabInfo: (tabId: number, data: any) => void;
+  onHide: (data: any) => void;
+}
+
 export class DialogStore {
   @observable
   public settings: ISettings = DEFAULT_SETTINGS;
@@ -15,6 +21,8 @@ export class DialogStore {
 
   private _windowId = -1;
 
+  private persistent = false;
+
   @observable
   public visible = false;
 
@@ -24,31 +32,23 @@ export class DialogStore {
     options: {
       hideOnBlur?: boolean;
       visibilityWrapper?: boolean;
+      persistent?: boolean;
     } = {},
   ) {
-    const { visibilityWrapper, hideOnBlur } = {
+    const { visibilityWrapper, hideOnBlur, persistent } = {
       hideOnBlur: true,
       visibilityWrapper: true,
+      persistent: false,
       ...options,
     };
-    if (visibilityWrapper) {
+
+    if (!persistent) this.visible = true;
+
+    this.persistent = persistent;
+
+    if (visibilityWrapper && persistent) {
       ipcRenderer.on('visible', async (e, flag, ...args) => {
-        if (!this.firstTime) {
-          requestAnimationFrame(() => {
-            this.visible = true;
-
-            setTimeout(() => {
-              this.visible = false;
-
-              setTimeout(() => {
-                this.onVisibilityChange(flag, ...args);
-              }, 20);
-            }, 20);
-          });
-          this.firstTime = true;
-        } else {
-          this.onVisibilityChange(flag, ...args);
-        }
+        this.onVisibilityChange(flag, ...args);
       });
     }
 
@@ -58,11 +58,32 @@ export class DialogStore {
       });
     }
 
-    ipcRenderer.send('get-settings');
+    this.settings = {
+      ...this.settings,
+      ...ipcRenderer.sendSync('get-settings-sync'),
+    };
 
     ipcRenderer.on('update-settings', (e, settings: ISettings) => {
       this.settings = { ...this.settings, ...settings };
     });
+
+    ipcRenderer.on('update-tab-info', (e, tabId, data) =>
+      this.onUpdateTabInfo(tabId, data),
+    );
+
+    this.onHide = () => {};
+    this.onUpdateTabInfo = () => {};
+    this.onVisibilityChange = () => {};
+
+    this.send('loaded');
+  }
+
+  public async invoke(channel: string, ...args: any[]) {
+    return await ipcRenderer.invoke(`${channel}-${this.id}`, ...args);
+  }
+
+  public async send(channel: string, ...args: any[]) {
+    ipcRenderer.send(`${channel}-${this.id}`, ...args);
   }
 
   public get id() {
@@ -78,17 +99,14 @@ export class DialogStore {
     return this._windowId;
   }
 
-  public onVisibilityChange(visible: boolean, ...args: any[]) {}
-
   public hide(data: any = null) {
-    if (this.visible) {
-      this.visible = false;
-      this.onHide(data);
-      setTimeout(() => {
-        ipcRenderer.send(`hide-${this.id}`);
-      });
-    }
-  }
+    if (this.persistent && !this.visible) return;
 
-  public onHide(data: any = null) {}
+    this.visible = false;
+    this.onHide(data);
+
+    setTimeout(() => {
+      this.send('hide');
+    });
+  }
 }

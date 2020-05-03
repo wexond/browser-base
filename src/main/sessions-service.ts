@@ -10,6 +10,7 @@ import { parseCrx } from '~/utils/crx';
 import { pathExists } from '~/utils/files';
 import { extractZip } from '~/utils/zip';
 import { extensions, _setFallbackSession } from 'electron-extensions';
+import { requestPermission } from './dialogs/permissions';
 
 // TODO: move windows list to the corresponding sessions
 export class SessionsService {
@@ -76,7 +77,8 @@ export class SessionsService {
             });
 
             if (!perm) {
-              const response = await window.dialogs.permissionsDialog.requestPermission(
+              const response = await requestPermission(
+                window.win,
                 permission,
                 webContents.getURL(),
                 details,
@@ -115,6 +117,16 @@ export class SessionsService {
       id,
     });
 
+    const downloadsDialog = () =>
+      Application.instance.dialogs.getDynamic('downloads-dialog')?.browserView
+        ?.webContents;
+
+    const downloads: IDownloadItem[] = [];
+
+    ipcMain.handle('get-downloads', () => {
+      return downloads;
+    });
+
     // TODO(sentialx): clean up the download listeners
     this.view.on('will-download', (event, item, webContents) => {
       const fileName = item.getFilename();
@@ -139,8 +151,9 @@ export class SessionsService {
       }
 
       const downloadItem = getDownloadItem(item, id);
+      downloads.push(downloadItem);
 
-      window.dialogs.downloadsDialog.send('download-started', downloadItem);
+      downloadsDialog()?.send('download-started', downloadItem);
       window.send('download-started', downloadItem);
 
       item.on('updated', (event, state) => {
@@ -154,17 +167,18 @@ export class SessionsService {
 
         const data = getDownloadItem(item, id);
 
-        window.dialogs.downloadsDialog.send('download-progress', data);
+        downloadsDialog()?.send('download-progress', data);
         window.send('download-progress', data);
+
+        Object.assign(downloadItem, data);
       });
       item.once('done', async (event, state) => {
         if (state === 'completed') {
-          window.dialogs.downloadsDialog.send('download-completed', id);
-          window.send(
-            'download-completed',
-            id,
-            !window.dialogs.downloadsDialog.visible,
-          );
+          const dialog = downloadsDialog();
+          dialog?.send('download-completed', id);
+          window.send('download-completed', id, !!dialog);
+
+          downloadItem.completed = true;
 
           if (process.env.ENABLE_EXTENSIONS && extname(fileName) === '.crx') {
             const crxBuf = await promises.readFile(item.savePath);
@@ -215,8 +229,9 @@ export class SessionsService {
       );
 
       const downloadItem = getDownloadItem(item, id);
+      downloads.push(downloadItem);
 
-      window.dialogs.downloadsDialog.send('download-started', downloadItem);
+      downloadsDialog()?.send('download-started', downloadItem);
       window.send('download-started', downloadItem);
 
       item.on('updated', (event, state) => {
@@ -230,17 +245,18 @@ export class SessionsService {
 
         const data = getDownloadItem(item, id);
 
-        window.dialogs.downloadsDialog.send('download-progress', data);
+        Object.assign(downloadItem, data);
+
+        downloadsDialog()?.send('download-progress', data);
         window.send('download-progress', data);
       });
       item.once('done', async (event, state) => {
+        const dialog = downloadsDialog();
         if (state === 'completed') {
-          window.dialogs.downloadsDialog.send('download-completed', id);
-          window.send(
-            'download-completed',
-            id,
-            !window.dialogs.downloadsDialog.visible,
-          );
+          dialog?.send('download-completed', id);
+          window.send('download-completed', id, !!dialog);
+
+          downloadItem.completed = true;
         } else {
           console.log(`Download failed: ${state}`);
         }

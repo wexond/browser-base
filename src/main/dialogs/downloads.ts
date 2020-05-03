@@ -1,53 +1,45 @@
-import { AppWindow } from '../windows';
-import { Dialog } from '.';
-import { ipcMain } from 'electron';
+import { BrowserWindow } from 'electron';
+import { Application } from '../application';
 import {
+  DIALOG_MARGIN_TOP,
   DIALOG_MARGIN,
   DIALOG_TOP,
-  DIALOG_MARGIN_TOP,
 } from '~/constants/design';
 
-const WIDTH = 350;
+export const showDownloadsDialog = (
+  browserWindow: BrowserWindow,
+  x: number,
+  y: number,
+) => {
+  let height = 0;
 
-export class DownloadsDialog extends Dialog {
-  public visible = false;
+  const dialog = Application.instance.dialogs.show({
+    name: 'downloads-dialog',
+    browserWindow,
+    getBounds: () => {
+      const winBounds = browserWindow.getContentBounds();
+      const maxHeight = winBounds.height - DIALOG_TOP - 16;
 
-  private height = 0;
+      height = Math.round(Math.min(winBounds.height, height + 28));
 
-  public left = 0;
-  public top = 0;
+      dialog.browserView.webContents.send(
+        `max-height`,
+        Math.min(maxHeight, height),
+      );
 
-  constructor(appWindow: AppWindow) {
-    super(appWindow, {
-      name: 'downloads-dialog',
-      bounds: {
-        width: WIDTH,
-        height: 0,
-      },
-    });
+      return {
+        x: x - 350 + DIALOG_MARGIN,
+        y: y - DIALOG_MARGIN_TOP,
+        width: 350,
+        height,
+      };
+    },
+  });
 
-    ipcMain.on(`height-${this.id}`, (e, height) => {
-      this.height = height;
-      this.rearrange();
-    });
-  }
+  if (!dialog) return;
 
-  public rearrange() {
-    const { height } = this.appWindow.win.getContentBounds();
-
-    const maxHeight = height - DIALOG_TOP - 16;
-
-    super.rearrange({
-      x: Math.round(this.left - WIDTH + DIALOG_MARGIN),
-      height: Math.round(Math.min(height, this.height + 28)),
-      y: Math.round(this.top - DIALOG_MARGIN_TOP),
-    });
-
-    this.send(`max-height`, Math.min(maxHeight, this.height));
-  }
-
-  public async show() {
-    await super.show();
-    this.send('visible', true);
-  }
-}
+  dialog.on('height', (e, h) => {
+    height = h;
+    dialog.rearrange();
+  });
+};

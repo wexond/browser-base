@@ -24,7 +24,9 @@ export const runAutoUpdaterService = () => {
 
     for (const window of Application.instance.windows.list) {
       window.send('update-available');
-      window.dialogs.menuDialog.send('update-available');
+      Application.instance.dialogs
+        .getDynamic('menu')
+        ?.browserView?.webContents?.send('update-available');
     }
   });
 };

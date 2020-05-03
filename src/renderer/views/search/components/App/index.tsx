@@ -119,7 +119,7 @@ export const App = hot(
 
     return (
       <ThemeProvider theme={{ ...store.theme }}>
-        <StyledApp visible={true}>
+        <StyledApp>
           <UIStyle />
           <SearchBox>
             <CurrentIcon
@@ -137,7 +137,6 @@ export const App = hot(
               onInput={onInput}
               ref={store.inputRef}
               onKeyPress={onKeyPress}
-              placeholder="Search or type in a URL"
             ></Input>
           </SearchBox>
           <Suggestions visible={suggestionsVisible}></Suggestions>

@@ -1,65 +1,46 @@
-import { AppWindow } from '../windows';
-import { Dialog } from '.';
-import { DIALOG_MARGIN, DIALOG_MARGIN_TOP } from '~/constants/design';
+import { BrowserWindow } from 'electron';
 import { Application } from '../application';
+import { DIALOG_MARGIN_TOP, DIALOG_MARGIN } from '~/constants/design';
 import { IBookmark } from '~/interfaces';
 
-const WIDTH = 366;
-
-export class AddBookmarkDialog extends Dialog {
-  public visible = false;
-
-  public left = 0;
-  public top = 0;
-
-  constructor(appWindow: AppWindow) {
-    super(appWindow, {
-      name: 'add-bookmark',
-      bounds: {
-        width: WIDTH,
-        height: 240,
-      },
-    });
-  }
-
-  public rearrange() {
-    super.rearrange({
-      x: Math.round(this.left - WIDTH + DIALOG_MARGIN),
-      y: Math.round(this.top - DIALOG_MARGIN_TOP),
-    });
-  }
-
-  public async show() {
-    await super.show();
+export const showAddBookmarkDialog = (
+  browserWindow: BrowserWindow,
+  x: number,
+  y: number,
+  data?: {
+    url: string;
+    title: string;
+    bookmark?: IBookmark;
+    favicon?: string;
+  },
+) => {
+  if (!data) {
     const {
       url,
       title,
       bookmark,
       favicon,
     } = Application.instance.windows.current.viewManager.selected;
-
-    this.send('visible', true, {
+    data = {
       url,
       title,
       bookmark,
       favicon,
-    });
+    };
   }
 
-  public async showForBookmark(data: {
-    url: string;
-    title: string;
-    bookmark?: IBookmark;
-    favicon?: string;
-  }) {
-    await super.show();
-    const { url, title, bookmark, favicon } = data;
+  const dialog = Application.instance.dialogs.show({
+    name: 'add-bookmark',
+    browserWindow,
+    getBounds: () => ({
+      width: 366,
+      height: 240,
+      x: x - 366 + DIALOG_MARGIN,
+      y: y - DIALOG_MARGIN_TOP,
+    }),
+  });
 
-    this.send('visible', true, {
-      url,
-      title,
-      bookmark,
-      favicon,
-    });
-  }
-}
+  dialog.on('loaded', (e) => {
+    e.reply('data', data);
+  });
+};

@@ -14,7 +14,7 @@ export const App = hot(
       <ThemeProvider
         theme={{ ...store.theme, dark: store.theme['dialog.lightForeground'] }}
       >
-        <StyledApp visible={store.visible}>
+        <StyledApp>
           <UIStyle />
           <QuickMenu />
         </StyledApp>

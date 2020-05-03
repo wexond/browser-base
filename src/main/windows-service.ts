@@ -1,5 +1,6 @@
 import { AppWindow } from './windows/app';
 import { extensions } from 'electron-extensions';
+import { BrowserWindow, ipcMain } from 'electron';
 
 export class WindowsService {
   public list: AppWindow[] = [];
@@ -34,6 +35,11 @@ export class WindowsService {
         return view.id;
       };
     }
+
+    ipcMain.handle('get-tab-zoom', (e, tabId) => {
+      return this.findByBrowserView(tabId).viewManager.views.get(tabId)
+        .webContents.zoomFactor;
+    });
   }
 
   public open(incognito = false) {
@@ -53,6 +59,10 @@ export class WindowsService {
 
   public findByBrowserView(webContentsId: number) {
     return this.list.find((x) => !!x.viewManager.views.get(webContentsId));
+  }
+
+  public fromBrowserWindow(browserWindow: BrowserWindow) {
+    return this.list.find((x) => x.id === browserWindow.id);
   }
 
   public broadcast(channel: string, ...args: unknown[]) {

@@ -1,6 +1,5 @@
-import { BrowserView, app, ipcMain } from 'electron';
+import { BrowserView, app, ipcMain, BrowserWindow } from 'electron';
 import { join } from 'path';
-import { AppWindow } from '../windows';
 
 interface IOptions {
   name: string;
@@ -18,8 +17,8 @@ interface IRectangle {
   height?: number;
 }
 
-export class Dialog {
-  public appWindow: AppWindow;
+export class PersistentDialog {
+  public browserWindow: BrowserWindow;
   public browserView: BrowserView;
 
   public visible = false;
@@ -31,19 +30,21 @@ export class Dialog {
     height: 0,
   };
 
+  public name: string;
+
   private timeout: any;
   private hideTimeout: number;
-  private name: string;
-
-  public tabIds: number[] = [];
 
   private loaded = false;
   private showCallback: any = null;
 
-  public constructor(
-    appWindow: AppWindow,
-    { bounds, name, devtools, hideTimeout, webPreferences }: IOptions,
-  ) {
+  public constructor({
+    bounds,
+    name,
+    devtools,
+    hideTimeout,
+    webPreferences,
+  }: IOptions) {
     this.browserView = new BrowserView({
       webPreferences: {
         nodeIntegration: true,
@@ -53,7 +54,6 @@ export class Dialog {
       },
     });
 
-    this.appWindow = appWindow;
     this.bounds = { ...this.bounds, ...bounds };
     this.hideTimeout = hideTimeout;
     this.name = name;
@@ -62,9 +62,6 @@ export class Dialog {
 
     ipcMain.on(`hide-${webContents.id}`, () => {
       this.hide(false, false);
-      this.tabIds = this.tabIds.filter(
-        (x) => x !== appWindow.viewManager.selectedId,
-      );
     });
 
     webContents.once('dom-ready', () => {
@@ -77,13 +74,10 @@ export class Dialog {
     });
 
     if (process.env.NODE_ENV === 'development') {
-      webContents.loadURL(`http://localhost:4444/${name}.html`);
-      if (devtools) {
-        webContents.openDevTools({ mode: 'detach' });
-      }
+      this.webContents.loadURL(`http://localhost:4444/${this.name}.html`);
     } else {
-      webContents.loadURL(
-        join('file://', app.getAppPath(), `build/${name}.html`),
+      this.webContents.loadURL(
+        join('file://', app.getAppPath(), `build/${this.name}.html`),
       );
     }
   }
@@ -109,15 +103,13 @@ export class Dialog {
     }
   }
 
-  public toggle() {
-    if (!this.visible) this.show();
-  }
-
-  public show(focus = true, waitForLoad = true) {
+  public show(browserWindow: BrowserWindow, focus = true, waitForLoad = true) {
     return new Promise((resolve) => {
+      this.browserWindow = browserWindow;
+
       clearTimeout(this.timeout);
 
-      this.appWindow.webContents.send(
+      browserWindow.webContents.send(
         'dialog-visibility-change',
         this.name,
         true,
@@ -131,7 +123,7 @@ export class Dialog {
 
         this.visible = true;
 
-        this.appWindow.win.addBrowserView(this.browserView);
+        browserWindow.addBrowserView(this.browserView);
         this.rearrange();
 
         if (focus) this.webContents.focus();
@@ -157,11 +149,13 @@ export class Dialog {
   }
 
   public hide(bringToTop = false, hideVisually = true) {
+    if (!this.browserWindow) return;
+
     if (hideVisually) this.hideVisually();
 
     if (!this.visible) return;
 
-    this.appWindow.webContents.send(
+    this.browserWindow.webContents.send(
       'dialog-visibility-change',
       this.name,
       false,
@@ -175,10 +169,10 @@ export class Dialog {
 
     if (this.hideTimeout) {
       this.timeout = setTimeout(() => {
-        this.appWindow.win.removeBrowserView(this.browserView);
+        this.browserWindow.removeBrowserView(this.browserView);
       }, this.hideTimeout);
     } else {
-      this.appWindow.win.removeBrowserView(this.browserView);
+      this.browserWindow.removeBrowserView(this.browserView);
     }
 
     this.visible = false;
@@ -187,8 +181,8 @@ export class Dialog {
   }
 
   public bringToTop() {
-    this.appWindow.win.removeBrowserView(this.browserView);
-    this.appWindow.win.addBrowserView(this.browserView);
+    this.browserWindow.removeBrowserView(this.browserView);
+    this.browserWindow.addBrowserView(this.browserView);
   }
 
   public destroy() {

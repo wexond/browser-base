@@ -77,7 +77,7 @@ const config = {
             loader: 'ts-loader',
             options: {
               experimentalWatchApi: dev,
-              transpileOnly: dev,
+              transpileOnly: true, // TODO: dev
               getCustomTransformers: () => ({
                 before: [styledComponentsTransformer],
               }),

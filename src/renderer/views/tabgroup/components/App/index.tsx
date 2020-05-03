@@ -45,7 +45,7 @@ export const App = hot(
   observer(() => {
     return (
       <ThemeProvider theme={{ ...store.theme }}>
-        <StyledApp visible={store.visible}>
+        <StyledApp>
           <UIStyle />
           <Textfield
             dark={store.theme['dialog.lightForeground']}

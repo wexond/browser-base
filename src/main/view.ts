@@ -32,6 +32,13 @@ export class View {
 
   public bookmark: IBookmark;
 
+  public findInfo = {
+    occurrences: '0/0',
+    text: '',
+  };
+
+  public requestedPermission: any;
+
   private historyQueue = new Queue();
 
   private lastUrl = '';
@@ -83,7 +90,9 @@ export class View {
     });
 
     this.webContents.addListener('found-in-page', (e, result) => {
-      this.window.dialogs.findDialog.send('found-in-page', result);
+      Application.instance.dialogs
+        .getDynamic('find')
+        .browserView.webContents.send('found-in-page', result);
     });
 
     this.webContents.addListener('page-title-updated', (e, title) => {

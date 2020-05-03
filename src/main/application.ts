@@ -9,6 +9,7 @@ import { WindowsService } from './windows-service';
 import { StorageService } from './services/storage';
 import { getMainMenu } from './menus/main';
 import { runAutoUpdaterService } from './services';
+import { DialogsService } from './services/dialogs-service';
 
 export class Application {
   public static instance = new Application();
@@ -20,6 +21,8 @@ export class Application {
   public storage = new StorageService();
 
   public windows = new WindowsService();
+
+  public dialogs = new DialogsService();
 
   public start() {
     const gotTheLock = app.requestSingleInstanceLock();
@@ -83,6 +86,7 @@ export class Application {
     checkFiles();
 
     this.storage.run();
+    this.dialogs.run();
 
     this.windows.open();
 

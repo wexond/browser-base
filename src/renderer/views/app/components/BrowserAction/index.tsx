@@ -72,7 +72,7 @@ const onMouseDown = (data: IBrowserAction) => async (e: any) => {
   canOpenPopup =
     !store.dialogsVisibility['extension-popup'] ||
     data.extensionId !== store.extensions.currentlyToggledPopup;
-  ipcRenderer.send(`hide-extension-popup-${store.windowId}`);
+  // ipcRenderer.send(`hide-extension-popup-${store.windowId}`);
 };
 
 export const BrowserAction = observer(({ data }: Props) => {

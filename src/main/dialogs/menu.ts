@@ -1,39 +1,21 @@
-import { AppWindow } from '../windows';
-import {
-  MENU_WIDTH,
-  DIALOG_MARGIN,
-  DIALOG_MARGIN_TOP,
-} from '~/constants/design';
-import { Dialog } from '.';
+import { BrowserWindow } from 'electron';
+import { Application } from '../application';
+import { DIALOG_MARGIN_TOP, DIALOG_MARGIN } from '~/constants/design';
 
-const WIDTH = MENU_WIDTH;
-const HEIGHT = 550;
-
-export class MenuDialog extends Dialog {
-  public visible = false;
-  public left = 0;
-  public top = 0;
-
-  constructor(appWindow: AppWindow) {
-    super(appWindow, {
-      name: 'menu',
-      bounds: {
-        width: WIDTH,
-        height: HEIGHT,
-      },
-      devtools: false,
-    });
-  }
-
-  public rearrange() {
-    super.rearrange({
-      x: Math.round(this.left - WIDTH + DIALOG_MARGIN),
-      y: Math.round(this.top - DIALOG_MARGIN_TOP),
-    });
-  }
-
-  public async show() {
-    await super.show();
-    this.send('visible', true);
-  }
-}
+export const showMenuDialog = (
+  browserWindow: BrowserWindow,
+  x: number,
+  y: number,
+) => {
+  const menuWidth = 330;
+  Application.instance.dialogs.show({
+    name: 'menu',
+    browserWindow,
+    getBounds: () => ({
+      width: menuWidth,
+      height: 470,
+      x: x - menuWidth + DIALOG_MARGIN,
+      y: y - DIALOG_MARGIN_TOP,
+    }),
+  });
+};

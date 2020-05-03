@@ -1,53 +1,50 @@
-import { ipcMain } from 'electron';
 import { VIEW_Y_OFFSET } from '~/constants/design';
-import { AppWindow } from '../windows';
-import { Dialog } from '.';
+import { BrowserWindow } from 'electron';
+import { Application } from '../application';
 
-const HEIGHT = 165;
-const WIDTH = 366;
+export const requestPermission = (
+  browserWindow: BrowserWindow,
+  name: string,
+  url: string,
+  details: any,
+  tabId: number,
+): Promise<boolean> => {
+  return new Promise((resolve, reject) => {
+    if (
+      name === 'unknown' ||
+      (name === 'media' && details.mediaTypes.length === 0) ||
+      name === 'midiSysex'
+    ) {
+      return reject('Unknown permission');
+    }
 
-export class PermissionsDialog extends Dialog {
-  public constructor(appWindow: AppWindow) {
-    super(appWindow, {
+    const appWindow = Application.instance.windows.fromBrowserWindow(
+      browserWindow,
+    );
+
+    appWindow.viewManager.selected.requestedPermission = { name, url, details };
+
+    const dialog = Application.instance.dialogs.show({
       name: 'permissions',
-      bounds: {
-        height: HEIGHT,
-        width: WIDTH,
-        y: VIEW_Y_OFFSET,
+      browserWindow,
+      getBounds: () => ({
+        width: 366,
+        height: 165,
         x: 0,
+        y: VIEW_Y_OFFSET,
+      }),
+      tabAssociation: {
+        tabId,
+        getTabInfo: (tabId) => {
+          const tab = appWindow.viewManager.views.get(tabId);
+          return tab.requestedPermission;
+        },
       },
     });
-  }
 
-  public async requestPermission(
-    name: string,
-    url: string,
-    details: any,
-    tabId: number,
-  ): Promise<boolean> {
-    return new Promise((resolve, reject) => {
-      if (
-        name === 'unknown' ||
-        (name === 'media' && details.mediaTypes.length === 0) ||
-        name === 'midiSysex'
-      ) {
-        return reject('Unknown permission');
-      }
-
-      this.tabIds.push(tabId);
-
-      this.show();
-
-      this.send('request-permission', { name, url, details });
-
-      ipcMain.once(
-        `request-permission-result-${this.appWindow.id}`,
-        (e, r: boolean) => {
-          resolve(r);
-          this.tabIds = this.tabIds.filter((x) => x !== tabId);
-          this.hide();
-        },
-      );
+    dialog.on('result', (e, result) => {
+      resolve(result);
+      dialog.hide();
     });
-  }
-}
+  });
+};

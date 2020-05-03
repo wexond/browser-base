@@ -1,57 +1,50 @@
-import { AppWindow } from '../windows';
-import { Dialog } from '.';
-import { ipcMain } from 'electron';
-import { DIALOG_MARGIN, DIALOG_MARGIN_TOP } from '~/constants/design';
+import { BrowserWindow } from 'electron';
+import { Application } from '../application';
+import { DIALOG_MARGIN_TOP, DIALOG_MARGIN } from '~/constants/design';
 
-export class ExtensionPopup extends Dialog {
-  public visible = false;
+export const showExtensionDialog = (
+  browserWindow: BrowserWindow,
+  x: number,
+  y: number,
+  url: string,
+  inspect = false,
+) => {
+  if (!process.env.ENABLE_EXTENSIONS) return;
 
-  private height = 512;
+  let height = 512;
+  let width = 512;
 
-  public left = 0;
-  public top = 0;
+  const dialog = Application.instance.dialogs.show({
+    name: 'extension-popup',
+    browserWindow,
+    getBounds: () => {
+      return {
+        x: x - width + DIALOG_MARGIN,
+        y: y - DIALOG_MARGIN_TOP,
+        height: Math.min(1024, height),
+        width: Math.min(1024, width),
+      };
+    },
+  });
 
-  private width = 512;
+  if (!dialog) return;
 
-  public url = '';
+  dialog.on('bounds', (e, w, h) => {
+    width = w;
+    height = h;
+    dialog.rearrange();
+  });
 
-  constructor(appWindow: AppWindow) {
-    super(appWindow, {
-      name: 'extension-popup',
-      bounds: {
-        width: 512,
-        height: 512,
-      },
-      devtools: false,
-      webPreferences: {
-        webviewTag: true,
-      },
-    });
-
-    ipcMain.on(`bounds-${this.id}`, (e, width, height) => {
-      this.height = height;
-      this.width = width;
-      this.rearrange();
-    });
-
-    this.webContents.on('will-attach-webview', (e, webPreferences, params) => {
+  dialog.browserView.webContents.on(
+    'will-attach-webview',
+    (e, webPreferences, params) => {
       webPreferences.sandbox = true;
       webPreferences.nodeIntegration = false;
       webPreferences.contextIsolation = true;
-    });
-  }
+    },
+  );
 
-  public rearrange() {
-    super.rearrange({
-      x: Math.round(this.left - this.width + DIALOG_MARGIN),
-      y: Math.round(this.top - DIALOG_MARGIN_TOP),
-      height: Math.round(Math.min(1024, this.height)),
-      width: Math.round(Math.min(1024, this.width)),
-    });
-  }
-
-  public async show(inspect = false) {
-    await super.show();
-    this.send('visible', true, { url: this.url, inspect });
-  }
-}
+  dialog.on('loaded', (e) => {
+    e.reply('data', { url, inspect });
+  });
+};

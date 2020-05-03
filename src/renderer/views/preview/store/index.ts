@@ -38,7 +38,7 @@ export class Store extends DialogStore {
   }
 
   constructor() {
-    super({ visibilityWrapper: false });
+    super({ visibilityWrapper: false, persistent: true });
 
     ipcRenderer.on('visible', (e, visible, tab) => {
       clearTimeout(this.timeout);
