@@ -2,6 +2,7 @@
 const { resolve, join } = require('path');
 const { writeFileSync, readFileSync, existsSync } = require('fs');
 const merge = require('webpack-merge');
+const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const createStyledComponentsTransformer = require('typescript-plugin-styled-components')
@@ -12,8 +13,20 @@ const TerserPlugin = require('terser-webpack-plugin');
 
 const INCLUDE = resolve(__dirname, 'src');
 
+const BUILD_FLAGS = {
+  ENABLE_EXTENSIONS: true,
+  ENABLE_AUTOFILL: false,
+};
+
+process.env = {
+  ...process.env,
+  ...BUILD_FLAGS,
+};
+
 const dev = process.env.DEV === '1';
 let prebuild = process.env.PREBUILD === '1';
+
+process.env.NODE_ENV = dev ? 'development' : 'production';
 
 if (dev) prebuild = false;
 
@@ -74,13 +87,6 @@ const config = {
 
         include: INCLUDE,
       },
-      /*{
-        test: /\.node$/,
-        loader: 'awesome-node-loader',
-        options: {
-          name: '[contenthash].[ext]',
-        },
-      },*/
     ],
   },
 
@@ -97,7 +103,9 @@ const config = {
     },
   },
 
-  plugins: [],
+  plugins: [
+    new webpack.EnvironmentPlugin(['NODE_ENV', ...Object.keys(BUILD_FLAGS)]),
+  ],
 
   externals: {
     keytar: `require('keytar')`,

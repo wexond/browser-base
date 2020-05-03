@@ -343,7 +343,7 @@ export const Toolbar = observer(() => {
           </AddressbarText>
         </AddressbarInputContainer>
 
-        {hasCredentials && (
+        {process.env.ENABLE_AUTOFILL && hasCredentials && (
           <ToolbarButton icon={ICON_KEY} size={16} onClick={onKeyClick} />
         )}
         {(store.dialogsVisibility['zoom'] || store.zoomFactor !== 1) && (

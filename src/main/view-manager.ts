@@ -56,7 +56,11 @@ export class ViewManager extends EventEmitter {
     });
 
     ipcMain.handle(`view-select-${id}`, (e, id: number, focus: boolean) => {
-      extensions.tabs.activate(id, focus);
+      if (process.env.ENABLE_EXTENSIONS) {
+        extensions.tabs.activate(id, focus);
+      } else {
+        this.select(id, focus);
+      }
     });
 
     ipcMain.on(`view-destroy-${id}`, (e, id: number) => {
@@ -133,7 +137,9 @@ export class ViewManager extends EventEmitter {
 
     this.views.set(id, view);
 
-    extensions.tabs.observe(webContents);
+    if (process.env.ENABLE_EXTENSIONS) {
+      extensions.tabs.observe(webContents);
+    }
 
     webContents.once('destroyed', () => {
       this.views.delete(id);

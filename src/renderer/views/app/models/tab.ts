@@ -107,10 +107,12 @@ export class ITab {
       });
     }
 
-    const { defaultBrowserActions } = store.extensions;
+    if (process.env.ENABLE_EXTENSIONS) {
+      const { defaultBrowserActions } = store.extensions;
 
-    for (const item of defaultBrowserActions) {
-      store.extensions.addBrowserActionToTab(this.id, item);
+      for (const item of defaultBrowserActions) {
+        store.extensions.addBrowserActionToTab(this.id, item);
+      }
     }
   }
 
@@ -176,7 +178,7 @@ export class ITab {
 
     const width =
       (containerWidth - pinnedTabs * (TAB_PINNED_WIDTH + TABS_PADDING)) /
-      realTabsLength -
+        realTabsLength -
       TABS_PADDING -
       store.tabs.leftMargins / realTabsLength;
 

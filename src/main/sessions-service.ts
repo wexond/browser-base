@@ -28,21 +28,23 @@ export class SessionsService {
 
     this.clearCache('incognito');
 
-    // TODO: remove this after fix for e.sender.session
-    _setFallbackSession(this.view);
+    if (process.env.ENABLE_EXTENSIONS) {
+      // TODO: remove this after fix for e.sender.session
+      _setFallbackSession(this.view);
 
-    extensions.initializeSession(
-      this.view,
-      `${app.getAppPath()}/build/extensions-preload.bundle.js`,
-    );
+      extensions.initializeSession(
+        this.view,
+        `${app.getAppPath()}/build/extensions-preload.bundle.js`,
+      );
 
-    ipcMain.on('load-extensions', () => {
-      this.loadExtensions();
-    });
+      ipcMain.on('load-extensions', () => {
+        this.loadExtensions();
+      });
 
-    ipcMain.handle('get-extensions', () => {
-      return this.extensions;
-    });
+      ipcMain.handle('get-extensions', () => {
+        return this.extensions;
+      });
+    }
 
     /*
     // TODO:
@@ -166,7 +168,7 @@ export class SessionsService {
             !window.dialogs.downloadsDialog.visible,
           );
 
-          if (extname(fileName) === '.crx') {
+          if (process.env.ENABLE_EXTENSIONS && extname(fileName) === '.crx') {
             const crxBuf = await promises.readFile(item.savePath);
             const crxInfo = parseCrx(crxBuf);
 
@@ -283,6 +285,8 @@ export class SessionsService {
   }
 
   public async loadExtensions() {
+    if (!process.env.ENABLE_EXTENSIONS) return;
+
     const context = this.view;
 
     if (this.extensionsLoaded) return;
