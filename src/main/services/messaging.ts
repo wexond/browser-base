@@ -116,27 +116,28 @@ export const runMessagingService = (appWindow: AppWindow) => {
   });
 
   if (process.env.ENABLE_AUTOFILL) {
-    ipcMain.on(`form-fill-show-${id}`, async (e, rect, name, value) => {
-      const items = await getFormFillMenuItems(name, value);
+    // TODO: autofill
+    // ipcMain.on(`form-fill-show-${id}`, async (e, rect, name, value) => {
+    //   const items = await getFormFillMenuItems(name, value);
 
-      if (items.length) {
-        appWindow.dialogs.formFillDialog.send(`formfill-get-items`, items);
-        appWindow.dialogs.formFillDialog.inputRect = rect;
+    //   if (items.length) {
+    //     appWindow.dialogs.formFillDialog.send(`formfill-get-items`, items);
+    //     appWindow.dialogs.formFillDialog.inputRect = rect;
 
-        appWindow.dialogs.formFillDialog.resize(
-          items.length,
-          items.find((r) => r.subtext) != null,
-        );
-        appWindow.dialogs.formFillDialog.rearrange();
-        appWindow.dialogs.formFillDialog.show(false);
-      } else {
-        appWindow.dialogs.formFillDialog.hide();
-      }
-    });
+    //     appWindow.dialogs.formFillDialog.resize(
+    //       items.length,
+    //       items.find((r) => r.subtext) != null,
+    //     );
+    //     appWindow.dialogs.formFillDialog.rearrange();
+    //     appWindow.dialogs.formFillDialog.show(false);
+    //   } else {
+    //     appWindow.dialogs.formFillDialog.hide();
+    //   }
+    // });
 
-    ipcMain.on(`form-fill-hide-${id}`, () => {
-      appWindow.dialogs.formFillDialog.hide();
-    });
+    // ipcMain.on(`form-fill-hide-${id}`, () => {
+    //   appWindow.dialogs.formFillDialog.hide();
+    // });
 
     ipcMain.on(
       `form-fill-update-${id}`,
@@ -166,15 +167,15 @@ export const runMessagingService = (appWindow: AppWindow) => {
       },
     );
 
-    ipcMain.on(`credentials-show-${id}`, (e, data) => {
-      appWindow.dialogs.credentialsDialog.send('credentials-update', data);
-      appWindow.dialogs.credentialsDialog.rearrange();
-      appWindow.dialogs.credentialsDialog.show();
-    });
+    // ipcMain.on(`credentials-show-${id}`, (e, data) => {
+    //   appWindow.dialogs.credentialsDialog.send('credentials-update', data);
+    //   appWindow.dialogs.credentialsDialog.rearrange();
+    //   appWindow.dialogs.credentialsDialog.show();
+    // });
 
-    ipcMain.on(`credentials-hide-${id}`, () => {
-      appWindow.dialogs.credentialsDialog.hide();
-    });
+    // ipcMain.on(`credentials-hide-${id}`, () => {
+    //   appWindow.dialogs.credentialsDialog.hide();
+    // });
 
     ipcMain.on(`credentials-save-${id}`, async (e, data) => {
       const { username, password, update, oldUsername } = data;

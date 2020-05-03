@@ -119,7 +119,7 @@ export const App = hot(
 
     return (
       <ThemeProvider theme={{ ...store.theme }}>
-        <StyledApp visible={true}>
+        <StyledApp>
           <UIStyle />
           <SearchBox>
             <CurrentIcon
