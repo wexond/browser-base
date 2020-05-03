@@ -117,6 +117,7 @@ export class SessionsService {
       id,
     });
 
+    // TODO: download dialog.
     // TODO(sentialx): clean up the download listeners
     this.view.on('will-download', (event, item, webContents) => {
       const fileName = item.getFilename();
@@ -142,7 +143,7 @@ export class SessionsService {
 
       const downloadItem = getDownloadItem(item, id);
 
-      window.dialogs.downloadsDialog.send('download-started', downloadItem);
+      // window.dialogs.downloadsDialog.send('download-started', downloadItem);
       window.send('download-started', downloadItem);
 
       item.on('updated', (event, state) => {
@@ -156,16 +157,17 @@ export class SessionsService {
 
         const data = getDownloadItem(item, id);
 
-        window.dialogs.downloadsDialog.send('download-progress', data);
+        //window.dialogs.downloadsDialog.send('download-progress', data);
         window.send('download-progress', data);
       });
       item.once('done', async (event, state) => {
         if (state === 'completed') {
-          window.dialogs.downloadsDialog.send('download-completed', id);
+          //window.dialogs.downloadsDialog.send('download-completed', id);
           window.send(
             'download-completed',
             id,
-            !window.dialogs.downloadsDialog.visible,
+            false,
+            //!window.dialogs.downloadsDialog.visible,
           );
 
           if (process.env.ENABLE_EXTENSIONS && extname(fileName) === '.crx') {
@@ -218,7 +220,7 @@ export class SessionsService {
 
       const downloadItem = getDownloadItem(item, id);
 
-      window.dialogs.downloadsDialog.send('download-started', downloadItem);
+      // window.dialogs.downloadsDialog.send('download-started', downloadItem);
       window.send('download-started', downloadItem);
 
       item.on('updated', (event, state) => {
@@ -232,16 +234,17 @@ export class SessionsService {
 
         const data = getDownloadItem(item, id);
 
-        window.dialogs.downloadsDialog.send('download-progress', data);
+        // window.dialogs.downloadsDialog.send('download-progress', data);
         window.send('download-progress', data);
       });
       item.once('done', async (event, state) => {
         if (state === 'completed') {
-          window.dialogs.downloadsDialog.send('download-completed', id);
+          // window.dialogs.downloadsDialog.send('download-completed', id);
           window.send(
             'download-completed',
             id,
-            !window.dialogs.downloadsDialog.visible,
+            false,
+            //!window.dialogs.downloadsDialog.visible,
           );
         } else {
           console.log(`Download failed: ${state}`);

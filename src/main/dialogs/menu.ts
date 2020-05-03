@@ -11,11 +11,11 @@ export const showMenuDialog = (
   Application.instance.dialogs.show({
     name: 'menu',
     browserWindow,
-    bounds: {
+    getBounds: () => ({
       width: menuWidth,
       height: 470,
       x: x - menuWidth + DIALOG_MARGIN,
       y: y - DIALOG_MARGIN_TOP,
-    },
+    }),
   });
 };

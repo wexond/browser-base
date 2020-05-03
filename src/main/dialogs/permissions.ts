@@ -27,12 +27,12 @@ export const requestPermission = (
     const dialog = Application.instance.dialogs.show({
       name: 'permissions',
       browserWindow,
-      bounds: {
+      getBounds: () => ({
         width: 366,
         height: 165,
         x: 0,
         y: VIEW_Y_OFFSET,
-      },
+      }),
       tabAssociation: {
         tabId,
         getTabInfo: (tabId) => {

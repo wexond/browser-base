@@ -4,6 +4,7 @@ import { SearchDialog } from '../dialogs/search';
 import { PreviewDialog } from '../dialogs/preview';
 import { PersistentDialog } from '../dialogs/dialog';
 import { Application } from '../application';
+import { IRectangle } from '~/interfaces';
 
 interface IDialogTabAssociation {
   tabId?: number;
@@ -14,11 +15,11 @@ interface IDialogTabAssociation {
 interface IDialogShowOptions {
   name: string;
   browserWindow: Electron.BrowserWindow;
-  bounds: Electron.Rectangle;
   hideTimeout?: number;
   devtools?: boolean;
   tabAssociation?: IDialogTabAssociation;
   onHide?: (dialog: IDialog) => void;
+  getBounds: () => IRectangle;
 }
 
 interface IDialog {
@@ -30,7 +31,16 @@ interface IDialog {
   hide: (tabId?: number) => void;
   handle: (name: string, cb: (...args: any[]) => any) => void;
   on: (name: string, cb: (...args: any[]) => any) => void;
+  rearrange: (bounds?: IRectangle) => void;
 }
+
+const roundifyRectangle = (rect: IRectangle): IRectangle => {
+  const newRect: any = { ...rect };
+  Object.keys(newRect).forEach((key) => {
+    if (!isNaN(newRect[key])) newRect[key] = Math.round(newRect[key]);
+  });
+  return newRect;
+};
 
 export class DialogsService {
   public browserViews: BrowserView[] = [];
@@ -69,7 +79,7 @@ export class DialogsService {
     const {
       name,
       browserWindow,
-      bounds,
+      getBounds,
       devtools,
       onHide,
       hideTimeout,
@@ -97,22 +107,31 @@ export class DialogsService {
 
     browserWindow.webContents.send('dialog-visibility-change', name, true);
 
-    bounds.x = Math.round(bounds.x);
-    bounds.y = Math.round(bounds.y);
-
     this.browserViewDetails.set(browserView.id, true);
+
+    const rearrange = (rect?: IRectangle) => {
+      rect = rect || {};
+      browserView.setBounds({
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+        ...roundifyRectangle(getBounds()),
+        ...roundifyRectangle(rect),
+      });
+    };
 
     if (foundDialog) {
       browserWindow.addBrowserView(browserView);
-      browserView.setBounds(bounds);
+      rearrange();
       return null;
     }
 
     browserWindow.addBrowserView(browserView);
-    browserView.setBounds({ x: 0, y: 0, width: 1, height: 1 });
+    rearrange({ x: 0, y: 0, width: 1, height: 1 });
 
     browserView.webContents.once('dom-ready', () => {
-      browserView.setBounds(bounds);
+      rearrange();
       browserView.webContents.focus();
     });
 
@@ -195,6 +214,7 @@ export class DialogsService {
         ipcMain.on(channel, (...args) => cb(...args));
         channels.push(channel);
       },
+      rearrange,
     };
 
     if (tabAssociation) {

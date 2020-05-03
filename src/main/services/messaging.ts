@@ -13,6 +13,7 @@ import * as bookmarkMenu from '../menus/bookmarks';
 import { showFindDialog } from '../dialogs/find';
 import { getFormFillMenuItems } from '../utils';
 import { showAddBookmarkDialog } from '../dialogs/add-bookmark';
+import { showExtensionDialog } from '../dialogs/extension-popup';
 
 export const runMessagingService = (appWindow: AppWindow) => {
   const { id } = appWindow;
@@ -85,6 +86,18 @@ export const runMessagingService = (appWindow: AppWindow) => {
     showAddBookmarkDialog(appWindow.win, left, top);
   });
 
+  if (process.env.ENABLE_EXTENSIONS) {
+    ipcMain.on(`show-extension-popup-${id}`, (e, left, top, url, inspect) => {
+      showExtensionDialog(appWindow.win, left, top, url, inspect);
+    });
+  }
+
+  // ipcMain.on(`hide-extension-popup-${id}`, (e) => {
+  //   if (appWindow.dialogs.extensionPopup.visible) {
+  //     appWindow.dialogs.extensionPopup.hideVisually();
+  //   }
+  // });
+
   // ipcMain.on(`show-tabgroup-dialog-${id}`, (e, tabGroup) => {
   //   appWindow.dialogs.tabGroupDialog.edit(tabGroup);
   // });
@@ -93,19 +106,6 @@ export const runMessagingService = (appWindow: AppWindow) => {
   //   appWindow.dialogs.downloadsDialog.left = left;
   //   appWindow.dialogs.downloadsDialog.top = top;
   //   appWindow.dialogs.downloadsDialog.show();
-  // });
-
-  // ipcMain.on(`show-extension-popup-${id}`, (e, left, top, url, inspect) => {
-  //   appWindow.dialogs.extensionPopup.left = left;
-  //   appWindow.dialogs.extensionPopup.top = top;
-  //   appWindow.dialogs.extensionPopup.url = url;
-  //   appWindow.dialogs.extensionPopup.show(inspect);
-  // });
-
-  // ipcMain.on(`hide-extension-popup-${id}`, (e) => {
-  //   if (appWindow.dialogs.extensionPopup.visible) {
-  //     appWindow.dialogs.extensionPopup.hideVisually();
-  //   }
   // });
 
   // ipcMain.on(`show-zoom-dialog-${id}`, (e, left, top) => {

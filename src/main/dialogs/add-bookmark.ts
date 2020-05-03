@@ -32,12 +32,12 @@ export const showAddBookmarkDialog = (
   const dialog = Application.instance.dialogs.show({
     name: 'add-bookmark',
     browserWindow,
-    bounds: {
+    getBounds: () => ({
       width: 366,
       height: 240,
       x: x - 366 + DIALOG_MARGIN,
       y: y - DIALOG_MARGIN_TOP,
-    },
+    }),
   });
 
   dialog.on('loaded', (e) => {

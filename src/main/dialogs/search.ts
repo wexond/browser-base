@@ -38,8 +38,6 @@ export class SearchDialog extends PersistentDialog {
           ? Math.max(DIALOG_MIN_HEIGHT, HEIGHT + height)
           : HEIGHT + height,
       });
-
-      this.lastHeight = HEIGHT + height;
     });
 
     ipcMain.on(`addressbar-update-input-${this.id}`, (e, data) => {

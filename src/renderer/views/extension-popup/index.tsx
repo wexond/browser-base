@@ -98,12 +98,9 @@ const createWebview = (url: string, inspect: boolean) => {
   container.appendChild(webview);
 };
 
-ipcRenderer.on('visible', (e, flag, data) => {
-  if (flag) {
-    const { url, inspect } = data;
-    createWebview(url, inspect);
-  } else {
-    visible = false;
-    hide();
-  }
+ipcRenderer.on('data', (e, data) => {
+  const { url, inspect } = data;
+  createWebview(url, inspect);
 });
+
+ipcRenderer.send(`loaded-${getWebContentsId()}`);

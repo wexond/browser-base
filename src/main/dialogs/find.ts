@@ -11,12 +11,12 @@ export const showFindDialog = (browserWindow: BrowserWindow) => {
   Application.instance.dialogs.show({
     name: 'find',
     browserWindow,
-    bounds: {
+    getBounds: () => ({
       width: 416,
       height: 70,
       x: width - 416,
       y: VIEW_Y_OFFSET,
-    },
+    }),
     tabAssociation: {
       tabId: appWindow.viewManager.selectedId,
       getTabInfo: (tabId) => {
