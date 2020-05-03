@@ -225,44 +225,6 @@ export class Store {
       },
     );
 
-    ipcRenderer.on(
-      'set-browserAction-info',
-      async (e, extensionId, action: BrowserActionChangeType, details) => {
-        if (
-          this.extensions.defaultBrowserActions.filter(
-            (x) => x.extensionId === extensionId,
-          ).length === 0
-        ) {
-          this.extensions.load();
-        }
-
-        const handler = (item: IBrowserAction) => {
-          if (action === 'setBadgeText') {
-            item.badgeText = details.text;
-          } else if (action === 'setPopup') {
-            item.popup = details.popup;
-          } else if (action === 'setTitle') {
-            item.title = details.title;
-          }
-        };
-
-        if (details.tabId) {
-          this.extensions.browserActions
-            .filter(
-              (x) => x.extensionId === extensionId && x.tabId === details.tabId,
-            )
-            .forEach(handler);
-        } else {
-          this.extensions.defaultBrowserActions
-            .filter((x) => x.extensionId === extensionId)
-            .forEach(handler);
-          this.extensions.browserActions
-            .filter((x) => x.extensionId === extensionId)
-            .forEach(handler);
-        }
-      },
-    );
-
     ipcRenderer.on('find', () => {
       const tab = this.tabs.selectedTab;
       if (tab) {
@@ -307,8 +269,49 @@ export class Store {
       }
     });
 
+    if (process.env.ENABLE_EXTENSIONS) {
+      ipcRenderer.on(
+        'set-browserAction-info',
+        async (e, extensionId, action: BrowserActionChangeType, details) => {
+          if (
+            this.extensions.defaultBrowserActions.filter(
+              (x) => x.extensionId === extensionId,
+            ).length === 0
+          ) {
+            this.extensions.load();
+          }
+
+          const handler = (item: IBrowserAction) => {
+            if (action === 'setBadgeText') {
+              item.badgeText = details.text;
+            } else if (action === 'setPopup') {
+              item.popup = details.popup;
+            } else if (action === 'setTitle') {
+              item.title = details.title;
+            }
+          };
+
+          if (details.tabId) {
+            this.extensions.browserActions
+              .filter(
+                (x) =>
+                  x.extensionId === extensionId && x.tabId === details.tabId,
+              )
+              .forEach(handler);
+          } else {
+            this.extensions.defaultBrowserActions
+              .filter((x) => x.extensionId === extensionId)
+              .forEach(handler);
+            this.extensions.browserActions
+              .filter((x) => x.extensionId === extensionId)
+              .forEach(handler);
+          }
+        },
+      );
+      ipcRenderer.send('load-extensions');
+    }
+
     ipcRenderer.send('update-check');
-    ipcRenderer.send('load-extensions');
   }
 }
 

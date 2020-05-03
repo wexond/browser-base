@@ -71,11 +71,7 @@ const showAddBookmarkDialog = async () => {
 const showZoomDialog = async () => {
   if (!(await isDialogVisible('zoomDialog')) && store.zoomFactor != 1) {
     const { right, bottom } = zoomRef.getBoundingClientRect();
-    ipcRenderer.send(
-      `show-zoom-dialog-${store.windowId}`,
-      right,
-      bottom,
-    );
+    ipcRenderer.send(`show-zoom-dialog-${store.windowId}`, right, bottom);
   }
 };
 
@@ -347,14 +343,16 @@ export const Toolbar = observer(() => {
           </AddressbarText>
         </AddressbarInputContainer>
 
-        {hasCredentials && (
+        {process.env.ENABLE_AUTOFILL && hasCredentials && (
           <ToolbarButton icon={ICON_KEY} size={16} onClick={onKeyClick} />
         )}
         {(store.dialogsVisibility['zoom'] || store.zoomFactor !== 1) && (
           <ToolbarButton
             divRef={(r) => (zoomRef = r)}
             toggled={store.dialogsVisibility['zoom']}
-            icon={store.zoomFactor >= 1 ? ICON_MAGNIFY_PLUS : ICON_MAGNIFY_MINUS}
+            icon={
+              store.zoomFactor >= 1 ? ICON_MAGNIFY_PLUS : ICON_MAGNIFY_MINUS
+            }
             size={18}
             dense
             onMouseDown={onZoomClick}

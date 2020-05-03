@@ -76,6 +76,8 @@ export class ExtensionsStore {
   }
 
   public async load() {
+    if (!process.env.ENABLE_EXTENSIONS) return;
+
     const extensions: Electron.Extension[] = await ipcRenderer.invoke(
       'get-extensions',
     );

@@ -283,7 +283,7 @@ export class View {
   }
 
   public async updateCredentials() {
-    if (this.browserView.isDestroyed()) return;
+    if (!process.env.ENABLE_AUTOFILL || this.browserView.isDestroyed()) return;
 
     const item = await Application.instance.storage.findOne<any>({
       scope: 'formfill',
@@ -338,7 +338,9 @@ export class View {
     this.isNewTab = url.startsWith(NEWTAB_URL);
 
     this.updateData();
-    this.updateCredentials();
+
+    if (process.env.ENABLE_AUTOFILL) this.updateCredentials();
+
     this.updateBookmark();
   };
 
