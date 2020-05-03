@@ -1,14 +1,18 @@
 import { ipcMain } from 'electron';
+import { parse } from 'url';
+import { getPassword, setPassword, deletePassword } from 'keytar';
+
 import { AppWindow } from '../windows';
 import { Application } from '../application';
 import { showMenuDialog } from '../dialogs/menu';
 import { PreviewDialog } from '../dialogs/preview';
-import { parse } from 'url';
 import { IFormFillData, IBookmark } from '~/interfaces';
 import { SearchDialog } from '../dialogs/search';
 
 import * as bookmarkMenu from '../menus/bookmarks';
 import { showFindDialog } from '../dialogs/find';
+import { getFormFillMenuItems } from '../utils';
+import { showAddBookmarkDialog } from '../dialogs/add-bookmark';
 
 export const runMessagingService = (appWindow: AppWindow) => {
   const { id } = appWindow;
@@ -77,16 +81,9 @@ export const runMessagingService = (appWindow: AppWindow) => {
     appWindow.send('find');
   });
 
-  // ipcMain.on(`show-tab-preview-${id}`, (e, tab) => {
-  //   appWindow.dialogs.previewDialog.tab = tab;
-  //   appWindow.dialogs.previewDialog.show();
-  // });
-
-  // ipcMain.on(`hide-tab-preview-${id}`, (e, tab) => {
-  //   appWindow.dialogs.previewDialog.hide(
-  //     appWindow.dialogs.previewDialog.visible,
-  //   );
-  // });
+  ipcMain.on(`show-add-bookmark-dialog-${id}`, (e, left, top) => {
+    showAddBookmarkDialog(appWindow.win, left, top);
+  });
 
   // ipcMain.on(`show-tabgroup-dialog-${id}`, (e, tabGroup) => {
   //   appWindow.dialogs.tabGroupDialog.edit(tabGroup);
@@ -109,12 +106,6 @@ export const runMessagingService = (appWindow: AppWindow) => {
   //   if (appWindow.dialogs.extensionPopup.visible) {
   //     appWindow.dialogs.extensionPopup.hideVisually();
   //   }
-  // });
-
-  // ipcMain.on(`show-add-bookmark-dialog-${id}`, (e, left, top) => {
-  //   appWindow.dialogs.addBookmarkDialog.left = left;
-  //   appWindow.dialogs.addBookmarkDialog.top = top;
-  //   appWindow.dialogs.addBookmarkDialog.show();
   // });
 
   // ipcMain.on(`show-zoom-dialog-${id}`, (e, left, top) => {

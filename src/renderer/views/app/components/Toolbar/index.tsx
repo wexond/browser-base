@@ -25,7 +25,6 @@ import {
   ICON_INCOGNITO,
   ICON_MORE,
   ICON_SEARCH,
-  ICON_DASHBOARD,
   ICON_MAGNIFY_PLUS,
   ICON_MAGNIFY_MINUS,
 } from '~/renderer/constants/icons';
@@ -58,28 +57,20 @@ let menuRef: HTMLDivElement = null;
 let zoomRef: HTMLDivElement = null;
 
 const showAddBookmarkDialog = async () => {
-  if (!(await isDialogVisible('addBookmarkDialog'))) {
-    const { right, bottom } = starRef.getBoundingClientRect();
-    ipcRenderer.send(
-      `show-add-bookmark-dialog-${store.windowId}`,
-      right,
-      bottom,
-    );
-  }
+  const { right, bottom } = starRef.getBoundingClientRect();
+  ipcRenderer.send(`show-add-bookmark-dialog-${store.windowId}`, right, bottom);
 };
 
 const showZoomDialog = async () => {
-  if (!(await isDialogVisible('zoomDialog')) && store.zoomFactor != 1) {
+  if (store.zoomFactor != 1) {
     const { right, bottom } = zoomRef.getBoundingClientRect();
     ipcRenderer.send(`show-zoom-dialog-${store.windowId}`, right, bottom);
   }
 };
 
 const showMenuDialog = async () => {
-  if (!(await isDialogVisible('menuDialog'))) {
-    const { right, bottom } = menuRef.getBoundingClientRect();
-    ipcRenderer.send(`show-menu-dialog-${store.windowId}`, right, bottom);
-  }
+  const { right, bottom } = menuRef.getBoundingClientRect();
+  ipcRenderer.send(`show-menu-dialog-${store.windowId}`, right, bottom);
 };
 
 ipcRenderer.on('show-add-bookmark-dialog', () => {

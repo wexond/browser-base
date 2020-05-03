@@ -25,13 +25,13 @@ export class Store extends DialogStore {
       this.folders = await ipcRenderer.invoke('bookmarks-get-folders');
       this.currentFolder = this.folders.find((x) => x.static === 'main');
     })();
-  }
 
-  public async onVisibilityChange(visible: boolean, data: any) {
-    this.visible = visible;
-
-    if (visible) {
+    ipcRenderer.on('data', async (e, data) => {
       const { bookmark, title, url, favicon } = data;
+
+      if (!bookmark) {
+        this.dialogTitle = !bookmark ? 'Bookmark added' : 'Edit bookmark';
+      }
 
       this.bookmark = bookmark;
       this.folders = await ipcRenderer.invoke('bookmarks-get-folders');
@@ -43,9 +43,6 @@ export class Store extends DialogStore {
           favicon,
           parent: this.folders.find((x) => x.static === 'main')._id,
         });
-        this.dialogTitle = 'Bookmark added';
-      } else {
-        this.dialogTitle = 'Edit bookmark';
       }
 
       this.currentFolder = this.folders.find(
@@ -57,7 +54,7 @@ export class Store extends DialogStore {
         this.titleRef.current.focus();
         this.titleRef.current.select();
       }
-    }
+    });
   }
 }
 
