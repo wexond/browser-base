@@ -14,6 +14,7 @@ import { showFindDialog } from '../dialogs/find';
 import { getFormFillMenuItems } from '../utils';
 import { showAddBookmarkDialog } from '../dialogs/add-bookmark';
 import { showExtensionDialog } from '../dialogs/extension-popup';
+import { showDownloadsDialog } from '../dialogs/downloads';
 
 export const runMessagingService = (appWindow: AppWindow) => {
   const { id } = appWindow;
@@ -92,20 +93,12 @@ export const runMessagingService = (appWindow: AppWindow) => {
     });
   }
 
-  // ipcMain.on(`hide-extension-popup-${id}`, (e) => {
-  //   if (appWindow.dialogs.extensionPopup.visible) {
-  //     appWindow.dialogs.extensionPopup.hideVisually();
-  //   }
-  // });
+  ipcMain.on(`show-downloads-dialog-${id}`, (e, left, top) => {
+    showDownloadsDialog(appWindow.win, left, top);
+  });
 
   // ipcMain.on(`show-tabgroup-dialog-${id}`, (e, tabGroup) => {
   //   appWindow.dialogs.tabGroupDialog.edit(tabGroup);
-  // });
-
-  // ipcMain.on(`show-downloads-dialog-${id}`, (e, left, top) => {
-  //   appWindow.dialogs.downloadsDialog.left = left;
-  //   appWindow.dialogs.downloadsDialog.top = top;
-  //   appWindow.dialogs.downloadsDialog.show();
   // });
 
   // ipcMain.on(`show-zoom-dialog-${id}`, (e, left, top) => {

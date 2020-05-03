@@ -109,39 +109,14 @@ export class DialogsService {
 
     this.browserViewDetails.set(browserView.id, true);
 
-    const rearrange = (rect?: IRectangle) => {
-      rect = rect || {};
-      browserView.setBounds({
-        x: 0,
-        y: 0,
-        width: 0,
-        height: 0,
-        ...roundifyRectangle(getBounds()),
-        ...roundifyRectangle(rect),
-      });
-    };
-
     if (foundDialog) {
       browserWindow.addBrowserView(browserView);
-      rearrange();
+      foundDialog.rearrange();
       return null;
     }
 
     browserWindow.addBrowserView(browserView);
-    rearrange({ x: 0, y: 0, width: 1, height: 1 });
-
-    browserView.webContents.once('dom-ready', () => {
-      rearrange();
-      browserView.webContents.focus();
-    });
-
-    if (process.env.NODE_ENV === 'development') {
-      browserView.webContents.loadURL(`http://localhost:4444/${name}.html`);
-    } else {
-      browserView.webContents.loadURL(
-        join('file://', app.getAppPath(), `build/${name}.html`),
-      );
-    }
+    browserView.setBounds({ x: 0, y: 0, width: 1, height: 1 });
 
     if (devtools) {
       browserView.webContents.openDevTools({ mode: 'detach' });
@@ -214,8 +189,31 @@ export class DialogsService {
         ipcMain.on(channel, (...args) => cb(...args));
         channels.push(channel);
       },
-      rearrange,
+      rearrange: (rect) => {
+        rect = rect || {};
+        browserView.setBounds({
+          x: 0,
+          y: 0,
+          width: 0,
+          height: 0,
+          ...roundifyRectangle(getBounds()),
+          ...roundifyRectangle(rect),
+        });
+      },
     };
+
+    browserView.webContents.once('dom-ready', () => {
+      dialog.rearrange();
+      browserView.webContents.focus();
+    });
+
+    if (process.env.NODE_ENV === 'development') {
+      browserView.webContents.loadURL(`http://localhost:4444/${name}.html`);
+    } else {
+      browserView.webContents.loadURL(
+        join('file://', app.getAppPath(), `build/${name}.html`),
+      );
+    }
 
     if (tabAssociation) {
       activateHandler = (id: number) => {
