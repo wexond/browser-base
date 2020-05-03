@@ -94,9 +94,15 @@ export class AppWindow {
 
       this.dialogs.permissionsDialog = new PermissionsDialog(this);
       this.dialogs.authDialog = new AuthDialog(this);
-      this.dialogs.formFillDialog = new FormFillDialog(this);
-      this.dialogs.credentialsDialog = new CredentialsDialog(this);
-      this.dialogs.extensionPopup = new ExtensionPopup(this);
+
+      if (process.env.ENABLE_AUTOFILL) {
+        this.dialogs.formFillDialog = new FormFillDialog(this);
+        this.dialogs.credentialsDialog = new CredentialsDialog(this);
+      }
+
+      if (process.env.ENABLE_EXTENSIONS) {
+        this.dialogs.extensionPopup = new ExtensionPopup(this);
+      }
     });
 
     runMessagingService(this);

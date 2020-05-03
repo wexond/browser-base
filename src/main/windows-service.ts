@@ -9,35 +9,40 @@ export class WindowsService {
   public lastFocused: AppWindow;
 
   constructor() {
-    extensions.tabs.on('activated', (tabId, windowId, focus) => {
-      const win = this.list.find((x) => x.id === windowId);
-      win.viewManager.select(tabId, focus === undefined ? true : focus);
-    });
+    if (process.env.ENABLE_EXTENSIONS) {
+      extensions.tabs.on('activated', (tabId, windowId, focus) => {
+        const win = this.list.find((x) => x.id === windowId);
+        win.viewManager.select(tabId, focus === undefined ? true : focus);
+      });
 
-    extensions.tabs.onCreateDetails = (tab, details) => {
-      const win = this.findByBrowserView(tab.id);
-      details.windowId = win.id;
-    };
+      extensions.tabs.onCreateDetails = (tab, details) => {
+        const win = this.findByBrowserView(tab.id);
+        details.windowId = win.id;
+      };
 
-    extensions.windows.onCreate = async (details) => {
-      return this.open(details.incognito).id;
-    };
+      extensions.windows.onCreate = async (details) => {
+        return this.open(details.incognito).id;
+      };
 
-    extensions.tabs.onCreate = async (details) => {
-      const win =
-        this.list.find((x) => x.id === details.windowId) || this.lastFocused;
+      extensions.tabs.onCreate = async (details) => {
+        const win =
+          this.list.find((x) => x.id === details.windowId) || this.lastFocused;
 
-      if (!win) return -1;
+        if (!win) return -1;
 
-      const view = win.viewManager.create(details);
-      return view.id;
-    };
+        const view = win.viewManager.create(details);
+        return view.id;
+      };
+    }
   }
 
   public open(incognito = false) {
     const window = new AppWindow(incognito);
     this.list.push(window);
-    extensions.windows.observe(window.win);
+
+    if (process.env.ENABLE_EXTENSIONS) {
+      extensions.windows.observe(window.win);
+    }
 
     window.win.on('focus', () => {
       this.lastFocused = window;

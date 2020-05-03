@@ -47,12 +47,16 @@ const preloadConfig = getConfig({
 
   entry: {
     'view-preload': './src/preloads/view-preload',
-    'popup-preload': './src/preloads/popup-preload',
-    'extensions-preload': './src/preloads/extensions-preload',
   },
 
   plugins: [],
 });
+
+if (process.env.ENABLE_EXTENSIONS) {
+  preloadConfig.entry['popup-preload'] = './src/preloads/popup-preload';
+  preloadConfig.entry['extensions-preload'] =
+    './src/preloads/extensions-preload';
+}
 
 if (process.env.START === '1') {
   mainConfig.plugins.push({

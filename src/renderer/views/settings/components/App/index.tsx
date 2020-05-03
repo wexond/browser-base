@@ -9,7 +9,6 @@ import { Privacy } from '../Privacy';
 import store from '../../store';
 import { NavigationDrawer } from '~/renderer/components/NavigationDrawer';
 import { Button } from '~/renderer/components/Button';
-import { Style } from '../../style';
 import { ThemeProvider } from 'styled-components';
 import { Autofill } from '../Autofill';
 import { OnStartup } from '../Startup';
@@ -239,9 +238,11 @@ export default hot(
             <MenuItem icon={ICON_PALETTE} section="appearance">
               Appearance
             </MenuItem>
-            <MenuItem icon={ICON_AUTOFILL} section="autofill">
-              Autofill
-            </MenuItem>
+            {process.env.ENABLE_AUTOFILL && (
+              <MenuItem icon={ICON_AUTOFILL} section="autofill">
+                Autofill
+              </MenuItem>
+            )}
             <MenuItem icon={ICON_POWER} section="startup">
               On startup
             </MenuItem>
@@ -267,7 +268,8 @@ export default hot(
           <Content>
             <LeftContent style={{ maxWidth: 800, marginTop: 56 }}>
               {selectedSection === 'appearance' && <Appearance />}
-              {selectedSection === 'autofill' && <Autofill />}
+              {selectedSection === 'autofill' &&
+                process.env.ENABLE_AUTOFILL && <Autofill />}
               {selectedSection === 'address-bar' && <AddressBar />}
               {selectedSection === 'search-engines' && <ManageSearchEngines />}
               {selectedSection === 'startup' && <OnStartup />}

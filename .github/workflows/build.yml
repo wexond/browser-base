@@ -28,6 +28,9 @@ jobs:
         env:
           ADBLOCK: true
 
+      - name: Get commit message
+        run: echo "::set-output name=message::$(git log --no-merges -1 --oneline)"
+
       - name: Build the app
         run: yarn ci-build
         env:
@@ -36,4 +39,4 @@ jobs:
           MAC_CERTS: ${{ secrets.mac_certs }}
           MAC_CERTS_PASSWORD: ${{ secrets.mac_certs_password }}
 
-          RELEASE: ${{ startsWith(github.ref, 'refs/tags/v') }}
+          RELEASE: ${{ contains(steps.log.outputs.message, 'bump version') }}
