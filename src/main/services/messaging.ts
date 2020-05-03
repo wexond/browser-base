@@ -16,6 +16,7 @@ import { showAddBookmarkDialog } from '../dialogs/add-bookmark';
 import { showExtensionDialog } from '../dialogs/extension-popup';
 import { showDownloadsDialog } from '../dialogs/downloads';
 import { showZoomDialog } from '../dialogs/zoom';
+import { showTabGroupDialog } from '../dialogs/tabgroup';
 
 export const runMessagingService = (appWindow: AppWindow) => {
   const { id } = appWindow;
@@ -102,13 +103,13 @@ export const runMessagingService = (appWindow: AppWindow) => {
     showZoomDialog(appWindow.win, left, top);
   });
 
-  // ipcMain.on(`show-tabgroup-dialog-${id}`, (e, tabGroup) => {
-  //   appWindow.dialogs.tabGroupDialog.edit(tabGroup);
-  // });
+  ipcMain.on(`show-tabgroup-dialog-${id}`, (e, tabGroup) => {
+    showTabGroupDialog(appWindow.win, tabGroup);
+  });
 
-  // ipcMain.on(`edit-tabgroup-${id}`, (e, tabGroup) => {
-  //   appWindow.send(`edit-tabgroup`, tabGroup);
-  // });
+  ipcMain.on(`edit-tabgroup-${id}`, (e, tabGroup) => {
+    appWindow.send(`edit-tabgroup`, tabGroup);
+  });
 
   ipcMain.on(`is-incognito-${id}`, (e) => {
     e.returnValue = appWindow.incognito;

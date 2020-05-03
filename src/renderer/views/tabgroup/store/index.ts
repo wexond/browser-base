@@ -8,15 +8,18 @@ export class Store extends DialogStore {
 
   public tabGroupId: number;
 
-  public onVisibilityChange(visible: boolean, tabGroup: any) {
-    this.visible = visible;
+  public constructor() {
+    super();
+    this.init();
+  }
 
-    if (visible) {
-      this.tabGroupId = tabGroup.id;
-      this.inputRef.current.inputRef.current.focus();
-      this.inputRef.current.inputRef.current.value = tabGroup.name;
-      this.inputRef.current.inputRef.current.select();
-    }
+  public async init() {
+    const tabGroup = await this.invoke('tabgroup');
+
+    this.tabGroupId = tabGroup.id;
+    this.inputRef.current.inputRef.current.focus();
+    this.inputRef.current.inputRef.current.value = tabGroup.name;
+    this.inputRef.current.inputRef.current.select();
   }
 }
 

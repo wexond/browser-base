@@ -1,31 +1,27 @@
-import { AppWindow } from '../windows';
-import { TITLEBAR_HEIGHT, DIALOG_MARGIN_TOP } from '~/constants/design';
-import { Dialog } from '.';
+import { BrowserWindow } from 'electron';
+import { Application } from '../application';
+import {
+  DIALOG_MARGIN_TOP,
+  DIALOG_MARGIN,
+  TITLEBAR_HEIGHT,
+} from '~/constants/design';
 
-const WIDTH = 266;
-const HEIGHT = 180;
+export const showTabGroupDialog = (
+  browserWindow: BrowserWindow,
+  tabGroup: any,
+) => {
+  const dialog = Application.instance.dialogs.show({
+    name: 'tabgroup',
+    browserWindow,
+    getBounds: () => ({
+      width: 266,
+      height: 180,
+      x: tabGroup.x - DIALOG_MARGIN,
+      y: TITLEBAR_HEIGHT - DIALOG_MARGIN_TOP,
+    }),
+  });
 
-export class TabGroupDialog extends Dialog {
-  public visible = false;
+  if (!dialog) return;
 
-  constructor(appWindow: AppWindow) {
-    super(appWindow, {
-      name: 'tabgroup',
-      bounds: {
-        width: WIDTH,
-        height: HEIGHT,
-        y: TITLEBAR_HEIGHT - DIALOG_MARGIN_TOP,
-      },
-    });
-  }
-
-  public rearrange() {
-    super.rearrange({ x: this.bounds.x - 20 });
-  }
-
-  public edit(tabGroup: any) {
-    this.bounds.x = Math.round(tabGroup.x);
-    super.show();
-    this.send('visible', true, tabGroup);
-  }
-}
+  dialog.handle('tabgroup', () => tabGroup);
+};
