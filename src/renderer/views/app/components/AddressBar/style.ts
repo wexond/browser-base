@@ -17,17 +17,24 @@ export const StyledAddressBar = styled.div`
   ${({ theme, focus }: { theme: ITheme; focus: boolean }) => css`
     background-color: ${theme['addressbar.backgroundColor']};
     border: 1px solid
-      ${focus && !theme.isCompact ? `${BLUE_300} !important` : 'transparent'};
+      ${focus && !theme.isCompact
+        ? `${BLUE_300} !important`
+        : theme.isCompact
+        ? '1px solid rgba(255, 255, 255, 0.12)'
+        : 'transparent'};
     color: ${theme['addressbar.textColor']};
     box-shadow: ${focus && !theme.isCompact
       ? `0 0 0 1px ${BLUE_300}`
       : `0px 0px 5px 0px rgba(0,0,0,0.1)`};
 
-    &:hover {
-      border: ${theme['toolbar.lightForeground']
-        ? '1px solid rgba(255, 255, 255, 0.12)'
-        : '1px solid rgba(0, 0, 0, 0.12)'};
-    }
+    ${!theme.isCompact &&
+    css`
+      &:hover {
+        border: ${theme['toolbar.lightForeground']
+          ? '1px solid rgba(255, 255, 255, 0.12)'
+          : '1px solid rgba(0, 0, 0, 0.12)'};
+      }
+    `}
   `};
 `;
 

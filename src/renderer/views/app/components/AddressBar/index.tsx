@@ -9,10 +9,7 @@ import { ToolbarButton } from '../ToolbarButton';
 import { StyledAddressBar, InputContainer, Input, Text } from './style';
 import { ICON_SEARCH } from '~/renderer/constants';
 import { SiteButtons } from '../SiteButtons';
-import {
-  DEFAULT_TITLEBAR_HEIGHT,
-  COMPACT_TITLEBAR_HEIGHT,
-} from '~/constants/design';
+import { DEFAULT_TITLEBAR_HEIGHT } from '~/constants/design';
 
 let mouseUpped = false;
 

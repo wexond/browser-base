@@ -156,6 +156,7 @@ interface TabContainerProps {
   pinned: boolean;
   theme?: ITheme;
   hasTabGroup: boolean;
+  selected?: boolean;
 }
 
 export const TabContainer = styled.div`
@@ -170,12 +171,13 @@ export const TabContainer = styled.div`
   border-bottom: transparent !important;
   border: 2px solid;
 
-  ${({ pinned, theme, hasTabGroup }: TabContainerProps) => css`
+  ${({ pinned, theme, hasTabGroup, selected }: TabContainerProps) => css`
     max-width: ${pinned ? `${TAB_PINNED_WIDTH}px` : '100%'};
     margin-top: ${theme.tabMarginTop}px;
     height: ${theme.tabHeight}px;
     border-radius: ${theme.isCompact && !hasTabGroup ? '4px' : 'auto'};
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
+    box-shadow: ${selected ? '0px 0px 6px 0px rgba(0,0,0,0.12)' : 'none'};
   `};
 `;
