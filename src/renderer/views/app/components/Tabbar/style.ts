@@ -57,7 +57,7 @@ export const TabsContainer = styled.div`
 export const AddTab = styled(ToolbarButton)`
   position: absolute;
   left: 0;
-  width: ${ADD_TAB_BUTTON_WIDTH}px;
+  min-width: ${ADD_TAB_BUTTON_WIDTH}px;
   height: ${ADD_TAB_BUTTON_HEIGHT}px;
 
   ${({ theme }: { theme: ITheme }) => css`
