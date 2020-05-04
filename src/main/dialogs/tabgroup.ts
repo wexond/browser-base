@@ -19,6 +19,7 @@ export const showTabGroupDialog = (
       x: tabGroup.x - DIALOG_MARGIN,
       y: TITLEBAR_HEIGHT - DIALOG_MARGIN_TOP,
     }),
+    onWindowBoundsUpdate: () => dialog.hide(),
   });
 
   if (!dialog) return;

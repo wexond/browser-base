@@ -3,20 +3,22 @@ import { BrowserWindow } from 'electron';
 import { Application } from '../application';
 
 export const showFindDialog = (browserWindow: BrowserWindow) => {
-  const { width } = browserWindow.getContentBounds();
   const appWindow = Application.instance.windows.fromBrowserWindow(
     browserWindow,
   );
 
-  Application.instance.dialogs.show({
+  const dialog = Application.instance.dialogs.show({
     name: 'find',
     browserWindow,
-    getBounds: () => ({
-      width: 416,
-      height: 70,
-      x: width - 416,
-      y: VIEW_Y_OFFSET,
-    }),
+    getBounds: () => {
+      const { width } = browserWindow.getContentBounds();
+      return {
+        width: 416,
+        height: 70,
+        x: width - 416,
+        y: VIEW_Y_OFFSET,
+      };
+    },
     tabAssociation: {
       tabId: appWindow.viewManager.selectedId,
       getTabInfo: (tabId) => {
@@ -27,6 +29,9 @@ export const showFindDialog = (browserWindow: BrowserWindow) => {
         const tab = appWindow.viewManager.views.get(tabId);
         tab.findInfo = info;
       },
+    },
+    onWindowBoundsUpdate: (disposition) => {
+      if (disposition === 'resize') dialog.rearrange();
     },
   });
 };

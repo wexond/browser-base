@@ -12,12 +12,15 @@ interface IDialogTabAssociation {
   setTabInfo?: (tabId: number, ...args: any[]) => void;
 }
 
+type BoundsDisposition = 'move' | 'resize';
+
 interface IDialogShowOptions {
   name: string;
   browserWindow: Electron.BrowserWindow;
   hideTimeout?: number;
   devtools?: boolean;
   tabAssociation?: IDialogTabAssociation;
+  onWindowBoundsUpdate?: (disposition: BoundsDisposition) => void;
   onHide?: (dialog: IDialog) => void;
   getBounds: () => IRectangle;
 }
@@ -83,6 +86,7 @@ export class DialogsService {
       devtools,
       onHide,
       hideTimeout,
+      onWindowBoundsUpdate,
       tabAssociation,
     } = options;
 
@@ -122,10 +126,17 @@ export class DialogsService {
       browserView.webContents.openDevTools({ mode: 'detach' });
     }
 
-    const channels: string[] = [];
+    const tabsEvents: {
+      activate?: (id: number) => void;
+      remove?: (id: number) => void;
+    } = {};
 
-    let activateHandler: any;
-    let closeHandler: any;
+    const windowEvents: {
+      resize?: () => void;
+      move?: () => void;
+    } = {};
+
+    const channels: string[] = [];
 
     const dialog: IDialog = {
       browserView,
@@ -173,8 +184,8 @@ export class DialogsService {
         }
 
         if (tabAssociation) {
-          appWindow.viewManager.off('activated', activateHandler);
-          appWindow.viewManager.off('activated', closeHandler);
+          appWindow.viewManager.off('activated', tabsEvents.activate);
+          appWindow.viewManager.off('removed', tabsEvents.remove);
         }
 
         if (onHide) onHide(dialog);
@@ -202,6 +213,41 @@ export class DialogsService {
       },
     };
 
+    tabsEvents.activate = (id) => {
+      const visible = dialog.tabIds.includes(id);
+      browserWindow.webContents.send('dialog-visibility-change', name, visible);
+
+      if (visible) {
+        dialog._sendTabInfo(id);
+        browserWindow.removeBrowserView(browserView);
+        browserWindow.addBrowserView(browserView);
+      } else {
+        browserWindow.removeBrowserView(browserView);
+      }
+    };
+
+    tabsEvents.remove = (id) => {
+      dialog.hide(id);
+    };
+
+    windowEvents.move = () => {
+      onWindowBoundsUpdate('move');
+    };
+
+    windowEvents.resize = () => {
+      onWindowBoundsUpdate('resize');
+    };
+
+    if (tabAssociation) {
+      appWindow.viewManager.on('removed', tabsEvents.remove);
+      appWindow.viewManager.on('activated', tabsEvents.activate);
+    }
+
+    if (onWindowBoundsUpdate) {
+      browserWindow.on('resize', windowEvents.resize);
+      browserWindow.on('move', windowEvents.move);
+    }
+
     browserView.webContents.once('dom-ready', () => {
       dialog.rearrange();
       browserView.webContents.focus();
@@ -213,32 +259,6 @@ export class DialogsService {
       browserView.webContents.loadURL(
         join('file://', app.getAppPath(), `build/${name}.html`),
       );
-    }
-
-    if (tabAssociation) {
-      activateHandler = (id: number) => {
-        const visible = dialog.tabIds.includes(id);
-        browserWindow.webContents.send(
-          'dialog-visibility-change',
-          name,
-          visible,
-        );
-
-        if (visible) {
-          dialog._sendTabInfo(id);
-          browserWindow.removeBrowserView(browserView);
-          browserWindow.addBrowserView(browserView);
-        } else {
-          browserWindow.removeBrowserView(browserView);
-        }
-      };
-
-      closeHandler = (id: number) => {
-        dialog.hide(id);
-      };
-
-      appWindow.viewManager.on('removed', closeHandler);
-      appWindow.viewManager.on('activated', activateHandler);
     }
 
     ipcMain.on(`hide-${browserView.webContents.id}`, () => {

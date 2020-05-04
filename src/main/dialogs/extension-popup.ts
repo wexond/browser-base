@@ -25,6 +25,7 @@ export const showExtensionDialog = (
         width: Math.min(1024, width),
       };
     },
+    onWindowBoundsUpdate: () => dialog.hide(),
   });
 
   if (!dialog) return;
