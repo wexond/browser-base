@@ -46,6 +46,11 @@ export class Store {
   public addressbarEditing = false;
 
   @computed
+  public get isCompact() {
+    return this.settings.object.topBarVariant === 'compact';
+  }
+
+  @computed
   public get addressbarValue() {
     const tab = this.tabs.selectedTab;
     if (tab?.addressbarValue != null) return tab?.addressbarValue;

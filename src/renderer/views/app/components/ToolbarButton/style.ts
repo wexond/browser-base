@@ -29,7 +29,6 @@ export const Icon = styled.div`
     dense?: boolean;
     theme?: ITheme;
   }) => css`
-    margin-top: ${dense ? 0 : -1}px;
     ${centerIcon(size)};
     opacity: ${disabled ? 0.25 : opacity};
     filter: ${autoInvert && theme['toolbar.lightForeground']

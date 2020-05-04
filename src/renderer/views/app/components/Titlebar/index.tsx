@@ -7,6 +7,8 @@ import { Tabbar } from '../Tabbar';
 import { platform } from 'os';
 import { WindowsControls } from 'react-windows-controls';
 import { StyledTitlebar } from './style';
+import { NavigationButtons } from '../NavigationButtons';
+import { RightButtons } from '../RightButtons';
 
 const onCloseClick = () => ipcRenderer.send(`window-close-${store.windowId}`);
 
@@ -28,7 +30,11 @@ export const Titlebar = observer(() => {
       onMouseDown={onMouseDown}
       isHTMLFullscreen={store.isHTMLFullscreen}
     >
+      {store.settings.object.topBarVariant === 'compact' && (
+        <NavigationButtons />
+      )}
       <Tabbar />
+      {store.settings.object.topBarVariant === 'compact' && <RightButtons />}
       {platform() !== 'darwin' && (
         <WindowsControls
           style={{

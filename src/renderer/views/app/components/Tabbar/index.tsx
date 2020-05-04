@@ -7,6 +7,7 @@ import store from '../../store';
 import { ipcRenderer } from 'electron';
 import { TabGroup } from '../TabGroup';
 import { ICON_ADD } from '~/renderer/constants/icons';
+import { AddressBarContainer } from '../AddressBarContainer';
 
 let timeout: any;
 
@@ -68,6 +69,9 @@ export const Tabbar = observer(() => {
         onClick={onAddTabClick}
         divRef={(r: any) => (store.addTab.ref = r)}
       />
+      {store.settings.object.topBarVariant === 'compact' && (
+        <AddressBarContainer />
+      )}
     </StyledTabbar>
   );
 });

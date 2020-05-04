@@ -12,10 +12,7 @@ import {
   StyledPinAction,
   TabContainer,
 } from './style';
-import {
-  ICON_VOLUME_HIGH,
-  ICON_VOLUME_OFF,
-} from '~/renderer/constants';
+import { ICON_VOLUME_HIGH, ICON_VOLUME_OFF } from '~/renderer/constants';
 import { ITab } from '../../models';
 import store from '../../store';
 import { remote, ipcRenderer } from 'electron';
@@ -27,7 +24,7 @@ const removeTab = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {
 
 const toggleMuteTab = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {
   e.stopPropagation();
-  tab.isMuted ? store.tabs.unmuteTab(tab) : store.tabs.muteTab(tab)
+  tab.isMuted ? store.tabs.unmuteTab(tab) : store.tabs.muteTab(tab);
 };
 
 const onCloseMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -288,16 +285,18 @@ export default observer(({ tab }: { tab: ITab }) => {
       ref={tab.ref}
     >
       <TabContainer
+        hasTabGroup={tab.tabGroupId != undefined}
         pinned={tab.isPinned}
         style={{
           backgroundColor: tab.isSelected
             ? store.theme['toolbar.backgroundColor']
             : tab.isHovered
-              ? defaultHoverColor
-              : defaultColor,
-          borderColor: (tab.isSelected && tab.tabGroupId != undefined)
-            ? tab.tabGroup.color
-            : 'transparent',
+            ? defaultHoverColor
+            : defaultColor,
+          borderColor:
+            tab.isSelected && tab.tabGroupId != undefined && !store.isCompact
+              ? tab.tabGroup.color
+              : 'transparent',
         }}
       >
         <Content tab={tab} />

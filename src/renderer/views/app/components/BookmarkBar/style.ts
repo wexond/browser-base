@@ -12,14 +12,19 @@ export const BookmarkBar = styled.div`
   flex-flow: row;
   color: rgba(0, 0, 0, 0.8);
   width: 100%;
-  height: 32px;
+  min-height: 32px;
   padding: 2px 8px;
   padding-top: 0px;
   padding-right: 4px;
-  margin-top: -3px;
   ${({ theme }: { theme: ITheme }) => css`
-    background-color: ${theme['toolbar.backgroundColor']};
-    border-bottom: 1px solid ${theme['toolbar.bottomLine.backgroundColor']};
+    margin-top: ${theme.isCompact ? 0 : -1}px;
+    background-color: ${theme.isCompact
+      ? theme['titlebar.backgroundColor']
+      : theme['toolbar.backgroundColor']};
+    border-bottom: 1px solid
+      ${theme.isCompact
+        ? 'transparent'
+        : theme['toolbar.bottomLine.backgroundColor']};
     color: ${theme['addressbar.textColor']};
   `};
 `;

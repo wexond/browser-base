@@ -16,9 +16,10 @@ export const StyledAddressBar = styled.div`
 
   ${({ theme, focus }: { theme: ITheme; focus: boolean }) => css`
     background-color: ${theme['addressbar.backgroundColor']};
-    border: 1px solid ${focus ? `${BLUE_300} !important` : 'transparent'};
+    border: 1px solid
+      ${focus && !theme.isCompact ? `${BLUE_300} !important` : 'transparent'};
     color: ${theme['addressbar.textColor']};
-    box-shadow: ${focus
+    box-shadow: ${focus && !theme.isCompact
       ? `0 0 0 1px ${BLUE_300}`
       : `0px 0px 5px 0px rgba(0,0,0,0.1)`};
 

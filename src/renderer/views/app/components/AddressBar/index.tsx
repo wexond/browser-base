@@ -77,13 +77,14 @@ const addressbarRef = React.createRef<HTMLDivElement>();
 const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   store.tabs.selectedTab.addressbarValue = e.currentTarget.value;
 
-  const { left, width } = addressbarRef.current.getBoundingClientRect();
+  const { left, top, width } = addressbarRef.current.getBoundingClientRect();
 
   if (e.currentTarget.value.trim() !== '') {
     ipcRenderer.send(`search-show-${store.windowId}`, {
       text: e.currentTarget.value,
       cursorPos: e.currentTarget.selectionStart,
       x: left,
+      y: top,
       width: width,
     });
     store.addressbarEditing = true;
@@ -142,7 +143,7 @@ export const AddressBar = observer(() => {
           ))}
         </Text>
       </InputContainer>
-      {store.settings.object.topBarVariant === 'default' && <SiteButtons />}
+      {!store.isCompact && <SiteButtons />}
     </StyledAddressBar>
   );
 });
