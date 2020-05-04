@@ -586,6 +586,8 @@ export class TabsStore {
         return;
       }
 
+      store.canOpenSearch = false;
+
       selectedTab.isDragging = true;
 
       const newLeft =

@@ -36,6 +36,8 @@ export class Store {
 
   public inputRef: HTMLInputElement;
 
+  public canOpenSearch = false;
+
   @observable
   public addressbarTextVisible = true;
 
