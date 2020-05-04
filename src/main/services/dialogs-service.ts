@@ -37,7 +37,7 @@ interface IDialog {
   rearrange: (bounds?: IRectangle) => void;
 }
 
-const roundifyRectangle = (rect: IRectangle): IRectangle => {
+export const roundifyRectangle = (rect: IRectangle): IRectangle => {
   const newRect: any = { ...rect };
   Object.keys(newRect).forEach((key) => {
     if (!isNaN(newRect[key])) newRect[key] = Math.round(newRect[key]);

@@ -9,6 +9,10 @@ import { ToolbarButton } from '../ToolbarButton';
 import { StyledAddressBar, InputContainer, Input, Text } from './style';
 import { ICON_SEARCH } from '~/renderer/constants';
 import { SiteButtons } from '../SiteButtons';
+import {
+  DEFAULT_TITLEBAR_HEIGHT,
+  COMPACT_TITLEBAR_HEIGHT,
+} from '~/constants/design';
 
 let mouseUpped = false;
 
@@ -77,14 +81,14 @@ const addressbarRef = React.createRef<HTMLDivElement>();
 const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   store.tabs.selectedTab.addressbarValue = e.currentTarget.value;
 
-  const { left, top, width } = addressbarRef.current.getBoundingClientRect();
+  const { left, width } = addressbarRef.current.getBoundingClientRect();
 
   if (e.currentTarget.value.trim() !== '') {
     ipcRenderer.send(`search-show-${store.windowId}`, {
       text: e.currentTarget.value,
       cursorPos: e.currentTarget.selectionStart,
       x: left,
-      y: top,
+      y: !store.isCompact ? DEFAULT_TITLEBAR_HEIGHT : 0,
       width: width,
     });
     store.addressbarEditing = true;

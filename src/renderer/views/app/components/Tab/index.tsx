@@ -16,6 +16,7 @@ import { ICON_VOLUME_HIGH, ICON_VOLUME_OFF } from '~/renderer/constants';
 import { ITab } from '../../models';
 import store from '../../store';
 import { remote, ipcRenderer } from 'electron';
+import { COMPACT_TAB_MARGIN_TOP } from '~/constants/design';
 
 const removeTab = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {
   e.stopPropagation();
@@ -63,12 +64,16 @@ const onMouseEnter = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {
     store.tabs.hoveredTabId = tab.id;
   }
 
-  const x = tab.ref.current.getBoundingClientRect().left + 8;
+  const { bottom, left } = tab.ref.current.getBoundingClientRect();
+
+  const x = left + 8;
+  const y = store.isCompact ? bottom - COMPACT_TAB_MARGIN_TOP : bottom;
 
   if (store.tabs.canShowPreview && !store.tabs.isDragging) {
     ipcRenderer.send(`show-tab-preview-${store.windowId}`, {
       id: tab.id,
       x,
+      y,
     });
   }
 };
