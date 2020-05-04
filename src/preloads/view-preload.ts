@@ -112,7 +112,10 @@ const postMsg = (data: any, res: any) => {
 
 const hostname = window.location.href.substr(WEBUI_BASE_URL.length);
 
-if (window.location.host === 'chrome.google.com') {
+if (
+  process.env.ENABLE_EXTENSIONS &&
+  window.location.host === 'chrome.google.com'
+) {
   injectChromeWebstoreInstallButton();
 }
 
