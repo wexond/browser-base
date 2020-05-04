@@ -1,24 +1,19 @@
 import { BrowserWindow } from 'electron';
 import { Application } from '../application';
-import {
-  DIALOG_MARGIN_TOP,
-  DIALOG_MARGIN,
-  TITLEBAR_HEIGHT,
-} from '~/constants/design';
+import { DIALOG_MARGIN_TOP, DIALOG_MARGIN } from '~/constants/design';
 import { PersistentDialog } from './dialog';
 
 const HEIGHT = 256;
 
 export class PreviewDialog extends PersistentDialog {
   public visible = false;
-  public tab: { id?: number; x?: number } = {};
+  public tab: { id?: number; x?: number; y?: number } = {};
 
   constructor() {
     super({
       name: 'preview',
       bounds: {
         height: HEIGHT,
-        y: TITLEBAR_HEIGHT,
       },
       hideTimeout: 150,
     });
@@ -26,7 +21,7 @@ export class PreviewDialog extends PersistentDialog {
 
   public rearrange() {
     const { width } = this.browserWindow.getContentBounds();
-    super.rearrange({ width });
+    super.rearrange({ width, y: this.tab.y });
   }
 
   public async show(browserWindow: BrowserWindow) {
@@ -45,7 +40,7 @@ export class PreviewDialog extends PersistentDialog {
       id,
       url: url.startsWith('wexond-error') ? errorURL : url,
       title,
-      x: Math.round(this.tab.x - 8),
+      x: this.tab.x - 8,
     });
   }
 

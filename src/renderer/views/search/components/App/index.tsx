@@ -10,6 +10,11 @@ import { ipcRenderer } from 'electron';
 import { Suggestions } from '../Suggestions';
 import { ICON_SEARCH, ICON_PAGE } from '~/renderer/constants';
 import { UIStyle } from '~/renderer/mixins/default-styles';
+import {
+  COMPACT_TITLEBAR_HEIGHT,
+  DEFAULT_TITLEBAR_HEIGHT,
+  TOOLBAR_HEIGHT,
+} from '~/constants/design';
 
 const onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
   if (e.which === 13) {
@@ -118,7 +123,15 @@ export const App = hot(
     }
 
     return (
-      <ThemeProvider theme={{ ...store.theme }}>
+      <ThemeProvider
+        theme={{
+          ...store.theme,
+          searchBoxHeight:
+            store.settings.topBarVariant === 'compact'
+              ? COMPACT_TITLEBAR_HEIGHT
+              : TOOLBAR_HEIGHT - 1,
+        }}
+      >
         <StyledApp>
           <UIStyle />
           <SearchBox>

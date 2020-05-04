@@ -6,6 +6,7 @@ import { Title, Row, Control, Header } from '../App/style';
 import store from '../../store';
 import { onSwitchChange } from '../../utils';
 import { observer } from 'mobx-react-lite';
+import { TopBarVariant } from '~/interfaces';
 
 const onThemeChange = (value: string) => {
   if (value === 'auto') {
@@ -32,6 +33,28 @@ const ThemeVariant = observer(() => {
           <Dropdown.Item value="auto">Auto</Dropdown.Item>
           <Dropdown.Item value="wexond-light">Light</Dropdown.Item>
           <Dropdown.Item value="wexond-dark">Dark</Dropdown.Item>
+        </Dropdown>
+      </Control>
+    </Row>
+  );
+});
+
+const onTopBarChange = (value: TopBarVariant) => {
+  store.settings.topBarVariant = value;
+  store.save();
+};
+
+const TopBarVariant = observer(() => {
+  return (
+    <Row>
+      <Title>Top bar variant</Title>
+      <Control>
+        <Dropdown
+          defaultValue={store.settings.topBarVariant}
+          onChange={onTopBarChange}
+        >
+          <Dropdown.Item value="default">Full</Dropdown.Item>
+          <Dropdown.Item value="compact">Compact</Dropdown.Item>
         </Dropdown>
       </Control>
     </Row>
@@ -85,6 +108,7 @@ export const Appearance = observer(() => {
       <BookmarksBar />
       <WarnQuit />
       <ThemeVariant />
+      <TopBarVariant />
     </>
   );
 });

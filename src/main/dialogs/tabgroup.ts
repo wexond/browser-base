@@ -1,10 +1,6 @@
 import { BrowserWindow } from 'electron';
 import { Application } from '../application';
-import {
-  DIALOG_MARGIN_TOP,
-  DIALOG_MARGIN,
-  TITLEBAR_HEIGHT,
-} from '~/constants/design';
+import { DIALOG_MARGIN_TOP, DIALOG_MARGIN } from '~/constants/design';
 
 export const showTabGroupDialog = (
   browserWindow: BrowserWindow,
@@ -17,7 +13,7 @@ export const showTabGroupDialog = (
       width: 266,
       height: 180,
       x: tabGroup.x - DIALOG_MARGIN,
-      y: TITLEBAR_HEIGHT - DIALOG_MARGIN_TOP,
+      y: tabGroup.y - DIALOG_MARGIN_TOP,
     }),
     onWindowBoundsUpdate: () => dialog.hide(),
   });

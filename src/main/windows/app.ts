@@ -203,13 +203,11 @@ export class AppWindow {
   }
 
   public fixDragging() {
-    if (process.platform === 'darwin') {
-      const bounds = this.win.getBounds();
-      this.win.setBounds({
-        height: bounds.height + 1,
-      });
-      this.win.setBounds(bounds);
-    }
+    const bounds = this.win.getBounds();
+    this.win.setBounds({
+      height: bounds.height + 1,
+    });
+    this.win.setBounds(bounds);
   }
 
   public send(channel: string, ...args: any[]) {

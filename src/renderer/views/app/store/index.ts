@@ -34,7 +34,7 @@ export class Store {
     return getTheme(this.settings.object.theme);
   }
 
-  public inputRef = React.createRef<HTMLInputElement>();
+  public inputRef: HTMLInputElement;
 
   @observable
   public addressbarTextVisible = true;
@@ -44,6 +44,11 @@ export class Store {
 
   @observable
   public addressbarEditing = false;
+
+  @computed
+  public get isCompact() {
+    return this.settings.object.topBarVariant === 'compact';
+  }
 
   @computed
   public get addressbarValue() {
@@ -246,15 +251,15 @@ export class Store {
         tab.addressbarSelectionRange = [data.selectionStart, data.selectionEnd];
 
         if (tab.isSelected) {
-          this.inputRef.current.value = data.text;
-          this.inputRef.current.setSelectionRange(
+          this.inputRef.value = data.text;
+          this.inputRef.setSelectionRange(
             data.selectionStart,
             data.selectionEnd,
           );
 
           if (data.focus) {
             remote.getCurrentWebContents().focus();
-            this.inputRef.current.focus();
+            this.inputRef.focus();
           }
 
           if (data.escape) {
@@ -262,7 +267,7 @@ export class Store {
             this.tabs.selectedTab.addressbarValue = null;
 
             requestAnimationFrame(() => {
-              this.inputRef.current.select();
+              this.inputRef.select();
             });
           }
         }

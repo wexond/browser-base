@@ -75,4 +75,5 @@ export const DEFAULT_SETTINGS: ISettings = {
     ? app.getPath('downloads')
     : '',
   doNotTrack: true,
+  topBarVariant: 'default',
 };

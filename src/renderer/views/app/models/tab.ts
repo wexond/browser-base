@@ -152,8 +152,8 @@ export class ITab {
       );
 
       if (focused) {
-        store.inputRef.current.focus();
-        store.inputRef.current.setSelectionRange(
+        store.inputRef.focus();
+        store.inputRef.setSelectionRange(
           this.addressbarSelectionRange[0],
           this.addressbarSelectionRange[1],
         );

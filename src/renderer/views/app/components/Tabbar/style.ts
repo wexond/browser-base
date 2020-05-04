@@ -6,14 +6,15 @@ import {
   TOOLBAR_BUTTON_WIDTH,
   ADD_TAB_BUTTON_WIDTH,
   ADD_TAB_BUTTON_HEIGHT,
-  TAB_MARGIN_TOP,
 } from '~/constants/design';
+import { ITheme } from '~/interfaces';
 
 export const StyledTabbar = styled.div`
   height: 100%;
   width: 100%;
   position: relative;
   overflow: hidden;
+  align-items: center;
   margin-right: 32px;
   display: flex;
   ${({ isFullscreen }: { isFullscreen: boolean }) => css`
@@ -56,7 +57,10 @@ export const TabsContainer = styled.div`
 export const AddTab = styled(ToolbarButton)`
   position: absolute;
   left: 0;
-  margin-top: ${TAB_MARGIN_TOP + 2}px;
-  width: ${ADD_TAB_BUTTON_WIDTH}px;
+  min-width: ${ADD_TAB_BUTTON_WIDTH}px;
   height: ${ADD_TAB_BUTTON_HEIGHT}px;
+
+  ${({ theme }: { theme: ITheme }) => css`
+    top: ${theme.isCompact ? 'auto' : theme.tabMarginTop + 2}px;
+  `};
 `;

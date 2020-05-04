@@ -1,5 +1,6 @@
 import { BrowserView, app, ipcMain, BrowserWindow } from 'electron';
 import { join } from 'path';
+import { roundifyRectangle } from '../services/dialogs-service';
 
 interface IOptions {
   name: string;
@@ -91,12 +92,12 @@ export class PersistentDialog {
   }
 
   public rearrange(rect: IRectangle = {}) {
-    this.bounds = {
-      height: rect.height || this.bounds.height,
-      width: rect.width || this.bounds.width,
-      x: rect.x || this.bounds.x,
-      y: rect.y || this.bounds.y,
-    };
+    this.bounds = roundifyRectangle({
+      height: rect.height || this.bounds.height || 0,
+      width: rect.width || this.bounds.width || 0,
+      x: rect.x || this.bounds.x || 0,
+      y: rect.y || this.bounds.y || 0,
+    });
 
     if (this.visible) {
       this.browserView.setBounds(this.bounds as any);

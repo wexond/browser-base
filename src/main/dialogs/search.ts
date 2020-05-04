@@ -2,7 +2,6 @@ import { ipcMain, BrowserWindow } from 'electron';
 import {
   DIALOG_MIN_HEIGHT,
   DIALOG_MARGIN_TOP,
-  TITLEBAR_HEIGHT,
   DIALOG_MARGIN,
 } from '~/constants/design';
 import { PersistentDialog } from './dialog';
@@ -17,6 +16,7 @@ export class SearchDialog extends PersistentDialog {
   public data = {
     text: '',
     x: 0,
+    y: 0,
     width: 200,
   };
 
@@ -47,9 +47,9 @@ export class SearchDialog extends PersistentDialog {
 
   public rearrange() {
     super.rearrange({
-      x: Math.round(this.data.x - DIALOG_MARGIN),
-      y: TITLEBAR_HEIGHT - DIALOG_MARGIN_TOP,
-      width: Math.round(this.data.width + 2 * DIALOG_MARGIN),
+      x: this.data.x - DIALOG_MARGIN,
+      y: this.data.y - DIALOG_MARGIN_TOP,
+      width: this.data.width + 2 * DIALOG_MARGIN,
     });
   }
 
