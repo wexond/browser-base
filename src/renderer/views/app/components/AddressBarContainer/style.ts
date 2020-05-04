@@ -20,6 +20,7 @@ export const StyledAddressBarContainer = styled.div`
     opacity: ${visible ? 1 : 0};
     transform: scale(${visible ? 1 : 1.05});
     pointer-events: ${visible ? 'inherit' : 'none'};
+    -webkit-app-region: ${visible ? `no-drag` : `inherit`};
     background-color: ${() => {
       const { r, g, b } = hexToRgb(theme['titlebar.backgroundColor']);
       return `rgba(${r}, ${g}, ${b}, 0.7)`;

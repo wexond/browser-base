@@ -18,6 +18,8 @@ import store from '../../store';
 import { remote, ipcRenderer } from 'electron';
 import { COMPACT_TAB_MARGIN_TOP } from '~/constants/design';
 
+let canOpenSearch = false;
+
 const removeTab = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {
   e.stopPropagation();
   tab.close();
@@ -46,6 +48,8 @@ const onMouseDown = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {
   if (button === 0) {
     if (!tab.isSelected) {
       tab.select();
+    } else {
+      canOpenSearch = true;
     }
 
     store.tabs.lastMouseX = 0;
@@ -85,6 +89,12 @@ const onMouseLeave = () => {
 const onClick = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {
   if (e.button === 4) {
     tab.close();
+    return;
+  }
+
+  if (e.button === 0 && canOpenSearch) {
+    store.inputRef.current.focus();
+    canOpenSearch = false;
   }
 };
 

@@ -10,7 +10,7 @@ export const StyledAddressBar = styled.div`
   display: flex;
   align-items: center;
   position: relative;
-  padding-top: 1px;
+
   font-size: 15px;
   overflow: hidden;
 
@@ -53,6 +53,7 @@ export const Text = styled.div`
   transform: translateY(calc(-50%));
   flex: 1;
   color: inherit;
+  margin-top: -1px;
   flex-wrap: nowrap;
   white-space: nowrap;
   overflow: hidden;

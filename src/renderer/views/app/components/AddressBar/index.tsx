@@ -14,6 +14,10 @@ import { DEFAULT_TITLEBAR_HEIGHT } from '~/constants/design';
 let mouseUpped = false;
 
 const onMouseDown = (e: React.MouseEvent<HTMLInputElement>) => {
+  e.stopPropagation();
+
+  if (!store.isCompact) return;
+
   store.addressbarTextVisible = false;
   store.addressbarFocused = true;
 };
@@ -25,6 +29,8 @@ const onFocus = (e: React.FocusEvent<HTMLInputElement>) => {
   if (store.tabs.selectedTab) {
     store.tabs.selectedTab.addressbarFocused = true;
   }
+
+  if (store.isCompact) e.currentTarget.select();
 };
 
 const onSelect = (e: React.MouseEvent<HTMLInputElement>) => {
@@ -37,7 +43,11 @@ const onSelect = (e: React.MouseEvent<HTMLInputElement>) => {
 };
 
 const onMouseUp = (e: React.MouseEvent<HTMLInputElement>) => {
-  if (window.getSelection().toString().length === 0 && !mouseUpped) {
+  if (
+    !store.isCompact &&
+    window.getSelection().toString().length === 0 &&
+    !mouseUpped
+  ) {
     e.currentTarget.select();
   }
 
