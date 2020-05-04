@@ -42,7 +42,7 @@ const onMouseDown = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {
   const { pageX, button } = e;
 
   if (store.addressbarEditing) {
-    store.inputRef.current.focus();
+    store.inputRef.focus();
   }
 
   if (button === 0) {
@@ -93,7 +93,7 @@ const onClick = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {
   }
 
   if (e.button === 0 && canOpenSearch) {
-    store.inputRef.current.focus();
+    store.inputRef.focus();
     canOpenSearch = false;
   }
 };

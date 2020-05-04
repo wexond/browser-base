@@ -7,7 +7,7 @@ import store from '../../store';
 export const AddressBarContainer = observer(() => {
   return (
     <StyledAddressBarContainer
-      onMouseDown={() => store.inputRef.current.blur()}
+      onMouseDown={() => store.inputRef.blur()}
       visible={store.addressbarFocused || store.addressbarEditing}
     >
       <AddressBar />
