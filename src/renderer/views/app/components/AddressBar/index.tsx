@@ -112,7 +112,7 @@ const onBlur = (e: React.FocusEvent<HTMLInputElement>) => {
   store.addressbarFocused = false;
   mouseUpped = false;
 
-  if (store.isCompact)
+  if (store.isCompact && !store.addressbarEditing)
     ipcRenderer.send(`window-fix-dragging-${store.windowId}`);
 
   const { selectedTab } = store.tabs;
