@@ -19,6 +19,7 @@ export const showZoomDialog = (
       x: x - 280 + DIALOG_MARGIN,
       y: y - DIALOG_MARGIN_TOP,
     }),
+    onWindowBoundsUpdate: () => dialog.hide(),
   });
 
   if (!dialog) return;

@@ -38,7 +38,10 @@ export const showAddBookmarkDialog = (
       x: x - 366 + DIALOG_MARGIN,
       y: y - DIALOG_MARGIN_TOP,
     }),
+    onWindowBoundsUpdate: () => dialog.hide(),
   });
+
+  if (!dialog) return;
 
   dialog.on('loaded', (e) => {
     e.reply('data', data);

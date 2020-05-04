@@ -34,6 +34,7 @@ export const showDownloadsDialog = (
         height,
       };
     },
+    onWindowBoundsUpdate: () => dialog.hide(),
   });
 
   if (!dialog) return;

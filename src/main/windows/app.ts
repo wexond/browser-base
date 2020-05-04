@@ -80,12 +80,6 @@ export class AppWindow {
       if (!this.win.isMaximized()) {
         windowState.bounds = this.win.getBounds();
       }
-
-      /*Object.values(this.dialogs).forEach((dialog) => {
-        if (dialog.visible) {
-          dialog.rearrange();
-        }
-      });*/
     });
 
     this.win.on('move', () => {

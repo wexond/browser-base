@@ -40,7 +40,12 @@ export const requestPermission = (
           return tab.requestedPermission;
         },
       },
+      onWindowBoundsUpdate: (disposition) => {
+        if (disposition === 'resize') dialog.rearrange();
+      },
     });
+
+    if (!dialog) return;
 
     dialog.on('result', (e, result) => {
       resolve(result);

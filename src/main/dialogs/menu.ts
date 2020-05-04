@@ -8,7 +8,7 @@ export const showMenuDialog = (
   y: number,
 ) => {
   const menuWidth = 330;
-  Application.instance.dialogs.show({
+  const dialog = Application.instance.dialogs.show({
     name: 'menu',
     browserWindow,
     getBounds: () => ({
@@ -17,5 +17,8 @@ export const showMenuDialog = (
       x: x - menuWidth + DIALOG_MARGIN,
       y: y - DIALOG_MARGIN_TOP,
     }),
+    onWindowBoundsUpdate: () => {
+      dialog.hide();
+    },
   });
 };

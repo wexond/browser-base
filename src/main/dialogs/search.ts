@@ -53,8 +53,14 @@ export class SearchDialog extends PersistentDialog {
     });
   }
 
+  private onResize = () => {
+    this.hide();
+  };
+
   public async show(browserWindow: BrowserWindow) {
     super.show(browserWindow, true, false);
+
+    browserWindow.once('resize', this.onResize);
 
     this.send('visible', true, {
       id: Application.instance.windows.current.viewManager.selectedId,
@@ -70,5 +76,6 @@ export class SearchDialog extends PersistentDialog {
 
   public hide(bringToTop = false) {
     super.hide(bringToTop);
+    this.browserWindow.removeListener('resize', this.onResize);
   }
 }
