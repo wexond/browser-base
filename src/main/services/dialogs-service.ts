@@ -188,6 +188,9 @@ export class DialogsService {
           appWindow.viewManager.off('removed', tabsEvents.remove);
         }
 
+        browserWindow.removeListener('resize', windowEvents.resize);
+        browserWindow.removeListener('move', windowEvents.move);
+
         if (onHide) onHide(dialog);
       },
       handle: (name, cb) => {
@@ -230,12 +233,21 @@ export class DialogsService {
       dialog.hide(id);
     };
 
+    const emitWindowBoundsUpdate = (type: BoundsDisposition) => {
+      if (
+        tabAssociation &&
+        !dialog.tabIds.includes(appWindow.viewManager.selectedId)
+      ) {
+        onWindowBoundsUpdate(type);
+      }
+    };
+
     windowEvents.move = () => {
-      onWindowBoundsUpdate('move');
+      emitWindowBoundsUpdate('move');
     };
 
     windowEvents.resize = () => {
-      onWindowBoundsUpdate('resize');
+      emitWindowBoundsUpdate('resize');
     };
 
     if (tabAssociation) {
