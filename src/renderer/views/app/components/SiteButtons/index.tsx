@@ -13,17 +13,16 @@ import { parse } from 'url';
 import store from '../../store';
 import { ToolbarButton } from '../ToolbarButton';
 
-let starRef: HTMLDivElement = null;
-let zoomRef: HTMLDivElement = null;
-
 const showAddBookmarkDialog = async () => {
-  const { right, bottom } = starRef.getBoundingClientRect();
+  const star = document.getElementById('star');
+  const { right, bottom } = star.getBoundingClientRect();
   ipcRenderer.send(`show-add-bookmark-dialog-${store.windowId}`, right, bottom);
 };
 
 const showZoomDialog = async () => {
   if (store.zoomFactor != 1) {
-    const { right, bottom } = zoomRef.getBoundingClientRect();
+    const zoom = document.getElementById('zoom');
+    const { right, bottom } = zoom.getBoundingClientRect();
     ipcRenderer.send(`show-zoom-dialog-${store.windowId}`, right, bottom);
   }
 };
@@ -86,7 +85,7 @@ export const SiteButtons = observer(() => {
       )}
       {(store.dialogsVisibility['zoom'] || store.zoomFactor !== 1) && (
         <ToolbarButton
-          divRef={(r) => (zoomRef = r)}
+          id="zoom"
           toggled={store.dialogsVisibility['zoom']}
           icon={store.zoomFactor >= 1 ? ICON_MAGNIFY_PLUS : ICON_MAGNIFY_MINUS}
           size={18}
@@ -95,7 +94,7 @@ export const SiteButtons = observer(() => {
         />
       )}
       <ToolbarButton
-        divRef={(r) => (starRef = r)}
+        id="star"
         toggled={store.dialogsVisibility['add-bookmark']}
         icon={store.isBookmarked ? ICON_STAR_FILLED : ICON_STAR}
         size={18}

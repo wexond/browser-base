@@ -86,12 +86,12 @@ const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
   }
 };
 
-const addressbarRef = React.createRef<HTMLDivElement>();
+let addressbarRef: HTMLDivElement;
 
 const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   store.tabs.selectedTab.addressbarValue = e.currentTarget.value;
 
-  const { left, width } = addressbarRef.current.getBoundingClientRect();
+  const { left, width } = addressbarRef.getBoundingClientRect();
 
   if (e.currentTarget.value.trim() !== '') {
     ipcRenderer.send(`search-show-${store.windowId}`, {
@@ -124,7 +124,10 @@ const onBlur = (e: React.FocusEvent<HTMLInputElement>) => {
 
 export const AddressBar = observer(() => {
   return (
-    <StyledAddressBar ref={addressbarRef} focus={store.addressbarFocused}>
+    <StyledAddressBar
+      ref={(r) => (addressbarRef = r)}
+      focus={store.addressbarFocused}
+    >
       <ToolbarButton
         toggled={false}
         icon={ICON_SEARCH}
