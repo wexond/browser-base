@@ -2,7 +2,6 @@ import { ipcMain, BrowserWindow } from 'electron';
 import {
   DIALOG_MIN_HEIGHT,
   DIALOG_MARGIN_TOP,
-  TITLEBAR_HEIGHT,
   DIALOG_MARGIN,
 } from '~/constants/design';
 import { PersistentDialog } from './dialog';

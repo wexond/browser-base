@@ -9,6 +9,8 @@ import { WindowsControls } from 'react-windows-controls';
 import { StyledTitlebar } from './style';
 import { NavigationButtons } from '../NavigationButtons';
 import { RightButtons } from '../RightButtons';
+import { Separator } from '../RightButtons/style';
+import { SiteButtons } from '../SiteButtons';
 
 const onCloseClick = () => ipcRenderer.send(`window-close-${store.windowId}`);
 
@@ -30,15 +32,20 @@ export const Titlebar = observer(() => {
       onMouseDown={onMouseDown}
       isHTMLFullscreen={store.isHTMLFullscreen}
     >
-      {store.settings.object.topBarVariant === 'compact' && (
-        <NavigationButtons />
-      )}
+      {store.isCompact && <NavigationButtons />}
       <Tabbar />
-      {store.settings.object.topBarVariant === 'compact' && <RightButtons />}
+      {store.isCompact && (
+        <>
+          <SiteButtons />
+          <Separator />
+          <RightButtons />
+        </>
+      )}
+
       {platform() !== 'darwin' && (
         <WindowsControls
           style={{
-            height: 32,
+            height: store.isCompact ? '100%' : 32,
             WebkitAppRegion: 'no-drag',
             marginLeft: 8,
           }}

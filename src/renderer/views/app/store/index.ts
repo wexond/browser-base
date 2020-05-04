@@ -313,7 +313,7 @@ export class Store {
           }
         },
       );
-      // TODO: ipcRenderer.send('load-extensions');
+      ipcRenderer.send('load-extensions');
     }
 
     ipcRenderer.send('update-check');

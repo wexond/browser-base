@@ -57,7 +57,7 @@ export const Button = styled.div`
   }) => css`
     border-radius: ${dense ? 2 : 4}px;
     height: ${dense ? 26 : TOOLBAR_BUTTON_HEIGHT}px;
-    width: ${dense ? 34 : TOOLBAR_BUTTON_WIDTH}px;
+    min-width: ${dense ? 34 : TOOLBAR_BUTTON_WIDTH}px;
     pointer-events: ${disabled ? 'none' : 'inherit'};
     -webkit-app-region: ${disabled ? 'drag' : 'no-drag'};
 

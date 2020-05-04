@@ -14,7 +14,7 @@ export const StyledAddressBarContainer = styled.div`
   align-items: center;
   padding-left: 72px;
   padding-right: 40px;
-  transition: 0.1s transform, opacity;
+  transition: 0.1s transform, 0.1s opacity;
 
   ${({ visible, theme }: { visible: boolean; theme?: ITheme }) => css`
     opacity: ${visible ? 1 : 0};

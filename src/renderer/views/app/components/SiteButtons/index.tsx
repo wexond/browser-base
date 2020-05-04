@@ -72,10 +72,17 @@ export const SiteButtons = observer(() => {
     hasCredentials = selectedTab.hasCredentials;
   }
 
+  const dense = !store.isCompact;
+
   return (
     <>
       {process.env.ENABLE_AUTOFILL && hasCredentials && (
-        <ToolbarButton icon={ICON_KEY} size={16} onClick={onKeyClick} />
+        <ToolbarButton
+          dense={dense}
+          icon={ICON_KEY}
+          size={16}
+          onClick={onKeyClick}
+        />
       )}
       {(store.dialogsVisibility['zoom'] || store.zoomFactor !== 1) && (
         <ToolbarButton
@@ -83,7 +90,7 @@ export const SiteButtons = observer(() => {
           toggled={store.dialogsVisibility['zoom']}
           icon={store.zoomFactor >= 1 ? ICON_MAGNIFY_PLUS : ICON_MAGNIFY_MINUS}
           size={18}
-          dense
+          dense={dense}
           onMouseDown={onZoomClick}
         />
       )}
@@ -92,7 +99,7 @@ export const SiteButtons = observer(() => {
         toggled={store.dialogsVisibility['add-bookmark']}
         icon={store.isBookmarked ? ICON_STAR_FILLED : ICON_STAR}
         size={18}
-        dense
+        dense={dense}
         onMouseDown={onStarClick}
       />
     </>

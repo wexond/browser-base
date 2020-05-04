@@ -31,5 +31,6 @@ export const StyledTitlebar = styled.div`
   }) => css`
     background-color: ${theme['titlebar.backgroundColor']};
     height: ${theme.titlebarHeight}px;
+    align-items: ${theme.isCompact ? 'center' : 'initial'};
   `};
 `;
