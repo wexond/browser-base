@@ -17,8 +17,10 @@ export const StyledAddressBar = styled.div`
   ${({ theme, focus }: { theme: ITheme; focus: boolean }) => css`
     background-color: ${theme['addressbar.backgroundColor']};
     border: 1px solid
-      ${theme.isCompact && theme['toolbar.lightForeground']
-        ? 'rgba(255, 255, 255, 0.12)'
+      ${theme.isCompact
+        ? theme['toolbar.lightForeground']
+          ? 'rgba(255, 255, 255, 0.12)'
+          : 'transparent'
         : focus
         ? `${BLUE_300} !important`
         : 'transparent'};
