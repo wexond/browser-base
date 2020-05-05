@@ -10,20 +10,20 @@ export const StyledAddressBarContainer = styled.div`
   top: 0;
   will-change: transform, opacity;
   z-index: 999;
-  display: flex;
   align-items: center;
   padding-left: 72px;
   padding-right: 40px;
   transition: 0.1s transform, 0.1s opacity;
 
   ${({ visible, theme }: { visible: boolean; theme?: ITheme }) => css`
+    display: ${visible ? 'flex' : 'table'};
     opacity: ${visible ? 1 : 0};
     transform: scale(${visible ? 1 : 1.05});
     pointer-events: ${visible ? 'inherit' : 'none'};
-    -webkit-app-region: ${visible ? `no-drag` : `inherit`};
+    -webkit-app-region: no-drag;
     background-color: ${() => {
       const { r, g, b } = hexToRgb(theme['titlebar.backgroundColor']);
-      return `rgba(${r}, ${g}, ${b}, 0.7)`;
+      return `rgba(${r}, ${g}, ${b}, 0.75)`;
     }};
   `}
 `;

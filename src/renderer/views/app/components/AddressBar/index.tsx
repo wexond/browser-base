@@ -31,7 +31,7 @@ const onFocus = (e: React.FocusEvent<HTMLInputElement>) => {
   }
 
   if (store.isCompact) {
-    ipcRenderer.send(`window-fix-dragging-${store.windowId}`);
+    // ipcRenderer.send(`window-fix-dragging-${store.windowId}`);
     e.currentTarget.select();
   }
 };
@@ -112,8 +112,8 @@ const onBlur = (e: React.FocusEvent<HTMLInputElement>) => {
   store.addressbarFocused = false;
   mouseUpped = false;
 
-  if (store.isCompact && !store.addressbarEditing)
-    ipcRenderer.send(`window-fix-dragging-${store.windowId}`);
+  // if (store.isCompact && !store.addressbarEditing)
+  //   ipcRenderer.send(`window-fix-dragging-${store.windowId}`);
 
   const { selectedTab } = store.tabs;
 

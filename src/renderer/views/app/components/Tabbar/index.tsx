@@ -69,9 +69,7 @@ export const Tabbar = observer(() => {
         onClick={onAddTabClick}
         divRef={(r: any) => (store.addTab.ref = r)}
       />
-      {store.settings.object.topBarVariant === 'compact' && (
-        <AddressBarContainer />
-      )}
+      {store.isCompact && <AddressBarContainer />}
     </StyledTabbar>
   );
 });
