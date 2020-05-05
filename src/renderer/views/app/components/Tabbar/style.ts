@@ -17,9 +17,7 @@ export const StyledTabbar = styled.div`
   align-items: center;
   margin-right: 32px;
   display: flex;
-  ${({ isFullscreen }: { isFullscreen: boolean }) => css`
-    margin-left: ${platform() === 'darwin' && !isFullscreen ? 78 : 4}px;
-  `};
+  margin-left: 4px;
 `;
 
 /* &:hover {

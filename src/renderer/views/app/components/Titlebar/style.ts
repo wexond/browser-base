@@ -1,5 +1,6 @@
 import styled, { css } from 'styled-components';
 import { ITheme } from '~/interfaces';
+import { platform } from 'os';
 
 // margin-top: ${isHTMLFullscreen ? -TOOLBAR_HEIGHT : 0}px;
 
@@ -24,13 +25,16 @@ export const StyledTitlebar = styled.div`
 
   ${({
     isHTMLFullscreen,
+    isFullscreen,
     theme,
   }: {
     isHTMLFullscreen: boolean;
+    isFullscreen: boolean;
     theme: ITheme;
   }) => css`
     background-color: ${theme['titlebar.backgroundColor']};
     height: ${theme.titlebarHeight}px;
     align-items: ${theme.isCompact ? 'center' : 'initial'};
+    padding-left: ${platform() === 'darwin' && !isFullscreen ? 78 : 4}px;
   `};
 `;
