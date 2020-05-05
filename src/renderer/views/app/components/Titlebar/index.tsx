@@ -35,13 +35,7 @@ export const Titlebar = observer(() => {
     >
       {store.isCompact && <NavigationButtons />}
       <Tabbar />
-      {store.isCompact && (
-        <>
-          <SiteButtons />
-          <Separator />
-          <RightButtons />
-        </>
-      )}
+      {store.isCompact && <RightButtons />}
 
       {platform() !== 'darwin' && (
         <WindowsControls

@@ -12,6 +12,7 @@ import {
 } from '~/renderer/constants/icons';
 import { Buttons, Separator } from './style';
 import store from '../../store';
+import { SiteButtons } from '../SiteButtons';
 
 let menuRef: HTMLDivElement = null;
 
@@ -79,7 +80,12 @@ export const RightButtons = observer(() => {
     <Buttons>
       <BrowserActions />
       {store.extensions.browserActions.length > 0 && <Separator />}
-
+      {store.isCompact && (
+        <>
+          <SiteButtons />
+          <Separator />
+        </>
+      )}
       <ToolbarButton
         size={16}
         badge={store.settings.object.shield && blockedAds > 0}
