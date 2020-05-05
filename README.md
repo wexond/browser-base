@@ -22,6 +22,7 @@ Wexond is an extensible and privacy-focused web browser with a totally different
 - **Beautiful and modern UI**
 - **Fast and fluent UI** - The animations are really smooth and their timings are perfectly balanced.
 - **Highly customizable new tab page** - Customize almost an every aspect of the new tab page!
+- **Customizable browser UI** - Choose whether Wexond should have compact or normal UI.
 - **Tab groups** - Easily group tabs, so it's hard to get lost.
 - **Scrollable tabs**
 - **Partial support for Chrome extensions** - Install some extensions directly from Chrome Web Store\* (see [#110](https://github.com/wexond/wexond/issues/110)) (WIP)
@@ -29,7 +30,14 @@ Wexond is an extensible and privacy-focused web browser with a totally different
 
 # Screenshots
 
-![image](https://user-images.githubusercontent.com/11065386/80321519-fab7cc80-881d-11ea-85a2-e8a1c959dca8.png)
+![image](https://user-images.githubusercontent.com/11065386/81024159-d9388f80-8e72-11ea-85e7-6c30e3b66554.png)
+
+UI normal variant:
+![image](https://user-images.githubusercontent.com/11065386/81024186-f40b0400-8e72-11ea-976e-cd1ca1b43ad8.png)
+
+UI compact variant:
+![image](https://user-images.githubusercontent.com/11065386/81024222-13099600-8e73-11ea-9fc9-3c63a034403d.png)
+![image](https://user-images.githubusercontent.com/11065386/81024252-2ddc0a80-8e73-11ea-9f2f-6c9a4a175c60.png)
 
 # Downloads
 - [Stable and beta versions](https://github.com/wexond/desktop/releases)
