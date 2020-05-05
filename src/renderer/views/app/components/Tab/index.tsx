@@ -90,7 +90,7 @@ const onClick = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {
     return;
   }
 
-  if (e.button === 0 && store.canOpenSearch) {
+  if (store.isCompact && e.button === 0 && store.canOpenSearch) {
     store.inputRef.focus();
     store.canOpenSearch = false;
   }
@@ -286,6 +286,10 @@ export default observer(({ tab }: { tab: ITab }) => {
     ? 'rgba(255, 255, 255, 0.08)'
     : 'rgba(255, 255, 255, 0.5)';
 
+  const defaultSelectedHoverColor = store.theme['toolbar.lightForeground']
+    ? '#393939'
+    : '#fcfcfc';
+
   return (
     <StyledTab
       selected={tab.isSelected}
@@ -303,7 +307,9 @@ export default observer(({ tab }: { tab: ITab }) => {
         selected={tab.isSelected}
         style={{
           backgroundColor: tab.isSelected
-            ? store.theme['toolbar.backgroundColor']
+            ? store.isCompact && tab.isHovered
+              ? defaultSelectedHoverColor
+              : store.theme['toolbar.backgroundColor']
             : tab.isHovered
             ? defaultHoverColor
             : defaultColor,
