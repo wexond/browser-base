@@ -14,6 +14,10 @@ import { TabEvent } from '~/interfaces/tabs';
 import { Queue } from '~/utils/queue';
 import { Application } from './application';
 
+interface IAuthInfo {
+  url: string;
+}
+
 export class View {
   public browserView: BrowserView;
 
@@ -37,6 +41,7 @@ export class View {
     text: '',
   };
 
+  public requestedAuth: IAuthInfo;
   public requestedPermission: any;
 
   private historyQueue = new Queue();

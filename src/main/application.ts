@@ -10,6 +10,7 @@ import { StorageService } from './services/storage';
 import { getMainMenu } from './menus/main';
 import { runAutoUpdaterService } from './services';
 import { DialogsService } from './services/dialogs-service';
+import { requestAuth } from './dialogs/auth';
 
 export class Application {
   public static instance = new Application();
@@ -63,7 +64,8 @@ export class Application {
       e.preventDefault();
 
       const window = this.windows.findByBrowserView(webContents.id);
-      const credentials = await window.dialogs.authDialog.requestAuth(
+      const credentials = await requestAuth(
+        window.win,
         request.url,
         webContents.id,
       );
