@@ -1,6 +1,6 @@
 import { VIEW_Y_OFFSET } from '~/constants/design';
 import { AppWindow } from '../windows';
-import { Dialog } from '.';
+import { Dialog } from '../dialogs';
 
 const WIDTH = 350;
 const HEIGHT = 271;

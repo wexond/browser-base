@@ -17,7 +17,7 @@ const mainConfig = getConfig({
   watch: dev,
 
   entry: {
-    main: './src/main',
+    browser: './src/browser',
   },
 
   plugins: [
