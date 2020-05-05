@@ -12,6 +12,8 @@ export class Store extends DialogStore {
   public constructor() {
     super();
 
+    this.init();
+
     ipcRenderer.on('update-available', () => {
       this.updateAvailable = true;
     });
