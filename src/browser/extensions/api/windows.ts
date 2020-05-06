@@ -117,7 +117,7 @@ export class WindowsAPI extends EventEmitter implements IWindowsEvents {
     this.emit('will-remove', windowId);
   }
 
-  public observe(window: BrowserWindow, senderSession?: Electron.Session) {
+  public observe(window: BrowserWindow) {
     this.windows.add(window);
 
     window.once('closed', () => {
@@ -126,7 +126,7 @@ export class WindowsAPI extends EventEmitter implements IWindowsEvents {
     });
 
     window.on('focus', () => {
-      this.sessionsInfo.set(senderSession || window.webContents.session, {
+      this.sessionsInfo.set(window.webContents.session, {
         lastFocused: window,
       });
     });
@@ -135,7 +135,9 @@ export class WindowsAPI extends EventEmitter implements IWindowsEvents {
   }
 
   public getWindowById(session: Electron.Session, id: number) {
-    return Array.from(this.windows).find((x) => x.id === id);
+    return Array.from(this.windows).find(
+      (x) => x.id === id && x.webContents.session === session,
+    );
   }
 
   public async create(

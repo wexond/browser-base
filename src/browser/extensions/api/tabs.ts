@@ -335,8 +335,8 @@ export class TabsAPI extends EventEmitter implements ITabsEvents {
     return this.createDetails(tab);
   };
 
-  private getCurrent(e: Electron.IpcMainInvokeEvent) {
-    const tab = this.getTabById(e.sender.session, e.sender.id);
+  private getCurrent(session: Electron.Session, sender: Electron.WebContents) {
+    const tab = this.getTabById(session, sender.id);
     if (!tab) return null;
 
     return this.getDetails(tab);
