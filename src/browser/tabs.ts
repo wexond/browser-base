@@ -59,8 +59,8 @@ export class Tabs {
       // this.emit('activated', id);
     });
 
-    extensions.tabs.on('will-remove', (tabId, windowId) => {
-      this.destroy(tabId, windowId);
+    extensions.tabs.on('removed', (tabId, removeInfo) => {
+      this.destroy(tabId, removeInfo.windowId);
     });
   }
 

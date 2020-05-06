@@ -19,7 +19,7 @@ import { COMPACT_TAB_MARGIN_TOP } from '~/constants/design';
 
 const removeTab = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {
   e.stopPropagation();
-  tab.close();
+  browser.tabs.remove(tab.id);
 };
 
 const toggleMuteTab = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {
@@ -97,7 +97,7 @@ const onClick = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {
 
 const onMouseUp = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {
   if (e.button === 1) {
-    tab.close();
+    browser.tabs.remove(tab.id);
   }
 };
 

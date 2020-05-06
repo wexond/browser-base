@@ -11,28 +11,6 @@ export class WindowsService {
   public lastFocused: AppWindow;
 
   constructor() {
-    if (process.env.ENABLE_EXTENSIONS) {
-      // TODO: sandbox
-      // extensions.tabs.on('activated', (tabId, windowId, focus) => {
-      //   const win = this.list.find((x) => x.id === windowId);
-      //   win.viewManager.select(tabId, focus === undefined ? true : focus);
-      // });
-      // extensions.tabs.onCreateDetails = (tab, details) => {
-      //   const win = this.findByBrowserView(tab.id);
-      //   details.windowId = win.id;
-      // };
-      // extensions.windows.onCreate = async (details) => {
-      //   return this.open(details.incognito).id;
-      // };
-      // extensions.tabs.onCreate = async (details) => {
-      //   const win =
-      //     this.list.find((x) => x.id === details.windowId) || this.lastFocused;
-      //   if (!win) return -1;
-      //   const view = win.viewManager.create(details);
-      //   return view.id;
-      // };
-    }
-
     extensions.windows.on('will-remove', (windowId) => {
       BrowserWindow.fromId(windowId).close();
     });

@@ -1,5 +1,5 @@
 import { getAPI } from './api';
-import { contextBridge, webFrame, ipcRenderer } from 'electron';
+import { webFrame, ipcRenderer } from 'electron';
 
 declare const chrome: any;
 declare let browser: any;

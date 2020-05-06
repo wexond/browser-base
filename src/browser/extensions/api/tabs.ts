@@ -43,8 +43,8 @@ export declare interface TabsAPI {
     ) => void,
   ): this;
   on(
-    event: 'will-remove',
-    listener: (tabId: number, windowId: number) => void,
+    event: 'removed',
+    listener: (tabId: number, removedInfo: chrome.tabs.TabRemoveInfo) => void,
   ): this;
   on(event: string, listener: Function): this;
 }
@@ -126,14 +126,14 @@ export class TabsAPI extends EventEmitter implements ITabsEvents {
   public remove(tabIds: number | number[]) {
     if (Array.isArray(tabIds)) {
       tabIds.forEach((id) => {
-        const tab: Tab = WebContents.fromId(id);
+        const tab = this.getTabById(id);
         if (!tab) return;
-        this.emit('will-remove', id, tab.windowId);
+        this.onRemoved(tab);
       });
       return;
     }
 
-    this.emit('will-remove', tabIds);
+    this.onRemoved(this.getTabById(tabIds));
   }
 
   // This API is deprecated, so we fallback it to chrome.tabs.query({ windowId })
@@ -185,10 +185,7 @@ export class TabsAPI extends EventEmitter implements ITabsEvents {
         // if (isSet(info.index) && info.index !== tab.index) return false
         return true;
       })
-      .map((tab, index) => {
-        tab.index = index;
-        return tab;
-      });
+      .sort((a, b) => a.index - b.index);
 
     return tabs;
   }
@@ -219,20 +216,34 @@ export class TabsAPI extends EventEmitter implements ITabsEvents {
 
     tab.windowId = details.windowId;
 
+    const tabDetails = this.getDetails(tab);
+
+    const { tabs } = Extensions.instance.windows.get(details.windowId, {
+      populate: true,
+    });
+
+    if (!details.index || details.index > tabs.length) {
+      tabDetails.index = tabs.length;
+    } else {
+      const tab = tabs.find((x) => x.index === details.index);
+      if (tab) tab.index = details.index + 1;
+
+      for (let i = details.index; i < tabs.length; i++) {
+        tabs[i].index++;
+      }
+
+      tabDetails.index = details.index;
+    }
+
     this.observe(tab);
 
     if (details.active) this.activate(tabId);
 
-    return this.getDetails(tab);
+    return tabDetails;
   }
 
   public observe(tab: Tab) {
     this.tabs.add(tab);
-
-    tab.once('destroyed', () => {
-      this.tabs.delete(tab);
-      this.onRemoved(tab);
-    });
 
     const updateEvents: any[] = [
       'page-title-updated', // title
@@ -406,8 +417,18 @@ export class TabsAPI extends EventEmitter implements ITabsEvents {
 
     this.detailsCache.delete(tab);
 
+    this.tabs.delete(tab);
+
     const windowId = details ? details.windowId : -1;
     const win = Extensions.instance.windows.getWindowById(windowId);
+
+    const { tabs } = Extensions.instance.windows.get(windowId, {
+      populate: true,
+    });
+
+    for (let i = details.index; i < tabs.length; i++) {
+      tabs[i].index--;
+    }
 
     const args = [
       tab.id,
