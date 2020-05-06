@@ -1,4 +1,4 @@
-import { BrowserWindow, WebContents, webContents } from 'electron';
+import { BrowserWindow, WebContents, webContents, session } from 'electron';
 import { promises } from 'fs';
 import { resolve } from 'path';
 import { sessionFromIpcEvent } from '../session';
@@ -22,7 +22,10 @@ export const getParentWindowOfTab = (tab: Tab) => {
 // Events which can be registered only once
 interface ITabsEvents {
   onCreateDetails: (tab: Tab, details: chrome.tabs.Tab) => void;
-  onCreate: (details: chrome.tabs.CreateProperties) => Promise<number>;
+  onCreate: (
+    session: Electron.Session,
+    details: chrome.tabs.CreateProperties,
+  ) => Promise<number>;
 }
 
 export declare interface TabsAPI {
@@ -74,7 +77,10 @@ export class TabsAPI extends EventEmitter implements ITabsEvents {
   }
 
   onCreateDetails: (tab: Tab, details: chrome.tabs.Tab) => void;
-  onCreate: (details: chrome.tabs.CreateProperties) => Promise<number>;
+  onCreate: (
+    session: Electron.Session,
+    details: chrome.tabs.CreateProperties,
+  ) => Promise<number>;
 
   public async update(
     session: Electron.Session,
@@ -222,7 +228,7 @@ export class TabsAPI extends EventEmitter implements ITabsEvents {
   }
 
   public async create(
-    session: Electron.Session,
+    ses: Electron.Session,
     details: chrome.tabs.CreateProperties,
   ): Promise<chrome.tabs.Tab> {
     if (!details.windowId) {
@@ -233,29 +239,28 @@ export class TabsAPI extends EventEmitter implements ITabsEvents {
       throw new Error('No onCreate event handler');
     }
 
-    const tabId = await this.onCreate(details);
+    const window = Extensions.instance.windows.get(ses, details.windowId, {
+      populate: true,
+    });
+
+    const tabId = await this.onCreate(
+      BrowserWindow.fromId(details.windowId).webContents.session,
+      details,
+    );
     const tab: Tab = webContents.fromId(tabId);
 
     tab.windowId = details.windowId;
 
     const tabDetails = this.getDetails(tab);
 
-    const { tabs } = Extensions.instance.windows.get(
-      session,
-      details.windowId,
-      {
-        populate: true,
-      },
-    );
-
-    if (!details.index || details.index > tabs.length) {
-      tabDetails.index = tabs.length;
+    if (!details.index || details.index > window.tabs.length) {
+      tabDetails.index = window.tabs.length;
     } else {
-      const tab = tabs.find((x) => x.index === details.index);
+      const tab = window.tabs.find((x) => x.index === details.index);
       if (tab) tab.index = details.index + 1;
 
-      for (let i = details.index; i < tabs.length; i++) {
-        tabs[i].index++;
+      for (let i = details.index; i < window.tabs.length; i++) {
+        window.tabs[i].index++;
       }
 
       tabDetails.index = details.index;
@@ -263,7 +268,7 @@ export class TabsAPI extends EventEmitter implements ITabsEvents {
 
     this.observe(tab);
 
-    if (details.active) this.activate(session, tabId);
+    if (details.active) this.activate(ses, tabId);
 
     return tabDetails;
   }

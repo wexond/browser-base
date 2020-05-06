@@ -49,7 +49,7 @@ export class Tab {
 
   private lastUrl = '';
 
-  public constructor(url: string) {
+  public constructor(session: Electron.Session, url: string) {
     this.browserView = new BrowserView({
       webPreferences: {
         preload: `${app.getAppPath()}/build/view-preload.bundle.js`,
@@ -60,6 +60,7 @@ export class Tab {
         plugins: true,
         nativeWindowOpen: true,
         webSecurity: true,
+        session,
         javascript: true,
       },
     });

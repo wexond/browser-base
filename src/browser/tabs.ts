@@ -11,8 +11,8 @@ export class Tabs {
   public windowsDetails: Map<number, IWindowDetails> = new Map();
 
   constructor() {
-    extensions.tabs.onCreate = async (details) => {
-      const tab = new Tab(details.url);
+    extensions.tabs.onCreate = async (session, details) => {
+      const tab = new Tab(session, details.url);
       this.tabs.set(tab.id, tab);
 
       if (!this.windowsDetails.has(details.windowId)) {
