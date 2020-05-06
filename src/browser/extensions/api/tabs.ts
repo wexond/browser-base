@@ -67,20 +67,21 @@ export class TabsAPI extends EventEmitter implements ITabsEvents {
     handler('update', this.update);
     handler('reload', this.reload);
     handler('remove', this.remove);
+    handler('insertCSS', this.insertCSS);
 
-    handler('create', this.createHandler, true);
-    handler('getCurrent', this.getCurrent, true);
-    handler('insertCSS', this.insertCSS, true);
+    handler('create', this.createHandler, { sender: true });
+    handler('getCurrent', this.getCurrent, { sender: true });
   }
 
   onCreateDetails: (tab: Tab, details: chrome.tabs.Tab) => void;
   onCreate: (details: chrome.tabs.CreateProperties) => Promise<number>;
 
   public async update(
+    session: Electron.Session,
     tabId: number,
     updateProperties: chrome.tabs.UpdateProperties,
   ) {
-    const tab = this.getTabById(tabId);
+    const tab = this.getTabById(session, tabId);
     if (!tab) return null;
 
     const { url, muted, active } = updateProperties;
@@ -90,15 +91,19 @@ export class TabsAPI extends EventEmitter implements ITabsEvents {
 
     if (typeof muted === 'boolean') tab.setAudioMuted(muted);
 
-    if (active) this.activate(tabId);
+    if (active) this.activate(session, tabId);
 
     this.onUpdated(tab);
 
     return this.createDetails(tab);
   }
 
-  public activate(tabId: number, ...additionalArgs: any[]) {
-    const tab = this.getTabById(tabId);
+  public activate(
+    session: Electron.Session,
+    tabId: number,
+    ...additionalArgs: any[]
+  ) {
+    const tab = this.getTabById(session, tabId);
     if (!tab) return;
 
     const details = this.getDetails(tab);
@@ -118,41 +123,53 @@ export class TabsAPI extends EventEmitter implements ITabsEvents {
     });
   }
 
-  public get(tabId: number): chrome.tabs.Tab {
-    const tab = this.getTabById(tabId);
+  public get(session: Electron.Session, tabId: number): chrome.tabs.Tab {
+    const tab = this.getTabById(session, tabId);
     return this.getDetails(tab);
   }
 
-  public remove(tabIds: number | number[]) {
+  public remove(session: Electron.Session, tabIds: number | number[]) {
     if (Array.isArray(tabIds)) {
-      tabIds.forEach((id) => {
-        const tab = this.getTabById(id);
-        if (!tab) return;
-        this.onRemoved(tab);
-      });
+      tabIds.forEach((id) => this.onRemoved(session, id));
       return;
     }
 
-    this.onRemoved(this.getTabById(tabIds));
+    this.onRemoved(session, tabIds);
   }
 
   // This API is deprecated, so we fallback it to chrome.tabs.query({ windowId })
-  public getAllInWindow(windowId: number) {
-    return this.query({ windowId });
+  public getAllInWindow(session: Electron.Session, windowId: number) {
+    return this.query(session, { windowId });
   }
 
   // Deprecated, fallback to chrome.tabs.query
-  public getSelected(windowId: number) {
+  public getSelected(
+    session: Electron.Session,
+    sender: Electron.WebContents,
+    windowId?: number,
+  ) {
+    let window: chrome.windows.Window;
+
     if (typeof windowId === 'number') {
-      return this.query({ windowId, active: true })[0];
+      window = Extensions.instance.windows.get(session, windowId);
+      return this.query(session, { windowId, active: true })[0];
+    } else {
+      window = Extensions.instance.windows.getCurrent(session, sender);
     }
-    return this.query({ active: true })[0];
+
+    if (!window) return null;
+
+    return this.query(session, {
+      windowId: window.id,
+      active: true,
+    })?.[0];
   }
 
-  public query(info: chrome.tabs.QueryInfo = {}) {
+  public query(session: Electron.Session, info: chrome.tabs.QueryInfo = {}) {
     const isSet = (value: any) => typeof value !== 'undefined';
 
     const tabs = Array.from(this.tabs)
+      .filter((tab) => tab.session === session)
       .map(this.getDetails)
       .filter((tab) => {
         if (isSet(info.active) && info.active !== tab.active) return false;
@@ -191,16 +208,21 @@ export class TabsAPI extends EventEmitter implements ITabsEvents {
   }
 
   public async createHandler(
-    e: Electron.IpcMainEvent,
+    session: Electron.Session,
+    sender: Electron.WebContents,
     details: chrome.tabs.CreateProperties,
   ) {
     if (!details.windowId) {
-      details.windowId = Extensions.instance.windows.getCurrent(e, {}).id;
+      details.windowId = Extensions.instance.windows.getCurrent(
+        session,
+        sender,
+      ).id;
     }
-    this.create(details);
+    this.create(session, details);
   }
 
   public async create(
+    session: Electron.Session,
     details: chrome.tabs.CreateProperties,
   ): Promise<chrome.tabs.Tab> {
     if (!details.windowId) {
@@ -218,9 +240,13 @@ export class TabsAPI extends EventEmitter implements ITabsEvents {
 
     const tabDetails = this.getDetails(tab);
 
-    const { tabs } = Extensions.instance.windows.get(details.windowId, {
-      populate: true,
-    });
+    const { tabs } = Extensions.instance.windows.get(
+      session,
+      details.windowId,
+      {
+        populate: true,
+      },
+    );
 
     if (!details.index || details.index > tabs.length) {
       tabDetails.index = tabs.length;
@@ -237,7 +263,7 @@ export class TabsAPI extends EventEmitter implements ITabsEvents {
 
     this.observe(tab);
 
-    if (details.active) this.activate(tabId);
+    if (details.active) this.activate(session, tabId);
 
     return tabDetails;
   }
@@ -279,10 +305,11 @@ export class TabsAPI extends EventEmitter implements ITabsEvents {
   }
 
   public reload(
+    session: Electron.Session,
     tabId: number,
     reloadProperties: chrome.tabs.ReloadProperties = {},
   ) {
-    const tab = this.getTabById(tabId);
+    const tab = this.getTabById(session, tabId);
     if (!tab) return;
 
     if (reloadProperties.bypassCache) {
@@ -292,8 +319,10 @@ export class TabsAPI extends EventEmitter implements ITabsEvents {
     }
   }
 
-  public getTabById(id: number) {
-    return Array.from(this.tabs).find((x) => x.id === id);
+  public getTabById(session: Electron.Session, id: number) {
+    return Array.from(this.tabs).find(
+      (x) => x.id === id && x.session === session,
+    );
   }
 
   public getDetails = (tab: Tab): chrome.tabs.Tab => {
@@ -307,25 +336,24 @@ export class TabsAPI extends EventEmitter implements ITabsEvents {
   };
 
   private getCurrent(e: Electron.IpcMainInvokeEvent) {
-    const tab = this.getTabById(e.sender.id);
+    const tab = this.getTabById(e.sender.session, e.sender.id);
     if (!tab) return null;
 
     return this.getDetails(tab);
   }
 
-  private async insertCSS(
-    e: Electron.IpcMainEvent,
+  public async insertCSS(
+    session: Electron.Session,
     extensionId: string,
     tabId: number,
     details: chrome.tabs.InjectDetails,
   ) {
-    const tab = this.getTabById(tabId);
+    const tab = this.getTabById(session, tabId);
     if (!tab) return;
 
     if (details.hasOwnProperty('file')) {
-      const ses = sessionFromIpcEvent(e);
       details.code = await promises.readFile(
-        resolve(ses.getExtension(extensionId).path, details.file),
+        resolve(session.getExtension(extensionId).path, details.file),
         'utf8',
       );
     }
@@ -410,7 +438,10 @@ export class TabsAPI extends EventEmitter implements ITabsEvents {
     sendToExtensionPages('tabs.onUpdated', tab.id, changeInfo, details);
   }
 
-  private onRemoved(tab: Tab) {
+  private onRemoved(session: Electron.Session, tabId: number) {
+    const tab = this.getTabById(session, tabId);
+    if (!tab) return;
+
     const details = this.detailsCache.has(tab)
       ? this.detailsCache.get(tab)
       : null;
@@ -420,9 +451,9 @@ export class TabsAPI extends EventEmitter implements ITabsEvents {
     this.tabs.delete(tab);
 
     const windowId = details ? details.windowId : -1;
-    const win = Extensions.instance.windows.getWindowById(windowId);
+    const win = Extensions.instance.windows.getWindowById(session, windowId);
 
-    const { tabs } = Extensions.instance.windows.get(windowId, {
+    const { tabs } = Extensions.instance.windows.get(session, windowId, {
       populate: true,
     });
 

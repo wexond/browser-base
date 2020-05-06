@@ -6,5 +6,6 @@ export const _setFallbackSession = (ses: Electron.Session) => {
   fallbackSession = ses;
 };
 
-export const sessionFromIpcEvent = (e: Electron.IpcMainEvent) =>
-  e.sender.session || fallbackSession || session.defaultSession;
+export const sessionFromIpcEvent = (
+  e: Electron.IpcMainEvent | Electron.IpcMainInvokeEvent,
+) => e.sender.session || fallbackSession || session.defaultSession;

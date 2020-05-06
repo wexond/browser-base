@@ -4,6 +4,7 @@ import { webContents } from 'electron';
 import { isAbsolute } from 'path';
 import { HandlerFactory } from '../handler-factory';
 import { EXTENSION_PROTOCOL } from '~/common/constants/protocols';
+import { Extensions } from '..';
 
 type IconType = string | { [key: string]: string };
 
@@ -67,7 +68,7 @@ export class BrowserActionAPI extends EventEmitter {
     super();
 
     const setter = (propName: string) => (
-      e: Electron.IpcMainEvent,
+      session: Electron.Session,
       extensionId: string,
       details: chrome.browserAction.BadgeBackgroundColorDetails &
         chrome.browserAction.BadgeTextDetails &
@@ -75,8 +76,7 @@ export class BrowserActionAPI extends EventEmitter {
         chrome.browserAction.PopupDetails &
         chrome.browserAction.TabIconDetails,
     ) => {
-      const ses = sessionFromIpcEvent(e);
-      const action = this.getOrCreate(ses, extensionId);
+      const action = this.getOrCreate(session, extensionId);
       const { tabId } = details;
 
       let newValue: any = (details as any)[CHROME_DETAILS_KEYS[propName]];
@@ -117,18 +117,12 @@ export class BrowserActionAPI extends EventEmitter {
       handler(
         `set${prop.charAt(0).toUpperCase()}${prop.substring(1)}`,
         setter(prop),
-        true,
       ),
     );
 
-    handler('getAll', this.getAllHandler, true);
-
+    handler('getAll', this.getAllInSession);
     handler('getAllInTab', this.getAllInTab);
-    handler('onClicked', this.onClicked);
-  }
-
-  private getAllHandler(event: Electron.IpcMainEvent) {
-    return this.getAllInSession(sessionFromIpcEvent(event));
+    // handler('onClicked', this.onClicked);
   }
 
   private getOrCreate(session: Electron.Session, extensionId: string) {
@@ -183,12 +177,15 @@ export class BrowserActionAPI extends EventEmitter {
     return Array.from(sessionActions.values());
   }
 
-  public getAllInTab(tabId: number): IBrowserAction[] {
-    const tab = webContents.fromId(tabId);
+  public getAllInTab(
+    session: Electron.Session,
+    tabId: number,
+  ): IBrowserAction[] {
+    const tab = Extensions.instance.tabs.getTabById(session, tabId);
     if (!tab) return [];
 
-    const { session } = tab;
-    const actions = this.getAllInSession(session);
+    const tabSession = tab.session;
+    const actions = this.getAllInSession(tabSession);
 
     return actions.map((action) =>
       action.tabs.has(tabId)

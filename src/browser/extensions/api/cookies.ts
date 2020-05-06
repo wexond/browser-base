@@ -14,10 +14,10 @@ export class CookiesAPI {
   constructor() {
     const handler = HandlerFactory.create('cookies', this);
 
-    handler('get', this.get, true);
-    handler('getAll', this.getAll, true);
-    handler('set', this.set, true);
-    handler('remove', this.remove, true);
+    handler('get', this.get);
+    handler('getAll', this.getAll);
+    handler('set', this.set);
+    handler('remove', this.remove);
   }
 
   public observeSession(ses: Electron.Session) {
@@ -55,12 +55,12 @@ export class CookiesAPI {
   }
 
   private async getAll(
-    e: Electron.IpcMainEvent,
+    ses: Electron.Session,
     details: chrome.cookies.Cookie & { url: string },
   ) {
     const { url, name, domain, path, secure, session } = details;
 
-    const cookies = await sessionFromIpcEvent(e).cookies.get({
+    const cookies = await ses.cookies.get({
       url,
       name,
       domain,
@@ -76,10 +76,13 @@ export class CookiesAPI {
     return [];
   }
 
-  private async get(e: Electron.IpcMainEvent, details: chrome.cookies.Details) {
+  private async get(
+    session: Electron.Session,
+    details: chrome.cookies.Details,
+  ) {
     const { url, name } = details;
 
-    const cookies = await sessionFromIpcEvent(e).cookies.get({ url, name });
+    const cookies = await session.cookies.get({ url, name });
 
     if (cookies && cookies[0]) {
       const cookie = cookies[0];
@@ -90,7 +93,7 @@ export class CookiesAPI {
   }
 
   private async set(
-    e: Electron.IpcMainEvent,
+    session: Electron.Session,
     details: { url: string } & Partial<chrome.cookies.Cookie>,
   ): Promise<Partial<chrome.cookies.Cookie>> {
     const {
@@ -104,7 +107,7 @@ export class CookiesAPI {
       expirationDate,
     } = details;
 
-    await sessionFromIpcEvent(e).cookies.set({
+    await session.cookies.set({
       url,
       name,
       value,
@@ -128,12 +131,12 @@ export class CookiesAPI {
   }
 
   private async remove(
-    e: Electron.IpcMainEvent,
+    session: Electron.Session,
     details: chrome.cookies.Details,
   ): Promise<Partial<chrome.cookies.Cookie & { url: string }>> {
     const { url, name } = details;
 
-    await sessionFromIpcEvent(e).cookies.remove(url, name);
+    await session.cookies.remove(url, name);
     return { url, name, storeId: null };
   }
 }

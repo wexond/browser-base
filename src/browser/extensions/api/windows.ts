@@ -5,6 +5,7 @@ import { isBackgroundPage } from '../web-contents';
 import { sendToExtensionPages } from '../background-pages';
 import { HandlerFactory } from '../handler-factory';
 import { WINDOW_ID_CURRENT } from '~/common/extensions/constants';
+import { sessionFromIpcEvent } from '../session';
 
 // Events which can be registered only once
 interface IWindowsEvents {
@@ -23,12 +24,16 @@ export declare interface WindowsAPI {
   on(event: string, listener: Function): this;
 }
 
+interface ISessionInfo {
+  lastFocused: BrowserWindow;
+}
+
 export class WindowsAPI extends EventEmitter implements IWindowsEvents {
   private windows: Set<BrowserWindow> = new Set();
 
   private detailsCache: Map<BrowserWindow, chrome.windows.Window> = new Map();
 
-  private lastFocused: BrowserWindow;
+  private sessionsInfo: Map<Electron.Session, ISessionInfo> = new Map();
 
   constructor() {
     super();
@@ -41,8 +46,8 @@ export class WindowsAPI extends EventEmitter implements IWindowsEvents {
     handler('getLastFocused', this.getLastFocused);
     handler('remove', this.remove);
 
-    handler('get', this.getHandler, true);
-    handler('getCurrent', this.getCurrent, true);
+    handler('get', this.getHandler, { sender: true });
+    handler('getCurrent', this.getCurrent, { sender: true });
   }
 
   onBeforeFocusNextZOrder: (windowId: number) => number;
@@ -52,8 +57,12 @@ export class WindowsAPI extends EventEmitter implements IWindowsEvents {
   ) => void;
   onCreate: (details: chrome.windows.CreateData) => Promise<number>;
 
-  public update(windowId: number, updateInfo: chrome.windows.UpdateInfo) {
-    const win = this.getWindowById(windowId);
+  public update(
+    session: Electron.Session,
+    windowId: number,
+    updateInfo: chrome.windows.UpdateInfo,
+  ) {
+    const win = this.getWindowById(session, windowId);
     if (!win) return null;
 
     const { left, top, width, height, state } = updateInfo;
@@ -84,7 +93,7 @@ export class WindowsAPI extends EventEmitter implements IWindowsEvents {
         !['fullscreen', 'maximized'].includes(state)
       ) {
         const windowIdToFocus = this.onBeforeFocusNextZOrder(windowId);
-        this.focus(windowIdToFocus);
+        this.focus(session, windowIdToFocus);
       }
     }
 
@@ -100,16 +109,15 @@ export class WindowsAPI extends EventEmitter implements IWindowsEvents {
     return this.createDetails(win);
   }
 
-  public focus(windowId: number) {
-    const win = this.getWindowById(windowId);
-    win.focus();
+  public focus(session: Electron.Session, windowId: number) {
+    this.getWindowById(session, windowId)?.focus();
   }
 
   public remove(windowId: number) {
     this.emit('will-remove', windowId);
   }
 
-  public observe(window: BrowserWindow) {
+  public observe(window: BrowserWindow, senderSession?: Electron.Session) {
     this.windows.add(window);
 
     window.once('closed', () => {
@@ -118,17 +126,20 @@ export class WindowsAPI extends EventEmitter implements IWindowsEvents {
     });
 
     window.on('focus', () => {
-      this.lastFocused = window;
+      this.sessionsInfo.set(senderSession || window.webContents.session, {
+        lastFocused: window,
+      });
     });
 
     this.onCreated(window);
   }
 
-  public getWindowById(id: number) {
+  public getWindowById(session: Electron.Session, id: number) {
     return Array.from(this.windows).find((x) => x.id === id);
   }
 
   public async create(
+    session: Electron.Session,
     details: chrome.windows.CreateData,
   ): Promise<chrome.windows.Window> {
     if (!this.onCreate) {
@@ -136,62 +147,76 @@ export class WindowsAPI extends EventEmitter implements IWindowsEvents {
     }
 
     const id = await this.onCreate(details);
-    const win = this.getWindowById(id);
+    const win = this.getWindowById(session, id);
     return this.getDetails(win);
   }
 
   public getLastFocused(
-    getInfo: chrome.windows.GetInfo,
+    session: Electron.Session,
+    getInfo?: chrome.windows.GetInfo,
   ): chrome.windows.Window {
-    return this.getDetailsMatchingGetInfo(this.lastFocused, getInfo);
+    const info = this.sessionsInfo.get(session);
+    if (!info) return null;
+    return this.getDetailsMatchingGetInfo(session, info.lastFocused, getInfo);
   }
 
   public get(
+    session: Electron.Session,
     id: number,
-    getInfo: chrome.windows.GetInfo,
+    getInfo?: chrome.windows.GetInfo,
   ): chrome.windows.Window {
-    const win = this.getWindowById(id);
-    return this.getDetailsMatchingGetInfo(win, getInfo);
+    const win = this.getWindowById(session, id);
+    return this.getDetailsMatchingGetInfo(session, win, getInfo);
   }
 
-  public getAll(getInfo: chrome.windows.GetInfo): chrome.windows.Window[] {
+  public getAll(
+    session: Electron.Session,
+    getInfo?: chrome.windows.GetInfo,
+  ): chrome.windows.Window[] {
     return Array.from(this.windows)
-      .map((win) => this.getDetailsMatchingGetInfo(win, getInfo))
+      .map((win) => this.getDetailsMatchingGetInfo(session, win, getInfo))
       .filter(Boolean);
   }
 
   private getHandler(
-    event: Electron.IpcMainInvokeEvent,
+    session: Electron.Session,
+    sender: Electron.WebContents,
     id: number,
     details: any,
   ) {
     return id === WINDOW_ID_CURRENT
-      ? this.getCurrent(event, details)
-      : this.get(id, details);
+      ? this.getCurrent(session, sender, details)
+      : this.get(session, id, details);
   }
 
   public getCurrent = (
-    event: Electron.IpcMainInvokeEvent,
-    getInfo: chrome.windows.GetInfo,
+    session: Electron.Session,
+    sender: Electron.WebContents,
+    getInfo?: chrome.windows.GetInfo,
   ): chrome.windows.Window => {
-    let win = this.getWindowById(event.sender.id);
+    let win = this.getWindowById(session, sender.id);
     if (win) {
-      return this.getDetailsMatchingGetInfo(win, getInfo);
+      return this.getDetailsMatchingGetInfo(session, win, getInfo);
     }
 
-    const tab = Extensions.instance.tabs.getTabById(event.sender.id);
+    const tab = Extensions.instance.tabs.getTabById(session, sender.id);
 
     if (!tab) {
-      if (isBackgroundPage(event.sender)) {
-        return this.getDetailsMatchingGetInfo(this.lastFocused, getInfo);
+      const info = this.sessionsInfo.get(session);
+      if (isBackgroundPage(sender) && info) {
+        return this.getDetailsMatchingGetInfo(
+          session,
+          info.lastFocused,
+          getInfo,
+        );
       }
       return null;
     }
 
     const tabDetails = Extensions.instance.tabs.getDetails(tab);
-    win = this.getWindowById(tabDetails.windowId);
+    win = this.getWindowById(session, tabDetails.windowId);
 
-    return this.getDetailsMatchingGetInfo(win, getInfo);
+    return this.getDetailsMatchingGetInfo(session, win, getInfo);
   };
 
   private createDetails(win: BrowserWindow): chrome.windows.Window {
@@ -234,6 +259,7 @@ export class WindowsAPI extends EventEmitter implements IWindowsEvents {
   }
 
   private getDetailsMatchingGetInfo = (
+    session: Electron.Session,
     win: BrowserWindow,
     getInfo: chrome.windows.GetInfo,
   ): chrome.windows.Window => {
@@ -252,7 +278,7 @@ export class WindowsAPI extends EventEmitter implements IWindowsEvents {
     if (getInfo?.populate === true) {
       return {
         ...details,
-        tabs: Extensions.instance.tabs.query({ windowId: win.id }),
+        tabs: Extensions.instance.tabs.query(session, { windowId: win.id }),
       };
     }
 
