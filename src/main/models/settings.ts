@@ -73,15 +73,18 @@ export class Settings extends EventEmitter {
   };
 
   public update = () => {
+    let themeSource = 'system';
+
     if (this.object.themeAuto) {
       this.object.theme = nativeTheme.shouldUseDarkColors
         ? 'wexond-dark'
         : 'wexond-light';
-
-      nativeTheme.themeSource = 'system';
     } else {
-      nativeTheme.themeSource =
-        this.object.theme === 'wexond-dark' ? 'dark' : 'light';
+      themeSource = this.object.theme === 'wexond-dark' ? 'dark' : 'light';
+    }
+
+    if (themeSource !== nativeTheme.themeSource) {
+      nativeTheme.themeSource = themeSource as any;
     }
 
     Application.instance.dialogs.sendToAll('update-settings', this.object);
