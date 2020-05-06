@@ -1,7 +1,7 @@
 import { AppWindow } from './windows/app';
-import { extensions } from 'electron-extensions';
 import { BrowserWindow, ipcMain } from 'electron';
 import { BrowserContext } from './browser-context';
+import { extensions } from './extensions';
 
 export class WindowsService {
   public list: AppWindow[] = [];
@@ -10,11 +10,7 @@ export class WindowsService {
 
   public lastFocused: AppWindow;
 
-  private browserContext: BrowserContext;
-
-  constructor(browserContext: BrowserContext) {
-    this.browserContext = browserContext;
-
+  constructor() {
     if (process.env.ENABLE_EXTENSIONS) {
       // TODO: sandbox
       // extensions.tabs.on('activated', (tabId, windowId, focus) => {
@@ -37,6 +33,10 @@ export class WindowsService {
       // };
     }
 
+    extensions.windows.on('will-remove', (windowId) => {
+      BrowserWindow.fromId(windowId).close();
+    });
+
     // TODO: sandbox
     // ipcMain.handle('get-tab-zoom', (e, tabId) => {
     //   return this.findByBrowserView(tabId).viewManager.views.get(tabId)
@@ -44,13 +44,11 @@ export class WindowsService {
     // });
   }
 
-  public create() {
-    const window = new AppWindow(this.browserContext);
+  public create(browserContext: BrowserContext) {
+    const window = new AppWindow(browserContext);
     this.list.push(window);
 
-    if (process.env.ENABLE_EXTENSIONS) {
-      extensions.windows.observe(window.win);
-    }
+    extensions.windows.observe(window.win);
 
     window.win.on('focus', () => {
       this.lastFocused = window;

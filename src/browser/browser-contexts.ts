@@ -3,19 +3,18 @@ import { getPath, makeId } from '~/utils';
 import { promises, existsSync } from 'fs';
 import { resolve, basename, parse, extname } from 'path';
 import { Application } from './application';
-import { registerProtocol } from './models/protocols';
 import * as url from 'url';
 import { IDownloadItem, BrowserActionChangeType } from '~/interfaces';
 import { parseCrx } from '~/utils/crx';
 import { pathExists } from '~/utils/files';
 import { extractZip } from '~/utils/zip';
-import { extensions, _setFallbackSession } from 'electron-extensions';
 import { requestPermission } from './dialogs/permissions';
 import { BrowserContext } from './browser-context';
+import { extensions } from './extensions';
 
 // TODO: move windows list to the corresponding sessions
 export class BrowserContexts {
-  public browserContexts: Set<BrowserContext> = new Set();
+  public browserContexts: Map<Electron.Session, BrowserContext> = new Map();
 
   public constructor() {
     // this.clearCache('incognito');
@@ -36,7 +35,7 @@ export class BrowserContexts {
 
   public create(session: Electron.Session, offTheRecord: boolean) {
     const browserContext = new BrowserContext(session, offTheRecord);
-    this.browserContexts.add(browserContext);
+    this.browserContexts.set(session, browserContext);
   }
 
   public clearCache(session: 'normal' | 'incognito') {

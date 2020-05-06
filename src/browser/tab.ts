@@ -14,6 +14,7 @@ import { TabEvent } from '~/interfaces/tabs';
 import { Queue } from '~/utils/queue';
 import { Application } from './application';
 import { hookTabEvents } from './tab-events';
+import { extensions } from './extensions';
 
 interface IAuthInfo {
   url: string;
@@ -25,7 +26,6 @@ export class Tab {
   public isNewTab = false;
   public homeUrl: string;
   public favicon = '';
-  public incognito = false;
 
   public errorURL = '';
 
@@ -49,7 +49,7 @@ export class Tab {
 
   private lastUrl = '';
 
-  public constructor(window: AppWindow, url: string, incognito: boolean) {
+  public constructor(url: string) {
     this.browserView = new BrowserView({
       webPreferences: {
         preload: `${app.getAppPath()}/build/view-preload.bundle.js`,
@@ -57,7 +57,6 @@ export class Tab {
         contextIsolation: true,
         sandbox: true,
         enableRemoteModule: false,
-        partition: incognito ? 'view_incognito' : 'persist:view',
         plugins: true,
         nativeWindowOpen: true,
         webSecurity: true,
@@ -65,32 +64,28 @@ export class Tab {
       },
     });
 
-    this.incognito = incognito;
-
     // USER-AGENT:
     this.webContents.userAgent = this.webContents.userAgent
       .replace(/ Wexond\\?.([^\s]+)/g, '')
       .replace(/ Electron\\?.([^\s]+)/g, '')
       .replace(/Chrome\\?.([^\s]+)/g, 'Chrome/80.0.3987.162');
 
-    (this.webContents as any).windowId = window.win.id;
-
-    this.window = window;
     this.homeUrl = url;
 
-    this.webContents.session.webRequest.onBeforeSendHeaders(
-      (details, callback) => {
-        const { object: settings } = Application.instance.settings;
-        if (settings.doNotTrack) details.requestHeaders['DNT'] = '1';
-        callback({ requestHeaders: details.requestHeaders });
-      },
-    );
+    // TODO: sandbox
+    // this.webContents.session.webRequest.onBeforeSendHeaders(
+    //   (details, callback) => {
+    //     const { object: settings } = Application.instance.settings;
+    //     if (settings.doNotTrack) details.requestHeaders['DNT'] = '1';
+    //     callback({ requestHeaders: details.requestHeaders });
+    //   },
+    // );
 
     ipcMain.handle(`get-error-url-${this.id}`, async (e) => {
       return this.errorURL;
     });
 
-    hookTabEvents(this);
+    // hookTabEvents(this);
 
     if (url.startsWith(NEWTAB_URL)) this.isNewTab = true;
 

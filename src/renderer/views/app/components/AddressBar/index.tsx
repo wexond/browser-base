@@ -2,9 +2,7 @@ import * as React from 'react';
 import { observer } from 'mobx-react-lite';
 
 import store from '../../store';
-import { isURL } from '~/utils';
-import { callViewMethod } from '~/utils/view';
-import { ipcRenderer } from 'electron';
+import { isURL } from '~/utils/url';
 import { ToolbarButton } from '../ToolbarButton';
 import { StyledAddressBar, InputContainer, Input, Text } from './style';
 import { ICON_SEARCH } from '~/renderer/constants';

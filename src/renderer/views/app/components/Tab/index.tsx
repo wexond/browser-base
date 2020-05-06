@@ -15,7 +15,6 @@ import {
 import { ICON_VOLUME_HIGH, ICON_VOLUME_OFF } from '~/renderer/constants';
 import { ITab } from '../../models';
 import store from '../../store';
-import { remote, ipcRenderer } from 'electron';
 import { COMPACT_TAB_MARGIN_TOP } from '~/constants/design';
 
 const removeTab = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {
@@ -45,7 +44,7 @@ const onMouseDown = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {
 
   if (button === 0) {
     if (!tab.isSelected) {
-      tab.select();
+      browser.tabs.update(tab.id, { active: true });
     } else {
       store.canOpenSearch = true;
     }
@@ -58,7 +57,7 @@ const onMouseDown = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {
     store.tabs.lastScrollLeft = store.tabs.containerRef.current.scrollLeft;
   }
 
-  ipcRenderer.send(`hide-tab-preview-${store.windowId}`);
+  //ipcRenderer.send(`hide-tab-preview-${store.windowId}`);
 };
 
 const onMouseEnter = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {
@@ -72,11 +71,11 @@ const onMouseEnter = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {
   const y = store.isCompact ? bottom - COMPACT_TAB_MARGIN_TOP : bottom;
 
   if (store.tabs.canShowPreview && !store.tabs.isDragging) {
-    ipcRenderer.send(`show-tab-preview-${store.windowId}`, {
-      id: tab.id,
-      x,
-      y,
-    });
+    // ipcRenderer.send(`show-tab-preview-${store.windowId}`, {
+    //   id: tab.id,
+    //   x,
+    //   y,
+    // });
   }
 };
 
@@ -86,7 +85,7 @@ const onMouseLeave = () => {
 
 const onClick = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {
   if (e.button === 4) {
-    tab.close();
+    browser.tabs.remove(tab.id);
     return;
   }
 
@@ -103,114 +102,113 @@ const onMouseUp = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {
 };
 
 const onContextMenu = (tab: ITab) => () => {
-  const menu = remote.Menu.buildFromTemplate([
-    {
-      label: 'New tab to the right',
-      click: () => {
-        store.tabs.addTab(
-          {
-            index: store.tabs.list.indexOf(store.tabs.selectedTab) + 1,
-          },
-          tab.tabGroupId,
-        );
-      },
-    },
-    {
-      label: 'Add to a new group',
-      click: () => {
-        const tabGroup = store.tabGroups.addGroup();
-        tab.tabGroupId = tabGroup.id;
-        store.tabs.updateTabsBounds(true);
-      },
-    },
-    {
-      label: 'Remove from group',
-      visible: !!tab.tabGroup,
-      click: () => {
-        tab.removeFromGroup();
-      },
-    },
-    {
-      type: 'separator',
-    },
-    {
-      label: 'Reload',
-      accelerator: 'CmdOrCtrl+R',
-      click: () => {
-        tab.callViewMethod('webContents.reload');
-      },
-    },
-    {
-      label: 'Duplicate',
-      click: () => {
-        store.tabs.addTab({ active: true, url: tab.url });
-      },
-    },
-    {
-      label: tab.isPinned ? 'Unpin tab' : 'Pin tab',
-      click: () => {
-        tab.isPinned ? store.tabs.unpinTab(tab) : store.tabs.pinTab(tab);
-      },
-    },
-    {
-      label: tab.isMuted ? 'Unmute tab' : 'Mute tab',
-      click: () => {
-        tab.isMuted ? store.tabs.unmuteTab(tab) : store.tabs.muteTab(tab);
-      },
-    },
-    {
-      type: 'separator',
-    },
-    {
-      label: 'Close tab',
-      accelerator: 'CmdOrCtrl+W',
-      click: () => {
-        tab.close();
-      },
-    },
-    {
-      label: 'Close other tabs',
-      click: () => {
-        for (const t of store.tabs.list) {
-          if (t !== tab) {
-            t.close();
-          }
-        }
-      },
-    },
-    {
-      label: 'Close tabs to the left',
-      click: () => {
-        for (let i = store.tabs.list.indexOf(tab) - 1; i >= 0; i--) {
-          store.tabs.list[i].close();
-        }
-      },
-    },
-    {
-      label: 'Close tabs to the right',
-      click: () => {
-        for (
-          let i = store.tabs.list.length - 1;
-          i > store.tabs.list.indexOf(tab);
-          i--
-        ) {
-          store.tabs.list[i].close();
-        }
-      },
-    },
-    {
-      type: 'separator',
-    },
-    {
-      label: 'Revert closed tab',
-      enabled: store.tabs.closedUrl !== '',
-      click: () => {
-        store.tabs.revertClosed();
-      },
-    },
-  ]);
-
-  menu.popup();
+  // const menu = remote.Menu.buildFromTemplate([
+  //   {
+  //     label: 'New tab to the right',
+  //     click: () => {
+  //       store.tabs.addTab(
+  //         {
+  //           index: store.tabs.list.indexOf(store.tabs.selectedTab) + 1,
+  //         },
+  //         tab.tabGroupId,
+  //       );
+  //     },
+  //   },
+  //   {
+  //     label: 'Add to a new group',
+  //     click: () => {
+  //       const tabGroup = store.tabGroups.addGroup();
+  //       tab.tabGroupId = tabGroup.id;
+  //       store.tabs.updateTabsBounds(true);
+  //     },
+  //   },
+  //   {
+  //     label: 'Remove from group',
+  //     visible: !!tab.tabGroup,
+  //     click: () => {
+  //       tab.removeFromGroup();
+  //     },
+  //   },
+  //   {
+  //     type: 'separator',
+  //   },
+  //   {
+  //     label: 'Reload',
+  //     accelerator: 'CmdOrCtrl+R',
+  //     click: () => {
+  //       tab.callViewMethod('webContents.reload');
+  //     },
+  //   },
+  //   {
+  //     label: 'Duplicate',
+  //     click: () => {
+  //       store.tabs.addTab({ active: true, url: tab.url });
+  //     },
+  //   },
+  //   {
+  //     label: tab.isPinned ? 'Unpin tab' : 'Pin tab',
+  //     click: () => {
+  //       tab.isPinned ? store.tabs.unpinTab(tab) : store.tabs.pinTab(tab);
+  //     },
+  //   },
+  //   {
+  //     label: tab.isMuted ? 'Unmute tab' : 'Mute tab',
+  //     click: () => {
+  //       tab.isMuted ? store.tabs.unmuteTab(tab) : store.tabs.muteTab(tab);
+  //     },
+  //   },
+  //   {
+  //     type: 'separator',
+  //   },
+  //   {
+  //     label: 'Close tab',
+  //     accelerator: 'CmdOrCtrl+W',
+  //     click: () => {
+  //       tab.close();
+  //     },
+  //   },
+  //   {
+  //     label: 'Close other tabs',
+  //     click: () => {
+  //       for (const t of store.tabs.list) {
+  //         if (t !== tab) {
+  //           t.close();
+  //         }
+  //       }
+  //     },
+  //   },
+  //   {
+  //     label: 'Close tabs to the left',
+  //     click: () => {
+  //       for (let i = store.tabs.list.indexOf(tab) - 1; i >= 0; i--) {
+  //         store.tabs.list[i].close();
+  //       }
+  //     },
+  //   },
+  //   {
+  //     label: 'Close tabs to the right',
+  //     click: () => {
+  //       for (
+  //         let i = store.tabs.list.length - 1;
+  //         i > store.tabs.list.indexOf(tab);
+  //         i--
+  //       ) {
+  //         store.tabs.list[i].close();
+  //       }
+  //     },
+  //   },
+  //   {
+  //     type: 'separator',
+  //   },
+  //   {
+  //     label: 'Revert closed tab',
+  //     enabled: store.tabs.closedUrl !== '',
+  //     click: () => {
+  //       store.tabs.revertClosed();
+  //     },
+  //   },
+  // ]);
+  // menu.popup();
 };
 
 const Content = observer(({ tab }: { tab: ITab }) => {

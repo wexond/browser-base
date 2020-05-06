@@ -12,7 +12,7 @@
     "styled-components"
   ],
   "homepage": "https://github.com/wexond/wexond#readme",
-  "main": "build/main.bundle.js",
+  "main": "build/browser.bundle.js",
   "author": "Eryk Rakowski <sentialx@gmail.com>",
   "repository": {
     "type": "git",
@@ -52,6 +52,7 @@
     "@types/react": "16.9.34",
     "@types/react-dom": "16.9.7",
     "@types/styled-components": "5.1.0",
+    "@types/uuid": "^7.0.3",
     "@typescript-eslint/eslint-plugin": "^2.30.0",
     "@typescript-eslint/parser": "^2.30.0",
     "animejs": "^3.2.0",
@@ -64,7 +65,6 @@
     "crypto-js": "^4.0.0",
     "electron": "^9.0.0-beta.22",
     "electron-builder": "22.6.0",
-    "electron-extensions": "^7.0.0-beta.2",
     "electron-updater": "4.3.1",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.11.0",
@@ -96,6 +96,7 @@
     "ts-loader": "^7.0.2",
     "typescript": "^3.8.3",
     "typescript-plugin-styled-components": "^1.4.4",
+    "uuid": "^8.0.0",
     "webpack": "4.43.0",
     "webpack-bundle-analyzer": "^3.7.0",
     "webpack-cli": "3.3.11",

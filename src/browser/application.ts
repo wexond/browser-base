@@ -19,6 +19,8 @@ export class Application {
 
   public browserContexts = new BrowserContexts();
 
+  public windows: WindowsService = new WindowsService();
+
   // public settings = new Settings();
 
   // public storage = new StorageService();

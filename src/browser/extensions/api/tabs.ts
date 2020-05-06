@@ -1,4 +1,4 @@
-import { BrowserWindow } from 'electron';
+import { BrowserWindow, WebContents, webContents } from 'electron';
 import { promises } from 'fs';
 import { resolve } from 'path';
 import { sessionFromIpcEvent } from '../session';
@@ -42,7 +42,10 @@ export declare interface TabsAPI {
       ...additionalArgs: any[]
     ) => void,
   ): this;
-  on(event: 'will-remove', listener: (tabId: number) => void): this;
+  on(
+    event: 'will-remove',
+    listener: (tabId: number, windowId: number) => void,
+  ): this;
   on(event: string, listener: Function): this;
 }
 
@@ -63,9 +66,9 @@ export class TabsAPI extends EventEmitter implements ITabsEvents {
     handler('query', this.query);
     handler('update', this.update);
     handler('reload', this.reload);
-    handler('create', this.create);
     handler('remove', this.remove);
 
+    handler('create', this.createHandler, true);
     handler('getCurrent', this.getCurrent, true);
     handler('insertCSS', this.insertCSS, true);
   }
@@ -122,7 +125,11 @@ export class TabsAPI extends EventEmitter implements ITabsEvents {
 
   public remove(tabIds: number | number[]) {
     if (Array.isArray(tabIds)) {
-      tabIds.forEach((id) => this.emit('will-remove', id));
+      tabIds.forEach((id) => {
+        const tab: Tab = WebContents.fromId(id);
+        if (!tab) return;
+        this.emit('will-remove', id, tab.windowId);
+      });
       return;
     }
 
@@ -137,9 +144,9 @@ export class TabsAPI extends EventEmitter implements ITabsEvents {
   // Deprecated, fallback to chrome.tabs.query
   public getSelected(windowId: number) {
     if (typeof windowId === 'number') {
-      return this.query({ windowId, active: true });
+      return this.query({ windowId, active: true })[0];
     }
-    return this.query({ active: true });
+    return this.query({ active: true })[0];
   }
 
   public query(info: chrome.tabs.QueryInfo = {}) {
@@ -186,15 +193,36 @@ export class TabsAPI extends EventEmitter implements ITabsEvents {
     return tabs;
   }
 
+  public async createHandler(
+    e: Electron.IpcMainEvent,
+    details: chrome.tabs.CreateProperties,
+  ) {
+    if (!details.windowId) {
+      details.windowId = Extensions.instance.windows.getCurrent(e, {}).id;
+    }
+    this.create(details);
+  }
+
   public async create(
     details: chrome.tabs.CreateProperties,
   ): Promise<chrome.tabs.Tab> {
+    if (!details.windowId) {
+      throw new Error('windowId not specified');
+    }
+
     if (!this.onCreate) {
       throw new Error('No onCreate event handler');
     }
 
     const tabId = await this.onCreate(details);
-    const tab = this.getTabById(tabId);
+    const tab: Tab = webContents.fromId(tabId);
+
+    tab.windowId = details.windowId;
+
+    this.observe(tab);
+
+    if (details.active) this.activate(tabId);
+
     return this.getDetails(tab);
   }
 
@@ -210,8 +238,6 @@ export class TabsAPI extends EventEmitter implements ITabsEvents {
       'page-title-updated', // title
       'did-start-loading', // status
       'did-stop-loading', // status
-      'media-started-playing', // audible
-      'media-paused', // audible
       'did-start-navigation', // url
       'did-redirect-navigation', // url
       'did-navigate-in-page', // url
@@ -221,6 +247,16 @@ export class TabsAPI extends EventEmitter implements ITabsEvents {
       tab.on(eventName, () => {
         this.onUpdated(tab);
       });
+    });
+
+    tab.on('media-started-playing', () => {
+      tab.audible = true;
+      this.onUpdated(tab);
+    });
+
+    tab.on('media-paused', () => {
+      tab.audible = false;
+      this.onUpdated(tab);
     });
 
     tab.on('page-favicon-updated', (event, favicons) => {
@@ -289,9 +325,6 @@ export class TabsAPI extends EventEmitter implements ITabsEvents {
   }
 
   private createDetails(tab: Tab): chrome.tabs.Tab {
-    const window = getParentWindowOfTab(tab);
-    const [width = 0, height = 0] = window ? window.getSize() : [];
-
     const prevDetails: Partial<chrome.tabs.Tab> = this.detailsCache.get(
       tab,
     ) || {
@@ -306,9 +339,13 @@ export class TabsAPI extends EventEmitter implements ITabsEvents {
       pinned: false,
     };
 
+    const window =
+      BrowserWindow.fromId(tab.windowId) || getParentWindowOfTab(tab);
+    const [width = 0, height = 0] = window ? window.getSize() : [];
+
     const details: chrome.tabs.Tab = {
       ...(prevDetails as chrome.tabs.Tab),
-      audible: tab.isCurrentlyAudible(),
+      audible: tab.audible,
       favIconUrl: tab.favicon || undefined,
       height,
       width,
@@ -372,10 +409,16 @@ export class TabsAPI extends EventEmitter implements ITabsEvents {
     const windowId = details ? details.windowId : -1;
     const win = Extensions.instance.windows.getWindowById(windowId);
 
-    sendToExtensionPages('tabs.onRemoved', tab.id, {
-      windowId,
-      isWindowClosing: win ? win.isDestroyed() : false,
-    });
+    const args = [
+      tab.id,
+      {
+        windowId,
+        isWindowClosing: win ? win.isDestroyed() : false,
+      },
+    ];
+
+    this.emit('removed', ...args);
+    sendToExtensionPages('tabs.onRemoved', ...args);
   }
 
   private onCreated(tab: Tab) {

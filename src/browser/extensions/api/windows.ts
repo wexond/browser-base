@@ -1,10 +1,10 @@
 import { BrowserWindow } from 'electron';
 import { EventEmitter } from 'events';
-import { Extensions } from '.';
-import { isBackgroundPage } from '../utils/web-contents';
-import { WINDOW_ID_CURRENT } from '../constants';
-import { sendToExtensionPages } from './background-pages';
-import { HandlerFactory } from './handler-factory';
+import { Extensions } from '../';
+import { isBackgroundPage } from '../web-contents';
+import { sendToExtensionPages } from '../background-pages';
+import { HandlerFactory } from '../handler-factory';
+import { WINDOW_ID_CURRENT } from '~/common/extensions/constants';
 
 // Events which can be registered only once
 interface IWindowsEvents {
@@ -39,6 +39,7 @@ export class WindowsAPI extends EventEmitter implements IWindowsEvents {
     handler('update', this.update);
     handler('getAll', this.getAll);
     handler('getLastFocused', this.getLastFocused);
+    handler('remove', this.remove);
 
     handler('get', this.getHandler, true);
     handler('getCurrent', this.getCurrent, true);
@@ -169,10 +170,15 @@ export class WindowsAPI extends EventEmitter implements IWindowsEvents {
       : this.get(id, details);
   }
 
-  private getCurrent = (
+  public getCurrent = (
     event: Electron.IpcMainInvokeEvent,
     getInfo: chrome.windows.GetInfo,
   ): chrome.windows.Window => {
+    let win = this.getWindowById(event.sender.id);
+    if (win) {
+      return this.getDetailsMatchingGetInfo(win, getInfo);
+    }
+
     const tab = Extensions.instance.tabs.getTabById(event.sender.id);
 
     if (!tab) {
@@ -183,7 +189,7 @@ export class WindowsAPI extends EventEmitter implements IWindowsEvents {
     }
 
     const tabDetails = Extensions.instance.tabs.getDetails(tab);
-    const win = this.getWindowById(tabDetails.windowId);
+    win = this.getWindowById(tabDetails.windowId);
 
     return this.getDetailsMatchingGetInfo(win, getInfo);
   };

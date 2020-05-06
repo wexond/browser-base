@@ -3,6 +3,7 @@ const { getConfig, dev } = require('./webpack.config.base');
 const { spawn, execSync } = require('child_process');
 const CopyPlugin = require('copy-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 let terser = require('terser');
 /* eslint-enable */
@@ -22,6 +23,7 @@ const mainConfig = getConfig({
 
   plugins: [
     // new BundleAnalyzerPlugin(),
+    // new ForkTsCheckerWebpackPlugin(),
     new CopyPlugin(
       [
         {
@@ -38,6 +40,7 @@ const mainConfig = getConfig({
   ],
 });
 
+// TODO: sandbox
 const preloadConfig = getConfig({
   target: 'electron-renderer',
 
@@ -46,16 +49,15 @@ const preloadConfig = getConfig({
   watch: dev,
 
   entry: {
-    'view-preload': './src/preloads/view-preload',
+    'api-preload': './src/renderer/preloads/api',
+    //'view-preload': './src/preloads/view-preload',
   },
 
   plugins: [],
 });
 
 if (process.env.ENABLE_EXTENSIONS) {
-  preloadConfig.entry['popup-preload'] = './src/preloads/popup-preload';
-  preloadConfig.entry['extensions-preload'] =
-    './src/preloads/extensions-preload';
+  //preloadConfig.entry['popup-preload'] = './src/preloads/popup-preload';
 }
 
 if (process.env.START === '1') {

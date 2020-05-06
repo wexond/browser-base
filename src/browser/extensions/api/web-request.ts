@@ -1,7 +1,7 @@
 import { webContents, ipcMain } from 'electron';
-import { sessionFromIpcEvent } from '../utils/session';
-import { webContentsInvoke } from '../utils/web-contents';
-import extendElectronWebRequest from '../utils/web-request';
+import { sessionFromIpcEvent } from '../session';
+import { webContentsInvoke } from '../web-contents';
+import extendElectronWebRequest from '../extend-web-request';
 
 const clearCacheOnNavigation = () => {
   webContents.getAllWebContents().forEach((wc) => {

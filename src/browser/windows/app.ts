@@ -8,6 +8,7 @@ import { Application } from '../application';
 import { isNightly } from '..';
 import { ViewManager } from '../view-manager';
 import { BrowserContext } from '../browser-context';
+import { getWebUIURL } from '~/common/utils/protocols';
 
 export class AppWindow {
   public win: BrowserWindow;
@@ -31,7 +32,7 @@ export class AppWindow {
         plugins: true,
         sandbox: true,
         nodeIntegration: false,
-        contextIsolation: true,
+        contextIsolation: false,
         javascript: true,
         enableRemoteModule: false,
         session: browserContext.session,
@@ -112,7 +113,7 @@ export class AppWindow {
     this.win.on('unmaximize', resize);
 
     this.win.on('close', (event: Electron.Event) => {
-      const { object: settings } = Application.instance.settings;
+      // const { object: settings } = Application.instance.settings;
 
       // TODO: sandbox
 
@@ -162,7 +163,7 @@ export class AppWindow {
       this.webContents.openDevTools({ mode: 'detach' });
       this.win.loadURL('http://localhost:4444/app.html');
     } else {
-      this.win.loadURL(join('file://', app.getAppPath(), 'build/app.html'));
+      this.win.loadURL(getWebUIURL('app'));
     }
 
     // TODO: sandbox
@@ -196,8 +197,10 @@ export class AppWindow {
     // });
 
     this.win.on('focus', () => {
-      Application.instance.windows.current = this;
+      // Application.instance.windows.current = this;
     });
+
+    this.setBoundsListener();
   }
 
   public get id() {
@@ -226,5 +229,15 @@ export class AppWindow {
     // this.win.setTitle(
     //   title.trim() === '' ? app.name : `${title} - ${app.name}`,
     // );
+  }
+
+  private setBoundsListener() {
+    // resize the BrowserView's height when the toolbar height changes
+    // ex: when the bookmarks bar appears
+    this.win.webContents.on('ipc-message', (e, message) => {
+      if (message === 'resize-height') {
+        Application.instance.tabs.fixBounds(this.id);
+      }
+    });
   }
 }
