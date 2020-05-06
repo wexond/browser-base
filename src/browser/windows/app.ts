@@ -7,15 +7,18 @@ import { runMessagingService } from '../services';
 import { Application } from '../application';
 import { isNightly } from '..';
 import { ViewManager } from '../view-manager';
+import { BrowserContext } from '../browser-context';
 
 export class AppWindow {
   public win: BrowserWindow;
 
-  public viewManager: ViewManager;
-
   public incognito: boolean;
 
-  public constructor(incognito: boolean) {
+  private browserContext: BrowserContext;
+
+  public constructor(browserContext: BrowserContext) {
+    this.browserContext = browserContext;
+
     this.win = new BrowserWindow({
       frame: false,
       minWidth: 400,
@@ -26,10 +29,12 @@ export class AppWindow {
       backgroundColor: '#ffffff',
       webPreferences: {
         plugins: true,
-        nodeIntegration: true,
-        contextIsolation: false,
+        sandbox: true,
+        nodeIntegration: false,
+        contextIsolation: true,
         javascript: true,
-        enableRemoteModule: true,
+        enableRemoteModule: false,
+        session: browserContext.session,
       },
       icon: resolve(
         app.getAppPath(),
@@ -38,11 +43,8 @@ export class AppWindow {
       show: false,
     });
 
-    this.incognito = incognito;
-
-    this.viewManager = new ViewManager(this, incognito);
-
-    runMessagingService(this);
+    // TODO: sandbox
+    // runMessagingService(this);
 
     const windowDataPath = getPath('window-data.json');
 
@@ -89,13 +91,14 @@ export class AppWindow {
     });
 
     const resize = () => {
-      setTimeout(() => {
-        if (process.platform === 'linux') {
-          this.viewManager.select(this.viewManager.selectedId, false);
-        } else {
-          this.viewManager.fixBounds();
-        }
-      });
+      // TODO: sandbox
+      // setTimeout(() => {
+      //   if (process.platform === 'linux') {
+      //     this.viewManager.select(this.viewManager.selectedId, false);
+      //   } else {
+      //     this.viewManager.fixBounds();
+      //   }
+      // });
 
       setTimeout(() => {
         this.webContents.send('tabs-resize');
@@ -111,20 +114,22 @@ export class AppWindow {
     this.win.on('close', (event: Electron.Event) => {
       const { object: settings } = Application.instance.settings;
 
-      if (settings.warnOnQuit && this.viewManager.views.size > 1) {
-        const answer = dialog.showMessageBoxSync(null, {
-          type: 'question',
-          title: `Quit ${app.name}?`,
-          message: `Quit ${app.name}?`,
-          detail: `You have opened ${this.viewManager.views.size} tabs.`,
-          buttons: ['Close', 'Cancel'],
-        });
+      // TODO: sandbox
 
-        if (answer === 1) {
-          event.preventDefault();
-          return;
-        }
-      }
+      // if (settings.warnOnQuit && this.viewManager.views.size > 1) {
+      //   const answer = dialog.showMessageBoxSync(null, {
+      //     type: 'question',
+      //     title: `Quit ${app.name}?`,
+      //     message: `Quit ${app.name}?`,
+      //     detail: `You have opened ${this.viewManager.views.size} tabs.`,
+      //     buttons: ['Close', 'Cancel'],
+      //   });
+
+      //   if (answer === 1) {
+      //     event.preventDefault();
+      //     return;
+      //   }
+      // }
 
       // Save current window state to a file.
       windowState.maximized = this.win.isMaximized();
@@ -133,22 +138,22 @@ export class AppWindow {
 
       this.win.setBrowserView(null);
 
-      Application.instance.dialogs.destroy();
+      // Application.instance.dialogs.destroy();
 
-      this.viewManager.clear();
+      // this.viewManager.clear();
 
-      if (
-        incognito &&
-        Application.instance.windows.list.filter((x) => x.incognito).length ===
-          1
-      ) {
-        Application.instance.sessions.clearCache('incognito');
-        Application.instance.sessions.unloadIncognitoExtensions();
-      }
+      // if (
+      //   incognito &&
+      //   Application.instance.windows.list.filter((x) => x.incognito).length ===
+      //     1
+      // ) {
+      //   Application.instance.sessions.clearCache('incognito');
+      //   Application.instance.sessions.unloadIncognitoExtensions();
+      // }
 
-      Application.instance.windows.list = Application.instance.windows.list.filter(
-        (x) => x.win.id !== this.win.id,
-      );
+      // Application.instance.windows.list = Application.instance.windows.list.filter(
+      //   (x) => x.win.id !== this.win.id,
+      // );
     });
 
     // this.webContents.openDevTools({ mode: 'detach' });
@@ -160,34 +165,35 @@ export class AppWindow {
       this.win.loadURL(join('file://', app.getAppPath(), 'build/app.html'));
     }
 
-    this.win.on('enter-full-screen', () => {
-      this.send('fullscreen', true);
-      this.viewManager.fixBounds();
-    });
+    // TODO: sandbox
+    // this.win.on('enter-full-screen', () => {
+    //   this.send('fullscreen', true);
+    //   this.viewManager.fixBounds();
+    // });
 
-    this.win.on('leave-full-screen', () => {
-      this.send('fullscreen', false);
-      this.viewManager.fixBounds();
-    });
+    // this.win.on('leave-full-screen', () => {
+    //   this.send('fullscreen', false);
+    //   this.viewManager.fixBounds();
+    // });
 
-    this.win.on('enter-html-full-screen', () => {
-      this.viewManager.fullscreen = true;
-      this.send('html-fullscreen', true);
-    });
+    // this.win.on('enter-html-full-screen', () => {
+    //   this.viewManager.fullscreen = true;
+    //   this.send('html-fullscreen', true);
+    // });
 
-    this.win.on('leave-html-full-screen', () => {
-      this.viewManager.fullscreen = false;
-      this.send('html-fullscreen', false);
-    });
+    // this.win.on('leave-html-full-screen', () => {
+    //   this.viewManager.fullscreen = false;
+    //   this.send('html-fullscreen', false);
+    // });
 
-    this.win.on('scroll-touch-begin', () => {
-      this.send('scroll-touch-begin');
-    });
+    // this.win.on('scroll-touch-begin', () => {
+    //   this.send('scroll-touch-begin');
+    // });
 
-    this.win.on('scroll-touch-end', () => {
-      this.viewManager.selected.send('scroll-touch-end');
-      this.send('scroll-touch-end');
-    });
+    // this.win.on('scroll-touch-end', () => {
+    //   this.viewManager.selected.send('scroll-touch-end');
+    //   this.send('scroll-touch-end');
+    // });
 
     this.win.on('focus', () => {
       Application.instance.windows.current = this;
@@ -215,9 +221,10 @@ export class AppWindow {
   }
 
   public updateTitle() {
-    const { title } = this.viewManager.selected;
-    this.win.setTitle(
-      title.trim() === '' ? app.name : `${title} - ${app.name}`,
-    );
+    // TODO: sandbox
+    // const { title } = this.viewManager.selected;
+    // this.win.setTitle(
+    //   title.trim() === '' ? app.name : `${title} - ${app.name}`,
+    // );
   }
 }

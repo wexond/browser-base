@@ -11,7 +11,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const PORT = 4444;
 
 const appConfig = getConfig(getBaseConfig('app'), {
-  target: 'electron-renderer',
+  target: 'web',
 
   devServer: {
     contentBase: join(__dirname, 'build'),
@@ -23,7 +23,7 @@ const appConfig = getConfig(getBaseConfig('app'), {
 });
 
 const extPopupConfig = getConfig({
-  target: 'electron-renderer',
+  target: 'web',
 
   entry: {},
   output: {},
@@ -50,6 +50,10 @@ applyEntries('app', appConfig, [
   'downloads-dialog',
   'add-bookmark',
   'zoom',
+  'settings',
+  'history',
+  'newtab',
+  'bookmarks',
 ]);
 
 if (process.env.ENABLE_EXTENSIONS) {

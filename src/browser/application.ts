@@ -1,7 +1,7 @@
-import { app, ipcMain, Menu } from 'electron';
+import { app, ipcMain, Menu, session } from 'electron';
 import { isAbsolute, extname } from 'path';
 import { existsSync } from 'fs';
-import { SessionsService } from './sessions-service';
+import { BrowserContexts } from './browser-contexts';
 import { checkFiles } from '~/utils/files';
 import { Settings } from './models/settings';
 import { isURL, prefixHttp } from '~/utils';
@@ -11,19 +11,21 @@ import { getMainMenu } from './menus/main';
 import { runAutoUpdaterService } from './services';
 import { DialogsService } from './services/dialogs-service';
 import { requestAuth } from './dialogs/auth';
+import { protocols } from './protocols';
+import { Tabs } from './tabs';
 
 export class Application {
   public static instance = new Application();
 
-  public sessions: SessionsService;
+  public browserContexts = new BrowserContexts();
 
-  public settings = new Settings();
+  // public settings = new Settings();
 
-  public storage = new StorageService();
+  // public storage = new StorageService();
 
-  public windows = new WindowsService();
+  public tabs = new Tabs();
 
-  public dialogs = new DialogsService();
+  // public dialogs = new DialogsService();
 
   public start() {
     const gotTheLock = app.requestSingleInstanceLock();
@@ -75,6 +77,8 @@ export class Application {
       }
     });
 
+    protocols.forEach((protocol) => protocol?.setPrivileged?.());
+
     ipcMain.on('create-window', (e, incognito = false) => {
       this.windows.open(incognito);
     });
@@ -87,15 +91,13 @@ export class Application {
 
     checkFiles();
 
-    this.storage.run();
-    this.dialogs.run();
+    // this.storage.run();
+    // this.dialogs.run();
 
-    this.windows.open();
+    this.browserContexts.create(session.defaultSession, false);
 
-    this.sessions = new SessionsService();
-
-    Menu.setApplicationMenu(getMainMenu());
-    runAutoUpdaterService();
+    // Menu.setApplicationMenu(getMainMenu());
+    // runAutoUpdaterService();
 
     app.on('activate', () => {
       if (this.windows.list.filter((x) => x !== null).length === 0) {
