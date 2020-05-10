@@ -1,7 +1,6 @@
 import { EventEmitter } from 'events';
-import { sessionFromIpcEvent } from '../session';
-import { webContents } from 'electron';
-import { isAbsolute } from 'path';
+import { join, dirname } from 'path';
+import { format, parse } from 'url';
 import { HandlerFactory } from '../handler-factory';
 import { EXTENSION_PROTOCOL } from '~/common/constants/protocols';
 import { Extensions } from '..';
@@ -28,25 +27,37 @@ const CHROME_DETAILS_KEYS: { [key: string]: string } = {
   title: 'title',
 };
 
-const resolvePath = (extensionUrl: string, path: string) => {
+const resolvePath = (
+  extensionUrl: string,
+  path: string,
+  scriptPath?: string,
+) => {
   if (!path) return undefined;
-  if (path.startsWith(extensionUrl) || isAbsolute(path)) return path;
-  return `${extensionUrl}${path}`;
+  if (path.startsWith(extensionUrl)) return path;
+  if (!scriptPath || path.startsWith('/')) scriptPath = './';
+  return format({
+    ...parse(extensionUrl),
+    pathname: join(dirname(scriptPath), path).replace(/\\/g, '/'),
+  });
 };
 
-const resolveIconPaths = (extensionUrl: string, icon: IconType): IconType => {
+const resolveIconPaths = (
+  extensionUrl: string,
+  icon: IconType,
+  scriptPath?: string,
+): IconType => {
   if (typeof icon === 'object') {
     const newIcon: IconType = {};
     Object.entries(icon).forEach(([key, value]) => {
       if (typeof value === 'string') {
-        newIcon[key] = resolvePath(extensionUrl, value);
+        newIcon[key] = resolvePath(extensionUrl, value, scriptPath);
       }
     });
     return newIcon;
   }
 
   if (typeof icon === 'string') {
-    return resolvePath(extensionUrl, icon);
+    return resolvePath(extensionUrl, icon, scriptPath);
   }
 
   return undefined;
@@ -75,6 +86,7 @@ export class BrowserActionAPI extends EventEmitter {
         chrome.browserAction.TitleDetails &
         chrome.browserAction.PopupDetails &
         chrome.browserAction.TabIconDetails,
+      scriptPath?: string,
     ) => {
       const action = this.getOrCreate(session, extensionId);
       const { tabId } = details;
@@ -83,9 +95,10 @@ export class BrowserActionAPI extends EventEmitter {
 
       if (propName === 'icon') {
         newValue =
-          details.imageData || resolveIconPaths(action.baseUrl, details.path);
+          details.imageData ||
+          resolveIconPaths(action.baseUrl, details.path, scriptPath);
       } else if (propName === 'popup') {
-        newValue = resolvePath(action.baseUrl, details.popup);
+        newValue = resolvePath(action.baseUrl, details.popup, scriptPath);
       }
 
       let actionToUpdate: any = action;

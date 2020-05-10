@@ -21,6 +21,7 @@ export declare interface WindowsAPI {
   on(event: 'focused', listener: (windowId: number) => void): this;
   on(event: 'created', listener: (window: chrome.windows.Window) => void): this;
   on(event: 'will-remove', listener: (windowId: number) => void): this;
+  on(event: 'removed', listener: (windowId: number) => void): this;
   on(event: string, listener: Function): this;
 }
 
@@ -113,7 +114,8 @@ export class WindowsAPI extends EventEmitter implements IWindowsEvents {
     this.getWindowById(session, windowId)?.focus();
   }
 
-  public remove(windowId: number) {
+  public remove(session: Electron.Session, windowId: number) {
+    if (!this.getWindowById(session, windowId)) return;
     this.emit('will-remove', windowId);
   }
 
@@ -288,7 +290,7 @@ export class WindowsAPI extends EventEmitter implements IWindowsEvents {
   };
 
   private onRemoved(win: BrowserWindow) {
-    this.emit('will-remove', win.id);
+    this.emit('removed', win.id);
     sendToExtensionPages('windows.onRemoved', {
       windowId: win.id,
     });

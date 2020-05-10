@@ -46,6 +46,10 @@ export declare interface TabsAPI {
     ) => void,
   ): this;
   on(
+    event: 'will-remove',
+    listener: (tabId: number, windowId: number) => void,
+  ): this;
+  on(
     event: 'removed',
     listener: (tabId: number, removedInfo: chrome.tabs.TabRemoveInfo) => void,
   ): this;
@@ -135,12 +139,22 @@ export class TabsAPI extends EventEmitter implements ITabsEvents {
   }
 
   public remove(session: Electron.Session, tabIds: number | number[]) {
+    const removeTab = (id: number) => {
+      const tab = this.getTabById(session, id);
+      if (!tab) return;
+
+      const details = this.detailsCache.get(tab);
+      const windowId = details ? details.windowId : -1;
+
+      this.emit('will-remove', id, windowId);
+    };
+
     if (Array.isArray(tabIds)) {
-      tabIds.forEach((id) => this.onRemoved(session, id));
+      tabIds.forEach((id) => removeTab(id));
       return;
     }
 
-    this.onRemoved(session, tabIds);
+    removeTab(tabIds);
   }
 
   // This API is deprecated, so we fallback it to chrome.tabs.query({ windowId })
@@ -158,7 +172,7 @@ export class TabsAPI extends EventEmitter implements ITabsEvents {
 
     if (typeof windowId === 'number') {
       window = Extensions.instance.windows.get(session, windowId);
-      return this.query(session, { windowId, active: true })[0];
+      return this.query(session, { windowId, active: true })?.[0];
     } else {
       window = Extensions.instance.windows.getCurrent(session, sender);
     }
@@ -276,6 +290,13 @@ export class TabsAPI extends EventEmitter implements ITabsEvents {
   public observe(tab: Tab) {
     this.tabs.add(tab);
 
+    const { session } = tab;
+
+    tab.once('destroyed', () => {
+      this.tabs.delete(tab);
+      this.onRemoved(session, tab);
+    });
+
     const updateEvents: any[] = [
       'page-title-updated', // title
       'did-start-loading', // status
@@ -369,6 +390,8 @@ export class TabsAPI extends EventEmitter implements ITabsEvents {
   }
 
   private createDetails(tab: Tab): chrome.tabs.Tab {
+    if (tab.isDestroyed()) return null;
+
     const prevDetails: Partial<chrome.tabs.Tab> = this.detailsCache.get(
       tab,
     ) || {
@@ -384,7 +407,8 @@ export class TabsAPI extends EventEmitter implements ITabsEvents {
     };
 
     const window =
-      BrowserWindow.fromId(tab.windowId) || getParentWindowOfTab(tab);
+      (tab.windowId > 0 && BrowserWindow.fromId(tab.windowId)) ||
+      getParentWindowOfTab(tab);
     const [width = 0, height = 0] = window ? window.getSize() : [];
 
     const details: chrome.tabs.Tab = {
@@ -443,31 +467,28 @@ export class TabsAPI extends EventEmitter implements ITabsEvents {
     sendToExtensionPages('tabs.onUpdated', tab.id, changeInfo, details);
   }
 
-  private onRemoved(session: Electron.Session, tabId: number) {
-    const tab = this.getTabById(session, tabId);
-    if (!tab) return;
-
-    const details = this.detailsCache.has(tab)
-      ? this.detailsCache.get(tab)
-      : null;
+  private onRemoved(session: Electron.Session, tab: Tab) {
+    const details = this.detailsCache.get(tab);
+    if (!details) return;
 
     this.detailsCache.delete(tab);
 
-    this.tabs.delete(tab);
-
-    const windowId = details ? details.windowId : -1;
+    const { windowId } = details;
     const win = Extensions.instance.windows.getWindowById(session, windowId);
 
-    const { tabs } = Extensions.instance.windows.get(session, windowId, {
+    const windowDetails = Extensions.instance.windows.get(session, windowId, {
       populate: true,
     });
 
-    for (let i = details.index; i < tabs.length; i++) {
-      tabs[i].index--;
+    if (windowDetails) {
+      for (let i = details.index; i < windowDetails.tabs.length; i++) {
+        if (!windowDetails.tabs[i]) continue;
+        windowDetails.tabs[i].index--;
+      }
     }
 
     const args = [
-      tab.id,
+      details.id,
       {
         windowId,
         isWindowClosing: win ? win.isDestroyed() : false,
