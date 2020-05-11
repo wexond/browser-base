@@ -7,6 +7,7 @@ import {
 } from '~/common/constants/protocols';
 import { isBackgroundPage } from './web-contents';
 
+// TODO: send to proper sessions
 export const sendToExtensionPages = (channel: string, ...args: any[]) => {
   webContents.getAllWebContents().forEach((wc) => {
     if (

@@ -14,7 +14,7 @@ const TerserPlugin = require('terser-webpack-plugin');
 const INCLUDE = resolve(__dirname, 'src');
 
 const BUILD_FLAGS = {
-  ENABLE_EXTENSIONS: false,
+  ENABLE_EXTENSIONS: true,
   ENABLE_AUTOFILL: false,
 };
 

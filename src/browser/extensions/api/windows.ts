@@ -5,7 +5,7 @@ import { isBackgroundPage } from '../web-contents';
 import { sendToExtensionPages } from '../background-pages';
 import { HandlerFactory } from '../handler-factory';
 import { WINDOW_ID_CURRENT } from '~/common/extensions/constants';
-import { sessionFromIpcEvent } from '../session';
+import { WEBUI_BASE_URL } from '~/common/constants/protocols';
 
 // Events which can be registered only once
 interface IWindowsEvents {
@@ -198,9 +198,11 @@ export class WindowsAPI extends EventEmitter implements IWindowsEvents {
     sender: Electron.WebContents,
     getInfo?: chrome.windows.GetInfo,
   ): chrome.windows.Window => {
-    let win = this.getWindowById(session, sender.id);
-    if (win) {
-      return this.getDetailsMatchingGetInfo(session, win, getInfo);
+    if (sender.getURL().startsWith(WEBUI_BASE_URL)) {
+      const win = BrowserWindow.fromWebContents(sender);
+      if (win) {
+        return this.getDetailsMatchingGetInfo(session, win, getInfo);
+      }
     }
 
     const tab = Extensions.instance.tabs.getTabById(session, sender.id);

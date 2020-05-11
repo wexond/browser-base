@@ -1,5 +1,7 @@
 import { getAPI } from './api';
 import { webFrame, ipcRenderer } from 'electron';
+import { IpcEvent } from './ipc-event';
+import { ipcInvoker } from './ipc-invoker';
 
 declare const chrome: any;
 declare let browser: any;
@@ -10,6 +12,11 @@ export const injectAPI = async (webUi: boolean) => {
   if (webUi) {
     api.send = (channel: string, ...args: any[]) =>
       ipcRenderer.send(channel, ...args);
+
+    api.browserAction = {
+      getAllInTab: ipcInvoker('browserAction.getAllInTab'),
+      onUpdated: new IpcEvent('browserAction.onUpdated'),
+    };
 
     const w = await webFrame.executeJavaScript('window');
     w.browser = api;

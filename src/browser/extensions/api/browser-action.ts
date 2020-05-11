@@ -12,6 +12,7 @@ interface IBrowserActionInfo {
   popup?: string;
   title?: string;
   badgeText?: string;
+  tabId?: number;
   badgeBackgroundColor?: string | number[];
 }
 
@@ -63,9 +64,23 @@ const resolveIconPaths = (
   return undefined;
 };
 
+const getActionForTab = (action: IBrowserAction, tabId: number) =>
+  action.tabs.has(tabId)
+    ? {
+        ...action,
+        ...action.tabs.get(tabId),
+      }
+    : action;
+
 export declare interface BrowserActionAPI {
-  on(event: 'updated', listener: (action: IBrowserAction) => void): this;
-  on(event: 'loaded', listener: (action: IBrowserAction) => void): this;
+  on(
+    event: 'updated',
+    listener: (session: Electron.Session, action: IBrowserAction) => void,
+  ): this;
+  on(
+    event: 'loaded',
+    listener: (session: Electron.Session, action: IBrowserAction) => void,
+  ): this;
   on(event: string, listener: Function): this;
 }
 
@@ -107,14 +122,14 @@ export class BrowserActionAPI extends EventEmitter {
         if (action.tabs.has(tabId)) {
           actionToUpdate = action.tabs.get(tabId);
         } else {
-          actionToUpdate = {};
+          actionToUpdate = { tabId };
           action.tabs.set(tabId, actionToUpdate);
         }
       }
 
       if (actionToUpdate[propName] !== newValue) {
         actionToUpdate[propName] = newValue;
-        this.emit('updated', action);
+        this.emit('updated', session, getActionForTab(action, details.tabId));
       }
     };
 
@@ -150,6 +165,7 @@ export class BrowserActionAPI extends EventEmitter {
       action = {
         tabs: new Map(),
         extensionId,
+        badgeText: '',
         baseUrl: `${EXTENSION_PROTOCOL.scheme}${extensionId}/`,
       };
       sessionActions.set(extensionId, action);
@@ -179,7 +195,7 @@ export class BrowserActionAPI extends EventEmitter {
       title,
     });
 
-    this.emit('loaded', action);
+    this.emit('loaded', session, action);
 
     return action;
   }
@@ -200,14 +216,7 @@ export class BrowserActionAPI extends EventEmitter {
     const tabSession = tab.session;
     const actions = this.getAllInSession(tabSession);
 
-    return actions.map((action) =>
-      action.tabs.has(tabId)
-        ? {
-            ...action,
-            ...action.tabs.get(tabId),
-          }
-        : action,
-    );
+    return actions.map((action) => getActionForTab(action, tabId));
   }
 
   // TODO(sentialx): Tab in callback, fire if the browser action has no popup.

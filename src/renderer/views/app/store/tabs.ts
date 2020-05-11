@@ -195,11 +195,15 @@ export class TabsStore {
       this.createTab(tab);
     });
 
-    browser.tabs.onActivated.addListener(({ tabId, windowId }) => {
+    browser.tabs.onActivated.addListener(async ({ tabId, windowId }) => {
       const tab = this.getTabById(tabId);
       if (!tab) return;
 
       this.selectedTabId = tabId;
+
+      store.extensions.browserActions = await browser.browserAction.getAllInTab(
+        tabId,
+      );
 
       const focused = tab.addressbarFocused;
 

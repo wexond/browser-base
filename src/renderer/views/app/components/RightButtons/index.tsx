@@ -42,12 +42,9 @@ const BrowserActions = observer(() => {
   return (
     <>
       {selectedTabId &&
-        store.extensions.browserActions.map((item) => {
-          if (item.tabId === selectedTabId) {
-            return <BrowserAction data={item} key={item.extensionId} />;
-          }
-          return null;
-        })}
+        store.extensions.browserActions.map((item) => (
+          <BrowserAction data={item} key={item.extensionId} />
+        ))}
     </>
   );
 });
@@ -78,8 +75,8 @@ export const RightButtons = observer(() => {
 
   return (
     <Buttons>
-      {/* <BrowserActions /> */}
-      {/* {store.extensions.browserActions.length > 0 && <Separator />} */}
+      <BrowserActions />
+      {store.extensions.browserActions.length > 0 && <Separator />}
       {store.isCompact && (
         <>
           <SiteButtons />

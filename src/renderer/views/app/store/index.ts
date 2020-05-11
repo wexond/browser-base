@@ -7,6 +7,7 @@ import { TabGroupsStore } from './tab-groups';
 import { AddTabStore } from './add-tab';
 import { TabsStore } from './tabs';
 import { getTheme } from '~/utils/themes';
+import { ExtensionsStore } from './extensions';
 
 // TODO: sandbox
 export class Store {
@@ -19,6 +20,7 @@ export class Store {
   public addTab = new AddTabStore();
   public tabs = new TabsStore();
   public tabGroups = new TabGroupsStore(this);
+  public extensions = new ExtensionsStore();
 
   // @computed
   // public get theme() {

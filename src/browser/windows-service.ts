@@ -1,7 +1,8 @@
 import { AppWindow } from './windows/app';
-import { BrowserWindow, ipcMain } from 'electron';
+import { BrowserWindow } from 'electron';
 import { BrowserContext } from './browser-context';
 import { extensions } from './extensions';
+import { Application } from './application';
 
 export class WindowsService {
   public list: AppWindow[] = [];
@@ -13,6 +14,20 @@ export class WindowsService {
   constructor() {
     extensions.windows.on('will-remove', (windowId) => {
       BrowserWindow.fromId(windowId).close();
+    });
+
+    extensions.browserAction.on('updated', (session, action) => {
+      this.getAllInSession(session).forEach((window) => {
+        const windowDetails = Application.instance.tabs.windowsDetails.get(
+          window.id,
+        );
+        if (
+          !windowDetails ||
+          (action.tabId && windowDetails.selectedTabId !== action.tabId)
+        )
+          return;
+        window.send('browserAction.onUpdated', action);
+      });
     });
 
     // TODO: sandbox
@@ -33,6 +48,10 @@ export class WindowsService {
     });
 
     return window;
+  }
+
+  public getAllInSession(session: Electron.Session) {
+    return this.list.filter((x) => x.webContents.session === session);
   }
 
   public findByBrowserView(webContentsId: number) {
