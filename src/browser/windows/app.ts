@@ -32,7 +32,7 @@ export class AppWindow {
         plugins: true,
         sandbox: true,
         nodeIntegration: false,
-        contextIsolation: false,
+        contextIsolation: true,
         javascript: true,
         enableRemoteModule: false,
         session: browserContext.session,
