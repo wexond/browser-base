@@ -1,4 +1,4 @@
-import { BrowserWindow } from 'electron';
+import { BrowserWindow, session } from 'electron';
 import { EventEmitter } from 'events';
 import { Extensions } from '../';
 import { isBackgroundPage } from '../web-contents';
@@ -14,7 +14,10 @@ interface IWindowsEvents {
     details: chrome.windows.Window,
   ) => void;
   onBeforeFocusNextZOrder: (windowId: number) => number;
-  onCreate: (details: chrome.windows.CreateData) => Promise<number>;
+  onCreate: (
+    session: Electron.Session,
+    details: chrome.windows.CreateData,
+  ) => Promise<number>;
 }
 
 export declare interface WindowsAPI {
@@ -56,7 +59,10 @@ export class WindowsAPI extends EventEmitter implements IWindowsEvents {
     window: BrowserWindow,
     details: chrome.windows.Window,
   ) => void;
-  onCreate: (details: chrome.windows.CreateData) => Promise<number>;
+  onCreate: (
+    session: Electron.Session,
+    details: chrome.windows.CreateData,
+  ) => Promise<number>;
 
   public update(
     session: Electron.Session,
@@ -143,16 +149,23 @@ export class WindowsAPI extends EventEmitter implements IWindowsEvents {
   }
 
   public async create(
-    session: Electron.Session,
+    senderSession: Electron.Session,
     details: chrome.windows.CreateData,
   ): Promise<chrome.windows.Window> {
     if (!this.onCreate) {
       throw new Error('No onCreate event handler');
     }
 
-    const id = await this.onCreate(details);
-    const win = this.getWindowById(session, id);
-    return this.getDetails(win);
+    const ses = details.incognito
+      ? session.fromPartition('incognito')
+      : senderSession;
+
+    const id = await this.onCreate(ses, details);
+    const win = BrowserWindow.fromId(id);
+
+    this.observe(win);
+
+    return this.getDetails(this.getWindowById(ses, id));
   }
 
   public getLastFocused(

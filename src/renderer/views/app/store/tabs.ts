@@ -192,10 +192,13 @@ export class TabsStore {
     // });
 
     browser.tabs.onCreated.addListener((tab) => {
+      if (tab.windowId !== store.windowId) return;
       this.createTab(tab);
     });
 
     browser.tabs.onActivated.addListener(async ({ tabId, windowId }) => {
+      if (windowId !== store.windowId) return;
+
       const tab = this.getTabById(tabId);
       if (!tab) return;
 

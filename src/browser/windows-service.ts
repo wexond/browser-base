@@ -10,12 +10,19 @@ export class WindowsService {
 
   public current: AppWindow;
 
-  public lastFocused: AppWindow;
-
   constructor() {
     extensions.windows.on('will-remove', (windowId) => {
       BrowserWindow.fromId(windowId).close();
     });
+
+    extensions.windows.onCreate = async (session, window) => {
+      const appWindow = new AppWindow(
+        Application.instance.browserContexts.browserContexts.get(session),
+      );
+      this.list.push(appWindow);
+
+      return appWindow.id;
+    };
 
     extensions.browserAction.on('updated', (session, action) => {
       this.getAllInSession(session).forEach((window) => {
@@ -60,29 +67,20 @@ export class WindowsService {
     // });
   }
 
-  public create(browserContext: BrowserContext) {
-    const window = new AppWindow(browserContext);
-    this.list.push(window);
-
-    extensions.windows.observe(window.win);
-
-    window.win.on('focus', () => {
-      this.lastFocused = window;
-    });
-
-    return window;
-  }
-
   public getAllInSession(session: Electron.Session) {
     return this.list.filter((x) => x.webContents.session === session);
   }
 
-  public findByBrowserView(webContentsId: number) {
-    return this.list.find((x) => !!x.viewManager.views.get(webContentsId));
-  }
-
   public fromBrowserWindow(browserWindow: BrowserWindow) {
     return this.list.find((x) => x.id === browserWindow.id);
+  }
+
+  public fromWebContents(webContents: Electron.WebContents) {
+    return this.list.find((x) => x.webContents === webContents);
+  }
+
+  public fromId(id: number) {
+    return this.list.find((x) => x.id === id);
   }
 
   public broadcast(channel: string, ...args: unknown[]) {

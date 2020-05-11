@@ -25,6 +25,16 @@ const chromeToElectronHeaders = (headers: any) => {
   return newHeaders;
 };
 
+function toArrayBuffer(buffer: Buffer) {
+  if (!buffer) return undefined;
+  const ab = new ArrayBuffer(buffer.length);
+  const view = new Uint8Array(ab);
+  for (let i = 0; i < buffer.length; ++i) {
+    view[i] = buffer[i];
+  }
+  return ab;
+}
+
 const electronToChromeDetails = (details: any) => {
   const newDetails = {
     ...details,
@@ -44,6 +54,13 @@ const electronToChromeDetails = (details: any) => {
         value: newDetails.responseHeaders[k][0],
       }),
     );
+  }
+
+  if (newDetails.uploadData) {
+    newDetails.uploadData = newDetails.uploadData.map((x) => ({
+      bytes: toArrayBuffer(x.bytes),
+      file: x.file,
+    }));
   }
 
   return newDetails;

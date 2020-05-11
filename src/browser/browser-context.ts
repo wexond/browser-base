@@ -3,7 +3,6 @@ import { hookBrowserContextEvents } from './browser-context-events';
 import { _setFallbackSession } from './extensions/session';
 import { app, ipcMain } from 'electron';
 import { extensions } from './extensions';
-import { WindowsService } from './windows-service';
 import { Application } from './application';
 import { getPath } from '~/utils/paths';
 import { promises } from 'fs';
@@ -20,9 +19,6 @@ export class BrowserContext {
 
     protocols.forEach((protocol) => protocol?.register?.(session));
 
-    // TODO: remove this after fix for e.sender.session
-    _setFallbackSession(session);
-
     extensions.initializeSession(
       session,
       `${app.getAppPath()}/build/api-preload.bundle.js`,
@@ -38,7 +34,7 @@ export class BrowserContext {
       await this.loadExtensions();
     }
 
-    Application.instance.windows.create(this);
+    extensions.windows.create(this.session, {});
   }
 
   public async loadExtensions() {

@@ -1,4 +1,4 @@
-import { BrowserWindow, WebContents, webContents, session } from 'electron';
+import { BrowserWindow, webContents } from 'electron';
 import { promises } from 'fs';
 import { resolve } from 'path';
 import { sessionFromIpcEvent } from '../session';
@@ -97,7 +97,7 @@ export class TabsAPI extends EventEmitter implements ITabsEvents {
     const { url, muted, active } = updateProperties;
 
     // TODO: validate URL, prevent 'javascript:'
-    if (url) await tab.loadURL(url);
+    if (url) tab.loadURL(url);
 
     if (typeof muted === 'boolean') tab.setAudioMuted(muted);
 
@@ -121,7 +121,9 @@ export class TabsAPI extends EventEmitter implements ITabsEvents {
     const activeChanged = !details.active;
 
     this.detailsCache.forEach((tabInfo, cacheTab) => {
-      tabInfo.active = tabId === cacheTab.id;
+      if (details.windowId === cacheTab.windowId) {
+        tabInfo.active = tabId === cacheTab.id;
+      }
     });
 
     if (!activeChanged) return;
@@ -238,11 +240,10 @@ export class TabsAPI extends EventEmitter implements ITabsEvents {
         sender,
       ).id;
     }
-    this.create(session, details);
+    this.create(details);
   }
 
   public async create(
-    ses: Electron.Session,
     details: chrome.tabs.CreateProperties,
   ): Promise<chrome.tabs.Tab> {
     if (!details.windowId) {
@@ -253,14 +254,13 @@ export class TabsAPI extends EventEmitter implements ITabsEvents {
       throw new Error('No onCreate event handler');
     }
 
-    const window = Extensions.instance.windows.get(ses, details.windowId, {
+    const { session } = BrowserWindow.fromId(details.windowId).webContents;
+
+    const window = Extensions.instance.windows.get(session, details.windowId, {
       populate: true,
     });
 
-    const tabId = await this.onCreate(
-      BrowserWindow.fromId(details.windowId).webContents.session,
-      details,
-    );
+    const tabId = await this.onCreate(session, details);
     const tab: Tab = webContents.fromId(tabId);
 
     tab.windowId = details.windowId;
@@ -282,7 +282,7 @@ export class TabsAPI extends EventEmitter implements ITabsEvents {
 
     this.observe(tab);
 
-    if (details.active) this.activate(ses, tabId);
+    this.update(session, tab.id, details);
 
     return tabDetails;
   }
