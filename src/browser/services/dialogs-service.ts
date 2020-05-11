@@ -6,6 +6,7 @@ import { PersistentDialog } from '../dialogs/dialog';
 import { Application } from '../application';
 import { IRectangle } from '~/interfaces';
 import { extensions } from '../extensions';
+import { getWebUIURL } from '~/common/utils/protocols';
 
 interface IDialogTabAssociation {
   tabId?: number;
@@ -272,13 +273,7 @@ export class DialogsService {
       browserView.webContents.focus();
     });
 
-    if (process.env.NODE_ENV === 'development') {
-      browserView.webContents.loadURL(`http://localhost:4444/${name}.html`);
-    } else {
-      browserView.webContents.loadURL(
-        join('file://', app.getAppPath(), `build/${name}.html`),
-      );
-    }
+    browserView.webContents.loadURL(getWebUIURL(name));
 
     ipcMain.on(`hide-${browserView.webContents.id}`, () => {
       dialog.hide();

@@ -41,7 +41,7 @@ const createWebview = (url: string) => {
   webview.style.width = '100%';
   webview.style.height = '100%';
 
-  browser.ipcRenderer.once('webview-blur', () => {
+  browser.ipcRenderer.on('webview-blur', () => {
     if (visible && !webview.isDevToolsOpened()) {
       hide();
     }

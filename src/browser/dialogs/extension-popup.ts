@@ -15,7 +15,7 @@ export const showExtensionDialog = (
   let height = 512;
   let width = 512;
 
-  app.on('web-contents-created', (e, wc) => {
+  const wcCreatedListener = (e, wc) => {
     if (wc.getType() === 'webview') {
       if (inspect) {
         wc.openDevTools();
@@ -34,7 +34,9 @@ export const showExtensionDialog = (
         menu.popup();
       });
     }
-  });
+  };
+
+  app.on('web-contents-created', wcCreatedListener);
 
   const dialog = Application.instance.dialogs.show({
     name: 'extension-popup',
@@ -48,6 +50,11 @@ export const showExtensionDialog = (
       };
     },
     onWindowBoundsUpdate: () => dialog.hide(),
+    onHide: () => {
+      app.removeListener('web-contents-created', wcCreatedListener);
+      ipcMain.removeAllListeners('extension-popup-size');
+      ipcMain.removeAllListeners('webview-blur');
+    },
   });
 
   if (!dialog) return;
