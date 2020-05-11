@@ -1,45 +1,34 @@
 import { Tab } from './tab';
 import { extensions } from './extensions';
 import { BrowserWindow } from 'electron';
-
-interface IWindowDetails {
-  selectedTabId: number;
-}
+import { Application } from './application';
 
 export class Tabs {
   public tabs: Map<number, Tab> = new Map();
-  public windowsDetails: Map<number, IWindowDetails> = new Map();
 
   constructor() {
     extensions.tabs.onCreate = async (session, details) => {
-      const tab = new Tab(session, details.url);
+      const tab = new Tab(session, details.windowId);
       this.tabs.set(tab.id, tab);
-
-      if (!this.windowsDetails.has(details.windowId)) {
-        this.windowsDetails.set(details.windowId, {
-          selectedTabId: -1,
-        });
-      }
 
       return tab.id;
     };
 
     extensions.tabs.on('activated', (tabId, windowId) => {
-      const windowDetails = this.windowsDetails.get(windowId);
-      if (!windowDetails) return;
+      const window = Application.instance.windows.fromId(windowId);
+      if (!window) return;
 
       const tab = this.tabs.get(tabId);
-      const window = BrowserWindow.fromId(windowId);
 
-      const prevTab = this.tabs.get(windowDetails.selectedTabId);
+      const prevTab = this.tabs.get(window.selectedTabId);
 
       if (prevTab) {
-        window.removeBrowserView(prevTab.browserView);
+        window.win.removeBrowserView(prevTab.browserView);
       }
 
-      windowDetails.selectedTabId = tabId;
+      window.selectedTabId = tabId;
 
-      window.addBrowserView(tab.browserView);
+      window.win.addBrowserView(tab.browserView);
 
       // if (focus) {
       if (true) {
@@ -59,34 +48,33 @@ export class Tabs {
       // this.emit('activated', id);
     });
 
-    extensions.tabs.on('will-remove', (tabId, windowId) => {
-      this.destroy(tabId, windowId);
+    extensions.tabs.on('will-remove', (tabId) => {
+      this.destroy(tabId);
     });
   }
 
-  public destroy(id: number, windowId: number) {
+  public destroy(id: number) {
     const tab = this.tabs.get(id);
     if (!tab) return;
 
     this.tabs.delete(id);
 
     if (!tab.browserView.isDestroyed()) {
-      const window = BrowserWindow.fromId(windowId);
+      const window = BrowserWindow.fromId(tab.windowId);
       window.removeBrowserView(tab.browserView);
       tab.destroy();
     }
   }
 
   public async fixBounds(windowId: number) {
-    const windowDetails = this.windowsDetails.get(windowId);
-    if (!windowDetails) return;
+    const window = Application.instance.windows.fromId(windowId);
+    if (!window) return;
 
-    const window = BrowserWindow.fromId(windowId);
-    const tab = this.tabs.get(windowDetails.selectedTabId);
+    const tab = this.tabs.get(window.selectedTabId);
 
     if (!tab) return;
 
-    const { width, height } = window.getContentBounds();
+    const { width, height } = window.win.getContentBounds();
 
     const toolbarContentHeight = await window.webContents.executeJavaScript(`
       document.getElementById('app').offsetHeight

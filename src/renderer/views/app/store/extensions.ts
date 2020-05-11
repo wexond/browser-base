@@ -1,6 +1,8 @@
 /* eslint @typescript-eslint/camelcase: 0 */
 
 import { observable, computed } from 'mobx';
+import store from './';
+import { IBrowserAction } from '~/common/extensions/interfaces/browser-action';
 
 const findClosestIconSize = (array: number[], target: number) => {
   let selected: number;
@@ -20,10 +22,10 @@ const findClosestIconSize = (array: number[], target: number) => {
 
 export class ExtensionsStore {
   @observable
-  private _browserActions: any[] = [];
+  private _browserActions: IBrowserAction[] = [];
 
   @computed
-  public get browserActions(): any[] {
+  public get browserActions(): IBrowserAction[] {
     return this._browserActions.map((x) => {
       let icon = x.icon;
 
@@ -43,7 +45,7 @@ export class ExtensionsStore {
     });
   }
 
-  public set browserActions(value: any[]) {
+  public set browserActions(value: IBrowserAction[]) {
     this._browserActions = value;
   }
 
@@ -51,9 +53,12 @@ export class ExtensionsStore {
   public currentlyToggledPopup = '';
 
   constructor() {
-    browser.browserAction.onUpdated.addListener((newAction: any) => {
+    browser.browserAction.onUpdated.addListener((newAction: IBrowserAction) => {
       this.browserActions = this.browserActions.map((x) => {
-        if (x.extensionId === newAction.extensionId) {
+        if (
+          x.extensionId === newAction.extensionId &&
+          ((x.tabId && x.tabId === store.tabs.selectedTabId) || !x.tabId)
+        ) {
           return newAction;
         }
         return x;

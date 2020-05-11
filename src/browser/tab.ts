@@ -23,13 +23,9 @@ interface IAuthInfo {
 export class Tab {
   public browserView: BrowserView;
 
-  public isNewTab = false;
-  public homeUrl: string;
   public favicon = '';
 
   public errorURL = '';
-
-  private window: AppWindow;
 
   public bounds: any;
 
@@ -45,11 +41,15 @@ export class Tab {
   public requestedAuth: IAuthInfo;
   public requestedPermission: any;
 
+  public windowId: number;
+
   private historyQueue = new Queue();
 
   private lastUrl = '';
 
-  public constructor(session: Electron.Session, url: string) {
+  public constructor(session: Electron.Session, windowId: number) {
+    this.windowId = windowId;
+
     this.browserView = new BrowserView({
       webPreferences: {
         preload: `${app.getAppPath()}/build/view-preload.bundle.js`,
@@ -71,8 +71,6 @@ export class Tab {
       .replace(/ Electron\\?.([^\s]+)/g, '')
       .replace(/Chrome\\?.([^\s]+)/g, 'Chrome/80.0.3987.162');
 
-    this.homeUrl = url;
-
     // TODO: sandbox
     // this.webContents.session.webRequest.onBeforeSendHeaders(
     //   (details, callback) => {
@@ -87,10 +85,6 @@ export class Tab {
     });
 
     // hookTabEvents(this);
-
-    if (url.startsWith(NEWTAB_URL)) this.isNewTab = true;
-
-    this.webContents.loadURL(url);
 
     this.browserView.setAutoResize({
       width: true,
@@ -188,8 +182,6 @@ export class Tab {
     if (this.lastUrl === url) return;
 
     this.lastUrl = url;
-
-    this.isNewTab = url.startsWith(NEWTAB_URL);
 
     this.updateData();
 

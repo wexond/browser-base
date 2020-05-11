@@ -26,14 +26,7 @@ export class WindowsService {
 
     extensions.browserAction.on('updated', (session, action) => {
       this.getAllInSession(session).forEach((window) => {
-        const windowDetails = Application.instance.tabs.windowsDetails.get(
-          window.id,
-        );
-        if (
-          !windowDetails ||
-          (action.tabId && windowDetails.selectedTabId !== action.tabId)
-        )
-          return;
+        if (action.tabId && window.selectedTabId !== action.tabId) return;
         window.send('browserAction.onUpdated', action);
       });
     });
@@ -44,9 +37,7 @@ export class WindowsService {
       const action = extensions.browserAction.getForTab(
         e.sender.session,
         extensionId,
-        Application.instance.tabs.windowsDetails.get(
-          BrowserWindow.fromWebContents(e.sender).id,
-        ).selectedTabId,
+        this.fromWebContents(e.sender).selectedTabId,
       );
 
       if (!action) return;
@@ -76,7 +67,12 @@ export class WindowsService {
   }
 
   public fromWebContents(webContents: Electron.WebContents) {
-    return this.list.find((x) => x.webContents === webContents);
+    return (
+      this.list.find((x) => x.webContents === webContents) ||
+      Object.values(Application.instance.tabs.tabs).find(
+        (x) => x.webContents === webContents,
+      )
+    );
   }
 
   public fromId(id: number) {

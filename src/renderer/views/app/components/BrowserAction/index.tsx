@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { observer } from 'mobx-react-lite';
 import { ToolbarButton } from '../ToolbarButton';
-import { IBrowserAction } from '../../models';
 import store from '../../store';
+import { IBrowserAction } from '~/common/extensions/interfaces/browser-action';
 
 interface Props {
   data: IBrowserAction;

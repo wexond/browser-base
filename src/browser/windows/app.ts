@@ -15,6 +15,8 @@ export class AppWindow {
 
   public incognito: boolean;
 
+  public selectedTabId = -1;
+
   private browserContext: BrowserContext;
 
   public constructor(browserContext: BrowserContext) {

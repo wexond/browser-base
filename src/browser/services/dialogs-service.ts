@@ -153,9 +153,7 @@ export class DialogsService {
         }
       },
       hide: (tabId) => {
-        const { selectedTabId } = Application.instance.tabs.windowsDetails.get(
-          appWindow.id,
-        );
+        const { selectedTabId } = appWindow;
 
         dialog.tabIds = dialog.tabIds.filter(
           (x) => x !== (tabId || selectedTabId),
@@ -239,13 +237,7 @@ export class DialogsService {
     };
 
     const emitWindowBoundsUpdate = (type: BoundsDisposition) => {
-      if (
-        tabAssociation &&
-        !dialog.tabIds.includes(
-          Application.instance.tabs.windowsDetails.get(appWindow.id)
-            .selectedTabId,
-        )
-      ) {
+      if (tabAssociation && !dialog.tabIds.includes(appWindow.selectedTabId)) {
         onWindowBoundsUpdate(type);
       }
     };

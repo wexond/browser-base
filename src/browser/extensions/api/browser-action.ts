@@ -4,23 +4,10 @@ import { format, parse } from 'url';
 import { HandlerFactory } from '../handler-factory';
 import { EXTENSION_PROTOCOL } from '~/common/constants/protocols';
 import { Extensions } from '..';
-
-type IconType = string | { [key: string]: string };
-
-interface IBrowserActionInfo {
-  icon?: IconType;
-  popup?: string;
-  title?: string;
-  badgeText?: string;
-  tabId?: number;
-  badgeBackgroundColor?: string | number[];
-}
-
-interface IBrowserAction extends IBrowserActionInfo {
-  baseUrl: string;
-  extensionId: string;
-  tabs: Map<number, IBrowserActionInfo>;
-}
+import {
+  IconType,
+  IBrowserAction,
+} from '~/common/extensions/interfaces/browser-action';
 
 const CHROME_DETAILS_KEYS: { [key: string]: string } = {
   badgeText: 'text',
