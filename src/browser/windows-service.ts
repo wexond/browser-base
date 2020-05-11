@@ -1,8 +1,9 @@
 import { AppWindow } from './windows/app';
-import { BrowserWindow } from 'electron';
+import { BrowserWindow, ipcMain } from 'electron';
 import { BrowserContext } from './browser-context';
 import { extensions } from './extensions';
 import { Application } from './application';
+import { showExtensionDialog } from './dialogs/extension-popup';
 
 export class WindowsService {
   public list: AppWindow[] = [];
@@ -28,6 +29,28 @@ export class WindowsService {
           return;
         window.send('browserAction.onUpdated', action);
       });
+    });
+
+    ipcMain.handle(`browserAction.showPopup`, (e, extensionId, options) => {
+      const { left, top, inspect } = options;
+
+      const action = extensions.browserAction.getForTab(
+        e.sender.session,
+        extensionId,
+        Application.instance.tabs.windowsDetails.get(
+          BrowserWindow.fromWebContents(e.sender).id,
+        ).selectedTabId,
+      );
+
+      if (!action) return;
+
+      showExtensionDialog(
+        BrowserWindow.fromWebContents(e.sender),
+        left,
+        top,
+        action.popup,
+        inspect,
+      );
     });
 
     // TODO: sandbox

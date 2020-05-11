@@ -89,12 +89,6 @@ export const runMessagingService = (appWindow: AppWindow) => {
     showAddBookmarkDialog(appWindow.win, left, top);
   });
 
-  if (process.env.ENABLE_EXTENSIONS) {
-    ipcMain.on(`show-extension-popup-${id}`, (e, left, top, url, inspect) => {
-      showExtensionDialog(appWindow.win, left, top, url, inspect);
-    });
-  }
-
   ipcMain.on(`show-downloads-dialog-${id}`, (e, left, top) => {
     showDownloadsDialog(appWindow.win, left, top);
   });

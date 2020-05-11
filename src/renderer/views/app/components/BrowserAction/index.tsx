@@ -14,16 +14,10 @@ const showPopup = (
   data: IBrowserAction,
   left: number,
   top: number,
-  devtools: boolean,
+  inspect: boolean,
 ) => {
   store.extensions.currentlyToggledPopup = data.extensionId;
-  // ipcRenderer.send(
-  //   `show-extension-popup-${store.windowId}`,
-  //   left,
-  //   top,
-  //   data.popup,
-  //   devtools,
-  // );
+  browser.browserAction.showPopup(data.extensionId, { left, top, inspect });
 };
 
 let canOpenPopup = true;

@@ -1,6 +1,7 @@
-import { BrowserWindow } from 'electron';
+import { BrowserWindow, app, Menu, ipcMain } from 'electron';
 import { Application } from '../application';
 import { DIALOG_MARGIN_TOP, DIALOG_MARGIN } from '~/constants/design';
+import { resolve } from 'path';
 
 export const showExtensionDialog = (
   browserWindow: BrowserWindow,
@@ -13,6 +14,27 @@ export const showExtensionDialog = (
 
   let height = 512;
   let width = 512;
+
+  app.on('web-contents-created', (e, wc) => {
+    if (wc.getType() === 'webview') {
+      if (inspect) {
+        wc.openDevTools();
+      }
+
+      wc.on('context-menu', (e, params) => {
+        const menu = Menu.buildFromTemplate([
+          {
+            label: 'Inspect element',
+            click: () => {
+              wc.inspectElement(params.x, params.y);
+            },
+          },
+        ]);
+
+        menu.popup();
+      });
+    }
+  });
 
   const dialog = Application.instance.dialogs.show({
     name: 'extension-popup',
@@ -30,10 +52,15 @@ export const showExtensionDialog = (
 
   if (!dialog) return;
 
-  dialog.on('bounds', (e, w, h) => {
-    width = w;
-    height = h;
+  ipcMain.on('extension-popup-size', (e, w, h) => {
+    width = w + 32;
+    height = h + 40;
     dialog.rearrange();
+    dialog.browserView.webContents.send('webview-size', w, h);
+  });
+
+  ipcMain.once('webview-blur', () => {
+    dialog.browserView.webContents.send('webview-blur');
   });
 
   dialog.browserView.webContents.on(
@@ -42,10 +69,16 @@ export const showExtensionDialog = (
       webPreferences.sandbox = true;
       webPreferences.nodeIntegration = false;
       webPreferences.contextIsolation = true;
+      webPreferences.enableRemoteModule = false;
+      webPreferences.preloadURL = `file:///${resolve(
+        app.getAppPath(),
+        'build',
+        'popup-preload.bundle.js',
+      )}`;
     },
   );
 
   dialog.on('loaded', (e) => {
-    e.reply('data', { url, inspect });
+    e.reply('data', url);
   });
 };

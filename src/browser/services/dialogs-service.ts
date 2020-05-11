@@ -5,6 +5,7 @@ import { PreviewDialog } from '../dialogs/preview';
 import { PersistentDialog } from '../dialogs/dialog';
 import { Application } from '../application';
 import { IRectangle } from '~/interfaces';
+import { extensions } from '../extensions';
 
 interface IDialogTabAssociation {
   tabId?: number;
@@ -62,10 +63,11 @@ export class DialogsService {
   private createBrowserView() {
     const view = new BrowserView({
       webPreferences: {
-        nodeIntegration: true,
-        contextIsolation: false,
-        enableRemoteModule: true,
+        nodeIntegration: false,
+        contextIsolation: true,
+        enableRemoteModule: false,
         webviewTag: true,
+        sandbox: true,
       },
     });
 
@@ -150,13 +152,15 @@ export class DialogsService {
         }
       },
       hide: (tabId) => {
-        const { selectedId } = appWindow.viewManager;
-
-        dialog.tabIds = dialog.tabIds.filter(
-          (x) => x !== (tabId || selectedId),
+        const { selectedTabId } = Application.instance.tabs.windowsDetails.get(
+          appWindow.id,
         );
 
-        if (tabId && tabId !== selectedId) return;
+        dialog.tabIds = dialog.tabIds.filter(
+          (x) => x !== (tabId || selectedTabId),
+        );
+
+        if (tabId && tabId !== selectedTabId) return;
 
         browserWindow.webContents.send('dialog-visibility-change', name, false);
 
@@ -184,8 +188,8 @@ export class DialogsService {
         }
 
         if (tabAssociation) {
-          appWindow.viewManager.off('activated', tabsEvents.activate);
-          appWindow.viewManager.off('removed', tabsEvents.remove);
+          extensions.tabs.off('activated', tabsEvents.activate);
+          extensions.tabs.off('removed', tabsEvents.remove);
         }
 
         browserWindow.removeListener('resize', windowEvents.resize);
@@ -236,7 +240,10 @@ export class DialogsService {
     const emitWindowBoundsUpdate = (type: BoundsDisposition) => {
       if (
         tabAssociation &&
-        !dialog.tabIds.includes(appWindow.viewManager.selectedId)
+        !dialog.tabIds.includes(
+          Application.instance.tabs.windowsDetails.get(appWindow.id)
+            .selectedTabId,
+        )
       ) {
         onWindowBoundsUpdate(type);
       }
@@ -251,8 +258,8 @@ export class DialogsService {
     };
 
     if (tabAssociation) {
-      appWindow.viewManager.on('removed', tabsEvents.remove);
-      appWindow.viewManager.on('activated', tabsEvents.activate);
+      extensions.tabs.on('activated', tabsEvents.activate);
+      extensions.tabs.on('removed', tabsEvents.remove);
     }
 
     if (onWindowBoundsUpdate) {

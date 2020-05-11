@@ -65,7 +65,7 @@ const resolveIconPaths = (
 };
 
 const getActionForTab = (action: IBrowserAction, tabId: number) =>
-  action.tabs.has(tabId)
+  action?.tabs?.has?.(tabId)
     ? {
         ...action,
         ...action.tabs.get(tabId),
@@ -217,6 +217,16 @@ export class BrowserActionAPI extends EventEmitter {
     const actions = this.getAllInSession(tabSession);
 
     return actions.map((action) => getActionForTab(action, tabId));
+  }
+
+  public getForTab(
+    session: Electron.Session,
+    extensionId: string,
+    tabId: number,
+  ) {
+    const sessionActions = this.sessionActionMap.get(session);
+    if (!sessionActions) return null;
+    return getActionForTab(sessionActions.get(extensionId), tabId);
   }
 
   // TODO(sentialx): Tab in callback, fire if the browser action has no popup.

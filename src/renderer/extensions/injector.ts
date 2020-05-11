@@ -10,11 +10,11 @@ export const injectAPI = async (webUi: boolean) => {
   const api = getAPI();
 
   if (webUi) {
-    api.send = (channel: string, ...args: any[]) =>
-      ipcRenderer.send(channel, ...args);
+    api.ipcRenderer = ipcRenderer;
 
     api.browserAction = {
       getAllInTab: ipcInvoker('browserAction.getAllInTab'),
+      showPopup: ipcInvoker('browserAction.showPopup'),
       onUpdated: new IpcEvent('browserAction.onUpdated'),
     };
 
