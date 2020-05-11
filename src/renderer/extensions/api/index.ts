@@ -8,16 +8,16 @@ import {
 } from '~/common/extensions/constants';
 import { WebRequestEvent } from '../web-request-event';
 
-declare const chrome: any;
-
 class PolicyConfig {
   get() {}
   set() {}
   clear() {}
 }
 
-export const getAPI = () => {
-  const manifest = chrome?.runtime ? chrome.runtime.getManifest() : {};
+export const getChromeAPI = () => {
+  const manifest: chrome.runtime.Manifest = chrome?.runtime
+    ? chrome.runtime.getManifest()
+    : ({} as any);
 
   const tabs = {
     ...chrome.tabs,
@@ -192,7 +192,7 @@ export const getAPI = () => {
     onCommitted: new IpcEvent('webNavigation.onCommitted'),
   };
 
-  const api: any = {
+  const api = {
     tabs,
     cookies,
     windows,
@@ -203,6 +203,8 @@ export const getAPI = () => {
     webNavigation,
     webRequest,
     privacy,
+    browserAction: {},
+    storage: {},
   };
 
   if (manifest.browser_action) {

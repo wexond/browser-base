@@ -5,7 +5,7 @@ import { isVisible, searchElements } from '../utils';
 import { getFormFillValue } from '~/utils/form-fill';
 import { IFormFillData } from '~/interfaces';
 import AutoComplete from './auto-complete';
-import { windowId } from '../view-preload';
+import { windowId } from '../../renderer/preloads/view-preload';
 
 export type FormField = HTMLInputElement | HTMLSelectElement;
 

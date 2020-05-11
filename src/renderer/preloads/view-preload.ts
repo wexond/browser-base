@@ -1,26 +1,23 @@
 import { ipcRenderer, webFrame } from 'electron';
 
-import AutoComplete from './models/auto-complete';
+import AutoComplete from '../../preloads/models/auto-complete';
 import { getTheme } from '~/utils/themes';
-import { WEBUI_BASE_URL } from '~/constants/files';
-import { injectChromeWebstoreInstallButton } from './chrome-webstore';
+import { injectChromeWebstoreInstallButton } from '../chrome-webstore';
+import { WEBUI_BASE_URL } from '~/common/constants/protocols';
+import { getWexondAPI } from '../internal/wexond-api';
 
 const tabId = ipcRenderer.sendSync('get-webcontents-id');
 
 export const windowId: number = ipcRenderer.sendSync('get-window-id');
 
+const browser = getWexondAPI();
+
 const goBack = () => {
-  ipcRenderer.invoke(`web-contents-call`, {
-    webContentsId: tabId,
-    method: 'goBack',
-  });
+  browser.tabs.goBack();
 };
 
 const goForward = () => {
-  ipcRenderer.invoke(`web-contents-call`, {
-    webContentsId: tabId,
-    method: 'goForward',
-  });
+  browser.tabs.goForward();
 };
 
 window.addEventListener('mouseup', (e) => {

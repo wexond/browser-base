@@ -1,26 +1,16 @@
-import { getAPI } from './api';
-import { webFrame, ipcRenderer } from 'electron';
-import { IpcEvent } from './ipc-event';
-import { ipcInvoker } from './ipc-invoker';
+import { webFrame } from 'electron';
+import { getWexondAPI } from '../internal/wexond-api';
+import { getChromeAPI } from './api';
 
 declare const chrome: any;
 declare let browser: any;
 
 export const injectAPI = async (webUi: boolean) => {
-  const api = getAPI();
-
   if (webUi) {
-    api.ipcRenderer = ipcRenderer;
-
-    api.browserAction = {
-      getAllInTab: ipcInvoker('browserAction.getAllInTab'),
-      showPopup: ipcInvoker('browserAction.showPopup'),
-      onUpdated: new IpcEvent('browserAction.onUpdated'),
-    };
-
     const w = await webFrame.executeJavaScript('window');
-    w.browser = api;
+    w.browser = getWexondAPI();
   } else {
+    const api = getChromeAPI();
     Object.assign(chrome, api);
     Object.freeze(chrome);
   }
