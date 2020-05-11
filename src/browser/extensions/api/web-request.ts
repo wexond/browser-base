@@ -2,6 +2,7 @@ import { webContents, ipcMain } from 'electron';
 import { sessionFromIpcEvent } from '../session';
 import { webContentsInvoke } from '../web-contents';
 import extendElectronWebRequest from '../extend-web-request';
+import { Extensions } from '..';
 
 const clearCacheOnNavigation = () => {
   webContents.getAllWebContents().forEach((wc) => {
@@ -76,7 +77,22 @@ export class WebRequestAPI {
     const { id }: any = webRequest.addListener(
       name,
       filter,
-      async (details: any, callback: any) => {
+      async (
+        details: Electron.OnBeforeRequestListenerDetails,
+        callback: any,
+      ) => {
+        if (!details.webContentsId || details.webContentsId < 1)
+          return callback(details);
+        const wc = webContents.fromId(details.webContentsId);
+        if (
+          wc &&
+          !Extensions.instance.tabs.getTabById(
+            wc.session,
+            details.webContentsId,
+          )
+        )
+          return callback(details);
+
         const returnedDetails = await webContentsInvoke(
           e.sender,
           listenerId,

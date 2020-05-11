@@ -80,7 +80,7 @@ const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     }
 
     store.tabs.selectedTab.addressbarValue = url;
-    callViewMethod(store.tabs.selectedTabId, 'loadURL', url);
+    browser.tabs.update(store.tabs.selectedTabId, { url });
   }
 };
 

@@ -220,9 +220,11 @@ export class WindowsAPI extends EventEmitter implements IWindowsEvents {
     }
 
     const tabDetails = Extensions.instance.tabs.getDetails(tab);
-    win = this.getWindowById(session, tabDetails.windowId);
-
-    return this.getDetailsMatchingGetInfo(session, win, getInfo);
+    return this.getDetailsMatchingGetInfo(
+      session,
+      this.getWindowById(session, tabDetails.windowId),
+      getInfo,
+    );
   };
 
   private createDetails(win: BrowserWindow): chrome.windows.Window {
