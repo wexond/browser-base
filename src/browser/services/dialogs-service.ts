@@ -1,4 +1,4 @@
-import { BrowserView, app, ipcMain } from 'electron';
+import { BrowserView, app, ipcMain, session } from 'electron';
 import { join } from 'path';
 import { SearchDialog } from '../dialogs/search';
 import { PreviewDialog } from '../dialogs/preview';
@@ -69,6 +69,7 @@ export class DialogsService {
         enableRemoteModule: false,
         webviewTag: true,
         sandbox: true,
+        partition: 'persist:ui',
       },
     });
 

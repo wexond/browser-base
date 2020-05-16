@@ -28,7 +28,10 @@ const resolveUrl = (extensionUrl: string, path: string) => {
 
 const resolvePath = (path: string, scriptPath?: string) => {
   if (!path) return undefined;
-  if (!scriptPath || path.startsWith('/')) scriptPath = './';
+  if (!scriptPath || path.startsWith('/')) {
+    scriptPath = './';
+    path = path.replace(/^(?:\.\.\/)+/, '');
+  }
   return join(dirname(scriptPath), path).replace(/\\/g, '/');
 };
 
