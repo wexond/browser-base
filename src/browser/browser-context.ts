@@ -1,14 +1,16 @@
 import { protocols } from './protocols';
-import { hookBrowserContextEvents } from './browser-context-events';
-import { _setFallbackSession } from './extensions/session';
 import { app, ipcMain } from 'electron';
 import { extensions } from './extensions';
-import { Application } from './application';
 import { getPath } from '~/utils/paths';
 import { promises } from 'fs';
 import { resolve } from 'path';
 
 export class BrowserContext {
+  private static browserContexts: Map<
+    Electron.Session,
+    BrowserContext
+  > = new Map();
+
   public session: Electron.Session;
 
   private offTheRecord = false;
@@ -45,5 +47,15 @@ export class BrowserContext {
         console.error(e);
       }
     }
+  }
+
+  public static from(session: Electron.Session, offTheRecord: boolean) {
+    if (this.browserContexts.has(session))
+      return this.browserContexts.get(session);
+
+    const browserContext = new BrowserContext(session, offTheRecord);
+    this.browserContexts.set(session, browserContext);
+
+    return browserContext;
   }
 }

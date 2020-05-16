@@ -6,6 +6,7 @@ import { getPath } from '~/utils';
 import { Application } from '../application';
 import { isNightly } from '..';
 import { getWebUIURL } from '~/common/utils/protocols';
+import { BrowserContext } from '../browser-context';
 
 export class AppWindow {
   public win: BrowserWindow;
@@ -14,7 +15,10 @@ export class AppWindow {
 
   public selectedTabId = -1;
 
-  public constructor() {
+  public browserContext: BrowserContext;
+
+  public constructor(browserContext: BrowserContext) {
+    this.browserContext = browserContext;
     this.init();
 
     // TODO: sandbox
@@ -100,7 +104,7 @@ export class AppWindow {
   }
 
   public init() {
-    const browserContext = Application.instance.browserContexts.getOrCreate(
+    const browserContext = BrowserContext.from(
       session.fromPartition('persist:ui'),
       true,
     );

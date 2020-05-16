@@ -36,7 +36,7 @@ interface ISessionInfo {
 export class WindowsAPI extends EventEmitter implements IWindowsEvents {
   private detailsCache: Map<BrowserWindow, chrome.windows.Window> = new Map();
 
-  private sessionsInfo: Map<Electron.Session, ISessionInfo> = new Map();
+  public sessionsInfo: Map<Electron.Session, ISessionInfo> = new Map();
 
   constructor() {
     super();

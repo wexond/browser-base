@@ -14,11 +14,10 @@ import { requestAuth } from './dialogs/auth';
 import { protocols } from './protocols';
 import { Tabs } from './tabs';
 import { extensions } from './extensions';
+import { BrowserContext } from './browser-context';
 
 export class Application {
   public static instance = new Application();
-
-  public browserContexts = new BrowserContexts();
 
   public windows: WindowsService = new WindowsService();
 
@@ -97,14 +96,14 @@ export class Application {
     // this.storage.run();
     // this.dialogs.run();
 
-    const browserContext = await this.browserContexts.getOrCreate(
+    const browserContext = await BrowserContext.from(
       session.defaultSession,
       false,
     );
 
     await browserContext.loadExtensions();
 
-    this.windows.create(session.defaultSession, {});
+    this.windows.create(browserContext, {});
 
     // Menu.setApplicationMenu(getMainMenu());
     // runAutoUpdaterService();

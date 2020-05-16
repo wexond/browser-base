@@ -1,7 +1,7 @@
 import { AppWindow } from './windows/app';
 import { BrowserWindow, ipcMain } from 'electron';
 import { BrowserContext } from './browser-context';
-import { extensions } from './extensions';
+import { extensions, Extensions } from './extensions';
 import { Application } from './application';
 import { showExtensionDialog } from './dialogs/extension-popup';
 import { HandlerFactory } from './extensions/handler-factory';
@@ -17,13 +17,13 @@ export class WindowsService {
     });
 
     extensions.windows.onCreate = async (session, createDetails) => {
-      return this.create(session, createDetails);
+      return this.create(BrowserContext.from(session, false), createDetails);
     };
 
     extensions.browserAction.on('updated', (session, action) => {
       this.getAllInSession(session).forEach((window) => {
         if (action.tabId && window.selectedTabId !== action.tabId) return;
-        window.send('browserAction.onUpdated', action);
+        window.webContents.send('browserAction.onUpdated', action);
       });
     });
 
@@ -61,19 +61,23 @@ export class WindowsService {
   }
 
   public create(
-    session: Electron.Session,
+    browserContext: BrowserContext,
     createData: chrome.windows.CreateData,
   ) {
-    const appWindow = new AppWindow();
+    const appWindow = new AppWindow(browserContext);
     this.list.push(appWindow);
 
-    extensions.windows.observe(appWindow.win, session);
+    extensions.windows.observe(appWindow.win, browserContext.session);
 
     return appWindow.id;
   }
 
   public getAllInSession(session: Electron.Session) {
-    return this.list.filter((x) => x.webContents.session === session);
+    return this.list.filter(
+      (x) =>
+        x.webContents.session === session ||
+        x.browserContext.session === session,
+    );
   }
 
   public fromBrowserWindow(browserWindow: BrowserWindow) {

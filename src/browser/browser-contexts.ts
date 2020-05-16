@@ -14,8 +14,6 @@ import { extensions } from './extensions';
 
 // TODO: move windows list to the corresponding sessions
 export class BrowserContexts {
-  public browserContexts: Map<Electron.Session, BrowserContext> = new Map();
-
   public constructor() {
     // this.clearCache('incognito');
 
@@ -31,16 +29,6 @@ export class BrowserContexts {
       this.clearCache('normal');
       this.clearCache('incognito');
     });
-  }
-
-  public getOrCreate(session: Electron.Session, offTheRecord: boolean) {
-    if (this.browserContexts.has(session))
-      return this.browserContexts.get(session);
-
-    const browserContext = new BrowserContext(session, offTheRecord);
-    this.browserContexts.set(session, browserContext);
-
-    return browserContext;
   }
 
   public clearCache(session: 'normal' | 'incognito') {
