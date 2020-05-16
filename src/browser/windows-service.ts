@@ -4,6 +4,7 @@ import { BrowserContext } from './browser-context';
 import { extensions } from './extensions';
 import { Application } from './application';
 import { showExtensionDialog } from './dialogs/extension-popup';
+import { HandlerFactory } from './extensions/handler-factory';
 
 export class WindowsService {
   public list: AppWindow[] = [];
@@ -15,13 +16,8 @@ export class WindowsService {
       BrowserWindow.fromId(windowId).close();
     });
 
-    extensions.windows.onCreate = async (session, window) => {
-      const appWindow = new AppWindow(
-        Application.instance.browserContexts.browserContexts.get(session),
-      );
-      this.list.push(appWindow);
-
-      return appWindow.id;
+    extensions.windows.onCreate = async (session, createDetails) => {
+      return this.create(session, createDetails);
     };
 
     extensions.browserAction.on('updated', (session, action) => {
@@ -31,31 +27,49 @@ export class WindowsService {
       });
     });
 
-    ipcMain.handle(`browserAction.showPopup`, (e, extensionId, options) => {
-      const { left, top, inspect } = options;
+    const browserActionHandler = HandlerFactory.create('browserAction', this);
 
-      const action = extensions.browserAction.getForTab(
-        e.sender.session,
-        extensionId,
-        this.fromWebContents(e.sender).selectedTabId,
-      );
+    browserActionHandler(
+      'showPopup',
+      (session, sender, extensionId, options) => {
+        const { left, top, inspect } = options;
 
-      if (!action) return;
+        const action = extensions.browserAction.getForTab(
+          session,
+          extensionId,
+          this.fromWebContents(sender).selectedTabId,
+        );
 
-      showExtensionDialog(
-        BrowserWindow.fromWebContents(e.sender),
-        left,
-        top,
-        action.popup,
-        inspect,
-      );
-    });
+        if (!action) return;
+
+        showExtensionDialog(
+          BrowserWindow.fromWebContents(sender),
+          left,
+          top,
+          action.popup,
+          inspect,
+        );
+      },
+      { sender: true },
+    );
 
     // TODO: sandbox
     // ipcMain.handle('get-tab-zoom', (e, tabId) => {
     //   return this.findByBrowserView(tabId).viewManager.views.get(tabId)
     //     .webContents.zoomFactor;
     // });
+  }
+
+  public create(
+    session: Electron.Session,
+    createData: chrome.windows.CreateData,
+  ) {
+    const appWindow = new AppWindow();
+    this.list.push(appWindow);
+
+    extensions.windows.observe(appWindow.win, session);
+
+    return appWindow.id;
   }
 
   public getAllInSession(session: Electron.Session) {

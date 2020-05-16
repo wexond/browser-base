@@ -24,21 +24,11 @@ export class BrowserContext {
       `${app.getAppPath()}/build/api-preload.bundle.js`,
     );
 
-    this.init();
-
     // hookBrowserContextEvents(this);
   }
 
-  public async init() {
-    if (process.env.ENABLE_EXTENSIONS && !this.offTheRecord) {
-      await this.loadExtensions();
-    }
-
-    extensions.windows.create(this.session, {});
-  }
-
   public async loadExtensions() {
-    if (!process.env.ENABLE_EXTENSIONS) return;
+    if (!process.env.ENABLE_EXTENSIONS || this.offTheRecord) return;
 
     const extensionsPath = getPath('extensions');
     const dirs = await promises.readdir(extensionsPath);

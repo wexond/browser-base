@@ -33,9 +33,14 @@ export class BrowserContexts {
     });
   }
 
-  public create(session: Electron.Session, offTheRecord: boolean) {
+  public getOrCreate(session: Electron.Session, offTheRecord: boolean) {
+    if (this.browserContexts.has(session))
+      return this.browserContexts.get(session);
+
     const browserContext = new BrowserContext(session, offTheRecord);
     this.browserContexts.set(session, browserContext);
+
+    return browserContext;
   }
 
   public clearCache(session: 'normal' | 'incognito') {

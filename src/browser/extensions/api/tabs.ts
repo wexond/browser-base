@@ -1,4 +1,4 @@
-import { BrowserWindow, webContents } from 'electron';
+import { BrowserWindow, webContents, session } from 'electron';
 import { promises } from 'fs';
 import { resolve } from 'path';
 import { sessionFromIpcEvent } from '../session';
@@ -230,20 +230,19 @@ export class TabsAPI extends EventEmitter implements ITabsEvents {
   }
 
   public async createHandler(
-    session: Electron.Session,
+    ses: Electron.Session,
     sender: Electron.WebContents,
     details: chrome.tabs.CreateProperties,
   ) {
     if (!details.windowId) {
-      details.windowId = Extensions.instance.windows.getCurrent(
-        session,
-        sender,
-      ).id;
+      details.windowId = Extensions.instance.windows.getCurrent(ses, sender).id;
     }
-    this.create(details);
+
+    this.create(ses, details);
   }
 
   public async create(
+    ses: Electron.Session,
     details: chrome.tabs.CreateProperties,
   ): Promise<chrome.tabs.Tab> {
     if (!details.windowId) {
@@ -254,13 +253,11 @@ export class TabsAPI extends EventEmitter implements ITabsEvents {
       throw new Error('No onCreate event handler');
     }
 
-    const { session } = BrowserWindow.fromId(details.windowId).webContents;
-
-    const window = Extensions.instance.windows.get(session, details.windowId, {
+    const window = Extensions.instance.windows.get(ses, details.windowId, {
       populate: true,
     });
 
-    const tabId = await this.onCreate(session, details);
+    const tabId = await this.onCreate(ses, details);
     const tab: Tab = webContents.fromId(tabId);
 
     tab.windowId = details.windowId;
@@ -282,7 +279,7 @@ export class TabsAPI extends EventEmitter implements ITabsEvents {
 
     this.observe(tab);
 
-    this.update(session, tab.id, details);
+    this.update(ses, tab.id, details);
 
     return tabDetails;
   }

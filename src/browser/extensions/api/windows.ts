@@ -29,12 +29,11 @@ export declare interface WindowsAPI {
 }
 
 interface ISessionInfo {
-  lastFocused: BrowserWindow;
+  lastFocused?: BrowserWindow;
+  windows?: Map<number, BrowserWindow>;
 }
 
 export class WindowsAPI extends EventEmitter implements IWindowsEvents {
-  private windows: Set<BrowserWindow> = new Set();
-
   private detailsCache: Map<BrowserWindow, chrome.windows.Window> = new Map();
 
   private sessionsInfo: Map<Electron.Session, ISessionInfo> = new Map();
@@ -125,27 +124,37 @@ export class WindowsAPI extends EventEmitter implements IWindowsEvents {
     this.emit('will-remove', windowId);
   }
 
-  public observe(window: BrowserWindow) {
-    this.windows.add(window);
+  public observe(window: BrowserWindow, senderSession: Electron.Session) {
+    let sessionInfo = this.sessionsInfo.get(senderSession);
+    if (!sessionInfo) {
+      sessionInfo = {
+        windows: new Map(),
+      };
+      this.sessionsInfo.set(senderSession, sessionInfo);
+    }
+
+    if (sessionInfo.windows?.has(window.id)) return;
+
+    HandlerFactory.uiToSenderSession.set(
+      window.webContents.session,
+      senderSession,
+    );
+    sessionInfo.windows.set(window.id, window);
 
     window.once('closed', () => {
-      this.windows.delete(window);
+      sessionInfo.windows.delete(window.id);
       this.onRemoved(window);
     });
 
     window.on('focus', () => {
-      this.sessionsInfo.set(window.webContents.session, {
-        lastFocused: window,
-      });
+      sessionInfo.lastFocused = window;
     });
 
     this.onCreated(window);
   }
 
   public getWindowById(session: Electron.Session, id: number) {
-    return Array.from(this.windows).find(
-      (x) => x.id === id && x.webContents.session === session,
-    );
+    return this.sessionsInfo.get(session)?.windows?.get(id);
   }
 
   public async create(
@@ -156,16 +165,12 @@ export class WindowsAPI extends EventEmitter implements IWindowsEvents {
       throw new Error('No onCreate event handler');
     }
 
-    const ses = details.incognito
-      ? session.fromPartition('incognito')
-      : senderSession;
-
-    const id = await this.onCreate(ses, details);
+    const id = await this.onCreate(senderSession, details);
     const win = BrowserWindow.fromId(id);
 
-    this.observe(win);
+    this.observe(win, senderSession);
 
-    return this.getDetails(this.getWindowById(ses, id));
+    return this.getDetails(this.getWindowById(senderSession, id));
   }
 
   public getLastFocused(
@@ -190,7 +195,7 @@ export class WindowsAPI extends EventEmitter implements IWindowsEvents {
     session: Electron.Session,
     getInfo?: chrome.windows.GetInfo,
   ): chrome.windows.Window[] {
-    return Array.from(this.windows)
+    return Object.values(this.sessionsInfo.get(session).windows)
       .map((win) => this.getDetailsMatchingGetInfo(session, win, getInfo))
       .filter(Boolean);
   }

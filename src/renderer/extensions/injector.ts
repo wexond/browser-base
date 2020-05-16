@@ -1,4 +1,4 @@
-import { webFrame } from 'electron';
+import { webFrame, contextBridge } from 'electron';
 import { getWexondAPI } from '../internal/wexond-api';
 import { getChromeAPI } from './api';
 

@@ -1,13 +1,10 @@
-import { BrowserWindow, app, dialog } from 'electron';
+import { BrowserWindow, app, session } from 'electron';
 import { writeFileSync, promises } from 'fs';
-import { resolve, join } from 'path';
+import { resolve } from 'path';
 
 import { getPath } from '~/utils';
-import { runMessagingService } from '../services';
 import { Application } from '../application';
 import { isNightly } from '..';
-import { ViewManager } from '../view-manager';
-import { BrowserContext } from '../browser-context';
 import { getWebUIURL } from '~/common/utils/protocols';
 
 export class AppWindow {
@@ -17,10 +14,96 @@ export class AppWindow {
 
   public selectedTabId = -1;
 
-  private browserContext: BrowserContext;
+  public constructor() {
+    this.init();
 
-  public constructor(browserContext: BrowserContext) {
-    this.browserContext = browserContext;
+    // TODO: sandbox
+    // runMessagingService(this);
+
+    // const resize = () => {
+    //   TODO: sandbox
+    //   setTimeout(() => {
+    //     if (process.platform === 'linux') {
+    //       this.viewManager.select(this.viewManager.selectedId, false);
+    //     } else {
+    //       this.viewManager.fixBounds();
+    //     }
+    //   });
+    // };
+
+    // this.win.on('close', (event: Electron.Event) => {
+    //   const { object: settings } = Application.instance.settings;
+    //   TODO: sandbox
+    //   if (settings.warnOnQuit && this.viewManager.views.size > 1) {
+    //     const answer = dialog.showMessageBoxSync(null, {
+    //       type: 'question',
+    //       title: `Quit ${app.name}?`,
+    //       message: `Quit ${app.name}?`,
+    //       detail: `You have opened ${this.viewManager.views.size} tabs.`,
+    //       buttons: ['Close', 'Cancel'],
+    //     });
+    //     if (answer === 1) {
+    //       event.preventDefault();
+    //       return;
+    //     }
+    //   }
+    //   Application.instance.dialogs.destroy();
+    //   this.viewManager.clear();
+    //   if (
+    //     incognito &&
+    //     Application.instance.windows.list.filter((x) => x.incognito).length ===
+    //       1
+    //   ) {
+    //     Application.instance.sessions.clearCache('incognito');
+    //     Application.instance.sessions.unloadIncognitoExtensions();
+    //   }
+    //   Application.instance.windows.list = Application.instance.windows.list.filter(
+    //     (x) => x.win.id !== this.win.id,
+    //   );
+    // });
+
+    // this.webContents.openDevTools({ mode: 'detach' });
+
+    // TODO: sandbox
+    // this.win.on('enter-full-screen', () => {
+    //   this.send('fullscreen', true);
+    //   this.viewManager.fixBounds();
+    // });
+
+    // this.win.on('leave-full-screen', () => {
+    //   this.send('fullscreen', false);
+    //   this.viewManager.fixBounds();
+    // });
+
+    // this.win.on('enter-html-full-screen', () => {
+    //   this.viewManager.fullscreen = true;
+    //   this.send('html-fullscreen', true);
+    // });
+
+    // this.win.on('leave-html-full-screen', () => {
+    //   this.viewManager.fullscreen = false;
+    //   this.send('html-fullscreen', false);
+    // });
+
+    // this.win.on('scroll-touch-begin', () => {
+    //   this.send('scroll-touch-begin');
+    // });
+
+    // this.win.on('scroll-touch-end', () => {
+    //   this.viewManager.selected.send('scroll-touch-end');
+    //   this.send('scroll-touch-end');
+    // });
+
+    // this.win.on('focus', () => {
+    //   Application.instance.windows.current = this;
+    // });
+  }
+
+  public init() {
+    const browserContext = Application.instance.browserContexts.getOrCreate(
+      session.fromPartition('persist:ui'),
+      true,
+    );
 
     this.win = new BrowserWindow({
       frame: false,
@@ -45,9 +128,6 @@ export class AppWindow {
       ),
       show: false,
     });
-
-    // TODO: sandbox
-    // runMessagingService(this);
 
     const windowDataPath = getPath('window-data.json');
 
@@ -94,15 +174,6 @@ export class AppWindow {
     });
 
     const resize = () => {
-      // TODO: sandbox
-      // setTimeout(() => {
-      //   if (process.platform === 'linux') {
-      //     this.viewManager.select(this.viewManager.selectedId, false);
-      //   } else {
-      //     this.viewManager.fixBounds();
-      //   }
-      // });
-
       setTimeout(() => {
         this.webContents.send('tabs-resize');
       }, 500);
@@ -114,52 +185,14 @@ export class AppWindow {
     this.win.on('restore', resize);
     this.win.on('unmaximize', resize);
 
-    this.win.on('close', (event: Electron.Event) => {
-      // const { object: settings } = Application.instance.settings;
-
-      // TODO: sandbox
-
-      // if (settings.warnOnQuit && this.viewManager.views.size > 1) {
-      //   const answer = dialog.showMessageBoxSync(null, {
-      //     type: 'question',
-      //     title: `Quit ${app.name}?`,
-      //     message: `Quit ${app.name}?`,
-      //     detail: `You have opened ${this.viewManager.views.size} tabs.`,
-      //     buttons: ['Close', 'Cancel'],
-      //   });
-
-      //   if (answer === 1) {
-      //     event.preventDefault();
-      //     return;
-      //   }
-      // }
-
+    this.win.on('close', () => {
       // Save current window state to a file.
       windowState.maximized = this.win.isMaximized();
       windowState.fullscreen = this.win.isFullScreen();
       writeFileSync(windowDataPath, JSON.stringify(windowState));
 
       this.win.setBrowserView(null);
-
-      // Application.instance.dialogs.destroy();
-
-      // this.viewManager.clear();
-
-      // if (
-      //   incognito &&
-      //   Application.instance.windows.list.filter((x) => x.incognito).length ===
-      //     1
-      // ) {
-      //   Application.instance.sessions.clearCache('incognito');
-      //   Application.instance.sessions.unloadIncognitoExtensions();
-      // }
-
-      // Application.instance.windows.list = Application.instance.windows.list.filter(
-      //   (x) => x.win.id !== this.win.id,
-      // );
     });
-
-    // this.webContents.openDevTools({ mode: 'detach' });
 
     if (process.env.NODE_ENV === 'development') {
       this.webContents.openDevTools({ mode: 'detach' });
@@ -167,40 +200,6 @@ export class AppWindow {
     } else {
       this.win.loadURL(getWebUIURL('app'));
     }
-
-    // TODO: sandbox
-    // this.win.on('enter-full-screen', () => {
-    //   this.send('fullscreen', true);
-    //   this.viewManager.fixBounds();
-    // });
-
-    // this.win.on('leave-full-screen', () => {
-    //   this.send('fullscreen', false);
-    //   this.viewManager.fixBounds();
-    // });
-
-    // this.win.on('enter-html-full-screen', () => {
-    //   this.viewManager.fullscreen = true;
-    //   this.send('html-fullscreen', true);
-    // });
-
-    // this.win.on('leave-html-full-screen', () => {
-    //   this.viewManager.fullscreen = false;
-    //   this.send('html-fullscreen', false);
-    // });
-
-    // this.win.on('scroll-touch-begin', () => {
-    //   this.send('scroll-touch-begin');
-    // });
-
-    // this.win.on('scroll-touch-end', () => {
-    //   this.viewManager.selected.send('scroll-touch-end');
-    //   this.send('scroll-touch-end');
-    // });
-
-    this.win.on('focus', () => {
-      // Application.instance.windows.current = this;
-    });
 
     this.setBoundsListener();
   }

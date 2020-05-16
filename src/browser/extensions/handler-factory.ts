@@ -7,6 +7,11 @@ interface IOptions {
 }
 
 export class HandlerFactory {
+  public static uiToSenderSession: Map<
+    Electron.Session,
+    Electron.Session
+  > = new Map();
+
   public static create(scope: string, bind: any) {
     return (name: string, fn: (...args: any[]) => void, options?: IOptions) =>
       ipcMain.handle(`${scope}.${name}`, (...args: any[]) => {
@@ -19,7 +24,14 @@ export class HandlerFactory {
         const newArgs = [...rest];
 
         if (options.sender) newArgs.splice(0, 0, e.sender);
-        if (options.session) newArgs.splice(0, 0, sessionFromIpcEvent(e));
+        if (options.session) {
+          let ses = sessionFromIpcEvent(e);
+          if (this.uiToSenderSession.has(ses)) {
+            ses = this.uiToSenderSession.get(ses);
+          }
+
+          newArgs.splice(0, 0, ses);
+        }
 
         return fn.bind(bind)(...newArgs);
       });

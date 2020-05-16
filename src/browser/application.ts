@@ -13,6 +13,7 @@ import { DialogsService } from './services/dialogs-service';
 import { requestAuth } from './dialogs/auth';
 import { protocols } from './protocols';
 import { Tabs } from './tabs';
+import { extensions } from './extensions';
 
 export class Application {
   public static instance = new Application();
@@ -96,7 +97,14 @@ export class Application {
     // this.storage.run();
     // this.dialogs.run();
 
-    this.browserContexts.create(session.defaultSession, false);
+    const browserContext = await this.browserContexts.getOrCreate(
+      session.defaultSession,
+      false,
+    );
+
+    await browserContext.loadExtensions();
+
+    this.windows.create(session.defaultSession, {});
 
     // Menu.setApplicationMenu(getMainMenu());
     // runAutoUpdaterService();
