@@ -10,7 +10,6 @@ export interface IBrowserActionInfo {
 }
 
 export interface IBrowserAction extends IBrowserActionInfo {
-  baseUrl: string;
   extensionId: string;
   tabs?: Map<number, IBrowserActionInfo>;
 }

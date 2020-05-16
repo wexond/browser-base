@@ -1,13 +1,15 @@
 import { EventEmitter } from 'events';
-import { join, dirname } from 'path';
+import { join, dirname, resolve } from 'path';
 import { format, parse } from 'url';
 import { HandlerFactory } from '../handler-factory';
+import { fromBuffer } from 'file-type';
 import { EXTENSION_PROTOCOL } from '~/common/constants/protocols';
 import { Extensions } from '..';
 import {
   IconType,
   IBrowserAction,
 } from '~/common/extensions/interfaces/browser-action';
+import { promises } from 'fs';
 
 const CHROME_DETAILS_KEYS: { [key: string]: string } = {
   badgeText: 'text',
@@ -15,37 +17,53 @@ const CHROME_DETAILS_KEYS: { [key: string]: string } = {
   title: 'title',
 };
 
-const resolvePath = (
-  extensionUrl: string,
-  path: string,
-  scriptPath?: string,
-) => {
+const resolveUrl = (extensionUrl: string, path: string) => {
   if (!path) return undefined;
   if (path.startsWith(extensionUrl)) return path;
-  if (!scriptPath || path.startsWith('/')) scriptPath = './';
   return format({
     ...parse(extensionUrl),
-    pathname: join(dirname(scriptPath), path).replace(/\\/g, '/'),
+    pathname: path,
   });
 };
 
-const resolveIconPaths = (
-  extensionUrl: string,
-  icon: IconType,
+const resolvePath = (path: string, scriptPath?: string) => {
+  if (!path) return undefined;
+  if (!scriptPath || path.startsWith('/')) scriptPath = './';
+  return join(dirname(scriptPath), path).replace(/\\/g, '/');
+};
+
+const getIconBase64 = async (
+  path: string,
+  basePath: string,
   scriptPath?: string,
-): IconType => {
+) => {
+  const buffer = await promises.readFile(
+    resolve(basePath, resolvePath(path, scriptPath)),
+  );
+
+  const type = await fromBuffer(buffer);
+
+  return `data:image/${type.ext};base64,${buffer.toString('base64')}`;
+};
+
+const getIconsBase64 = async (
+  icon: IconType,
+  basePath: string,
+  scriptPath?: string,
+): Promise<IconType> => {
   if (typeof icon === 'object') {
     const newIcon: IconType = {};
-    Object.entries(icon).forEach(([key, value]) => {
+    for (const [key, value] of Object.entries(icon)) {
       if (typeof value === 'string') {
-        newIcon[key] = resolvePath(extensionUrl, value, scriptPath);
+        newIcon[key] = await getIconBase64(value, basePath, scriptPath);
       }
-    });
+    }
+
     return newIcon;
   }
 
   if (typeof icon === 'string') {
-    return resolvePath(extensionUrl, icon, scriptPath);
+    return await getIconBase64(icon, basePath, scriptPath);
   }
 
   return undefined;
@@ -80,7 +98,7 @@ export class BrowserActionAPI extends EventEmitter {
   constructor() {
     super();
 
-    const setter = (propName: string) => (
+    const setter = (propName: string) => async (
       session: Electron.Session,
       extensionId: string,
       details: chrome.browserAction.BadgeBackgroundColorDetails &
@@ -91,6 +109,7 @@ export class BrowserActionAPI extends EventEmitter {
       scriptPath?: string,
     ) => {
       const action = this.getOrCreate(session, extensionId);
+      const extension = session.getExtension(action.extensionId);
       const { tabId } = details;
 
       let newValue: any = (details as any)[CHROME_DETAILS_KEYS[propName]];
@@ -98,9 +117,12 @@ export class BrowserActionAPI extends EventEmitter {
       if (propName === 'icon') {
         newValue =
           details.imageData ||
-          resolveIconPaths(action.baseUrl, details.path, scriptPath);
+          (await getIconsBase64(details.path, extension.path, scriptPath));
       } else if (propName === 'popup') {
-        newValue = resolvePath(action.baseUrl, details.popup, scriptPath);
+        newValue = resolveUrl(
+          extension.url,
+          resolvePath(details.popup, scriptPath),
+        );
       }
 
       let actionToUpdate: any = action;
@@ -153,7 +175,6 @@ export class BrowserActionAPI extends EventEmitter {
         tabs: new Map(),
         extensionId,
         badgeText: '',
-        baseUrl: `${EXTENSION_PROTOCOL.scheme}${extensionId}/`,
       };
       sessionActions.set(extensionId, action);
     }
@@ -161,10 +182,10 @@ export class BrowserActionAPI extends EventEmitter {
     return action;
   }
 
-  public loadFromManifest(
+  public async loadFromManifest(
     session: Electron.Session,
     extension: Electron.Extension,
-  ): IBrowserAction {
+  ): Promise<IBrowserAction> {
     const { browser_action: browserAction } = extension.manifest || {};
 
     if (!browserAction) return null;
@@ -177,8 +198,8 @@ export class BrowserActionAPI extends EventEmitter {
 
     const action = this.getOrCreate(session, extension.id);
     Object.assign(action, {
-      popup: resolvePath(extension.url, popup),
-      icon: resolveIconPaths(extension.url, icon),
+      popup: resolveUrl(extension.url, resolvePath(popup)),
+      icon: await getIconsBase64(icon, extension.path),
       title,
     });
 
