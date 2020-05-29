@@ -50,7 +50,14 @@ export class SettingsStore {
 
   @action
   public updateSettings(newSettings: ISettings) {
+    const prevState = { ...this.object };
     this.object = { ...this.object, ...newSettings };
+
+    if (prevState.topBarVariant !== newSettings.topBarVariant) {
+      requestAnimationFrame(() => {
+        this.store.tabs.updateTabsBounds(true);
+      });
+    }
   }
 
   public async save() {

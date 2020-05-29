@@ -3,14 +3,13 @@ import { observer } from 'mobx-react-lite';
 import { ThemeProvider } from 'styled-components';
 import { hot } from 'react-hot-loader/root';
 
-import { ipcRenderer } from 'electron';
 import { StyledApp, Title, Permissions, Permission, Buttons } from './style';
 import store from '../../store';
 import { Button } from '~/renderer/components/Button';
 import { UIStyle } from '~/renderer/mixins/default-styles';
 
 const sendResult = (r: boolean) => {
-  ipcRenderer.send(`request-permission-result-${store.windowId}`, r);
+  store.send('result', r);
 };
 
 const getText = (permission: string) => {

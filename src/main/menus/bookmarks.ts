@@ -9,6 +9,7 @@ import { join } from 'path';
 import { IBookmark } from '~/interfaces';
 import { Application } from '../application';
 import { AppWindow } from '../windows/app';
+import { showAddBookmarkDialog } from '../dialogs/add-bookmark';
 
 function getPath(file: string) {
   if (process.env.NODE_ENV === 'development') {
@@ -110,9 +111,7 @@ export function createMenu(appWindow: AppWindow, item: IBookmark) {
       label: 'Edit',
       click: () => {
         const windowBounds = appWindow.win.getBounds();
-        appWindow.dialogs.addBookmarkDialog.left = windowBounds.width - 20;
-        appWindow.dialogs.addBookmarkDialog.top = 72;
-        appWindow.dialogs.addBookmarkDialog.showForBookmark({
+        showAddBookmarkDialog(appWindow.win, windowBounds.width - 20, 72, {
           url: item.url,
           title: item.title,
           bookmark: item,

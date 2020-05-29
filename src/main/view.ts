@@ -14,6 +14,10 @@ import { TabEvent } from '~/interfaces/tabs';
 import { Queue } from '~/utils/queue';
 import { Application } from './application';
 
+interface IAuthInfo {
+  url: string;
+}
+
 export class View {
   public browserView: BrowserView;
 
@@ -31,6 +35,14 @@ export class View {
   public lastHistoryId: string;
 
   public bookmark: IBookmark;
+
+  public findInfo = {
+    occurrences: '0/0',
+    text: '',
+  };
+
+  public requestedAuth: IAuthInfo;
+  public requestedPermission: any;
 
   private historyQueue = new Queue();
 
@@ -83,7 +95,9 @@ export class View {
     });
 
     this.webContents.addListener('found-in-page', (e, result) => {
-      this.window.dialogs.findDialog.send('found-in-page', result);
+      Application.instance.dialogs
+        .getDynamic('find')
+        .browserView.webContents.send('found-in-page', result);
     });
 
     this.webContents.addListener('page-title-updated', (e, title) => {
@@ -283,7 +297,7 @@ export class View {
   }
 
   public async updateCredentials() {
-    if (this.browserView.isDestroyed()) return;
+    if (!process.env.ENABLE_AUTOFILL || this.browserView.isDestroyed()) return;
 
     const item = await Application.instance.storage.findOne<any>({
       scope: 'formfill',
@@ -338,7 +352,9 @@ export class View {
     this.isNewTab = url.startsWith(NEWTAB_URL);
 
     this.updateData();
-    this.updateCredentials();
+
+    if (process.env.ENABLE_AUTOFILL) this.updateCredentials();
+
     this.updateBookmark();
   };
 

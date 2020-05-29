@@ -31,6 +31,7 @@ interface Props {
   toggled?: boolean;
   dense?: boolean;
   iconStyle?: any;
+  id?: string;
 }
 
 export const ToolbarButton = observer(
@@ -59,11 +60,13 @@ export const ToolbarButton = observer(
     toggled,
     dense,
     iconStyle,
+    id,
   }: Props) => {
     style = { ...style };
 
     return (
       <Button
+        id={id}
         onClick={onClick}
         onContextMenu={onContextMenu}
         onMouseDown={onMouseDown}
@@ -72,11 +75,7 @@ export const ToolbarButton = observer(
         style={style}
         toggled={toggled}
         dense={dense}
-        ref={(r: HTMLDivElement) => {
-          if (typeof divRef === 'function') {
-            divRef(r);
-          }
-        }}
+        ref={divRef && divRef}
         disabled={disabled}
       >
         <Icon

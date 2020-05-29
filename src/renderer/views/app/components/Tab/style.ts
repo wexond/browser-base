@@ -4,7 +4,6 @@ import { transparency, ICON_CLOSE } from '~/renderer/constants';
 import { ITheme } from '~/interfaces';
 import { centerIcon } from '~/renderer/mixins';
 import { TAB_PINNED_WIDTH } from '../../constants';
-import { TAB_HEIGHT, TAB_MARGIN_TOP } from '~/constants/design';
 
 interface CloseProps {
   visible: boolean;
@@ -48,7 +47,7 @@ export const StyledAction = styled.div`
   z-index: 10;
   ${centerIcon(16)};
 
-    ${({ visible, theme, icon }: ActionProps) => css`
+  ${({ visible, theme, icon }: ActionProps) => css`
       opacity: ${visible ? transparency.icons.inactive : 0};
       display: ${visible ? 'block' : 'none'};
       filter: ${theme['toolbar.lightForeground'] ? 'invert(100%)' : 'none'};
@@ -77,12 +76,14 @@ export const StyledPinAction = styled.div`
   top: 8px;
   ${centerIcon(10)};
 
-    ${({ visible, theme, icon }: PinActionProps) => css`
+  ${({ visible, theme, icon }: PinActionProps) => css`
       display: ${visible ? 'block' : 'none'};
-      background-color: ${theme['toolbar.lightForeground'] ? 'rgb(255, 255, 255)' : 'rgb(0, 0, 0)'};
+      background-color: ${
+        theme['toolbar.lightForeground'] ? 'rgb(255, 255, 255)' : 'rgb(0, 0, 0)'
+      };
       background-image: url('${icon}');
     `}
-  
+
   &:hover {
     filter: invert(100%);
   }
@@ -153,15 +154,15 @@ export const StyledContent = styled.div`
 
 interface TabContainerProps {
   pinned: boolean;
+  theme?: ITheme;
+  hasTabGroup: boolean;
+  selected?: boolean;
 }
 
 export const TabContainer = styled.div`
   position: relative;
-  border-top-left-radius: 4px;
-  border-top-right-radius: 4px;
+
   width: 100%;
-  height: ${TAB_HEIGHT}px;
-  margin-top: ${TAB_MARGIN_TOP}px;
   align-items: center;
   overflow: hidden;
   display: flex;
@@ -170,7 +171,13 @@ export const TabContainer = styled.div`
   border-bottom: transparent !important;
   border: 2px solid;
 
-  ${({ pinned }: TabContainerProps) => css`
+  ${({ pinned, theme, hasTabGroup, selected }: TabContainerProps) => css`
     max-width: ${pinned ? `${TAB_PINNED_WIDTH}px` : '100%'};
+    margin-top: ${theme.tabMarginTop}px;
+    height: ${theme.tabHeight}px;
+    border-radius: ${theme.isCompact && !hasTabGroup ? '4px' : 'auto'};
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    box-shadow: ${selected ? '0px 0px 6px 0px rgba(0,0,0,0.12)' : 'none'};
   `};
 `;

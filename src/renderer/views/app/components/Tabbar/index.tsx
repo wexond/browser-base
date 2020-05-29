@@ -7,6 +7,7 @@ import store from '../../store';
 import { ipcRenderer } from 'electron';
 import { TabGroup } from '../TabGroup';
 import { ICON_ADD } from '~/renderer/constants/icons';
+import { AddressBarContainer } from '../AddressBarContainer';
 
 let timeout: any;
 
@@ -53,7 +54,7 @@ export const TabGroups = observer(() => {
 
 export const Tabbar = observer(() => {
   return (
-    <StyledTabbar isFullscreen={store.isFullscreen}>
+    <StyledTabbar>
       <TabsContainer
         onMouseEnter={onMouseEnter}
         onMouseLeave={onTabsMouseLeave}
@@ -68,6 +69,7 @@ export const Tabbar = observer(() => {
         onClick={onAddTabClick}
         divRef={(r: any) => (store.addTab.ref = r)}
       />
+      {store.isCompact && <AddressBarContainer />}
     </StyledTabbar>
   );
 });

@@ -67,5 +67,8 @@ export const CurrentIcon = styled.div`
 export const SearchBox = styled.div`
   display: flex;
   align-items: center;
-  height: ${TOOLBAR_HEIGHT}px;
+
+  ${({ theme }: { theme?: any }) => css`
+    height: ${theme.searchBoxHeight}px;
+  `}
 `;

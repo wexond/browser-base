@@ -13,6 +13,8 @@ export class Store extends DialogStore {
   public constructor() {
     super();
 
+    this.init();
+
     ipcRenderer.on('download-started', (e, item) => {
       this.downloads.push(item);
     });
@@ -38,8 +40,8 @@ export class Store extends DialogStore {
     });
   }
 
-  public onVisibilityChange(visible: boolean) {
-    this.visible = visible;
+  public async init() {
+    this.downloads = await ipcRenderer.invoke('get-downloads');
   }
 }
 

@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
-import { TITLEBAR_HEIGHT } from '~/constants/design';
 import { ITheme } from '~/interfaces';
+import { platform } from 'os';
 
 // margin-top: ${isHTMLFullscreen ? -TOOLBAR_HEIGHT : 0}px;
 
@@ -11,7 +11,6 @@ export const StyledTitlebar = styled.div`
   flex-flow: row;
   color: rgba(0, 0, 0, 0.8);
   width: 100%;
-  height: ${TITLEBAR_HEIGHT}px;
 
   &:before {
     position: absolute;
@@ -26,11 +25,16 @@ export const StyledTitlebar = styled.div`
 
   ${({
     isHTMLFullscreen,
+    isFullscreen,
     theme,
   }: {
     isHTMLFullscreen: boolean;
+    isFullscreen: boolean;
     theme: ITheme;
   }) => css`
     background-color: ${theme['titlebar.backgroundColor']};
+    height: ${theme.titlebarHeight}px;
+    align-items: ${theme.isCompact ? 'center' : 'initial'};
+    padding-left: ${platform() === 'darwin' && !isFullscreen ? 78 : 4}px;
   `};
 `;

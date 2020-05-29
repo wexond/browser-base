@@ -41,5 +41,10 @@ export interface ITheme {
 
   animations?: boolean;
 
+  titlebarHeight?: number;
+  tabHeight?: number;
+  tabMarginTop?: number;
+  isCompact?: boolean;
+
   dark?: boolean;
 }

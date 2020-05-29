@@ -4,6 +4,7 @@ import { viewSource, saveAs, printPage } from './common-actions';
 import { WEBUI_BASE_URL, WEBUI_URL_SUFFIX } from '~/constants/files';
 import { AppWindow } from '../windows';
 import { Application } from '../application';
+import { showMenuDialog } from '../dialogs/menu';
 
 const isMac = process.platform === 'darwin';
 
@@ -126,12 +127,14 @@ export const getMainMenu = () => {
 
         // Focus address bar
         ...createMenuItem(['Ctrl+Space', 'CmdOrCtrl+L', 'Alt+D', 'F6'], () => {
-          Application.instance.windows.current.dialogs.searchDialog.show();
+          Application.instance.dialogs
+            .getPersistent('search')
+            .show(Application.instance.windows.current.win);
         }),
 
         // Toggle menu
         ...createMenuItem(['Alt+F', 'Alt+E'], () => {
-          Application.instance.windows.current.dialogs.menuDialog.show();
+          Application.instance.windows.current.send('show-menu-dialog');
         }),
       ],
     },

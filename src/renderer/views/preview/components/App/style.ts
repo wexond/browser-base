@@ -2,9 +2,9 @@ import styled, { css } from 'styled-components';
 import { ITheme } from '~/interfaces';
 import { maxLines } from '~/renderer/mixins';
 import { TAB_MAX_WIDTH } from '~/renderer/views/app/constants/tabs';
-import { DialogStyle } from '~/renderer/mixins/dialogs';
+import { PersistentDialogStyle } from '~/renderer/mixins/dialogs';
 
-export const StyledApp = styled(DialogStyle)`
+export const StyledApp = styled(PersistentDialogStyle)`
   margin: 0;
   padding: 12px;
   font-size: 13px;

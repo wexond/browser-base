@@ -495,7 +495,7 @@ export class TabsStore {
       if (
         callingTab.left < tabGroup.left ||
         callingTab.left + callingTab.width >=
-        tabGroup.left + tabGroup.width + 20
+          tabGroup.left + tabGroup.width + 20
       ) {
         callingTab.removeFromGroup();
         return;
@@ -586,6 +586,8 @@ export class TabsStore {
         return;
       }
 
+      store.canOpenSearch = false;
+
       selectedTab.isDragging = true;
 
       const newLeft =
@@ -599,9 +601,9 @@ export class TabsStore {
       if (
         newLeft + selectedTab.width >
         container.current.scrollLeft +
-        container.current.offsetWidth -
-        TABS_PADDING +
-        20
+          container.current.offsetWidth -
+          TABS_PADDING +
+          20
       ) {
         left =
           container.current.scrollLeft +

@@ -10,6 +10,8 @@ export interface IStartupBehavior {
   type: 'continue' | 'urls' | 'empty';
 }
 
+export type TopBarVariant = 'default' | 'compact';
+
 export interface ISettings {
   theme: string;
   themeAuto: boolean;
@@ -27,4 +29,5 @@ export interface ISettings {
   downloadsDialog: boolean;
   downloadsPath: string;
   doNotTrack: boolean;
+  topBarVariant: TopBarVariant;
 }

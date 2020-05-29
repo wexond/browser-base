@@ -34,7 +34,9 @@ export class Store {
     return getTheme(this.settings.object.theme);
   }
 
-  public inputRef = React.createRef<HTMLInputElement>();
+  public inputRef: HTMLInputElement;
+
+  public canOpenSearch = false;
 
   @observable
   public addressbarTextVisible = true;
@@ -44,6 +46,11 @@ export class Store {
 
   @observable
   public addressbarEditing = false;
+
+  @computed
+  public get isCompact() {
+    return this.settings.object.topBarVariant === 'compact';
+  }
 
   @computed
   public get addressbarValue() {
@@ -225,44 +232,6 @@ export class Store {
       },
     );
 
-    ipcRenderer.on(
-      'set-browserAction-info',
-      async (e, extensionId, action: BrowserActionChangeType, details) => {
-        if (
-          this.extensions.defaultBrowserActions.filter(
-            (x) => x.extensionId === extensionId,
-          ).length === 0
-        ) {
-          this.extensions.load();
-        }
-
-        const handler = (item: IBrowserAction) => {
-          if (action === 'setBadgeText') {
-            item.badgeText = details.text;
-          } else if (action === 'setPopup') {
-            item.popup = details.popup;
-          } else if (action === 'setTitle') {
-            item.title = details.title;
-          }
-        };
-
-        if (details.tabId) {
-          this.extensions.browserActions
-            .filter(
-              (x) => x.extensionId === extensionId && x.tabId === details.tabId,
-            )
-            .forEach(handler);
-        } else {
-          this.extensions.defaultBrowserActions
-            .filter((x) => x.extensionId === extensionId)
-            .forEach(handler);
-          this.extensions.browserActions
-            .filter((x) => x.extensionId === extensionId)
-            .forEach(handler);
-        }
-      },
-    );
-
     ipcRenderer.on('find', () => {
       const tab = this.tabs.selectedTab;
       if (tab) {
@@ -284,15 +253,15 @@ export class Store {
         tab.addressbarSelectionRange = [data.selectionStart, data.selectionEnd];
 
         if (tab.isSelected) {
-          this.inputRef.current.value = data.text;
-          this.inputRef.current.setSelectionRange(
+          this.inputRef.value = data.text;
+          this.inputRef.setSelectionRange(
             data.selectionStart,
             data.selectionEnd,
           );
 
           if (data.focus) {
             remote.getCurrentWebContents().focus();
-            this.inputRef.current.focus();
+            this.inputRef.focus();
           }
 
           if (data.escape) {
@@ -300,15 +269,56 @@ export class Store {
             this.tabs.selectedTab.addressbarValue = null;
 
             requestAnimationFrame(() => {
-              this.inputRef.current.select();
+              this.inputRef.select();
             });
           }
         }
       }
     });
 
+    if (process.env.ENABLE_EXTENSIONS) {
+      ipcRenderer.on(
+        'set-browserAction-info',
+        async (e, extensionId, action: BrowserActionChangeType, details) => {
+          if (
+            this.extensions.defaultBrowserActions.filter(
+              (x) => x.extensionId === extensionId,
+            ).length === 0
+          ) {
+            this.extensions.load();
+          }
+
+          const handler = (item: IBrowserAction) => {
+            if (action === 'setBadgeText') {
+              item.badgeText = details.text;
+            } else if (action === 'setPopup') {
+              item.popup = details.popup;
+            } else if (action === 'setTitle') {
+              item.title = details.title;
+            }
+          };
+
+          if (details.tabId) {
+            this.extensions.browserActions
+              .filter(
+                (x) =>
+                  x.extensionId === extensionId && x.tabId === details.tabId,
+              )
+              .forEach(handler);
+          } else {
+            this.extensions.defaultBrowserActions
+              .filter((x) => x.extensionId === extensionId)
+              .forEach(handler);
+            this.extensions.browserActions
+              .filter((x) => x.extensionId === extensionId)
+              .forEach(handler);
+          }
+        },
+      );
+      ipcRenderer.send('load-extensions');
+    }
+
     ipcRenderer.send('update-check');
-    ipcRenderer.send('load-extensions');
   }
 }
 

@@ -4,7 +4,6 @@ import { ipcRenderer } from 'electron';
 import { observable, computed } from 'mobx';
 import { ISuggestion, IVisitedItem } from '~/interfaces';
 import { SuggestionsStore } from './suggestions';
-import { NEWTAB_URL } from '~/constants/tabs';
 import { DialogStore } from '~/models/dialog-store';
 
 let lastSuggestion: string;
@@ -67,6 +66,7 @@ export class Store extends DialogStore {
   public constructor() {
     super({
       visibilityWrapper: false,
+      persistent: true,
     });
 
     ipcRenderer.on('visible', (e, visible, data) => {
@@ -74,7 +74,6 @@ export class Store extends DialogStore {
 
       if (visible) {
         this.tabs = [];
-        this.suggestions.list = [];
         this.tabId = data.id;
 
         this.canSuggest = this.inputText.length <= data.text.length;
@@ -96,6 +95,20 @@ export class Store extends DialogStore {
     this.loadHistory();
 
     ipcRenderer.send(`can-show-${this.id}`);
+
+    this.onHide = (data) => {
+      ipcRenderer.send(`addressbar-update-input-${this.id}`, {
+        id: this.tabId,
+        text: this.inputRef.current.value,
+        selectionStart: this.inputRef.current.selectionStart,
+        selectionEnd: this.inputRef.current.selectionEnd,
+        ...data,
+      });
+
+      this.tabs = [];
+      this.inputRef.current.value = '';
+      this.suggestions.list = [];
+    };
   }
 
   public getCanSuggest(key: number) {
@@ -114,20 +127,6 @@ export class Store extends DialogStore {
     }
 
     return false;
-  }
-
-  public onHide(data: any = null) {
-    ipcRenderer.send(`addressbar-update-input-${this.id}`, {
-      id: this.tabId,
-      text: this.inputRef.current.value,
-      selectionStart: this.inputRef.current.selectionStart,
-      selectionEnd: this.inputRef.current.selectionEnd,
-      ...data,
-    });
-
-    this.tabs = [];
-    this.inputRef.current.value = '';
-    this.suggestions.list = [];
   }
 
   public async loadHistory() {

@@ -7,10 +7,12 @@ import { ipcRenderer } from 'electron';
 import store from '../../store';
 
 const onPlaceholderClick = (tabGroup: ITabGroup) => () => {
+  const { left, bottom } = tabGroup.ref.current.getBoundingClientRect();
   ipcRenderer.send(`show-tabgroup-dialog-${store.windowId}`, {
     name: tabGroup.name,
     id: tabGroup.id,
-    x: tabGroup.ref.current.getBoundingClientRect().left,
+    x: left,
+    y: bottom,
   });
 };
 

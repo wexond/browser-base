@@ -12,13 +12,11 @@ import {
   StyledPinAction,
   TabContainer,
 } from './style';
-import {
-  ICON_VOLUME_HIGH,
-  ICON_VOLUME_OFF,
-} from '~/renderer/constants';
+import { ICON_VOLUME_HIGH, ICON_VOLUME_OFF } from '~/renderer/constants';
 import { ITab } from '../../models';
 import store from '../../store';
 import { remote, ipcRenderer } from 'electron';
+import { COMPACT_TAB_MARGIN_TOP } from '~/constants/design';
 
 const removeTab = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {
   e.stopPropagation();
@@ -27,7 +25,7 @@ const removeTab = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {
 
 const toggleMuteTab = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {
   e.stopPropagation();
-  tab.isMuted ? store.tabs.unmuteTab(tab) : store.tabs.muteTab(tab)
+  tab.isMuted ? store.tabs.unmuteTab(tab) : store.tabs.muteTab(tab);
 };
 
 const onCloseMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -42,12 +40,14 @@ const onMouseDown = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {
   const { pageX, button } = e;
 
   if (store.addressbarEditing) {
-    store.inputRef.current.focus();
+    store.inputRef.focus();
   }
 
   if (button === 0) {
     if (!tab.isSelected) {
       tab.select();
+    } else {
+      store.canOpenSearch = true;
     }
 
     store.tabs.lastMouseX = 0;
@@ -66,12 +66,16 @@ const onMouseEnter = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {
     store.tabs.hoveredTabId = tab.id;
   }
 
-  const x = tab.ref.current.getBoundingClientRect().left + 8;
+  const { bottom, left } = tab.ref.current.getBoundingClientRect();
+
+  const x = left + 8;
+  const y = store.isCompact ? bottom - COMPACT_TAB_MARGIN_TOP : bottom;
 
   if (store.tabs.canShowPreview && !store.tabs.isDragging) {
     ipcRenderer.send(`show-tab-preview-${store.windowId}`, {
       id: tab.id,
       x,
+      y,
     });
   }
 };
@@ -83,6 +87,12 @@ const onMouseLeave = () => {
 const onClick = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {
   if (e.button === 4) {
     tab.close();
+    return;
+  }
+
+  if (store.isCompact && e.button === 0 && store.canOpenSearch) {
+    store.inputRef.focus();
+    store.canOpenSearch = false;
   }
 };
 
@@ -276,6 +286,10 @@ export default observer(({ tab }: { tab: ITab }) => {
     ? 'rgba(255, 255, 255, 0.08)'
     : 'rgba(255, 255, 255, 0.5)';
 
+  const defaultSelectedHoverColor = store.theme['toolbar.lightForeground']
+    ? '#393939'
+    : '#fcfcfc';
+
   return (
     <StyledTab
       selected={tab.isSelected}
@@ -288,16 +302,21 @@ export default observer(({ tab }: { tab: ITab }) => {
       ref={tab.ref}
     >
       <TabContainer
+        hasTabGroup={tab.tabGroupId != undefined}
         pinned={tab.isPinned}
+        selected={tab.isSelected}
         style={{
           backgroundColor: tab.isSelected
-            ? store.theme['toolbar.backgroundColor']
+            ? store.isCompact && tab.isHovered
+              ? defaultSelectedHoverColor
+              : store.theme['toolbar.backgroundColor']
             : tab.isHovered
-              ? defaultHoverColor
-              : defaultColor,
-          borderColor: (tab.isSelected && tab.tabGroupId != undefined)
-            ? tab.tabGroup.color
-            : 'transparent',
+            ? defaultHoverColor
+            : defaultColor,
+          borderColor:
+            tab.isSelected && tab.tabGroupId != undefined && !store.isCompact
+              ? tab.tabGroup.color
+              : 'transparent',
         }}
       >
         <Content tab={tab} />

@@ -38,11 +38,10 @@ const extPopupConfig = getConfig({
 });
 
 applyEntries('app', appConfig, [
+  ...(process.env.ENABLE_AUTOFILL ? ['form-fill', 'credentials'] : []),
   'app',
   'permissions',
   'auth',
-  'form-fill',
-  'credentials',
   'find',
   'menu',
   'search',
@@ -53,16 +52,20 @@ applyEntries('app', appConfig, [
   'zoom',
 ]);
 
-extPopupConfig.entry['extension-popup'] = [
-  `./src/renderer/views/extension-popup`,
-];
-extPopupConfig.plugins.push(
-  new HtmlWebpackPlugin({
-    title: 'Wexond',
-    template: 'static/pages/extension-popup.html',
-    filename: `extension-popup.html`,
-    chunks: [`vendor.app`, 'extension-popup'],
-  }),
-);
+if (process.env.ENABLE_EXTENSIONS) {
+  extPopupConfig.entry['extension-popup'] = [
+    `./src/renderer/views/extension-popup`,
+  ];
+  extPopupConfig.plugins.push(
+    new HtmlWebpackPlugin({
+      title: 'Wexond',
+      template: 'static/pages/extension-popup.html',
+      filename: `extension-popup.html`,
+      chunks: [`vendor.app`, 'extension-popup'],
+    }),
+  );
 
-module.exports = [appConfig, extPopupConfig];
+  module.exports = [appConfig, extPopupConfig];
+} else {
+  module.exports = appConfig;
+}
