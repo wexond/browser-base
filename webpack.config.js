@@ -22,8 +22,8 @@ const mainConfig = getConfig({
 
   plugins: [
     // new BundleAnalyzerPlugin(),
-    new CopyPlugin(
-      [
+    new CopyPlugin({
+      patterns: [
         {
           from:
             'node_modules/@cliqz/adblocker-electron-preload/dist/preload.cjs.js',
@@ -33,8 +33,7 @@ const mainConfig = getConfig({
           },
         },
       ],
-      { copyUnmodified: true },
-    ),
+    }),
   ],
 });
 
