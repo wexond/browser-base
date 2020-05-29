@@ -31,7 +31,10 @@ export const StyledDownloadItem = styled.div`
   }
 `;
 
-export const Title = styled.div``;
+export const Title = styled.div`
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
 
 export const SecondaryText = styled.div`
   opacity: 0.54;
@@ -65,6 +68,9 @@ export const Info = styled.div`
   flex-flow: column;
   justify-content: center;
   flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;
 
 export const Icon = styled.div`
