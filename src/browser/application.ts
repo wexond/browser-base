@@ -16,6 +16,7 @@ import { Tabs } from './tabs';
 import { extensions } from './extensions';
 import { BrowserContext } from './browser-context';
 import { Worker } from 'worker_threads';
+import { IStorageMessage } from '~/interfaces';
 
 export class Application {
   public static instance = new Application();
@@ -99,6 +100,8 @@ export class Application {
     worker.on('message', (e) => {
       console.log('worker message', e);
     });
+
+    worker.postMessage({ type: 'bookmarks-get-children' } as IStorageMessage);
 
     // this.storage.run();
     // this.dialogs.run();

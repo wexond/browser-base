@@ -17,3 +17,7 @@ export interface IRemoveOperation extends IFindOperation {
 export interface IUpdateOperation extends IFindOperation, IRemoveOperation {
   value: any;
 }
+
+export interface IStorageMessage {
+  type: 'bookmarks-get-children';
+}
