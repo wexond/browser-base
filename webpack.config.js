@@ -48,6 +48,12 @@ const storageConfig = getConfig({
   entry: {
     storage: './src/storage',
   },
+
+  plugins: [
+    new CopyPlugin({
+      patterns: [{ from: './static/storage/schema.sql', to: 'storage' }],
+    }),
+  ],
 });
 
 // TODO: sandbox
