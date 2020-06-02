@@ -52,6 +52,7 @@
     "@types/node-fetch": "^2.5.7",
     "@types/react": "16.9.35",
     "@types/react-dom": "16.9.8",
+    "@types/sqlstring": "^2.2.1",
     "@types/styled-components": "5.1.0",
     "@typescript-eslint/eslint-plugin": "^3.1.0",
     "@typescript-eslint/parser": "^3.1.0",
@@ -106,6 +107,7 @@
     "webpack-merge": "^4.2.2"
   },
   "dependencies": {
-    "better-sqlite3": "^7.0.1"
+    "better-sqlite3": "^7.0.1",
+    "sqlstring": "^2.3.2"
   }
 }
