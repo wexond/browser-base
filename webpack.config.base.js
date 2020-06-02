@@ -109,6 +109,7 @@ const config = {
 
   externals: {
     keytar: `require('keytar')`,
+    'better-sqlite3': `require('better-sqlite3')`,
   },
 
   optimization: {

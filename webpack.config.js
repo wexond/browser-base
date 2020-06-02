@@ -43,7 +43,18 @@ const mainConfig = getConfig({
   ],
 });
 
-// TODO: sandbox
+const storageConfig = getConfig({
+  target: 'node',
+
+  devtool: dev ? 'inline-source-map' : 'none',
+
+  watch: dev,
+
+  entry: {
+    storage: './src/storage',
+  },
+});
+
 const preloadConfig = getConfig({
   target: 'electron-renderer',
 
@@ -112,4 +123,4 @@ if (process.env.START === '1') {
   });
 }
 
-module.exports = [mainConfig, preloadConfig];
+module.exports = [mainConfig, storageConfig, preloadConfig];
