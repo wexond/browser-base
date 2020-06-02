@@ -1,14 +1,5 @@
-import * as Database from 'better-sqlite3';
-
-const db = new Database('storage.db', { verbose: console.log });
+import loader from './loaders';
 
 (async () => {
-  console.log('Storage loaded');
-
-  const query = db.prepare('SELECT * from history');
-  const items = query.run();
-
-  console.log(items);
+  await loader();
 })();
-
-console.log('XDDDDDDDDDDDDDDDDDDDDDDDDDD');

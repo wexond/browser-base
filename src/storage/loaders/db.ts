@@ -1,5 +1,19 @@
 import * as Database from 'better-sqlite3';
 
-export const db: Database.Database = new Database('storage.db', {
-  verbose: console.log,
-});
+import { config } from '../constants';
+import { pathExists } from '~/common/utils/files';
+import { loadSchema } from '../utils';
+
+export let db: Database.Database;
+
+export default async () => {
+  const exists = await pathExists(config.dbPath);
+
+  db = new Database(config.dbPath, {
+    verbose: console.log,
+  });
+
+  if (!exists) {
+    await loadSchema(config.schemaPath, db);
+  }
+};
