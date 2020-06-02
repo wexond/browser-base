@@ -227,7 +227,7 @@ export class TabsStore {
     });
 
     browser.tabs.onUpdated.addListener(
-      (tabId, { title, status, mutedInfo, audible, favIconUrl }) => {
+      (tabId, { title, status, mutedInfo, audible, favIconUrl, url }) => {
         const tab = this.getTabById(tabId);
         if (!tab) return;
 
@@ -236,6 +236,12 @@ export class TabsStore {
         if (mutedInfo) tab.isMuted = mutedInfo.muted;
         if (audible !== undefined) tab.isPlaying = audible;
         if (favIconUrl) tab.favicon = favIconUrl;
+        if (url) {
+          tab.url = url;
+          if (tab.id === this.selectedTabId && !store.addressbarFocused) {
+            this.selectedTab.addressbarValue = null;
+          }
+        }
       },
     );
   }
