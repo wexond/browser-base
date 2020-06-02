@@ -1,9 +1,8 @@
 import { EventEmitter } from 'events';
 import { join, dirname, resolve } from 'path';
 import { format, parse } from 'url';
-import { HandlerFactory } from '../handler-factory';
+import { HandlerFactory, ISenderDetails } from '../handler-factory';
 import { fromBuffer } from 'file-type';
-import { EXTENSION_PROTOCOL } from '~/common/constants/protocols';
 import { Extensions } from '..';
 import {
   IconType,
@@ -28,7 +27,7 @@ const resolveUrl = (extensionUrl: string, path: string) => {
 
 const resolvePath = (path: string, scriptPath?: string) => {
   if (!path) return undefined;
-  if (!scriptPath || path.startsWith('/')) {
+  if (!scriptPath || path.startsWith('/') || path.startsWith('.')) {
     scriptPath = './';
     path = path.replace(/^(?:\.\.\/)+/, '');
   }
@@ -93,7 +92,7 @@ export declare interface BrowserActionAPI {
 }
 
 export class BrowserActionAPI extends EventEmitter {
-  private sessionActionMap: Map<
+  public sessionActionMap: Map<
     Electron.Session,
     Map<string, IBrowserAction>
   > = new Map();
@@ -102,14 +101,16 @@ export class BrowserActionAPI extends EventEmitter {
     super();
 
     const setter = (propName: string) => async (
-      session: Electron.Session,
-      extensionId: string,
-      details: chrome.browserAction.BadgeBackgroundColorDetails &
-        chrome.browserAction.BadgeTextDetails &
-        chrome.browserAction.TitleDetails &
-        chrome.browserAction.PopupDetails &
-        chrome.browserAction.TabIconDetails,
-      scriptPath?: string,
+      { session, extensionId, scriptPath }: ISenderDetails,
+      {
+        details,
+      }: {
+        details: chrome.browserAction.BadgeBackgroundColorDetails &
+          chrome.browserAction.BadgeTextDetails &
+          chrome.browserAction.TitleDetails &
+          chrome.browserAction.PopupDetails &
+          chrome.browserAction.TabIconDetails;
+      },
     ) => {
       const action = this.getOrCreate(session, extensionId);
       const extension = session.getExtension(action.extensionId);
@@ -159,9 +160,6 @@ export class BrowserActionAPI extends EventEmitter {
         setter(prop),
       ),
     );
-
-    handler('getAll', this.getAllInSession);
-    handler('getAllInTab', this.getAllInTab);
     // handler('onClicked', this.onClicked);
   }
 
@@ -209,35 +207,6 @@ export class BrowserActionAPI extends EventEmitter {
     this.emit('loaded', session, action);
 
     return action;
-  }
-
-  public getAllInSession(session: Electron.Session): IBrowserAction[] {
-    const sessionActions = this.sessionActionMap.get(session);
-    if (!sessionActions) return [];
-    return Array.from(sessionActions.values());
-  }
-
-  public getAllInTab(
-    session: Electron.Session,
-    tabId: number,
-  ): IBrowserAction[] {
-    const tab = Extensions.instance.tabs.getTabById(session, tabId);
-    if (!tab) return [];
-
-    const tabSession = tab.session;
-    const actions = this.getAllInSession(tabSession);
-
-    return actions.map((action) => getActionForTab(action, tabId));
-  }
-
-  public getForTab(
-    session: Electron.Session,
-    extensionId: string,
-    tabId: number,
-  ) {
-    const sessionActions = this.sessionActionMap.get(session);
-    if (!sessionActions) return null;
-    return getActionForTab(sessionActions.get(extensionId), tabId);
   }
 
   // TODO(sentialx): Tab in callback, fire if the browser action has no popup.

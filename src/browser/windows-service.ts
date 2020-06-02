@@ -4,7 +4,7 @@ import { BrowserContext } from './browser-context';
 import { extensions, Extensions } from './extensions';
 import { Application } from './application';
 import { showExtensionDialog } from './dialogs/extension-popup';
-import { HandlerFactory } from './extensions/handler-factory';
+import { HandlerFactory, ISenderDetails } from './extensions/handler-factory';
 
 export class WindowsService {
   public list: AppWindow[] = [];
@@ -23,18 +23,21 @@ export class WindowsService {
     extensions.browserAction.on('updated', (session, action) => {
       this.getAllInSession(session).forEach((window) => {
         if (action.tabId && window.selectedTabId !== action.tabId) return;
-        window.webContents.send('browserAction.onUpdated', action);
+        extensions.browserActionPrivate.sendEventToAll('onUpdated', action);
       });
     });
 
-    const browserActionHandler = HandlerFactory.create('browserAction', this);
+    const browserActionHandler = HandlerFactory.create(
+      'browserActionPrivate',
+      this,
+    );
 
     browserActionHandler(
-      'showPopup',
-      (session, sender, extensionId, options) => {
-        const { left, top, inspect } = options;
+      'openPopup',
+      ({ session, sender }: ISenderDetails, { extensionId, details }: any) => {
+        const { left, top, inspect } = details;
 
-        const action = extensions.browserAction.getForTab(
+        const action = extensions.browserActionPrivate.getForTab(
           session,
           extensionId,
           this.fromWebContents(sender).selectedTabId,
@@ -50,7 +53,6 @@ export class WindowsService {
           inspect,
         );
       },
-      { sender: true },
     );
 
     // TODO: sandbox

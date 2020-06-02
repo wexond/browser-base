@@ -204,7 +204,7 @@ export class TabsStore {
 
       this.selectedTabId = tabId;
 
-      store.extensions.browserActions = await browser.browserAction.getAllInTab(
+      store.extensions.browserActions = await browser.browserActionPrivate.getAllInTab(
         tabId,
       );
 
@@ -243,7 +243,7 @@ export class TabsStore {
           }
 
           if (tabId === this.selectedTabId) {
-            store.navigationState = await browser.tabs.getNavigationState(
+            store.navigationState = await browser.tabsPrivate.getNavigationState(
               tabId,
             );
           }

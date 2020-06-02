@@ -1,0 +1,206 @@
+// Copyright 2014 The Chromium Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+// Note: Many of these functions and events are implemented by hand and should
+// not elicit any code generation from the schema compiler. These items are
+// marked "nocompile."
+[
+  {
+    "namespace": "runtime",
+    "description": "Use the <code>chrome.runtime</code> API to retrieve the background page, return details about the manifest, and listen for and respond to events in the app or extension lifecycle. You can also use this API to convert the relative path of URLs to fully-qualified URLs.",
+    "types": [
+      {
+        "id": "RequestUpdateCheckStatus",
+        "type": "string",
+        "enum": ["throttled", "no_update", "update_available"],
+        "description": "Result of the update check."
+      },
+      {
+        "id": "OnInstalledReason",
+        "type": "string",
+        "enum": ["install", "update", "chrome_update", "shared_module_update"],
+        "description": "The reason that this event is being dispatched."
+      },
+      {
+        "id": "OnRestartRequiredReason",
+        "type": "string",
+        "description": "The reason that the event is being dispatched. 'app_update' is used when the restart is needed because the application is updated to a newer version. 'os_update' is used when the restart is needed because the browser/OS is updated to a newer version. 'periodic' is used when the system runs for more than the permitted uptime set in the enterprise policy.",
+        "enum": ["app_update", "os_update", "periodic"]
+      }
+    ],
+    "functions": [
+      {
+        "name": "openOptionsPage",
+        "type": "function",
+        "description": "<p>Open your Extension's options page, if possible.</p><p>The precise behavior may depend on your manifest's <code><a href=\"optionsV2\">options_ui</a></code> or <code><a href=\"options\">options_page</a></code> key, or what Chrome happens to support at the time. For example, the page may be opened in a new tab, within chrome://extensions, within an App, or it may just focus an open options page. It will never cause the caller page to reload.</p><p>If your Extension does not declare an options page, or Chrome failed to create one for some other reason, the callback will set $(ref:lastError).</p>",
+        "parameters": [
+          {
+            "type": "function",
+            "name": "callback",
+            "parameters": [],
+            "optional": true
+          }
+        ]
+      },
+      {
+        "name": "setUninstallURL",
+        "type": "function",
+        "description": "Sets the URL to be visited upon uninstallation. This may be used to clean up server-side data, do analytics, and implement surveys. Maximum 255 characters.",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "url",
+            "maxLength": 255,
+            "description": "URL to be opened after the extension is uninstalled. This URL must have an http: or https: scheme. Set an empty string to not open a new tab upon uninstallation."
+          },
+          {
+            "type": "function",
+            "name": "callback",
+            "optional": true,
+            "description": "Called when the uninstall URL is set. If the given URL is invalid, $(ref:runtime.lastError) will be set.",
+            "parameters": []
+          }
+        ]
+      },
+      {
+        "name": "requestUpdateCheck",
+        "type": "function",
+        "description": "<p>Requests an immediate update check be done for this app/extension.</p> <p><b>Important</b>: Most extensions/apps should <b>not</b> use this method, since chrome already does automatic checks every few hours, and you can listen for the $(ref:runtime.onUpdateAvailable) event without needing to call requestUpdateCheck.</p><p>This method is only appropriate to call in very limited circumstances, such as if your extension/app talks to a backend service, and the backend service has determined that the client extension/app version is very far out of date and you'd like to prompt a user to update. Most other uses of requestUpdateCheck, such as calling it unconditionally based on a repeating timer, probably only serve to waste client, network, and server resources.</p>",
+        "parameters": [
+          {
+            "type": "function",
+            "name": "callback",
+            "parameters": [
+              {
+                "name": "status",
+                "$ref": "RequestUpdateCheckStatus",
+                "description": "Result of the update check."
+              },
+              {
+                "name": "details",
+                "type": "object",
+                "optional": true,
+                "properties": {
+                  "version": {
+                    "type": "string",
+                    "description": "The version of the available update."
+                  }
+                },
+                "description": "If an update is available, this contains more information about the available update."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "restart",
+        "description": "Restart the ChromeOS device when the app runs in kiosk mode. Otherwise, it's no-op.",
+        "type": "function",
+        "parameters": []
+      },
+      {
+        "name": "restartAfterDelay",
+        "description": "Restart the ChromeOS device when the app runs in kiosk mode after the given seconds. If called again before the time ends, the reboot will be delayed. If called with a value of -1, the reboot will be cancelled. It's a no-op in non-kiosk mode. It's only allowed to be called repeatedly by the first extension to invoke this API.",
+        "type": "function",
+        "parameters": [
+          {
+            "type": "integer",
+            "name": "seconds",
+            "description": "Time to wait in seconds before rebooting the device, or -1 to cancel a scheduled reboot."
+          },
+          {
+            "type": "function",
+            "name": "callback",
+            "description": "A callback to be invoked when a restart request was successfully rescheduled.",
+            "optional": true
+          }
+        ]
+      }
+    ],
+    "events": [
+      {
+        "name": "onStartup",
+        "type": "function",
+        "description": "Fired when a profile that has this extension installed first starts up. This event is not fired when an incognito profile is started, even if this extension is operating in 'split' incognito mode."
+      },
+      {
+        "name": "onInstalled",
+        "type": "function",
+        "description": "Fired when the extension is first installed, when the extension is updated to a new version, and when Chrome is updated to a new version.",
+        "parameters": [
+          {
+            "type": "object",
+            "name": "details",
+            "properties": {
+              "reason": {
+                "$ref": "OnInstalledReason",
+                "description": "The reason that this event is being dispatched."
+              },
+              "previousVersion": {
+                "type": "string",
+                "optional": true,
+                "description": "Indicates the previous version of the extension, which has just been updated. This is present only if 'reason' is 'update'."
+              },
+              "id": {
+                "type": "string",
+                "optional": true,
+                "description": "Indicates the ID of the imported shared module extension which updated. This is present only if 'reason' is 'shared_module_update'."
+              }
+            }
+          }
+        ]
+      },
+      {
+        "name": "onSuspend",
+        "type": "function",
+        "description": "Sent to the event page just before it is unloaded. This gives the extension opportunity to do some clean up. Note that since the page is unloading, any asynchronous operations started while handling this event are not guaranteed to complete. If more activity for the event page occurs before it gets unloaded the onSuspendCanceled event will be sent and the page won't be unloaded. "
+      },
+      {
+        "name": "onSuspendCanceled",
+        "type": "function",
+        "description": "Sent after onSuspend to indicate that the app won't be unloaded after all."
+      },
+      {
+        "name": "onUpdateAvailable",
+        "type": "function",
+        "description": "Fired when an update is available, but isn't installed immediately because the app is currently running. If you do nothing, the update will be installed the next time the background page gets unloaded, if you want it to be installed sooner you can explicitly call chrome.runtime.reload(). If your extension is using a persistent background page, the background page of course never gets unloaded, so unless you call chrome.runtime.reload() manually in response to this event the update will not get installed until the next time chrome itself restarts. If no handlers are listening for this event, and your extension has a persistent background page, it behaves as if chrome.runtime.reload() is called in response to this event.",
+        "parameters": [
+          {
+            "type": "object",
+            "name": "details",
+            "properties": {
+              "version": {
+                "type": "string",
+                "description": "The version number of the available update."
+              }
+            },
+            "additionalProperties": { "type": "any" },
+            "description": "The manifest details of the available update."
+          }
+        ]
+      },
+      {
+        // TODO(xiyuan): onBrowserUpdateAvailable is deprecated in favor of
+        // onRestartRequired. We should remove it when we are sure it is unused.
+        "name": "onBrowserUpdateAvailable",
+        "type": "function",
+        "description": "Fired when a Chrome update is available, but isn't installed immediately because a browser restart is required.",
+        "deprecated": "Please use $(ref:runtime.onRestartRequired).",
+        "parameters": []
+      },
+      {
+        "name": "onRestartRequired",
+        "type": "function",
+        "description": "Fired when an app or the device that it runs on needs to be restarted. The app should close all its windows at its earliest convenient time to let the restart to happen. If the app does nothing, a restart will be enforced after a 24-hour grace period has passed. Currently, this event is only fired for Chrome OS kiosk apps.",
+        "parameters": [
+          {
+            "$ref": "OnRestartRequiredReason",
+            "name": "reason",
+            "description": "The reason that the event is being dispatched."
+          }
+        ]
+      }
+    ]
+  }
+]

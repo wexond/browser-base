@@ -7158,6 +7158,11 @@ wbuf@^1.1.0, wbuf@^1.7.3:
   dependencies:
     minimalistic-assert "^1.0.0"
 
+webidl2@^23.12.1:
+  version "23.12.1"
+  resolved "https://registry.yarnpkg.com/webidl2/-/webidl2-23.12.1.tgz#02efddec292db1950a0d98c96f89d3ede3b6ce9b"
+  integrity sha512-CbBwugDZl4vO2hH6oY5ZxCZM+6OB3+k8tXzkKTk1y1w4eLExHKMXS/mtIMFBj2vA7JanD8toNcDCp4EH7J3gLg==
+
 webpack-bundle-analyzer@^3.8.0:
   version "3.8.0"
   resolved "https://registry.yarnpkg.com/webpack-bundle-analyzer/-/webpack-bundle-analyzer-3.8.0.tgz#ce6b3f908daf069fd1f7266f692cbb3bded9ba16"

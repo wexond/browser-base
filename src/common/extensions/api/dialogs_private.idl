@@ -1,0 +1,5 @@
+namespace dialogsPrivate {};
+
+interface Events {
+  static void onVisibilityStateChange(DOMString name, boolean visible);
+};

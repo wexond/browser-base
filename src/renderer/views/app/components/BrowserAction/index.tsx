@@ -17,7 +17,11 @@ const showPopup = (
   inspect: boolean,
 ) => {
   store.extensions.currentlyToggledPopup = data.extensionId;
-  browser.browserAction.showPopup(data.extensionId, { left, top, inspect });
+  browser.browserActionPrivate.openPopup(data.extensionId, {
+    left,
+    top,
+    inspect,
+  });
 };
 
 let canOpenPopup = true;

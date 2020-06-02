@@ -300,7 +300,6 @@ export class Store {
 
     browser.dialogsPrivate.onVisibilityStateChange.addListener(
       (name, visible) => {
-        console.log(name, visible);
         this.dialogsVisibility[name] = visible;
       },
     );

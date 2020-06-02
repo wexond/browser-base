@@ -1,6 +1,5 @@
 import { webContents, ipcMain } from 'electron';
-import { sessionFromIpcEvent } from '../session';
-import { webContentsInvoke } from '../web-contents';
+import { EventHandler, IEventDetails } from '../event-handler';
 import extendElectronWebRequest from '../extend-web-request';
 import { Extensions } from '..';
 
@@ -11,6 +10,16 @@ const clearCacheOnNavigation = () => {
     wc.send('clear-cache', onNavigation);
   });
 };
+
+function toArrayBuffer(buffer: Buffer) {
+  if (!buffer) return undefined;
+  const ab = new ArrayBuffer(buffer.length);
+  const view = new Uint8Array(ab);
+  for (let i = 0; i < buffer.length; ++i) {
+    view[i] = buffer[i];
+  }
+  return ab;
+}
 
 const electronToChromeRequestType = (type: string): any => {
   if (type === 'mainFrame') return 'main_frame';
@@ -24,16 +33,6 @@ const chromeToElectronHeaders = (headers: any) => {
   headers.forEach((header: any) => (newHeaders[header.name] = [header.value]));
   return newHeaders;
 };
-
-function toArrayBuffer(buffer: Buffer) {
-  if (!buffer) return undefined;
-  const ab = new ArrayBuffer(buffer.length);
-  const view = new Uint8Array(ab);
-  for (let i = 0; i < buffer.length; ++i) {
-    view[i] = buffer[i];
-  }
-  return ab;
-}
 
 const electronToChromeDetails = (details: any) => {
   const newDetails = {
@@ -66,53 +65,56 @@ const electronToChromeDetails = (details: any) => {
   return newDetails;
 };
 
-export class WebRequestAPI {
+export class WebRequestAPI extends EventHandler {
   constructor() {
+    super('webRequest', [
+      'onBeforeRequest',
+      'onBeforeSendHeaders',
+      'onSendHeaders',
+      'onHeadersReceived',
+      'onAuthRequired',
+      'onBeforeRedirect',
+      'onResponseStarted',
+      'onCompleted',
+      'onErrorOccurred',
+    ]);
     // TODO(sentialx): send clear-cache from renderer
     ipcMain.on('clear-cache', () => {
       clearCacheOnNavigation();
     });
 
-    ipcMain.on('webRequest.addListener', this.addListener);
+    this.on('addListener', this.addListenerHandler);
   }
 
-  private addListener = (
-    e: Electron.IpcMainEvent,
-    listenerId: string,
-    name: string,
-    filter: any,
-  ) => {
-    const session = sessionFromIpcEvent(e);
-    const { webRequest }: any = extendElectronWebRequest(session);
+  private addListenerHandler = (eventDetails: IEventDetails, filter: any) => {
+    const { webRequest }: any = extendElectronWebRequest(eventDetails.session);
 
     // Ignore unknown webRequest event names.
-    if (!Object.getOwnPropertyNames(webRequest.webRequest).includes(name))
+    if (
+      !Object.getOwnPropertyNames(webRequest.webRequest).includes(
+        eventDetails.name,
+      )
+    )
       return;
 
     clearCacheOnNavigation();
 
+    if (filter === undefined) filter = {};
+
     const { id }: any = webRequest.addListener(
-      name,
+      eventDetails.name,
       filter,
-      async (
-        details: Electron.OnBeforeRequestListenerDetails,
-        callback: any,
-      ) => {
-        if (!details.webContentsId || details.webContentsId < 1)
-          return callback(details);
-        const wc = webContents.fromId(details.webContentsId);
+      async (details: any, callback: any) => {
         if (
-          wc &&
           !Extensions.instance.tabs.getTabById(
-            wc.session,
+            eventDetails.session,
             details.webContentsId,
           )
         )
           return callback(details);
 
-        const returnedDetails = await webContentsInvoke(
-          e.sender,
-          listenerId,
+        const returnedDetails = await this.invokeEvent(
+          eventDetails,
           electronToChromeDetails(details),
         );
 
@@ -128,8 +130,9 @@ export class WebRequestAPI {
       },
     );
 
-    ipcMain.on(`webRequest.removeListener-${listenerId}`, () => {
-      webRequest.removeListener(name, id);
-    });
+    // TODO: removeListener
+    // ipcMain.on(`webRequest.removeListener-${listenerId}`, () => {
+    //   webRequest.removeListener(name, id);
+    // });
   };
 }
