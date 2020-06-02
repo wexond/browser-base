@@ -21,7 +21,7 @@ const onForwardClick = () => {
 
 const onRefreshClick = () => {
   if (store.tabs.selectedTab && store.tabs.selectedTab.loading) {
-    browser.tabs.stop(store.tabs.selectedTabId);
+    browser.tabsPrivate.stop(store.tabs.selectedTabId);
   } else {
     browser.tabs.reload(store.tabs.selectedTabId);
   }

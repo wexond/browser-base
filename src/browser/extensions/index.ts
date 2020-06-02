@@ -8,11 +8,13 @@ import { WebRequestAPI } from './api/web-request';
 import { BrowserActionAPI } from './api/browser-action';
 import { DialogsPrivateAPI } from './api/dialogs-private';
 import { BrowserActionPrivateAPI } from './api/browser-action-private';
+import { TabsPrivateAPI } from './api/tabs-private';
 
 export class Extensions {
   public static instance = new Extensions();
 
   public tabs = new TabsAPI();
+  public tabsPrivate = new TabsPrivateAPI();
   public cookies = new CookiesAPI();
   public windows = new WindowsAPI();
   public webRequest = new WebRequestAPI();

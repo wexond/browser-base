@@ -410,7 +410,7 @@ export class TabsAPI extends EventHandler implements ITabsEvents {
     const tab = this.getTabById(session, tabId);
     if (!tab) return;
 
-    if (reloadProperties.bypassCache) {
+    if (reloadProperties?.bypassCache) {
       tab.reloadIgnoringCache();
     } else {
       tab.reload();

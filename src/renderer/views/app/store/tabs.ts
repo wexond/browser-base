@@ -243,7 +243,7 @@ export class TabsStore {
           }
 
           if (tabId === this.selectedTabId) {
-            store.navigationState = await browser.tabs.getNavigationState(
+            store.navigationState = await browser.tabsPrivate.getNavigationState(
               tabId,
             );
           }
