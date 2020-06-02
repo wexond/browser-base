@@ -7,6 +7,7 @@ import { WindowsAPI } from './api/windows';
 import { WebRequestAPI } from './api/web-request';
 import { BrowserActionAPI } from './api/browser-action';
 import { DialogsPrivateAPI } from './api/dialogs-private';
+import { BrowserActionPrivateAPI } from './api/browser-action-private';
 
 export class Extensions {
   public static instance = new Extensions();
@@ -16,6 +17,7 @@ export class Extensions {
   public windows = new WindowsAPI();
   public webRequest = new WebRequestAPI();
   public browserAction = new BrowserActionAPI();
+  public browserActionPrivate = new BrowserActionPrivateAPI();
   public dialogsPrivate = new DialogsPrivateAPI();
 
   public backgroundPages = new BackgroundPages();

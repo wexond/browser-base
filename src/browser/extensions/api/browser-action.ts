@@ -92,7 +92,7 @@ export declare interface BrowserActionAPI {
 }
 
 export class BrowserActionAPI extends EventEmitter {
-  private sessionActionMap: Map<
+  public sessionActionMap: Map<
     Electron.Session,
     Map<string, IBrowserAction>
   > = new Map();
@@ -160,9 +160,6 @@ export class BrowserActionAPI extends EventEmitter {
         setter(prop),
       ),
     );
-
-    handler('getAll', this.getAllInSession);
-    handler('getAllInTab', this.getAllInTab);
     // handler('onClicked', this.onClicked);
   }
 
@@ -210,35 +207,6 @@ export class BrowserActionAPI extends EventEmitter {
     this.emit('loaded', session, action);
 
     return action;
-  }
-
-  public getAllInSession({ session }: ISenderDetails): IBrowserAction[] {
-    const sessionActions = this.sessionActionMap.get(session);
-    if (!sessionActions) return [];
-    return Array.from(sessionActions.values());
-  }
-
-  public getAllInTab(
-    { session }: ISenderDetails,
-    { tabId }: { tabId: number },
-  ): IBrowserAction[] {
-    const tab = Extensions.instance.tabs.getTabById(session, tabId);
-    if (!tab) return [];
-
-    const tabSession = tab.session;
-    const actions = this.getAllInSession({ session: tabSession });
-
-    return actions.map((action) => getActionForTab(action, tabId));
-  }
-
-  public getForTab(
-    session: Electron.Session,
-    extensionId: string,
-    tabId: number,
-  ) {
-    const sessionActions = this.sessionActionMap.get(session);
-    if (!sessionActions) return null;
-    return getActionForTab(sessionActions.get(extensionId), tabId);
   }
 
   // TODO(sentialx): Tab in callback, fire if the browser action has no popup.

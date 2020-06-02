@@ -47,6 +47,8 @@ const e = (scope, name) => {
 
 const getJsType = (chromeType) => {
   if (chromeType === 'integer') return 'number';
+  if (chromeType === 'double') return 'number';
+  if (chromeType === 'long') return 'number';
   return chromeType;
 };
 
@@ -60,7 +62,7 @@ const i = (scope, name, parameters) => async (...args) => {
   const data = {};
 
   for (const param of expectedParams) {
-    if (param.ref) {
+    if (typeof param.ref !== undefined || typeof param.ref !== null) {
       let ref;
 
       if (typeof param.ref === 'number') {

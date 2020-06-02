@@ -21,7 +21,9 @@ const parseMember = (member) => {
     : member.idlType.idlType;
   const type = idlToJsonMap[name];
 
-  const prop = {};
+  const prop = {
+    name: member.name,
+  };
 
   if (member.required === false || member.optional === true) {
     prop.optional = true;

@@ -316,5 +316,8 @@
   },
   "tabsPrivate": {
     "contexts": ["webui"]
+  },
+  "browserActionPrivate": {
+    "contexts": ["webui"]
   }
 }

@@ -130,6 +130,28 @@ export const getAPI = (context: string): any => {
     ...generated.browserAction,
   };
 
+  const runtime = {
+    ...chrome.runtime,
+    ...generated.runtime,
+  };
+
+  const management = {
+    ...chrome.management,
+    ...generated.management,
+  };
+
+  const storage = {
+    ...chrome.storage,
+    ...generated.storage,
+  };
+
+  if (chrome.storage) {
+    storage.sync = chrome.storage.local;
+    storage.managed = {
+      get: (a, cb) => cb && cb({}),
+    };
+  }
+
   const api = {
     ...chrome,
     ...generated,
@@ -143,16 +165,11 @@ export const getAPI = (context: string): any => {
     webNavigation,
     webRequest,
     privacy,
+    runtime,
+    management,
     browserAction,
-    storage: {},
+    storage,
   };
-
-  if (chrome.storage) {
-    chrome.storage.sync = chrome.storage.local;
-    chrome.storage.managed = {
-      get: (a, cb) => cb && cb({}),
-    };
-  }
 
   return api;
 };
