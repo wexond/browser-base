@@ -52,7 +52,7 @@ export class Tab {
 
     this.browserView = new BrowserView({
       webPreferences: {
-        preload: `${app.getAppPath()}/build/view-preload.bundle.js`,
+        //preload: `${app.getAppPath()}/build/view-preload.bundle.js`,
         nodeIntegration: false,
         contextIsolation: true,
         sandbox: true,
