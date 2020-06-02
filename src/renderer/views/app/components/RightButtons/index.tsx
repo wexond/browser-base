@@ -75,8 +75,8 @@ export const RightButtons = observer(() => {
 
   return (
     <Buttons>
-      <BrowserActions />
-      {store.extensions.browserActions.length > 0 && <Separator />}
+      {/* TODO: idl <BrowserActions /> */}
+      {/* {store.extensions.browserActions.length > 0 && <Separator />} */}
       {store.isCompact && (
         <>
           <SiteButtons />

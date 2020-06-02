@@ -53,16 +53,17 @@ export class ExtensionsStore {
   public currentlyToggledPopup = '';
 
   constructor() {
-    browser.browserAction.onUpdated.addListener((newAction: IBrowserAction) => {
-      this.browserActions = this.browserActions.map((x) => {
-        if (
-          x.extensionId === newAction.extensionId &&
-          ((x.tabId && x.tabId === store.tabs.selectedTabId) || !x.tabId)
-        ) {
-          return newAction;
-        }
-        return x;
-      });
-    });
+    // TODO: idl
+    // browser.browserAction.onUpdated.addListener((newAction: IBrowserAction) => {
+    //   this.browserActions = this.browserActions.map((x) => {
+    //     if (
+    //       x.extensionId === newAction.extensionId &&
+    //       ((x.tabId && x.tabId === store.tabs.selectedTabId) || !x.tabId)
+    //     ) {
+    //       return newAction;
+    //     }
+    //     return x;
+    //   });
+    // });
   }
 }

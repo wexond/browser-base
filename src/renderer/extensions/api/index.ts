@@ -1,12 +1,9 @@
-import { ipcInvoker } from '../ipc-invoker';
+import { ipcRenderer } from 'electron';
 import { imageData2base64 } from '../image-data';
-import { IpcEvent } from '../ipc-event';
-import {
-  TAB_ID_NONE,
-  WINDOW_ID_NONE,
-  WINDOW_ID_CURRENT,
-} from '~/common/extensions/constants';
-import { WebRequestEvent } from '../web-request-event';
+
+const getGeneratedAPI = require('./_generated_api.js');
+
+declare const chrome: any;
 
 class PolicyConfig {
   get() {}
@@ -14,96 +11,109 @@ class PolicyConfig {
   clear() {}
 }
 
-export const getChromeAPI = () => {
-  const manifest: chrome.runtime.Manifest = chrome?.runtime
-    ? chrome.runtime.getManifest()
-    : ({} as any);
+export class StubEvent {
+  addListener() {}
+  removeListener() {}
+}
+
+export const getAPI = (context: string): any => {
+  const manifest = chrome?.runtime ? chrome.runtime.getManifest() : {};
+
+  const generated = getGeneratedAPI(
+    context,
+    async (scope: string, name: string, params: any) => {
+      if (params.details && params.details.imageData) {
+        if (params.details.imageData instanceof ImageData) {
+          params.details.imageData = imageData2base64(params.details.imageData);
+        } else {
+          params.details.imageData = Object.entries(
+            params.details.imageData,
+          ).reduce((obj: any, pair: any) => {
+            obj[pair[0]] = imageData2base64(pair[1]);
+            return obj;
+          }, {});
+        }
+      }
+
+      return await ipcRenderer.invoke(`${scope}.${name}`, {
+        params: { ...params, callback: undefined },
+        info: {
+          scriptPath: window.location.pathname,
+          extensionId: chrome?.runtime?.id,
+        },
+      });
+    },
+  );
 
   const tabs = {
     ...chrome.tabs,
-    TAB_ID_NONE,
-    getCurrent: ipcInvoker('tabs.getCurrent'),
-    create: ipcInvoker('tabs.create'),
-    get: ipcInvoker('tabs.get'),
-    remove: ipcInvoker('tabs.remove'),
-    getAllInWindow: ipcInvoker('tabs.getAllInWindow'),
-    getSelected: ipcInvoker('tabs.getSelected'),
-    insertCSS: ipcInvoker('tabs.insertCSS'),
-    query: ipcInvoker('tabs.query'),
-    reload: ipcInvoker('tabs.reload'),
-    update: ipcInvoker('tabs.update'),
-    goBack: ipcInvoker('tabs.goBack'),
-    goForward: ipcInvoker('tabs.goForward'),
-    onCreated: new IpcEvent('tabs.onCreated'),
-    onRemoved: new IpcEvent('tabs.onRemoved'),
-    onUpdated: new IpcEvent('tabs.onUpdated'),
-    onActivated: new IpcEvent('tabs.onActivated'),
+    ...generated.tabs,
   };
 
   const cookies = {
     ...chrome.cookies,
-    get: ipcInvoker('cookies.get'),
-    getAll: ipcInvoker('cookies.getAll'),
-    remove: ipcInvoker('cookies.remove'),
-    set: ipcInvoker('cookies.set'),
-    onChanged: new IpcEvent('cookies.onChanged'),
+    ...generated.cookies,
   };
 
   const windows = {
     ...chrome.windows,
-    WINDOW_ID_NONE,
-    WINDOW_ID_CURRENT,
-    get: ipcInvoker('windows.get'),
-    getAll: ipcInvoker('windows.getAll'),
-    getCurrent: ipcInvoker('windows.getCurrent'),
-    getLastFocused: ipcInvoker('windows.getLastFocused'),
-    create: ipcInvoker('windows.create'),
-    update: ipcInvoker('windows.update'),
-    remove: ipcInvoker('windows.remove'),
-    onCreated: new IpcEvent('windows.onCreated'),
-    onRemoved: new IpcEvent('windows.onRemoved'),
-    onFocusChanged: new IpcEvent('windows.onFocusChanged'),
+    ...generated.windows,
   };
 
   const extension = {
     ...chrome.extension,
+    ...generated.extension,
     getViews: (): any[] => [],
     isAllowedFileSchemeAccess: (cb: any) => cb && cb(false),
     isAllowedIncognitoAccess: (cb: any) => cb && cb(false),
   };
 
-  const contextMenus = {
-    ...chrome.contextMenus,
-    onClicked: new IpcEvent('contextMenus.onClicked'),
-    create: ipcInvoker('contextMenus.create', { noop: true }),
-    removeAll: ipcInvoker('contextMenus.removeAll', { noop: true }),
-    remove: ipcInvoker('contextMenus.remove', { noop: true }),
-  };
-
   const notifications = {
     ...chrome.notifications,
+    ...generated.notifications,
     create() {},
     update() {},
     clear() {},
     getAll() {},
     getPermissionLevel() {},
-    onClosed: new IpcEvent('notifications.onClosed'),
-    onClicked: new IpcEvent('notifications.onClicked'),
-    onButtonClicked: new IpcEvent('notifications.onButtonClicked'),
-    onPermissionLevelChanged: new IpcEvent(
-      'notifications.onPermissionLevelChanged',
-    ),
-    onShowSettings: new IpcEvent('notifications.onShowSettings'),
+    onClosed: new StubEvent(),
+    onClicked: new StubEvent(),
+    onButtonClicked: new StubEvent(),
+    onPermissionLevelChanged: new StubEvent(),
+    onShowSettings: new StubEvent(),
+  };
+
+  const webRequest = {
+    ...chrome.webRequest,
+    ...generated.webRequest,
+  };
+
+  const webNavigation = {
+    ...chrome.webNavigation,
+    ...generated.webNavigation,
   };
 
   const permissions = {
     ...chrome.permissions,
-    onAdded: new IpcEvent('permissions.onAdded'),
-    getAll: () => {},
+    ...generated.permissions,
+    getAll: (cb: any) => cb && cb([]),
+    onAdded: new StubEvent(),
+    contains: (perm: any, cb: any) => cb && cb(true),
+    request: (perm: any, cb: any) => cb && cb(true),
+  };
+
+  const contextMenus = {
+    ...chrome.contextMenus,
+    ...generated.contextMenus,
+    create: () => {},
+    removeAll: () => {},
+    remove: () => {},
+    onClicked: new StubEvent(),
   };
 
   const privacy = {
     ...chrome.privacy,
+    ...generated.privacy,
     network: {
       networkPredictionEnabled: new PolicyConfig(),
       webRTCIPHandlingPolicy: new PolicyConfig(),
@@ -117,81 +127,7 @@ export const getChromeAPI = () => {
 
   const browserAction = {
     ...chrome.browserAction,
-    setBadgeBackgroundColor: ipcInvoker(
-      'browserAction.setBadgeBackgroundColor',
-      {
-        includeId: true,
-      },
-    ),
-    setBadgeText: ipcInvoker('browserAction.setBadgeText', {
-      includeId: true,
-    }),
-    setIcon: ipcInvoker('browserAction.setIcon', {
-      includeId: true,
-      serialize: (details: any) => {
-        if (details.imageData) {
-          if (details.imageData instanceof ImageData) {
-            details.imageData = imageData2base64(details.imageData);
-          } else {
-            details.imageData = Object.entries(details.imageData).reduce(
-              (obj: any, pair: any) => {
-                obj[pair[0]] = imageData2base64(pair[1]);
-                return obj;
-              },
-              {},
-            );
-          }
-        }
-
-        return [details];
-      },
-    }),
-    setTitle: ipcInvoker('browserAction.setTitle', {
-      includeId: true,
-    }),
-    setPopup: ipcInvoker('browserAction.setPopup', {
-      includeId: true,
-    }),
-    onClicked: new IpcEvent('browserAction.onClicked'),
-  };
-
-  const webRequest = {
-    ...chrome.webRequest,
-    ResourceType: {
-      CSP_REPORT: 'csp_report',
-      FONT: 'font',
-      IMAGE: 'image',
-      MAIN_FRAME: 'main_frame',
-      MEDIA: 'media',
-      OBJECT: 'object',
-      OTHER: 'other',
-      PING: 'ping',
-      SCRIPT: 'script',
-      STYLESHEET: 'stylesheet',
-      SUB_FRAME: 'sub_frame',
-      WEBSOCKET: 'websocket',
-      XMLHTTPREQUEST: 'xmlhttprequest',
-    },
-
-    onBeforeRequest: new WebRequestEvent('onBeforeRequest'),
-    onBeforeSendHeaders: new WebRequestEvent('onBeforeSendHeaders'),
-    onHeadersReceived: new WebRequestEvent('onHeadersReceived'),
-    onSendHeaders: new WebRequestEvent('onSendHeaders'),
-    onResponseStarted: new WebRequestEvent('onResponseStarted'),
-    onBeforeRedirect: new WebRequestEvent('onBeforeRedirect'),
-    onCompleted: new WebRequestEvent('onCompleted'),
-    onErrorOccurred: new WebRequestEvent('onErrorOccurred'),
-    onAuthRequired: new WebRequestEvent('onAuthRequired'),
-  };
-
-  const webNavigation = {
-    ...chrome.webNavigation,
-    onBeforeNavigate: new IpcEvent('webNavigation.onBeforeNavigate'),
-    onCompleted: new IpcEvent('webNavigation.onCompleted'),
-    onCreatedNavigationTarget: new IpcEvent(
-      'webNavigation.onCreatedNavigationTarget',
-    ),
-    onCommitted: new IpcEvent('webNavigation.onCommitted'),
+    ...generated.browserAction,
   };
 
   const api = {
@@ -205,18 +141,14 @@ export const getChromeAPI = () => {
     webNavigation,
     webRequest,
     privacy,
-    browserAction: {},
+    browserAction,
     storage: {},
   };
 
-  if (manifest.browser_action) {
-    api.browserAction = browserAction;
-  }
-
   if (chrome.storage) {
-    api.storage = {
-      ...chrome.storage,
-      sync: chrome.storage.local,
+    chrome.storage.sync = chrome.storage.local;
+    chrome.storage.managed = {
+      get: (a, cb) => cb && cb({}),
     };
   }
 

@@ -204,9 +204,10 @@ export class TabsStore {
 
       this.selectedTabId = tabId;
 
-      store.extensions.browserActions = await browser.browserAction.getAllInTab(
-        tabId,
-      );
+      // TODO: idl
+      // store.extensions.browserActions = await browser.browserAction.getAllInTab(
+      //   tabId,
+      // );
 
       const focused = tab.addressbarFocused;
 
@@ -242,11 +243,12 @@ export class TabsStore {
             this.selectedTab.addressbarValue = null;
           }
 
-          if (tabId === this.selectedTabId) {
-            store.navigationState = await browser.tabs.getNavigationState(
-              tabId,
-            );
-          }
+          // TODO: idl
+          // if (tabId === this.selectedTabId) {
+          //   store.navigationState = await browser.tabs.getNavigationState(
+          //     tabId,
+          //   );
+          // }
         }
       },
     );

@@ -20,7 +20,7 @@ export class Store {
   public addTab = new AddTabStore();
   public tabs = new TabsStore();
   public tabGroups = new TabGroupsStore(this);
-  public extensions = new ExtensionsStore();
+  // public extensions = new ExtensionsStore();
 
   // @computed
   // public get theme() {
@@ -298,12 +298,12 @@ export class Store {
     // }
     // ipcRenderer.send('update-check');
 
-    browser.dialogsPrivate.onVisibilityStateChange.addListener(
-      (name, visible) => {
-        console.log(name, visible);
-        this.dialogsVisibility[name] = visible;
-      },
-    );
+    // TODO: idl
+    // browser.dialogsPrivate.onVisibilityStateChange.addListener(
+    //   (name, visible) => {
+    //     this.dialogsVisibility[name] = visible;
+    //   },
+    // );
   }
 }
 
