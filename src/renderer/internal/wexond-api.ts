@@ -12,6 +12,11 @@ export const getWexondAPI = () => {
       showPopup: ipcInvoker('browserAction.showPopup'),
       onUpdated: new IpcEvent('browserAction.onUpdated'),
     },
+    dialogsPrivate: {
+      onVisibilityStateChange: new IpcEvent(
+        'dialogsPrivate.onVisibilityStateChange',
+      ),
+    },
   };
 
   api.tabs = {

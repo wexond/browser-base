@@ -192,9 +192,6 @@ export class Store {
 
   public constructor() {
     this.init();
-    // ipcRenderer.on('update-navigation-state', (e, data) => {
-    //   this.navigationState = data;
-    // });
     // ipcRenderer.on('fullscreen', (e, fullscreen: boolean) => {
     //   this.isFullscreen = fullscreen;
     // });
@@ -233,9 +230,6 @@ export class Store {
     //   if (tab) {
     //     ipcRenderer.send(`find-show-${this.windowId}`, tab.id);
     //   }
-    // });
-    // ipcRenderer.on('dialog-visibility-change', (e, name, state) => {
-    //   this.dialogsVisibility[name] = state;
     // });
     // ipcRenderer.on(`addressbar-update-input`, (e, data) => {
     //   const tab = this.tabs.getTabById(data.id);
@@ -303,6 +297,13 @@ export class Store {
     //   ipcRenderer.send('load-extensions');
     // }
     // ipcRenderer.send('update-check');
+
+    browser.dialogsPrivate.onVisibilityStateChange.addListener(
+      (name, visible) => {
+        console.log(name, visible);
+        this.dialogsVisibility[name] = visible;
+      },
+    );
   }
 }
 
