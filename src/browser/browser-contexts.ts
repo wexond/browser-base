@@ -6,7 +6,7 @@ import { Application } from './application';
 import * as url from 'url';
 import { IDownloadItem, BrowserActionChangeType } from '~/interfaces';
 import { parseCrx } from '~/utils/crx';
-import { pathExists } from '~/utils/files';
+import { pathExists } from '~/common/utils/files';
 import { extractZip } from '~/utils/zip';
 import { requestPermission } from './dialogs/permissions';
 import { BrowserContext } from './browser-context';
