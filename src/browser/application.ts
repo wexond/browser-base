@@ -96,6 +96,10 @@ export class Application {
 
     const worker = new Worker('./build/storage.bundle.js');
 
+    worker.on('message', (e) => {
+      console.log('worker message', e);
+    });
+
     // this.storage.run();
     // this.dialogs.run();
 

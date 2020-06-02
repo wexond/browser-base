@@ -1,10 +1,7 @@
-import { MessageChannel } from 'worker_threads';
-
-export const messageChannel = new MessageChannel();
-export const port = messageChannel.port1;
+import { parentPort } from 'worker_threads';
 
 export default () => {
-  port.on('message', (message: string) => {
+  parentPort.on('message', (message: string) => {
     console.log(message);
   });
 };
