@@ -75,6 +75,7 @@ export class TabsAPI extends EventEmitter implements ITabsEvents {
     handler('reload', this.reload);
     handler('remove', this.remove);
     handler('insertCSS', this.insertCSS);
+    handler('stop', this.stop);
 
     handler('create', this.createHandler, { sender: true });
     handler('getCurrent', this.getCurrent, { sender: true });
@@ -340,6 +341,13 @@ export class TabsAPI extends EventEmitter implements ITabsEvents {
     } else {
       tab.reload();
     }
+  }
+
+  public stop(session: Electron.Session, tabId: number) {
+    const tab = this.getTabById(session, tabId);
+    if (!tab) return;
+
+    tab.stop();
   }
 
   public getTabById(session: Electron.Session, id: number) {

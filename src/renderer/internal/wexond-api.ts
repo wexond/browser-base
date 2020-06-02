@@ -14,5 +14,7 @@ export const getWexondAPI = () => {
     },
   };
 
+  api.tabs.stop = ipcInvoker('tabs.stop');
+
   return api;
 };

@@ -21,9 +21,9 @@ const onForwardClick = () => {
 
 const onRefreshClick = () => {
   if (store.tabs.selectedTab && store.tabs.selectedTab.loading) {
-    store.tabs.selectedTab.callViewMethod('stop');
+    browser.tabs.stop(store.tabs.selectedTabId);
   } else {
-    store.tabs.selectedTab.callViewMethod('reload');
+    browser.tabs.reload(store.tabs.selectedTabId);
   }
 };
 
