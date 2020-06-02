@@ -8,22 +8,23 @@ import {
   ICON_MAGNIFY_PLUS,
   ICON_MAGNIFY_MINUS,
 } from '~/renderer/constants/icons';
-import { ipcRenderer } from 'electron';
 import { parse } from 'url';
 import store from '../../store';
 import { ToolbarButton } from '../ToolbarButton';
 
+// TODO: sandbox
+
 const showAddBookmarkDialog = async () => {
   const star = document.getElementById('star');
   const { right, bottom } = star.getBoundingClientRect();
-  ipcRenderer.send(`show-add-bookmark-dialog-${store.windowId}`, right, bottom);
+  //ipcRenderer.send(`show-add-bookmark-dialog-${store.windowId}`, right, bottom);
 };
 
 const showZoomDialog = async () => {
   if (store.zoomFactor != 1) {
     const zoom = document.getElementById('zoom');
     const { right, bottom } = zoom.getBoundingClientRect();
-    ipcRenderer.send(`show-zoom-dialog-${store.windowId}`, right, bottom);
+    //ipcRenderer.send(`show-zoom-dialog-${store.windowId}`, right, bottom);
   }
 };
 
@@ -41,26 +42,26 @@ const onKeyClick = () => {
     (r) => r.url === hostname && r.fields.username,
   );
 
-  ipcRenderer.send(`credentials-show-${store.windowId}`, {
-    content: 'list',
-    list,
-  });
+  // ipcRenderer.send(`credentials-show-${store.windowId}`, {
+  //   content: 'list',
+  //   list,
+  // });
 };
 
-ipcRenderer.on('show-add-bookmark-dialog', () => {
-  showAddBookmarkDialog();
-});
+// ipcRenderer.on('show-add-bookmark-dialog', () => {
+//   showAddBookmarkDialog();
+// });
 
-ipcRenderer.on('show-zoom-dialog', () => {
-  showZoomDialog();
-});
+// ipcRenderer.on('show-zoom-dialog', () => {
+//   showZoomDialog();
+// });
 
-ipcRenderer.on('zoom-factor-updated', (e, zoomFactor, showDialog) => {
-  store.zoomFactor = zoomFactor;
-  if (!store.dialogsVisibility['zoom'] && showDialog) {
-    showZoomDialog();
-  }
-});
+// ipcRenderer.on('zoom-factor-updated', (e, zoomFactor, showDialog) => {
+//   store.zoomFactor = zoomFactor;
+//   if (!store.dialogsVisibility['zoom'] && showDialog) {
+//     showZoomDialog();
+//   }
+// });
 
 export const SiteButtons = observer(() => {
   const { selectedTab } = store.tabs;

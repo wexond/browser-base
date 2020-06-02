@@ -7,13 +7,10 @@ import {
   TAB_ANIMATION_DURATION,
   TABS_PADDING,
   TAB_MAX_WIDTH,
-} from '../constants';
+} from '../constants/tabs';
 
 import store from '.';
-import { ipcRenderer } from 'electron';
-import { defaultTabOptions } from '~/constants/tabs';
 import { TOOLBAR_HEIGHT } from '~/constants/design';
-import { TabEvent } from '~/interfaces/tabs';
 
 export class TabsStore {
   @observable
@@ -63,135 +60,184 @@ export class TabsStore {
     window.addEventListener('mousemove', this.onMouseMove);
     window.addEventListener('resize', this.onResize);
 
-    ipcRenderer.on('tabs-resize', () => {
-      this.updateTabsBounds(true);
+    // TODO: sandbox
+    // ipcRenderer.on('tabs-resize', () => {
+    //   this.updateTabsBounds(true);
+    // });
+
+    // ipcRenderer.on(
+    //   'create-tab',
+    //   (
+    //     e,
+    //     options: chrome.tabs.CreateProperties,
+    //     isNext: boolean,
+    //     id: number,
+    //   ) => {
+    //     if (isNext) {
+    //       const index = this.list.indexOf(this.selectedTab) + 1;
+    //       options.index = index;
+    //     }
+
+    //     this.createTab(options, id);
+    //   },
+    // );
+
+    // ipcRenderer.on('select-next-tab', () => {
+    //   const i = this.list.indexOf(this.selectedTab);
+    //   const nextTab = this.list[i + 1];
+
+    //   if (!nextTab) {
+    //     if (this.list[0]) {
+    //       this.list[0].select();
+    //     }
+    //   } else {
+    //     nextTab.select();
+    //   }
+    // });
+
+    // ipcRenderer.on('select-tab-index', (e, i) => {
+    //   this.list[i]?.select();
+    // });
+
+    // ipcRenderer.on('select-last-tab', () => {
+    //   this.list[this.list.length - 1]?.select();
+    // });
+
+    // ipcRenderer.on('select-previous-tab', () => {
+    //   const i = this.list.indexOf(this.selectedTab);
+    //   const prevTab = this.list[i - 1];
+
+    //   if (!prevTab) {
+    //     if (this.list[this.list.length - 1]) {
+    //       this.list[this.list.length - 1].select();
+    //     }
+    //   } else {
+    //     prevTab.select();
+    //   }
+    // });
+
+    // ipcRenderer.on('remove-tab', (e, id: number) => {
+    //   this.getTabById(id)?.close();
+    // });
+
+    // ipcRenderer.on('tab-event', (e, event: TabEvent, tabId, args) => {
+    //   const tab = this.getTabById(tabId);
+
+    //   if (tab) {
+    //     if (event === 'blocked-ad') {
+    //       tab.blockedAds++;
+    //     } else if (
+    //       event === 'url-updated' ||
+    //       event === 'title-updated' ||
+    //       event === 'favicon-updated'
+    //     ) {
+    //       if (event === 'url-updated') {
+    //         const [url] = args;
+    //         tab.url = url;
+
+    //         if (tab.id === this.selectedTabId && !store.addressbarFocused) {
+    //           this.selectedTab.addressbarValue = null;
+    //         }
+    //       } else if (event === 'title-updated') {
+    //         const [title] = args;
+    //         tab.title = title;
+    //       } else if (event === 'favicon-updated') {
+    //         const [favicon] = args;
+    //         tab.favicon = favicon;
+    //       }
+
+    //       tab.updateData();
+    //     } else if (event === 'load-commit') {
+    //       const [, , isMainFrame] = args;
+    //       if (isMainFrame) {
+    //         tab.blockedAds = 0;
+    //       }
+    //     } else if (event === 'did-navigate') {
+    //       tab.favicon = '';
+    //     } else if (event === 'media-playing') {
+    //       tab.isPlaying = true;
+    //     } else if (event === 'media-paused') {
+    //       tab.isPlaying = false;
+    //     } else if (
+    //       event === 'loading' ||
+    //       event === 'pinned' ||
+    //       event === 'credentials'
+    //     ) {
+    //       const [state] = args;
+    //       if (event === 'loading') {
+    //         tab.loading = state;
+    //       } else if (event === 'pinned') {
+    //         tab.isPinned = state;
+    //       } else if (event === 'credentials') {
+    //         tab.hasCredentials = state;
+    //       }
+    //     }
+    //   }
+    // });
+
+    // ipcRenderer.on('revert-closed-tab', () => {
+    //   this.revertClosed();
+    // });
+
+    // ipcRenderer.on('get-search-tabs', () => {
+    //   ipcRenderer.send(
+    //     'get-search-tabs',
+    //     this.list.map((tab) => ({
+    //       favicon: tab.favicon,
+    //       url: tab.url,
+    //       title: tab.title,
+    //       id: tab.id,
+    //     })),
+    //   );
+    // });
+
+    browser.tabs.onCreated.addListener((tab) => {
+      if (tab.windowId !== store.windowId) return;
+      this.createTab(tab);
     });
 
-    ipcRenderer.on(
-      'create-tab',
-      (
-        e,
-        options: chrome.tabs.CreateProperties,
-        isNext: boolean,
-        id: number,
-      ) => {
-        if (isNext) {
-          const index = this.list.indexOf(this.selectedTab) + 1;
-          options.index = index;
-        }
+    browser.tabs.onActivated.addListener(async ({ tabId, windowId }) => {
+      if (windowId !== store.windowId) return;
 
-        this.createTab(options, id);
+      const tab = this.getTabById(tabId);
+      if (!tab) return;
+
+      this.selectedTabId = tabId;
+
+      store.extensions.browserActions = await browser.browserAction.getAllInTab(
+        tabId,
+      );
+
+      const focused = tab.addressbarFocused;
+
+      // if (focused) {
+      //   store.inputRef.focus();
+      //   store.inputRef.setSelectionRange(
+      //     tab.addressbarSelectionRange[0],
+      //     tab.addressbarSelectionRange[1],
+      //   );
+      // }
+    });
+
+    browser.tabs.onRemoved.addListener((tabId) => {
+      const tab = this.getTabById(tabId);
+      if (!tab) return;
+
+      tab.close();
+    });
+
+    browser.tabs.onUpdated.addListener(
+      (tabId, { title, status, mutedInfo, audible, favIconUrl }) => {
+        const tab = this.getTabById(tabId);
+        if (!tab) return;
+
+        if (status) tab.loading = status === 'loading';
+        if (title) tab.title = title;
+        if (mutedInfo) tab.isMuted = mutedInfo.muted;
+        if (audible !== undefined) tab.isPlaying = audible;
+        if (favIconUrl) tab.favicon = favIconUrl;
       },
     );
-
-    ipcRenderer.on('select-next-tab', () => {
-      const i = this.list.indexOf(this.selectedTab);
-      const nextTab = this.list[i + 1];
-
-      if (!nextTab) {
-        if (this.list[0]) {
-          this.list[0].select();
-        }
-      } else {
-        nextTab.select();
-      }
-    });
-
-    ipcRenderer.on('select-tab-index', (e, i) => {
-      this.list[i]?.select();
-    });
-
-    ipcRenderer.on('select-last-tab', () => {
-      this.list[this.list.length - 1]?.select();
-    });
-
-    ipcRenderer.on('select-previous-tab', () => {
-      const i = this.list.indexOf(this.selectedTab);
-      const prevTab = this.list[i - 1];
-
-      if (!prevTab) {
-        if (this.list[this.list.length - 1]) {
-          this.list[this.list.length - 1].select();
-        }
-      } else {
-        prevTab.select();
-      }
-    });
-
-    ipcRenderer.on('remove-tab', (e, id: number) => {
-      this.getTabById(id)?.close();
-    });
-
-    ipcRenderer.on('tab-event', (e, event: TabEvent, tabId, args) => {
-      const tab = this.getTabById(tabId);
-
-      if (tab) {
-        if (event === 'blocked-ad') {
-          tab.blockedAds++;
-        } else if (
-          event === 'url-updated' ||
-          event === 'title-updated' ||
-          event === 'favicon-updated'
-        ) {
-          if (event === 'url-updated') {
-            const [url] = args;
-            tab.url = url;
-
-            if (tab.id === this.selectedTabId && !store.addressbarFocused) {
-              this.selectedTab.addressbarValue = null;
-            }
-          } else if (event === 'title-updated') {
-            const [title] = args;
-            tab.title = title;
-          } else if (event === 'favicon-updated') {
-            const [favicon] = args;
-            tab.favicon = favicon;
-          }
-
-          tab.updateData();
-        } else if (event === 'load-commit') {
-          const [, , isMainFrame] = args;
-          if (isMainFrame) {
-            tab.blockedAds = 0;
-          }
-        } else if (event === 'did-navigate') {
-          tab.favicon = '';
-        } else if (event === 'media-playing') {
-          tab.isPlaying = true;
-        } else if (event === 'media-paused') {
-          tab.isPlaying = false;
-        } else if (
-          event === 'loading' ||
-          event === 'pinned' ||
-          event === 'credentials'
-        ) {
-          const [state] = args;
-          if (event === 'loading') {
-            tab.loading = state;
-          } else if (event === 'pinned') {
-            tab.isPinned = state;
-          } else if (event === 'credentials') {
-            tab.hasCredentials = state;
-          }
-        }
-      }
-    });
-
-    ipcRenderer.on('revert-closed-tab', () => {
-      this.revertClosed();
-    });
-
-    ipcRenderer.on('get-search-tabs', () => {
-      ipcRenderer.send(
-        'get-search-tabs',
-        this.list.map((tab) => ({
-          favicon: tab.favicon,
-          url: tab.url,
-          title: tab.title,
-          id: tab.id,
-        })),
-      );
-    });
   }
 
   @action
@@ -214,18 +260,17 @@ export class TabsStore {
   }
 
   @action public createTab(
-    options: chrome.tabs.CreateProperties,
-    id: number,
+    details: browser.tabs.Tab,
     tabGroupId: number = undefined,
   ) {
     this.removedTabs = 0;
 
-    const tab = new ITab(options, id);
+    const tab = new ITab(details);
 
     tab.tabGroupId = tabGroupId;
 
-    if (options.index !== undefined) {
-      this.list.splice(options.index, 0, tab);
+    if (details.index !== undefined) {
+      this.list.splice(details.index, 0, tab);
     } else {
       this.list.push(tab);
     }
@@ -282,25 +327,7 @@ export class TabsStore {
   };
 
   @action
-  public async addTab(
-    options = defaultTabOptions,
-    tabGroupId: number = undefined,
-  ) {
-    ipcRenderer.send(`hide-window-${store.windowId}`);
-
-    const opts = { ...defaultTabOptions, ...options };
-
-    const id: number = await ipcRenderer.invoke(
-      `view-create-${store.windowId}`,
-      opts,
-    );
-    return this.createTab(opts, id, tabGroupId);
-  }
-
-  @action
   public async addTabs(options: chrome.tabs.CreateProperties[]) {
-    ipcRenderer.send(`hide-window-${store.windowId}`);
-
     for (let i = 0; i < options.length; i++) {
       if (i === options.length - 1) {
         options[i].active = true;
@@ -309,10 +336,11 @@ export class TabsStore {
       }
     }
 
-    const ids = await ipcRenderer.invoke(
-      `views-create-${store.windowId}`,
-      options,
-    );
+    // TODO: sandbox
+    // const ids = await ipcRenderer.invoke(
+    //   `views-create-${store.windowId}`,
+    //   options,
+    // );
     return this.createTabs(options, ids);
   }
 
@@ -323,7 +351,7 @@ export class TabsStore {
   @action
   public pinTab(tab: ITab) {
     tab.isPinned = true;
-    store.startupTabs.updateStartupTabItem(tab);
+    //store.startupTabs.updateStartupTabItem(tab);
     requestAnimationFrame(() => {
       tab.setLeft(0, false);
       this.getTabsToReplace(tab, 'left');
@@ -334,7 +362,7 @@ export class TabsStore {
   @action
   public unpinTab(tab: ITab) {
     tab.isPinned = false;
-    store.startupTabs.updateStartupTabItem(tab);
+    //store.startupTabs.updateStartupTabItem(tab);
     requestAnimationFrame(() => {
       tab.setLeft(
         Math.max(
@@ -351,13 +379,13 @@ export class TabsStore {
 
   @action
   public muteTab(tab: ITab) {
-    ipcRenderer.send(`mute-view-${store.windowId}`, tab.id);
+    //ipcRenderer.send(`mute-view-${store.windowId}`, tab.id);
     tab.isMuted = true;
   }
 
   @action
   public unmuteTab(tab: ITab) {
-    ipcRenderer.send(`unmute-view-${store.windowId}`, tab.id);
+    //ipcRenderer.send(`unmute-view-${store.windowId}`, tab.id);
     tab.isMuted = false;
   }
 

@@ -1,4 +1,3 @@
-import { ipcRenderer } from 'electron';
 import { observable, computed, action } from 'mobx';
 import * as React from 'react';
 
@@ -9,9 +8,7 @@ import {
   TAB_MIN_WIDTH,
   TAB_MAX_WIDTH,
   TAB_PINNED_WIDTH,
-} from '../constants';
-import { closeWindow } from '../utils/windows';
-import { callViewMethod } from '~/utils/view';
+} from '../constants/tabs';
 import { animateTab } from '../utils/tabs';
 import { NEWTAB_URL } from '~/constants/tabs';
 
@@ -89,10 +86,7 @@ export class ITab {
     return this.favicon !== '' || this.loading;
   }
 
-  public constructor(
-    { active, url, pinned }: chrome.tabs.CreateProperties,
-    id: number,
-  ) {
+  public constructor({ active, url, pinned, id }: browser.tabs.Tab) {
     this.url = url;
     this.id = id;
     this.isPinned = pinned;
@@ -100,65 +94,27 @@ export class ITab {
     if (NEWTAB_URL.startsWith(url)) {
       this.addressbarFocused = true;
     }
-
-    if (active) {
-      requestAnimationFrame(() => {
-        this.select();
-      });
-    }
-
-    if (process.env.ENABLE_EXTENSIONS) {
-      const { defaultBrowserActions } = store.extensions;
-
-      for (const item of defaultBrowserActions) {
-        store.extensions.addBrowserActionToTab(this.id, item);
-      }
-    }
   }
 
   @action
   public async updateData() {
-    if (!store.isIncognito) {
-      await store.startupTabs.addStartupTabItem({
-        id: this.id,
-        windowId: store.windowId,
-        url: this.url,
-        favicon: this.favicon,
-        pinned: !!this.isPinned,
-        title: this.title,
-        isUserDefined: false,
-        order: store.tabs.list.indexOf(this),
-      });
-    }
+    // TODO: sandbox
+    // if (!store.isIncognito) {
+    //   await store.startupTabs.addStartupTabItem({
+    //     id: this.id,
+    //     windowId: store.windowId,
+    //     url: this.url,
+    //     favicon: this.favicon,
+    //     pinned: !!this.isPinned,
+    //     title: this.title,
+    //     isUserDefined: false,
+    //     order: store.tabs.list.indexOf(this),
+    //   });
+    // }
   }
 
   public get tabGroup() {
     return store.tabGroups.getGroupById(this.tabGroupId);
-  }
-
-  @action
-  public async select() {
-    if (!this.isClosing) {
-      store.tabs.selectedTabId = this.id;
-
-      ipcRenderer.send(`browserview-show-${store.windowId}`);
-
-      const focused = this.addressbarFocused;
-
-      await ipcRenderer.invoke(
-        `view-select-${store.windowId}`,
-        this.id,
-        !this.addressbarFocused,
-      );
-
-      if (focused) {
-        store.inputRef.focus();
-        store.inputRef.setSelectionRange(
-          this.addressbarSelectionRange[0],
-          this.addressbarSelectionRange[1],
-        );
-      }
-    }
   }
 
   public getWidth(containerWidth: number = null, tabs: ITab[] = null) {
@@ -238,21 +194,22 @@ export class ITab {
 
   @action
   public close() {
+    // TODO: sandbox
     store.tabs.closedUrl = this.url;
     store.tabs.canShowPreview = false;
-    ipcRenderer.send(`hide-tab-preview-${store.windowId}`);
+    // ipcRenderer.send(`hide-tab-preview-${store.windowId}`);
 
     const selected = store.tabs.selectedTabId === this.id;
 
-    store.startupTabs.removeStartupTabItem(this.id);
+    // store.startupTabs.removeStartupTabItem(this.id);
 
-    ipcRenderer.send(`view-destroy-${store.windowId}`, this.id);
+    // ipcRenderer.send(`view-destroy-${store.windowId}`, this.id);
 
     const notClosingTabs = store.tabs.list.filter((x) => !x.isClosing);
     let index = notClosingTabs.indexOf(this);
 
     if (notClosingTabs.length === 1) {
-      closeWindow();
+      // closeWindow();
     }
 
     this.isClosing = true;
@@ -275,17 +232,19 @@ export class ITab {
     if (selected) {
       index = store.tabs.list.indexOf(this);
 
+      let idToSelect = 0;
+
       if (
         index + 1 < store.tabs.list.length &&
         !store.tabs.list[index + 1].isClosing &&
         !store.tabs.scrollable
       ) {
-        const nextTab = store.tabs.list[index + 1];
-        nextTab.select();
+        idToSelect = store.tabs.list[index + 1].id;
       } else if (index - 1 >= 0 && !store.tabs.list[index - 1].isClosing) {
-        const prevTab = store.tabs.list[index - 1];
-        prevTab.select();
+        idToSelect = store.tabs.list[index - 1].id;
       }
+
+      browser.tabs.update(idToSelect, { active: true });
     }
 
     this.removeTimeout = setTimeout(() => {

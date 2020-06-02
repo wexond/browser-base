@@ -1,37 +1,35 @@
 import { observable, computed } from 'mobx';
-import * as React from 'react';
 
-import { TabsStore } from './tabs';
-import { TabGroupsStore } from './tab-groups';
-import { AddTabStore } from './add-tab';
-import { ipcRenderer, remote } from 'electron';
-import { ExtensionsStore } from './extensions';
-import { SettingsStore } from './settings';
-import { getCurrentWindow } from '../utils/windows';
-import { StartupTabsStore } from './startup-tabs';
-import { getTheme } from '~/utils/themes';
-import { HistoryStore } from './history';
-import { AutoFillStore } from './autofill';
-import { IDownloadItem, BrowserActionChangeType } from '~/interfaces';
-import { IBrowserAction } from '../models';
+import { IDownloadItem } from '~/interfaces';
 import { NEWTAB_URL } from '~/constants/tabs';
 import { IURLSegment } from '~/interfaces/urls';
-import { BookmarkBarStore } from './bookmark-bar';
+import { TabGroupsStore } from './tab-groups';
+import { AddTabStore } from './add-tab';
+import { TabsStore } from './tabs';
+import { getTheme } from '~/utils/themes';
+import { ExtensionsStore } from './extensions';
 
+// TODO: sandbox
 export class Store {
-  public settings = new SettingsStore(this);
-  public history = new HistoryStore();
+  // public settings = new SettingsStore(this);
+  // public history = new HistoryStore();
+  // public startupTabs = new StartupTabsStore(this);
+  // public autoFill = new AutoFillStore();
+  // public bookmarksBar = new BookmarkBarStore(this);
+
   public addTab = new AddTabStore();
   public tabs = new TabsStore();
-  public extensions = new ExtensionsStore();
-  public startupTabs = new StartupTabsStore(this);
   public tabGroups = new TabGroupsStore(this);
-  public autoFill = new AutoFillStore();
-  public bookmarksBar = new BookmarkBarStore(this);
+  public extensions = new ExtensionsStore();
+
+  // @computed
+  // public get theme() {
+  //   return getTheme(this.settings.object.theme);
+  // }
 
   @computed
   public get theme() {
-    return getTheme(this.settings.object.theme);
+    return getTheme('wexond-light');
   }
 
   public inputRef: HTMLInputElement;
@@ -49,7 +47,8 @@ export class Store {
 
   @computed
   public get isCompact() {
-    return this.settings.object.topBarVariant === 'compact';
+    // return this.settings.object.topBarVariant === 'compact';
+    return false;
   }
 
   @computed
@@ -180,145 +179,130 @@ export class Store {
     y: 0,
   };
 
-  public windowId = getCurrentWindow().id;
+  public windowId = 0;
 
-  @observable
-  public isIncognito = ipcRenderer.sendSync(`is-incognito-${this.windowId}`);
+  // public windowId = getCurrentWindow().id;
+
+  // @observable
+  // public isIncognito = ipcRenderer.sendSync(`is-incognito-${this.windowId}`);
+
+  public async init() {
+    this.windowId = (await browser.windows.getCurrent()).id;
+  }
 
   public constructor() {
-    ipcRenderer.on('update-navigation-state', (e, data) => {
-      this.navigationState = data;
-    });
-
-    ipcRenderer.on('fullscreen', (e, fullscreen: boolean) => {
-      this.isFullscreen = fullscreen;
-    });
-
-    ipcRenderer.on('html-fullscreen', (e, fullscreen: boolean) => {
-      this.isHTMLFullscreen = fullscreen;
-    });
-
-    ipcRenderer.on('update-available', () => {
-      this.updateAvailable = true;
-    });
-
-    ipcRenderer.on('download-started', (e, item) => {
-      this.downloads.push(item);
-      this.downloadsButtonVisible = true;
-    });
-
-    ipcRenderer.on('download-progress', (e, item: IDownloadItem) => {
-      const i = this.downloads.find((x) => x.id === item.id);
-      i.receivedBytes = item.receivedBytes;
-    });
-
-    ipcRenderer.on('is-bookmarked', (e, flag) => {
-      this.isBookmarked = flag;
-    });
-
-    ipcRenderer.on(
-      'download-completed',
-      (e, id: string, downloadNotification: boolean) => {
-        const i = this.downloads.find((x) => x.id === id);
-        i.completed = true;
-
-        if (this.downloads.filter((x) => !x.completed).length === 0) {
-          this.downloads = [];
-        }
-
-        if (downloadNotification) {
-          this.downloadNotification = true;
-        }
-      },
-    );
-
-    ipcRenderer.on('find', () => {
-      const tab = this.tabs.selectedTab;
-      if (tab) {
-        ipcRenderer.send(`find-show-${this.windowId}`, tab.id);
-      }
-    });
-
-    ipcRenderer.on('dialog-visibility-change', (e, name, state) => {
-      this.dialogsVisibility[name] = state;
-    });
-
-    ipcRenderer.on(`addressbar-update-input`, (e, data) => {
-      const tab = this.tabs.getTabById(data.id);
-
-      this.addressbarEditing = false;
-
-      if (tab) {
-        tab.addressbarValue = data.text;
-        tab.addressbarSelectionRange = [data.selectionStart, data.selectionEnd];
-
-        if (tab.isSelected) {
-          this.inputRef.value = data.text;
-          this.inputRef.setSelectionRange(
-            data.selectionStart,
-            data.selectionEnd,
-          );
-
-          if (data.focus) {
-            remote.getCurrentWebContents().focus();
-            this.inputRef.focus();
-          }
-
-          if (data.escape) {
-            this.addressbarFocused = false;
-            this.tabs.selectedTab.addressbarValue = null;
-
-            requestAnimationFrame(() => {
-              this.inputRef.select();
-            });
-          }
-        }
-      }
-    });
-
-    if (process.env.ENABLE_EXTENSIONS) {
-      ipcRenderer.on(
-        'set-browserAction-info',
-        async (e, extensionId, action: BrowserActionChangeType, details) => {
-          if (
-            this.extensions.defaultBrowserActions.filter(
-              (x) => x.extensionId === extensionId,
-            ).length === 0
-          ) {
-            this.extensions.load();
-          }
-
-          const handler = (item: IBrowserAction) => {
-            if (action === 'setBadgeText') {
-              item.badgeText = details.text;
-            } else if (action === 'setPopup') {
-              item.popup = details.popup;
-            } else if (action === 'setTitle') {
-              item.title = details.title;
-            }
-          };
-
-          if (details.tabId) {
-            this.extensions.browserActions
-              .filter(
-                (x) =>
-                  x.extensionId === extensionId && x.tabId === details.tabId,
-              )
-              .forEach(handler);
-          } else {
-            this.extensions.defaultBrowserActions
-              .filter((x) => x.extensionId === extensionId)
-              .forEach(handler);
-            this.extensions.browserActions
-              .filter((x) => x.extensionId === extensionId)
-              .forEach(handler);
-          }
-        },
-      );
-      ipcRenderer.send('load-extensions');
-    }
-
-    ipcRenderer.send('update-check');
+    this.init();
+    // ipcRenderer.on('update-navigation-state', (e, data) => {
+    //   this.navigationState = data;
+    // });
+    // ipcRenderer.on('fullscreen', (e, fullscreen: boolean) => {
+    //   this.isFullscreen = fullscreen;
+    // });
+    // ipcRenderer.on('html-fullscreen', (e, fullscreen: boolean) => {
+    //   this.isHTMLFullscreen = fullscreen;
+    // });
+    // ipcRenderer.on('update-available', () => {
+    //   this.updateAvailable = true;
+    // });
+    // ipcRenderer.on('download-started', (e, item) => {
+    //   this.downloads.push(item);
+    //   this.downloadsButtonVisible = true;
+    // });
+    // ipcRenderer.on('download-progress', (e, item: IDownloadItem) => {
+    //   const i = this.downloads.find((x) => x.id === item.id);
+    //   i.receivedBytes = item.receivedBytes;
+    // });
+    // ipcRenderer.on('is-bookmarked', (e, flag) => {
+    //   this.isBookmarked = flag;
+    // });
+    // ipcRenderer.on(
+    //   'download-completed',
+    //   (e, id: string, downloadNotification: boolean) => {
+    //     const i = this.downloads.find((x) => x.id === id);
+    //     i.completed = true;
+    //     if (this.downloads.filter((x) => !x.completed).length === 0) {
+    //       this.downloads = [];
+    //     }
+    //     if (downloadNotification) {
+    //       this.downloadNotification = true;
+    //     }
+    //   },
+    // );
+    // ipcRenderer.on('find', () => {
+    //   const tab = this.tabs.selectedTab;
+    //   if (tab) {
+    //     ipcRenderer.send(`find-show-${this.windowId}`, tab.id);
+    //   }
+    // });
+    // ipcRenderer.on('dialog-visibility-change', (e, name, state) => {
+    //   this.dialogsVisibility[name] = state;
+    // });
+    // ipcRenderer.on(`addressbar-update-input`, (e, data) => {
+    //   const tab = this.tabs.getTabById(data.id);
+    //   this.addressbarEditing = false;
+    //   if (tab) {
+    //     tab.addressbarValue = data.text;
+    //     tab.addressbarSelectionRange = [data.selectionStart, data.selectionEnd];
+    //     if (tab.isSelected) {
+    //       this.inputRef.value = data.text;
+    //       this.inputRef.setSelectionRange(
+    //         data.selectionStart,
+    //         data.selectionEnd,
+    //       );
+    //       if (data.focus) {
+    //         remote.getCurrentWebContents().focus();
+    //         this.inputRef.focus();
+    //       }
+    //       if (data.escape) {
+    //         this.addressbarFocused = false;
+    //         this.tabs.selectedTab.addressbarValue = null;
+    //         requestAnimationFrame(() => {
+    //           this.inputRef.select();
+    //         });
+    //       }
+    //     }
+    //   }
+    // });
+    // if (process.env.ENABLE_EXTENSIONS) {
+    //   ipcRenderer.on(
+    //     'set-browserAction-info',
+    //     async (e, extensionId, action: BrowserActionChangeType, details) => {
+    //       if (
+    //         this.extensions.defaultBrowserActions.filter(
+    //           (x) => x.extensionId === extensionId,
+    //         ).length === 0
+    //       ) {
+    //         this.extensions.load();
+    //       }
+    //       const handler = (item: IBrowserAction) => {
+    //         if (action === 'setBadgeText') {
+    //           item.badgeText = details.text;
+    //         } else if (action === 'setPopup') {
+    //           item.popup = details.popup;
+    //         } else if (action === 'setTitle') {
+    //           item.title = details.title;
+    //         }
+    //       };
+    //       if (details.tabId) {
+    //         this.extensions.browserActions
+    //           .filter(
+    //             (x) =>
+    //               x.extensionId === extensionId && x.tabId === details.tabId,
+    //           )
+    //           .forEach(handler);
+    //       } else {
+    //         this.extensions.defaultBrowserActions
+    //           .filter((x) => x.extensionId === extensionId)
+    //           .forEach(handler);
+    //         this.extensions.browserActions
+    //           .filter((x) => x.extensionId === extensionId)
+    //           .forEach(handler);
+    //       }
+    //     },
+    //   );
+    //   ipcRenderer.send('load-extensions');
+    // }
+    // ipcRenderer.send('update-check');
   }
 }
 

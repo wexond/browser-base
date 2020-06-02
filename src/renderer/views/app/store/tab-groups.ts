@@ -21,7 +21,6 @@ import {
   DEEP_ORANGE_500,
   BLUE_GRAY_500,
 } from '~/renderer/constants';
-import { ipcRenderer } from 'electron';
 
 export class TabGroupsStore {
   @observable
@@ -52,14 +51,15 @@ export class TabGroupsStore {
   public constructor(store: Store) {
     this.store = store;
 
-    ipcRenderer.on('edit-tabgroup', (e, t) => {
-      if (t) {
-        const group = this.getGroupById(t.id);
-        if (t.name != null) group.name = t.name;
-        if (t.color) group.color = t.color;
-        store.tabs.updateTabsBounds(true);
-      }
-    });
+    // TODO: sandbox
+    // ipcRenderer.on('edit-tabgroup', (e, t) => {
+    //   if (t) {
+    //     const group = this.getGroupById(t.id);
+    //     if (t.name != null) group.name = t.name;
+    //     if (t.color) group.color = t.color;
+    //     store.tabs.updateTabsBounds(true);
+    //   }
+    // });
   }
 
   public getGroupById(id: number) {

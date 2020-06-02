@@ -3,7 +3,7 @@ import { ipcRenderer } from 'electron';
 import { Form } from './form';
 import { searchElements } from '../utils';
 import { IFormFillData } from '~/interfaces';
-import { windowId } from '../view-preload';
+import { windowId } from '../../renderer/preloads/view-preload';
 
 export class AutoComplete {
   public forms: Form[] = [];

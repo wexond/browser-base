@@ -1,28 +1,23 @@
 import * as React from 'react';
 import { observer } from 'mobx-react-lite';
 import { ToolbarButton } from '../ToolbarButton';
-import { IBrowserAction } from '../../models';
-import { ipcRenderer, remote } from 'electron';
 import store from '../../store';
+import { IBrowserAction } from '~/common/extensions/interfaces/browser-action';
 
 interface Props {
   data: IBrowserAction;
 }
 
+// TODO: sandbox
+
 const showPopup = (
   data: IBrowserAction,
   left: number,
   top: number,
-  devtools: boolean,
+  inspect: boolean,
 ) => {
   store.extensions.currentlyToggledPopup = data.extensionId;
-  ipcRenderer.send(
-    `show-extension-popup-${store.windowId}`,
-    left,
-    top,
-    data.popup,
-    devtools,
-  );
+  browser.browserAction.showPopup(data.extensionId, { left, top, inspect });
 };
 
 let canOpenPopup = true;
@@ -56,11 +51,11 @@ const onContextMenu = (data: IBrowserAction) => (
     {
       label: 'Inspect background page',
       click: () => {
-        ipcRenderer.invoke(
-          `inspect-extension`,
-          store.isIncognito,
-          data.extensionId,
-        );
+        // ipcRenderer.invoke(
+        //   `inspect-extension`,
+        //   store.isIncognito,
+        //   data.extensionId,
+        // );
       },
     },
   ]);

@@ -11,7 +11,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const PORT = 4444;
 
 const appConfig = getConfig(getBaseConfig('app'), {
-  target: 'electron-renderer',
+  target: 'web',
 
   devServer: {
     contentBase: join(__dirname, 'build'),
@@ -23,7 +23,7 @@ const appConfig = getConfig(getBaseConfig('app'), {
 });
 
 const extPopupConfig = getConfig({
-  target: 'electron-renderer',
+  target: 'web',
 
   entry: {},
   output: {},
@@ -40,16 +40,21 @@ const extPopupConfig = getConfig({
 applyEntries('app', appConfig, [
   ...(process.env.ENABLE_AUTOFILL ? ['form-fill', 'credentials'] : []),
   'app',
-  'permissions',
-  'auth',
-  'find',
-  'menu',
-  'search',
-  'preview',
-  'tabgroup',
-  'downloads-dialog',
-  'add-bookmark',
-  'zoom',
+  // TODO: sandbox
+  // 'permissions',
+  // 'auth',
+  // 'find',
+  // 'menu',
+  // 'search',
+  // 'preview',
+  // 'tabgroup',
+  // 'downloads-dialog',
+  // 'add-bookmark',
+  // 'zoom',
+  // 'settings',
+  // 'history',
+  // 'newtab',
+  // 'bookmarks',
 ]);
 
 if (process.env.ENABLE_EXTENSIONS) {
