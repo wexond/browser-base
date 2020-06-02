@@ -7,24 +7,7 @@ declare const chrome: any;
 declare let browser: any;
 
 export const injectAPI = async (webUi: boolean) => {
-  const api = {
-    ...getAPI(webUi ? 'webui' : 'blessed_extension'),
-    ipcRenderer,
-    browserAction: {
-      getAllInTab: () => {},
-      showPopup: () => {},
-      onUpdated: new StubEvent(),
-    },
-    dialogsPrivate: {
-      onVisibilityStateChange: new StubEvent(),
-    },
-  };
-
-  api.tabs = {
-    ...api.tabs,
-    stop: () => {},
-    getNavigationState: () => {},
-  };
+  const api = getAPI(webUi ? 'webui' : 'blessed_extension');
 
   if (webUi) {
     const w = await webFrame.executeJavaScript('window');

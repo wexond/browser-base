@@ -131,6 +131,8 @@ export const getAPI = (context: string): any => {
   };
 
   const api = {
+    ...chrome,
+    ...generated,
     tabs,
     cookies,
     windows,

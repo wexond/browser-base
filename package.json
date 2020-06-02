@@ -97,6 +97,7 @@
     "typescript": "^3.8.3",
     "typescript-plugin-styled-components": "^1.4.4",
     "uuid": "^8.1.0",
+    "webidl2": "^23.12.1",
     "webpack": "4.43.0",
     "webpack-bundle-analyzer": "^3.8.0",
     "webpack-cli": "3.3.11",
