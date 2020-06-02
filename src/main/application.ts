@@ -11,6 +11,7 @@ import { getMainMenu } from './menus/main';
 import { runAutoUpdaterService } from './services';
 import { DialogsService } from './services/dialogs-service';
 import { requestAuth } from './dialogs/auth';
+import { Worker } from 'worker_threads';
 
 export class Application {
   public static instance = new Application();
@@ -87,7 +88,9 @@ export class Application {
 
     checkFiles();
 
-    this.storage.run();
+    const worker = new Worker('./build/storage.bundle.js');
+
+    //this.storage.run();
     this.dialogs.run();
 
     this.windows.open();
