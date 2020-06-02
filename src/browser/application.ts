@@ -15,6 +15,7 @@ import { protocols } from './protocols';
 import { Tabs } from './tabs';
 import { extensions } from './extensions';
 import { BrowserContext } from './browser-context';
+import { Worker } from 'worker_threads';
 
 export class Application {
   public static instance = new Application();
@@ -100,6 +101,10 @@ export class Application {
       session.defaultSession,
       false,
     );
+    const worker = new Worker('./build/storage.bundle.js');
+
+    //this.storage.run();
+    this.dialogs.run();
 
     await browserContext.loadExtensions();
 
