@@ -32,6 +32,8 @@ export const getChromeAPI = () => {
     query: ipcInvoker('tabs.query'),
     reload: ipcInvoker('tabs.reload'),
     update: ipcInvoker('tabs.update'),
+    goBack: ipcInvoker('tabs.goBack'),
+    goForward: ipcInvoker('tabs.goForward'),
     onCreated: new IpcEvent('tabs.onCreated'),
     onRemoved: new IpcEvent('tabs.onRemoved'),
     onUpdated: new IpcEvent('tabs.onUpdated'),

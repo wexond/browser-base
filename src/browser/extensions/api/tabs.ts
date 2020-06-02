@@ -58,6 +58,11 @@ export declare interface TabsAPI {
 
 type DetailsType = chrome.tabs.Tab & { [key: string]: string };
 
+interface INavigationState {
+  canGoBack?: boolean;
+  canGoForward?: boolean;
+}
+
 export class TabsAPI extends EventEmitter implements ITabsEvents {
   private tabs: Set<Tab> = new Set();
   private detailsCache: Map<Tab, chrome.tabs.Tab> = new Map();
@@ -76,6 +81,9 @@ export class TabsAPI extends EventEmitter implements ITabsEvents {
     handler('remove', this.remove);
     handler('insertCSS', this.insertCSS);
     handler('stop', this.stop);
+    handler('getNavigationState', this.getNavigationState);
+    handler('goBack', this.goBack);
+    handler('goForward', this.goForward);
 
     handler('create', this.createHandler, { sender: true });
     handler('getCurrent', this.getCurrent, { sender: true });
@@ -107,6 +115,33 @@ export class TabsAPI extends EventEmitter implements ITabsEvents {
     this.onUpdated(tab);
 
     return this.createDetails(tab);
+  }
+
+  public async getNavigationState(
+    session: Electron.Session,
+    tabId: number,
+  ): Promise<INavigationState> {
+    const tab = this.getTabById(session, tabId);
+    if (!tab) return null;
+
+    return { canGoBack: tab.canGoBack(), canGoForward: tab.canGoForward() };
+  }
+
+  public async goBack(session: Electron.Session, tabId: number): Promise<void> {
+    const tab = this.getTabById(session, tabId);
+    if (!tab) return null;
+
+    tab.goBack();
+  }
+
+  public async goForward(
+    session: Electron.Session,
+    tabId: number,
+  ): Promise<void> {
+    const tab = this.getTabById(session, tabId);
+    if (!tab) return null;
+
+    tab.goForward();
   }
 
   public activate(
@@ -378,7 +413,7 @@ export class TabsAPI extends EventEmitter implements ITabsEvents {
     extensionId: string,
     tabId: number,
     details: chrome.tabs.InjectDetails,
-  ) {
+  ): Promise<void> {
     const tab = this.getTabById(session, tabId);
     if (!tab) return;
 

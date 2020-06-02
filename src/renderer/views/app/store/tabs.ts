@@ -227,7 +227,7 @@ export class TabsStore {
     });
 
     browser.tabs.onUpdated.addListener(
-      (tabId, { title, status, mutedInfo, audible, favIconUrl, url }) => {
+      async (tabId, { title, status, mutedInfo, audible, favIconUrl, url }) => {
         const tab = this.getTabById(tabId);
         if (!tab) return;
 
@@ -240,6 +240,12 @@ export class TabsStore {
           tab.url = url;
           if (tab.id === this.selectedTabId && !store.addressbarFocused) {
             this.selectedTab.addressbarValue = null;
+          }
+
+          if (tabId === this.selectedTabId) {
+            store.navigationState = await browser.tabs.getNavigationState(
+              tabId,
+            );
           }
         }
       },
