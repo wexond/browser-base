@@ -1,6 +1,7 @@
 import { ipcRenderer } from 'electron';
 import { imageData2base64 } from '../image-data';
 
+const assign = require('assign-deep');
 const getGeneratedAPI = require('./_generated_api.js');
 
 declare const chrome: any;
@@ -45,131 +46,61 @@ export const getAPI = (context: string): any => {
     },
   );
 
-  const tabs = {
-    ...chrome.tabs,
-    ...generated.tabs,
-  };
+  const api = assign({ ...chrome }, generated);
 
-  const cookies = {
-    ...chrome.cookies,
-    ...generated.cookies,
-  };
+  if (context === 'blessed_extension') {
+    if (api.storage) {
+      api.storage.sync = api.storage.local;
+      api.storage.managed = {
+        get: (a: any, cb: any) => cb && cb({}),
+      };
+    }
 
-  const windows = {
-    ...chrome.windows,
-    ...generated.windows,
-  };
+    api.extension = {
+      getViews: (): any[] => [],
+      isAllowedFileSchemeAccess: (cb: any) => cb && cb(false),
+      isAllowedIncognitoAccess: (cb: any) => cb && cb(false),
+    };
 
-  const extension = {
-    ...chrome.extension,
-    ...generated.extension,
-    getViews: (): any[] => [],
-    isAllowedFileSchemeAccess: (cb: any) => cb && cb(false),
-    isAllowedIncognitoAccess: (cb: any) => cb && cb(false),
-  };
+    api.notifications = {
+      create() {},
+      update() {},
+      clear() {},
+      getAll() {},
+      getPermissionLevel() {},
+      onClosed: new StubEvent(),
+      onClicked: new StubEvent(),
+      onButtonClicked: new StubEvent(),
+      onPermissionLevelChanged: new StubEvent(),
+      onShowSettings: new StubEvent(),
+    };
 
-  const notifications = {
-    ...chrome.notifications,
-    ...generated.notifications,
-    create() {},
-    update() {},
-    clear() {},
-    getAll() {},
-    getPermissionLevel() {},
-    onClosed: new StubEvent(),
-    onClicked: new StubEvent(),
-    onButtonClicked: new StubEvent(),
-    onPermissionLevelChanged: new StubEvent(),
-    onShowSettings: new StubEvent(),
-  };
+    api.permissions = {
+      getAll: (cb: any) => cb && cb([]),
+      onAdded: new StubEvent(),
+      contains: (perm: any, cb: any) => cb && cb(true),
+      request: (perm: any, cb: any) => cb && cb(true),
+    };
 
-  const webRequest = {
-    ...chrome.webRequest,
-    ...generated.webRequest,
-  };
+    api.contextMenus = {
+      create: () => {},
+      removeAll: () => {},
+      remove: () => {},
+      onClicked: new StubEvent(),
+    };
 
-  const webNavigation = {
-    ...chrome.webNavigation,
-    ...generated.webNavigation,
-  };
-
-  const permissions = {
-    ...chrome.permissions,
-    ...generated.permissions,
-    getAll: (cb: any) => cb && cb([]),
-    onAdded: new StubEvent(),
-    contains: (perm: any, cb: any) => cb && cb(true),
-    request: (perm: any, cb: any) => cb && cb(true),
-  };
-
-  const contextMenus = {
-    ...chrome.contextMenus,
-    ...generated.contextMenus,
-    create: () => {},
-    removeAll: () => {},
-    remove: () => {},
-    onClicked: new StubEvent(),
-  };
-
-  const privacy = {
-    ...chrome.privacy,
-    ...generated.privacy,
-    network: {
-      networkPredictionEnabled: new PolicyConfig(),
-      webRTCIPHandlingPolicy: new PolicyConfig(),
-      webRTCMultipleRoutesEnabled: new PolicyConfig(),
-      webRTCNonProxiedUdpEnabled: new PolicyConfig(),
-    },
-    websites: {
-      hyperlinkAuditingEnabled: new PolicyConfig(),
-    },
-  };
-
-  const browserAction = {
-    ...chrome.browserAction,
-    ...generated.browserAction,
-  };
-
-  const runtime = {
-    ...chrome.runtime,
-    ...generated.runtime,
-  };
-
-  const management = {
-    ...chrome.management,
-    ...generated.management,
-  };
-
-  const storage = {
-    ...chrome.storage,
-    ...generated.storage,
-  };
-
-  if (chrome.storage) {
-    storage.sync = chrome.storage.local;
-    storage.managed = {
-      get: (a, cb) => cb && cb({}),
+    api.privacy = {
+      network: {
+        networkPredictionEnabled: new PolicyConfig(),
+        webRTCIPHandlingPolicy: new PolicyConfig(),
+        webRTCMultipleRoutesEnabled: new PolicyConfig(),
+        webRTCNonProxiedUdpEnabled: new PolicyConfig(),
+      },
+      websites: {
+        hyperlinkAuditingEnabled: new PolicyConfig(),
+      },
     };
   }
-
-  const api = {
-    ...chrome,
-    ...generated,
-    tabs,
-    cookies,
-    windows,
-    extension,
-    notifications,
-    permissions,
-    contextMenus,
-    webNavigation,
-    webRequest,
-    privacy,
-    runtime,
-    management,
-    browserAction,
-    storage,
-  };
 
   return api;
 };
