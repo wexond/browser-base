@@ -41,6 +41,10 @@ class BookmarkService {
 
     return [{ ..._node, children }];
   }
+
+  public getTree() {
+    return this.getSubTree('0');
+  }
 }
 
 export default new BookmarkService();
