@@ -10,9 +10,9 @@ export default () => {
     console.log(type);
 
     if (type === 'bookmarks-get-children') {
-      const res = BookmarkService.get(['6', '2']);
+      const res = BookmarkService.getSubTree('1');
 
-      console.log(res);
+      parentPort.postMessage(res);
     }
   });
 };
