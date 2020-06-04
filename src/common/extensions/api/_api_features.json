@@ -1,0 +1,323 @@
+// Copyright 2012 The Chromium Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+// This features file defines extension APIs implemented under src/chrome.
+// See chrome/common/extensions/api/_features.md to understand this file, as
+// well as feature.h, simple_feature.h, and feature_provider.h.
+//
+// Note that specifying "web_page", "blessed_web_page", or "all" as a context
+// type will require manually updating chrome/renderer/resources/dispatcher.cc.
+
+{
+  "alarms": {
+    "dependencies": ["permission:alarms"],
+    "contexts": ["blessed_extension"]
+  },
+  "automation": {
+    "dependencies": ["manifest:automation"],
+    "contexts": ["blessed_extension"]
+  },
+  "declarativeNetRequest": {
+    "dependencies": ["permission:declarativeNetRequest"],
+    "contexts": ["blessed_extension"]
+  },
+  "declarativeNetRequest.onRuleMatchedDebug": {
+    "dependencies": [
+      "permission:declarativeNetRequest",
+      "permission:declarativeNetRequestFeedback"
+    ],
+    "location": "unpacked"
+  },
+  "declarativeWebRequest": {
+    "dependencies": ["permission:declarativeWebRequest"],
+    "contexts": ["blessed_extension"]
+  },
+  "documentScan": {
+    "dependencies": ["permission:documentScan"],
+    "contexts": ["blessed_extension"]
+  },
+  "idle": {
+    "dependencies": ["permission:idle"],
+    "contexts": ["blessed_extension"]
+  },
+  "management": [
+    {
+      "dependencies": ["permission:management"],
+      "contexts": ["blessed_extension"],
+      "default_parent": true
+    },
+    {
+      "channel": "stable",
+      "contexts": ["webui"],
+      "matches": ["chrome://extensions/*", "chrome://settings/*"]
+    }
+  ],
+  "networking.config": {
+    "dependencies": ["permission:networking.config"],
+    "contexts": ["blessed_extension"]
+  },
+  "networking.onc": {
+    "dependencies": ["permission:networking.onc"],
+    "contexts": ["blessed_extension"],
+    "source": "networkingPrivate"
+  },
+  "power": {
+    "dependencies": ["permission:power"],
+    "contexts": ["blessed_extension"]
+  },
+  "printerProvider": {
+    "dependencies": ["permission:printerProvider"],
+    "contexts": ["blessed_extension"],
+    "disallow_for_service_workers": true
+  },
+  "runtime": {
+    "channel": "stable",
+    "contexts": ["blessed_extension"]
+  },
+  "types": {
+    "internal": true,
+    "channel": "stable",
+    "extension_types": ["extension", "legacy_packaged_app", "platform_app"],
+    "contexts": ["blessed_extension"]
+  },
+  "vpnProvider": {
+    "dependencies": ["permission:vpnProvider"],
+    "contexts": ["blessed_extension"]
+  },
+  "webRequest": {
+    "dependencies": ["permission:webRequest"],
+    "contexts": ["blessed_extension"]
+  },
+  "autofillPrivate": [
+    {
+      "dependencies": ["permission:autofillPrivate"],
+      "contexts": ["blessed_extension"]
+    },
+    {
+      "channel": "stable",
+      "contexts": ["webui"],
+      "matches": ["chrome://settings/*"]
+    }
+  ],
+  "bookmarkManagerPrivate": [
+    {
+      "dependencies": ["permission:bookmarkManagerPrivate"],
+      "contexts": ["blessed_extension"]
+    },
+    {
+      "channel": "stable",
+      "contexts": ["webui"],
+      "matches": ["chrome://bookmarks/*"]
+    }
+  ],
+  "bookmarks": [
+    {
+      "dependencies": ["permission:bookmarks"],
+      "contexts": ["blessed_extension"],
+      "default_parent": true
+    },
+    {
+      "channel": "stable",
+      "contexts": ["webui"],
+      "matches": ["chrome://bookmarks/*", "chrome://welcome/*"]
+    }
+  ],
+  "bookmarks.export": {
+    "channel": "stable",
+    "contexts": ["webui"],
+    "dependencies": [],
+    "matches": ["chrome://bookmarks/*"]
+  },
+  "bookmarks.import": {
+    "channel": "stable",
+    "contexts": ["webui"],
+    "dependencies": [],
+    "matches": ["chrome://bookmarks/*"]
+  },
+  "browserAction": {
+    "dependencies": ["manifest:browser_action"],
+    "contexts": ["blessed_extension"]
+  },
+  "browserAction.openPopup": {
+    "contexts": ["webui"]
+  },
+  "browsingData": {
+    "dependencies": ["permission:browsingData"],
+    "contexts": ["blessed_extension"]
+  },
+  "certificateProvider": {
+    "dependencies": ["permission:certificateProvider"],
+    "contexts": ["blessed_extension"]
+  },
+  "commands": {
+    "dependencies": ["manifest:commands"],
+    "contexts": ["blessed_extension"]
+  },
+  "contentSettings": {
+    "dependencies": ["permission:contentSettings"],
+    "contexts": ["blessed_extension"]
+  },
+  "contextMenus": {
+    "dependencies": ["permission:contextMenus"],
+    "contexts": ["blessed_extension"]
+  },
+  "cookies": {
+    "dependencies": ["permission:cookies"],
+    "contexts": ["blessed_extension"]
+  },
+  "debugger": {
+    "dependencies": ["permission:debugger"],
+    "contexts": ["blessed_extension"]
+  },
+  "declarativeContent": {
+    "dependencies": ["permission:declarativeContent"],
+    "contexts": ["blessed_extension"]
+  },
+  "downloads": {
+    "dependencies": ["permission:downloads"],
+    "contexts": ["blessed_extension"]
+  },
+  "extension": {
+    "channel": "stable",
+    "extension_types": ["extension"],
+    "contexts": ["blessed_extension"]
+  },
+  "extension.getExtensionTabs": {
+    "contexts": ["blessed_extension"],
+    "disallow_for_service_workers": true
+  },
+  "extensionsManifestTypes": {
+    "internal": true,
+    "channel": "stable",
+    "contexts": ["blessed_extension"]
+  },
+  "fontSettings": {
+    "dependencies": ["permission:fontSettings"],
+    "contexts": ["blessed_extension"]
+  },
+  "history": {
+    "dependencies": ["permission:history"],
+    "contexts": ["blessed_extension"]
+  },
+  "identity": {
+    "dependencies": ["permission:identity"],
+    "contexts": ["blessed_extension"]
+  },
+  "identity.getAccounts": {
+    "channel": "dev",
+    "dependencies": ["permission:identity"],
+    "contexts": ["blessed_extension"]
+  },
+  "identityPrivate": {
+    "dependencies": ["permission:identityPrivate"],
+    "contexts": ["blessed_extension"]
+  },
+  "languageSettingsPrivate": [
+    {
+      "dependencies": ["permission:languageSettingsPrivate"],
+      "contexts": ["blessed_extension"]
+    },
+    {
+      "channel": "stable",
+      "contexts": ["webui"],
+      "matches": ["chrome://settings/*"]
+    }
+  ],
+  "notifications": {
+    "dependencies": ["permission:notifications"],
+    "contexts": ["blessed_extension"]
+  },
+  "omnibox": {
+    "dependencies": ["manifest:omnibox"],
+    "contexts": ["blessed_extension"]
+  },
+  "pageAction": {
+    "dependencies": ["manifest:page_action"],
+    "contexts": ["blessed_extension"],
+    "disallow_for_service_workers": true
+  },
+  "pageCapture": {
+    "dependencies": ["permission:pageCapture"],
+    "contexts": ["blessed_extension"],
+    "disallow_for_service_workers": true
+  },
+  "passwordsPrivate": {
+    "contexts": ["webui"],
+    "matches": ["chrome://settings/*"]
+  },
+  "permissions": {
+    "contexts": ["blessed_extension"]
+  },
+  "printing": {
+    "dependencies": ["permission:printing"],
+    "contexts": ["blessed_extension"]
+  },
+  "printingMetrics": {
+    "dependencies": ["permission:printingMetrics"],
+    "contexts": ["blessed_extension"]
+  },
+  "privacy": {
+    "dependencies": ["permission:privacy"],
+    "contexts": ["blessed_extension"]
+  },
+  "processes": {
+    "dependencies": ["permission:processes"],
+    "contexts": ["blessed_extension"]
+  },
+  "proxy": {
+    "dependencies": ["permission:proxy"],
+    "contexts": ["blessed_extension"]
+  },
+  "sessions": {
+    "dependencies": ["permission:sessions"],
+    "contexts": ["blessed_extension"]
+  },
+  "settingsPrivate": {
+    "contexts": ["webui"],
+    "matches": ["chrome://settings/*"]
+  },
+  "tabCapture": {
+    "dependencies": ["permission:tabCapture"],
+    "contexts": ["blessed_extension"],
+    "disallow_for_service_workers": true
+  },
+  "tabs": {
+    "contexts": ["blessed_extension", "webui"]
+  },
+  "topSites": {
+    "dependencies": ["permission:topSites"],
+    "contexts": ["blessed_extension"]
+  },
+  "tts": {
+    "dependencies": ["permission:tts"],
+    "contexts": ["blessed_extension"]
+  },
+  "ttsEngine": {
+    "dependencies": ["permission:ttsEngine"],
+    "contexts": ["blessed_extension"]
+  },
+  "webNavigation": {
+    "dependencies": ["permission:webNavigation"],
+    "contexts": ["blessed_extension"]
+  },
+  "windows": [
+    {
+      "dependencies": ["api:tabs"],
+      "contexts": ["blessed_extension"]
+    },
+    {
+      "channel": "stable",
+      "contexts": ["webui"]
+    }
+  ],
+  "dialogsPrivate": {
+    "contexts": ["webui"]
+  },
+  "tabsPrivate": {
+    "contexts": ["webui"]
+  },
+  "browserActionPrivate": {
+    "contexts": ["webui"]
+  }
+}

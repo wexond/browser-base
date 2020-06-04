@@ -1,0 +1,7 @@
+namespace tabsPrivate {};
+
+interface Functions {
+  static void getNavigationState(long tabId);
+
+  static void stop(long tabId);
+};

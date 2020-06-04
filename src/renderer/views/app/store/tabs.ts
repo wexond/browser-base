@@ -204,7 +204,7 @@ export class TabsStore {
 
       this.selectedTabId = tabId;
 
-      store.extensions.browserActions = await browser.browserAction.getAllInTab(
+      store.extensions.browserActions = await browser.browserActionPrivate.getAllInTab(
         tabId,
       );
 
@@ -227,7 +227,7 @@ export class TabsStore {
     });
 
     browser.tabs.onUpdated.addListener(
-      (tabId, { title, status, mutedInfo, audible, favIconUrl }) => {
+      async (tabId, { title, status, mutedInfo, audible, favIconUrl, url }) => {
         const tab = this.getTabById(tabId);
         if (!tab) return;
 
@@ -236,6 +236,18 @@ export class TabsStore {
         if (mutedInfo) tab.isMuted = mutedInfo.muted;
         if (audible !== undefined) tab.isPlaying = audible;
         if (favIconUrl) tab.favicon = favIconUrl;
+        if (url) {
+          tab.url = url;
+          if (tab.id === this.selectedTabId && !store.addressbarFocused) {
+            this.selectedTab.addressbarValue = null;
+          }
+
+          if (tabId === this.selectedTabId) {
+            store.navigationState = await browser.tabsPrivate.getNavigationState(
+              tabId,
+            );
+          }
+        }
       },
     );
   }

@@ -1,9 +1,11 @@
 import { ipcMain } from 'electron';
 import { sessionFromIpcEvent } from './session';
 
-interface IOptions {
-  sender?: boolean;
-  session?: boolean;
+export interface ISenderDetails {
+  session?: Electron.Session;
+  sender?: Electron.WebContents;
+  scriptPath?: string;
+  extensionId?: string;
 }
 
 export class HandlerFactory {
@@ -13,27 +15,22 @@ export class HandlerFactory {
   > = new Map();
 
   public static create(scope: string, bind: any) {
-    return (name: string, fn: (...args: any[]) => void, options?: IOptions) =>
+    return (name: string, fn: (...args: any[]) => void) =>
       ipcMain.handle(`${scope}.${name}`, (...args: any[]) => {
-        if (!options) options = {};
+        const [e, data] = args;
 
-        if (options.session === undefined) options.session = true;
+        const ses = sessionFromIpcEvent(e);
 
-        const [e, ...rest] = args;
-
-        const newArgs = [...rest];
-
-        if (options.sender) newArgs.splice(0, 0, e.sender);
-        if (options.session) {
-          let ses = sessionFromIpcEvent(e);
-          if (this.uiToSenderSession.has(ses)) {
-            ses = this.uiToSenderSession.get(ses);
-          }
-
-          newArgs.splice(0, 0, ses);
-        }
-
-        return fn.bind(bind)(...newArgs);
+        return fn.bind(bind)(
+          {
+            ...data.info,
+            session: this.uiToSenderSession.has(ses)
+              ? this.uiToSenderSession.get(ses)
+              : ses,
+            sender: e.sender,
+          },
+          data.params,
+        );
       });
   }
 }

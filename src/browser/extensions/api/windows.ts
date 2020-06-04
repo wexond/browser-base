@@ -3,9 +3,10 @@ import { EventEmitter } from 'events';
 import { Extensions } from '../';
 import { isBackgroundPage } from '../web-contents';
 import { sendToExtensionPages } from '../background-pages';
-import { HandlerFactory } from '../handler-factory';
+import { HandlerFactory, ISenderDetails } from '../handler-factory';
 import { WINDOW_ID_CURRENT } from '~/common/extensions/constants';
 import { WEBUI_BASE_URL } from '~/common/constants/protocols';
+import { EventHandler } from '../event-handler';
 
 // Events which can be registered only once
 interface IWindowsEvents {
@@ -33,13 +34,13 @@ interface ISessionInfo {
   windows?: Map<number, BrowserWindow>;
 }
 
-export class WindowsAPI extends EventEmitter implements IWindowsEvents {
+export class WindowsAPI extends EventHandler implements IWindowsEvents {
   private detailsCache: Map<BrowserWindow, chrome.windows.Window> = new Map();
 
   public sessionsInfo: Map<Electron.Session, ISessionInfo> = new Map();
 
   constructor() {
-    super();
+    super('windows', ['onCreated', 'onRemoved', 'onFocusChanged']);
 
     const handler = HandlerFactory.create('windows', this);
 
@@ -49,8 +50,8 @@ export class WindowsAPI extends EventEmitter implements IWindowsEvents {
     handler('getLastFocused', this.getLastFocused);
     handler('remove', this.remove);
 
-    handler('get', this.getHandler, { sender: true });
-    handler('getCurrent', this.getCurrent, { sender: true });
+    handler('get', this.getHandler);
+    handler('getCurrent', this.getCurrent);
   }
 
   onBeforeFocusNextZOrder: (windowId: number) => number;
@@ -64,9 +65,11 @@ export class WindowsAPI extends EventEmitter implements IWindowsEvents {
   ) => Promise<number>;
 
   public update(
-    session: Electron.Session,
-    windowId: number,
-    updateInfo: chrome.windows.UpdateInfo,
+    { session }: ISenderDetails,
+    {
+      windowId,
+      updateInfo,
+    }: { windowId: number; updateInfo: chrome.windows.UpdateInfo },
   ) {
     const win = this.getWindowById(session, windowId);
     if (!win) return null;
@@ -119,7 +122,10 @@ export class WindowsAPI extends EventEmitter implements IWindowsEvents {
     this.getWindowById(session, windowId)?.focus();
   }
 
-  public remove(session: Electron.Session, windowId: number) {
+  public remove(
+    { session }: ISenderDetails,
+    { windowId }: { windowId: number },
+  ) {
     if (!this.getWindowById(session, windowId)) return;
     this.emit('will-remove', windowId);
   }
@@ -158,24 +164,24 @@ export class WindowsAPI extends EventEmitter implements IWindowsEvents {
   }
 
   public async create(
-    senderSession: Electron.Session,
-    details: chrome.windows.CreateData,
+    { session }: ISenderDetails,
+    { createData }: { createData: chrome.windows.CreateData },
   ): Promise<chrome.windows.Window> {
     if (!this.onCreate) {
       throw new Error('No onCreate event handler');
     }
 
-    const id = await this.onCreate(senderSession, details);
+    const id = await this.onCreate(session, createData);
     const win = BrowserWindow.fromId(id);
 
-    this.observe(win, senderSession);
+    this.observe(win, session);
 
-    return this.getDetails(this.getWindowById(senderSession, id));
+    return this.getDetails(this.getWindowById(session, id));
   }
 
   public getLastFocused(
-    session: Electron.Session,
-    getInfo?: chrome.windows.GetInfo,
+    { session }: ISenderDetails,
+    { getInfo }: { getInfo?: chrome.windows.GetInfo } = {},
   ): chrome.windows.Window {
     const info = this.sessionsInfo.get(session);
     if (!info) return null;
@@ -183,17 +189,22 @@ export class WindowsAPI extends EventEmitter implements IWindowsEvents {
   }
 
   public get(
-    session: Electron.Session,
-    id: number,
-    getInfo?: chrome.windows.GetInfo,
+    { session }: ISenderDetails,
+    {
+      windowId,
+      getInfo,
+    }: {
+      windowId: number;
+      getInfo?: chrome.windows.GetInfo;
+    },
   ): chrome.windows.Window {
-    const win = this.getWindowById(session, id);
+    const win = this.getWindowById(session, windowId);
     return this.getDetailsMatchingGetInfo(session, win, getInfo);
   }
 
   public getAll(
-    session: Electron.Session,
-    getInfo?: chrome.windows.GetInfo,
+    { session }: ISenderDetails,
+    { getInfo }: { getInfo?: chrome.windows.GetInfo } = {},
   ): chrome.windows.Window[] {
     return Object.values(this.sessionsInfo.get(session).windows)
       .map((win) => this.getDetailsMatchingGetInfo(session, win, getInfo))
@@ -201,20 +212,20 @@ export class WindowsAPI extends EventEmitter implements IWindowsEvents {
   }
 
   private getHandler(
-    session: Electron.Session,
-    sender: Electron.WebContents,
-    id: number,
-    details: any,
+    { session, sender }: ISenderDetails,
+    {
+      windowId,
+      getInfo,
+    }: { windowId: number; getInfo: chrome.windows.GetInfo },
   ) {
-    return id === WINDOW_ID_CURRENT
-      ? this.getCurrent(session, sender, details)
-      : this.get(session, id, details);
+    return windowId === WINDOW_ID_CURRENT
+      ? this.getCurrent({ session, sender }, { getInfo })
+      : this.get({ session }, { windowId, getInfo });
   }
 
   public getCurrent = (
-    session: Electron.Session,
-    sender: Electron.WebContents,
-    getInfo?: chrome.windows.GetInfo,
+    { session, sender }: ISenderDetails,
+    { getInfo }: { getInfo?: chrome.windows.GetInfo } = {},
   ): chrome.windows.Window => {
     if (sender.getURL().startsWith(WEBUI_BASE_URL)) {
       const win = BrowserWindow.fromWebContents(sender);
@@ -304,7 +315,10 @@ export class WindowsAPI extends EventEmitter implements IWindowsEvents {
     if (getInfo?.populate === true) {
       return {
         ...details,
-        tabs: Extensions.instance.tabs.query(session, { windowId: win.id }),
+        tabs: Extensions.instance.tabs.query(
+          { session },
+          { queryInfo: { windowId: win.id } },
+        ),
       };
     }
 
@@ -313,7 +327,7 @@ export class WindowsAPI extends EventEmitter implements IWindowsEvents {
 
   private onRemoved(win: BrowserWindow) {
     this.emit('removed', win.id);
-    sendToExtensionPages('windows.onRemoved', {
+    this.sendEventToAll('onRemoved', {
       windowId: win.id,
     });
   }
@@ -321,6 +335,6 @@ export class WindowsAPI extends EventEmitter implements IWindowsEvents {
   private onCreated(win: BrowserWindow) {
     const details = this.getDetails(win);
     this.emit('created', details);
-    sendToExtensionPages('windows.onCreated', details);
+    this.sendEventToAll('onCreated', details);
   }
 }

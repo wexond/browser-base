@@ -12,18 +12,18 @@ import {
 } from '~/renderer/constants/icons';
 
 const onBackClick = () => {
-  store.tabs.selectedTab.callViewMethod('goBack');
+  browser.tabs.goBack(store.tabs.selectedTabId);
 };
 
 const onForwardClick = () => {
-  store.tabs.selectedTab.callViewMethod('goForward');
+  browser.tabs.goForward(store.tabs.selectedTabId);
 };
 
 const onRefreshClick = () => {
   if (store.tabs.selectedTab && store.tabs.selectedTab.loading) {
-    store.tabs.selectedTab.callViewMethod('stop');
+    browser.tabsPrivate.stop(store.tabs.selectedTabId);
   } else {
-    store.tabs.selectedTab.callViewMethod('reload');
+    browser.tabs.reload(store.tabs.selectedTabId);
   }
 };
 

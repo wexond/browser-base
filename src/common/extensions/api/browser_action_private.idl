@@ -1,0 +1,19 @@
+namespace browserActionPrivate {};
+
+dictionary OpenPopupDetails {
+  double left;
+  double top;
+  boolean? inspect;
+};
+
+interface Functions {
+  static void getAll();
+
+  static void getAllInTab(long tabId);
+
+  static void openPopup(DOMString extensionId, OpenPopupDetails details);
+};
+
+interface Events {
+  static void onUpdated(long browserAction);  
+};

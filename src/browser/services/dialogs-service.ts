@@ -113,7 +113,7 @@ export class DialogsService {
       foundDialog._sendTabInfo(tabAssociation.tabId);
     }
 
-    browserWindow.webContents.send('dialog-visibility-change', name, true);
+    extensions.dialogsPrivate.onVisibilityStateChange(name, true);
 
     this.browserViewDetails.set(browserView.id, true);
 
@@ -162,7 +162,7 @@ export class DialogsService {
 
         if (tabId && tabId !== selectedTabId) return;
 
-        browserWindow.webContents.send('dialog-visibility-change', name, false);
+        extensions.dialogsPrivate.onVisibilityStateChange(name, false);
 
         browserWindow.removeBrowserView(browserView);
 
