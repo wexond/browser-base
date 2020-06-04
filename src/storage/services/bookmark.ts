@@ -2,6 +2,15 @@ import { db } from '../loaders/db';
 import { IBookmarkNode } from '~/interfaces';
 
 class BookmarkService {
+  private format(node: IBookmarkNode): IBookmarkNode {
+    if (!node) return null;
+
+    return {
+      ...node,
+      id: node.id.toString(),
+    };
+  }
+
   public isFolder(node: IBookmarkNode) {
     return node.url == null;
   }
@@ -13,11 +22,14 @@ class BookmarkService {
 
     const query = db.prepare(`SELECT * FROM bookmarks WHERE id = ?`);
 
-    return ids.map((r) => query.get(r));
+    return ids.map((r) => this.format(query.get(r)));
   }
 
   public getChildren(id: string): IBookmarkNode[] {
-    return db.prepare(`SELECT * FROM bookmarks WHERE parentId = ?`).all(id);
+    return db
+      .prepare(`SELECT * FROM bookmarks WHERE parentId = ?`)
+      .all(id)
+      .map(this.format);
   }
 
   public getSubTree(id: string, node?: IBookmarkNode): IBookmarkNode[] {
