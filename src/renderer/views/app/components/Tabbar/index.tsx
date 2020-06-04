@@ -1,13 +1,15 @@
+// TODO: sandbox
+
 import { observer } from 'mobx-react-lite';
 import * as React from 'react';
 
 import { AddTab, StyledTabbar, TabsContainer } from './style';
 import { Tabs } from '../Tabs';
 import store from '../../store';
-import { ipcRenderer } from 'electron';
 import { TabGroup } from '../TabGroup';
 import { ICON_ADD } from '~/renderer/constants/icons';
 import { AddressBarContainer } from '../AddressBarContainer';
+import { defaultTabOptions } from '~/constants/tabs';
 
 let timeout: any;
 
@@ -20,12 +22,12 @@ const onTabsMouseLeave = () => {
     store.tabs.removedTabs = 0;
     store.tabs.updateTabsBounds(true);
   }, 300);
-  ipcRenderer.send(`hide-tab-preview-${store.windowId}`);
+  // ipcRenderer.send(`hide-tab-preview-${store.windowId}`);
   store.tabs.canShowPreview = true;
 };
 
 const onAddTabClick = () => {
-  store.tabs.addTab();
+  browser.tabs.create({ active: true, url: 'https://google.com' });
 };
 
 const onWheel = (e: any) => {
@@ -69,7 +71,7 @@ export const Tabbar = observer(() => {
         onClick={onAddTabClick}
         divRef={(r: any) => (store.addTab.ref = r)}
       />
-      {store.isCompact && <AddressBarContainer />}
+      {/* {store.isCompact && <AddressBarContainer />} */}
     </StyledTabbar>
   );
 });

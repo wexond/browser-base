@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components';
 import { transparency, ICON_CLOSE } from '~/renderer/constants';
 import { ITheme } from '~/interfaces';
 import { centerIcon } from '~/renderer/mixins';
-import { TAB_PINNED_WIDTH } from '../../constants';
+import { TAB_PINNED_WIDTH } from '../../constants/tabs';
 
 interface CloseProps {
   visible: boolean;

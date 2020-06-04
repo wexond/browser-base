@@ -1,87 +1,70 @@
 /* eslint @typescript-eslint/camelcase: 0 */
 
-import { observable } from 'mobx';
-import { join } from 'path';
+import { observable, computed } from 'mobx';
+import store from './';
+import { IBrowserAction } from '~/common/extensions/interfaces/browser-action';
 
-import { IBrowserAction } from '../models';
-import { promises } from 'fs';
-import { ipcRenderer } from 'electron';
-import store from '.';
+const findClosestIconSize = (array: number[], target: number) => {
+  let selected: number;
+  let lowest: number;
+
+  array.forEach((r) => {
+    const res = target - r;
+
+    if (lowest == null || lowest > res) {
+      lowest = res;
+      selected = r;
+    }
+  });
+
+  return selected;
+};
 
 export class ExtensionsStore {
   @observable
-  public browserActions: IBrowserAction[] = [];
+  private _browserActions: IBrowserAction[] = [];
 
-  @observable
-  public defaultBrowserActions: IBrowserAction[] = [];
+  @computed
+  public get browserActions(): IBrowserAction[] {
+    return this._browserActions.map((x) => {
+      let icon = x.icon;
+
+      if (typeof x.icon === 'object') {
+        const size = findClosestIconSize(
+          Object.keys(x.icon).map((y) => parseInt(y)),
+          32,
+        );
+
+        icon = x.icon[size];
+      }
+
+      return {
+        ...x,
+        icon,
+      };
+    });
+  }
+
+  public set browserActions(value: IBrowserAction[]) {
+    this._browserActions = value;
+  }
 
   @observable
   public currentlyToggledPopup = '';
 
-  public constructor() {
-    this.load();
-
-    ipcRenderer.on('load-browserAction', async (e, extension) => {
-      await this.loadExtension(extension);
-    });
-  }
-
-  public addBrowserActionToTab(tabId: number, browserAction: IBrowserAction) {
-    const tabBrowserAction: IBrowserAction = Object.assign(
-      Object.create(Object.getPrototypeOf(browserAction)),
-      browserAction,
+  constructor() {
+    browser.browserActionPrivate.onUpdated.addListener(
+      (newAction: IBrowserAction) => {
+        this.browserActions = this.browserActions.map((x) => {
+          if (
+            x.extensionId === newAction.extensionId &&
+            ((x.tabId && x.tabId === store.tabs.selectedTabId) || !x.tabId)
+          ) {
+            return newAction;
+          }
+          return x;
+        });
+      },
     );
-    tabBrowserAction.tabId = tabId;
-    this.browserActions.push(tabBrowserAction);
-  }
-
-  public async loadExtension(extension: Electron.Extension) {
-    if (this.defaultBrowserActions.find((x) => x.extensionId === extension.id))
-      return;
-
-    if (extension.manifest.browser_action) {
-      const { default_icon, default_title } = extension.manifest.browser_action;
-
-      let icon1 = default_icon;
-
-      if (typeof icon1 === 'object') {
-        icon1 = Object.values(default_icon)[
-          Object.keys(default_icon).length - 1
-        ];
-      }
-
-      const data = await promises.readFile(
-        join(extension.path, icon1 as string),
-      );
-
-      if (
-        this.defaultBrowserActions.find((x) => x.extensionId === extension.id)
-      )
-        return;
-
-      const icon = window.URL.createObjectURL(new Blob([data]));
-      const browserAction = new IBrowserAction({
-        extensionId: extension.id,
-        icon,
-        title: default_title,
-        popup: extension.manifest?.browser_action?.default_popup,
-      });
-
-      this.defaultBrowserActions.push(browserAction);
-
-      for (const tab of store.tabs.list) {
-        this.addBrowserActionToTab(tab.id, browserAction);
-      }
-    }
-  }
-
-  public async load() {
-    if (!process.env.ENABLE_EXTENSIONS) return;
-
-    const extensions: Electron.Extension[] = await ipcRenderer.invoke(
-      'get-extensions',
-    );
-
-    await Promise.all(extensions.map((x) => this.loadExtension(x)));
   }
 }

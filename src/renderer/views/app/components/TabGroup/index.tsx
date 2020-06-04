@@ -3,17 +3,17 @@ import { observer } from 'mobx-react-lite';
 
 import { ITabGroup } from '../../models';
 import { StyledTabGroup, Line, Placeholder } from './style';
-import { ipcRenderer } from 'electron';
 import store from '../../store';
 
 const onPlaceholderClick = (tabGroup: ITabGroup) => () => {
   const { left, bottom } = tabGroup.ref.current.getBoundingClientRect();
-  ipcRenderer.send(`show-tabgroup-dialog-${store.windowId}`, {
-    name: tabGroup.name,
-    id: tabGroup.id,
-    x: left,
-    y: bottom,
-  });
+  // TODO: sandbox
+  // ipcRenderer.send(`show-tabgroup-dialog-${store.windowId}`, {
+  //   name: tabGroup.name,
+  //   id: tabGroup.id,
+  //   x: left,
+  //   y: bottom,
+  // });
 };
 
 export const TabGroup = observer(({ tabGroup }: { tabGroup: ITabGroup }) => {

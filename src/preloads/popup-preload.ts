@@ -1,10 +1,11 @@
 import { ipcRenderer } from 'electron';
 
 const updateBounds = () => {
-  ipcRenderer.sendToHost(
-    'webview-size',
-    document.body.offsetWidth || document.body.scrollWidth,
-    document.body.offsetHeight || document.body.scrollHeight,
+  const { width, height } = document.body.getBoundingClientRect();
+  ipcRenderer.send(
+    `extension-popup-size`,
+    width === 0 ? 1 : width,
+    height === 0 ? 1 : height,
   );
 };
 
@@ -20,7 +21,7 @@ window.addEventListener('load', () => {
 });
 
 const close = () => {
-  ipcRenderer.sendToHost('webview-blur');
+  ipcRenderer.send('webview-blur');
 };
 
 window.addEventListener('blur', close);

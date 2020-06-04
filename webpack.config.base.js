@@ -132,7 +132,6 @@ const config = {
 };
 
 if (dev) {
-  config.plugins.push(new ForkTsCheckerWebpackPlugin());
   config.plugins.push(new HardSourceWebpackPlugin());
 }
 

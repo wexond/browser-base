@@ -1,6 +1,5 @@
 import { observer } from 'mobx-react-lite';
 import * as React from 'react';
-import { ipcRenderer, remote } from 'electron';
 
 import { ToolbarButton } from '../ToolbarButton';
 import { BrowserAction } from '../BrowserAction';
@@ -16,20 +15,22 @@ import { SiteButtons } from '../SiteButtons';
 
 let menuRef: HTMLDivElement = null;
 
+// TODO: sandbox
+
 const onDownloadsClick = async (e: React.MouseEvent<HTMLDivElement>) => {
   const { right, bottom } = e.currentTarget.getBoundingClientRect();
   store.downloadNotification = false;
-  ipcRenderer.send(`show-downloads-dialog-${store.windowId}`, right, bottom);
+  //ipcRenderer.send(`show-downloads-dialog-${store.windowId}`, right, bottom);
 };
 
 const showMenuDialog = async () => {
   const { right, bottom } = menuRef.getBoundingClientRect();
-  ipcRenderer.send(`show-menu-dialog-${store.windowId}`, right, bottom);
+  //ipcRenderer.send(`show-menu-dialog-${store.windowId}`, right, bottom);
 };
 
-ipcRenderer.on('show-menu-dialog', () => {
-  showMenuDialog();
-});
+// ipcRenderer.on('show-menu-dialog', () => {
+//   showMenuDialog();
+// });
 
 const onMenuClick = async () => {
   showMenuDialog();
@@ -41,30 +42,26 @@ const BrowserActions = observer(() => {
   return (
     <>
       {selectedTabId &&
-        store.extensions.browserActions.map((item) => {
-          if (item.tabId === selectedTabId) {
-            return <BrowserAction data={item} key={item.extensionId} />;
-          }
-          return null;
-        })}
+        store.extensions.browserActions.map((item) => (
+          <BrowserAction data={item} key={item.extensionId} />
+        ))}
     </>
   );
 });
 
 const onShieldContextMenu = (e: React.MouseEvent<HTMLDivElement>) => {
-  const menu = remote.Menu.buildFromTemplate([
-    {
-      checked: store.settings.object.shield,
-      label: 'Enabled',
-      type: 'checkbox',
-      click: () => {
-        store.settings.object.shield = !store.settings.object.shield;
-        store.settings.save();
-      },
-    },
-  ]);
-
-  menu.popup();
+  // const menu = remote.Menu.buildFromTemplate([
+  //   {
+  //     checked: store.settings.object.shield,
+  //     label: 'Enabled',
+  //     type: 'checkbox',
+  //     click: () => {
+  //       store.settings.object.shield = !store.settings.object.shield;
+  //       store.settings.save();
+  //     },
+  //   },
+  // ]);
+  // menu.popup();
 };
 
 export const RightButtons = observer(() => {
@@ -86,14 +83,14 @@ export const RightButtons = observer(() => {
           <Separator />
         </>
       )}
-      <ToolbarButton
+      {/* <ToolbarButton
         size={16}
         badge={store.settings.object.shield && blockedAds > 0}
         badgeText={blockedAds.toString()}
         icon={ICON_SHIELD}
         opacity={store.settings.object.shield ? 0.87 : 0.54}
         onContextMenu={onShieldContextMenu}
-      ></ToolbarButton>
+      ></ToolbarButton> */}
 
       {store.downloadsButtonVisible && (
         <ToolbarButton
@@ -108,7 +105,7 @@ export const RightButtons = observer(() => {
           value={store.downloadProgress}
         ></ToolbarButton>
       )}
-      {store.isIncognito && <ToolbarButton icon={ICON_INCOGNITO} size={18} />}
+      {/* {store.isIncognito && <ToolbarButton icon={ICON_INCOGNITO} size={18} />} */}
       <ToolbarButton
         divRef={(r) => (menuRef = r)}
         toggled={store.dialogsVisibility['menu']}
