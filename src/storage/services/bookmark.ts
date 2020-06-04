@@ -3,7 +3,9 @@ import { IBookmarkNode } from '~/interfaces';
 
 class BookmarkService {
   private format(node: IBookmarkNode): IBookmarkNode {
-    if (!node) return null;
+    if (!node) {
+      throw new Error(`Can't find bookmark.`);
+    }
 
     return {
       ...node,
