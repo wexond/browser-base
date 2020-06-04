@@ -98,10 +98,8 @@ export class Application {
     const worker = new Worker('./build/storage.bundle.js');
 
     worker.on('message', (e) => {
-      console.log('worker message', e);
+      Application.instance.windows.list[0].webContents.send('main-message', e);
     });
-
-    worker.postMessage({ type: 'bookmarks-get-children' } as IStorageMessage);
 
     // this.storage.run();
     // this.dialogs.run();
@@ -118,6 +116,12 @@ export class Application {
     await browserContext.loadExtensions();
 
     this.windows.create(browserContext, {});
+
+    const window = Application.instance.windows.list[0].webContents;
+
+    window.on('dom-ready', () => {
+      worker.postMessage({ type: 'bookmarks-get-children' } as IStorageMessage);
+    });
 
     // Menu.setApplicationMenu(getMainMenu());
     // runAutoUpdaterService();
