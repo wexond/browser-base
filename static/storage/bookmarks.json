@@ -1,36 +1,32 @@
-[
-  {
-    "id": "0",
-    "title": "",
-    "dateAdded": "",
-    "children": [
-      {
-        "id": "1",
-        "index": 0,
-        "parentId": "0",
-        "title": "Bookmarks bar",
-        "dateAdded": 1584537310718,
-        "dateGroupModified": 1589305944141,
-        "children": []
-      },
-      {
-        "id": "2",
-        "index": 1,
-        "parentId": "0",
-        "title": "Other bookmarks",
-        "dateAdded": 1584537310718,
-        "dateGroupModified": 1589305944141,
-        "children": []
-      },
-      {
-        "id": "3",
-        "index": 2,
-        "parentId": "0",
-        "title": "Mobile bookmarks",
-        "dateAdded": 1584537310718,
-        "dateGroupModified": 1591187285869,
-        "children": []
-      }
-    ]
-  }
-]
+{
+  "roots": {
+    "bookmark_bar": {
+      "children": [],
+      "date_added": "13235080272761663",
+      "date_modified": "13235586520595177",
+      "id": "1",
+      "name": "Favorites bar",
+      "source": "unknown",
+      "type": "folder"
+    },
+    "other": {
+      "children": [],
+      "date_added": "13235080272761671",
+      "date_modified": "0",
+      "id": "2",
+      "name": "Other favorites",
+      "source": "unknown",
+      "type": "folder"
+    },
+    "synced": {
+      "children": [],
+      "date_added": "13235080272761672",
+      "date_modified": "0",
+      "id": "3",
+      "name": "Mobile favorites",
+      "source": "unknown",
+      "type": "folder"
+    }
+  },
+  "version": 1
+}
