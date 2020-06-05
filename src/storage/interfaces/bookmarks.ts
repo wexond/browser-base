@@ -35,11 +35,3 @@ export interface IBookmarksDocumentRootMetaInfo {
   last_visited: number;
   last_visited_desktop: number;
 }
-
-// export interface IBookmarksNode {
-//   id: string;
-//   name: string;
-//   url: string;
-//   index: number;
-//   children?: string[];
-// }

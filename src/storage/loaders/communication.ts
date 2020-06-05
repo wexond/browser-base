@@ -10,7 +10,7 @@ export default () => {
     console.log(type);
 
     if (type === 'bookmarks-get-children') {
-      const res = BookmarkService.getSubTree('1');
+      const res = BookmarkService.getRecent(10);
 
       parentPort.postMessage(res);
     }

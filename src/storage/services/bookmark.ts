@@ -7,6 +7,8 @@ import { parseStringToNumber } from '../utils';
 class BookmarkService {
   private rootNode: IBookmarksDocumentRoot;
 
+  private idsMap = new Map<string, IBookmarksDocumentRoot>();
+
   private format(root: IBookmarksDocumentRoot, withChildren = false) {
     const {
       id,
@@ -53,26 +55,28 @@ class BookmarkService {
       name: '',
       children: nodes.map((r, index) => this.formatRoot(r, index, '0')),
     };
+
+    this.idsMap.set('0', this.rootNode);
   }
 
   private formatRoot(
     root: IBookmarksDocumentRoot,
     index?: number,
     parentId?: string,
-  ): IBookmarksDocumentRoot {
+  ) {
     let children = root.children;
 
     if (children) {
-      children = this.sortRootChildren(children).map((r, index) =>
-        this.formatRoot(r, index, root.id),
-      );
+      children = children
+        .sort((x, y): any => x.guid < y.guid)
+        .map((r, index) => this.formatRoot(r, index, root.id));
     }
 
-    return { ...root, children, index, parentId };
-  }
+    const data: IBookmarksDocumentRoot = { ...root, children, index, parentId };
 
-  private sortRootChildren(children: IBookmarksDocumentRoot[]) {
-    return children.sort((x, y): any => x.guid < y.guid);
+    this.idsMap.set(root.id, data);
+
+    return data;
   }
 
   private getRoot(ids: string | string[]) {
@@ -82,33 +86,44 @@ class BookmarkService {
 
     const nodes: IBookmarksDocumentRoot[] = [];
 
-    const queue = [this.rootNode];
+    ids.forEach((r) => {
+      const node = this.idsMap.get(r);
 
-    while (queue.length !== 0) {
-      const item = queue.shift();
+      if (!node) throw new Error(`Can't find bookmark for id.`);
 
-      if (ids.includes(item.id)) {
-        nodes.push(item);
+      nodes.push(node);
+    });
 
-        if (nodes.length === ids.length) {
-          return nodes;
-        }
-      } else if (item.children) {
-        queue.push(...item.children);
-      }
-    }
-
-    return undefined;
+    return nodes;
   }
 
   public get(ids: string | string[]) {
     return this.getRoot(ids).map((r) => this.format(r));
   }
 
+  public getRecent(count: number) {
+    const items = [...this.idsMap.values()];
+
+    return items
+      .sort((x, y) => parseInt(y.date_added) - parseInt(x.date_added))
+      .slice(0, count);
+  }
+
+  public getChildren(id: string) {
+    const [root] = this.getRoot(id);
+
+    if (!root.children) return [];
+
+    return root.children.map((r) => this.format(r));
+  }
+
   public getSubTree(id: string) {
     const [root] = this.getRoot(id);
 
-    return this.format(root, true);
+    const data = this.format(root, true);
+    console.log(process.memoryUsage());
+
+    return data;
   }
 
   public getTree() {
