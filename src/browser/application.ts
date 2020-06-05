@@ -4,7 +4,7 @@ import { existsSync } from 'fs';
 import { BrowserContexts } from './browser-contexts';
 import { checkFiles } from '~/utils/files';
 import { Settings } from './models/settings';
-import { isURL, prefixHttp } from '~/utils';
+import { isURL, prefixHttp, getPath } from '~/utils';
 import { WindowsService } from './windows-service';
 import { StorageService } from './services/storage';
 import { getMainMenu } from './menus/main';
@@ -95,7 +95,9 @@ export class Application {
 
     checkFiles();
 
-    const worker = new Worker('./build/storage.bundle.js');
+    const worker = new Worker('./build/storage.bundle.js', {
+      workerData: { storagePath: getPath('storage') },
+    });
 
     worker.on('message', (e) => {
       Application.instance.windows.list[0].webContents.send('main-message', e);
@@ -108,7 +110,6 @@ export class Application {
       session.defaultSession,
       false,
     );
-    const worker = new Worker('./build/storage.bundle.js');
 
     //this.storage.run();
     this.dialogs.run();

@@ -1,33 +1,118 @@
-import { db } from '../loaders/db';
+import { readJsonFile } from '~/common/utils/files';
+import { config } from '../constants';
+import { IBookmarksDocument, IBookmarksDocumentRoot } from '../interfaces';
 import { IBookmarkNode } from '~/interfaces';
+import { parseStringToNumber } from '../utils';
 
 class BookmarkService {
-  public isFolder(node: IBookmarkNode) {
+  private rootNode: IBookmarksDocumentRoot;
+
+  private format(root: IBookmarksDocumentRoot, withChildren = false) {
+    const {
+      id,
+      parentId,
+      index,
+      url,
+      name,
+      date_modified,
+      date_added,
+      children,
+    } = root;
+
+    const node: IBookmarkNode = {
+      id,
+      parentId,
+      index,
+      url,
+      title: name,
+      dateGroupModified: parseStringToNumber(date_modified),
+      dateAdded: parseStringToNumber(date_added),
+    };
+
+    if (withChildren && this.isFolder(root)) {
+      node.children = children.map((r) => this.format(r, true));
+    }
+
+    return node;
+  }
+
+  private isFolder(node: IBookmarksDocumentRoot | IBookmarkNode) {
     return node.url == null;
   }
 
-  public get(ids: string | string[]): IBookmarkNode[] {
+  public async load() {
+    const { roots } = await readJsonFile<IBookmarksDocument>(
+      config.bookmarks,
+      config.default.bookmarks,
+    );
+
+    const nodes = [roots.bookmark_bar, roots.other, roots.synced];
+
+    this.rootNode = {
+      id: '0',
+      name: '',
+      children: nodes.map((r, index) => this.formatRoot(r, index, '0')),
+    };
+  }
+
+  private formatRoot(
+    root: IBookmarksDocumentRoot,
+    index?: number,
+    parentId?: string,
+  ): IBookmarksDocumentRoot {
+    let children = root.children;
+
+    if (children) {
+      children = this.sortRootChildren(children).map((r, index) =>
+        this.formatRoot(r, index, root.id),
+      );
+    }
+
+    return { ...root, children, index, parentId };
+  }
+
+  private sortRootChildren(children: IBookmarksDocumentRoot[]) {
+    return children.sort((x, y): any => x.guid < y.guid);
+  }
+
+  private getRoot(ids: string | string[]) {
     if (typeof ids === 'string') {
       ids = [ids];
     }
 
-    const query = db.prepare(`SELECT * FROM bookmarks WHERE id = ?`);
+    const nodes: IBookmarksDocumentRoot[] = [];
 
-    return ids.map((r) => query.get(r));
+    const queue = [this.rootNode];
+
+    while (queue.length !== 0) {
+      const item = queue.shift();
+
+      if (ids.includes(item.id)) {
+        nodes.push(item);
+
+        if (nodes.length === ids.length) {
+          return nodes;
+        }
+      } else if (item.children) {
+        queue.push(...item.children);
+      }
+    }
+
+    return undefined;
   }
 
-  public getChildren(id: string): IBookmarkNode[] {
-    return db.prepare(`SELECT * FROM bookmarks WHERE parentId = ?`).all(id);
+  public get(ids: string | string[]) {
+    return this.getRoot(ids).map((r) => this.format(r));
   }
 
-  public getSubTree(id: string, node?: IBookmarkNode): IBookmarkNode[] {
-    const _node = node || this.get(id)[0];
+  public getSubTree(id: string) {
+    const [root] = this.getRoot(id);
 
-    const children = this.getChildren(id).map((r) =>
-      this.isFolder(r) ? this.getSubTree(r.id, r)[0] : r,
-    );
+    return this.format(root, true);
+  }
 
-    return [{ ..._node, children }];
+  public getTree() {
+    return this.rootNode;
   }
 }
 
