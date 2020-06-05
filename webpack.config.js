@@ -56,7 +56,7 @@ const storageConfig = getConfig({
 
   plugins: [
     new CopyPlugin({
-      patterns: [{ from: './static/storage/schema.sql', to: 'storage' }],
+      patterns: [{ from: './static/storage/*', to: 'storage' }],
     }),
   ],
 });

@@ -1,0 +1,36 @@
+[
+  {
+    "id": "0",
+    "title": "",
+    "dateAdded": "",
+    "children": [
+      {
+        "id": "1",
+        "index": 0,
+        "parentId": "0",
+        "title": "Bookmarks bar",
+        "dateAdded": 1584537310718,
+        "dateGroupModified": 1589305944141,
+        "children": []
+      },
+      {
+        "id": "2",
+        "index": 1,
+        "parentId": "0",
+        "title": "Other bookmarks",
+        "dateAdded": 1584537310718,
+        "dateGroupModified": 1589305944141,
+        "children": []
+      },
+      {
+        "id": "3",
+        "index": 2,
+        "parentId": "0",
+        "title": "Mobile bookmarks",
+        "dateAdded": 1584537310718,
+        "dateGroupModified": 1591187285869,
+        "children": []
+      }
+    ]
+  }
+]
