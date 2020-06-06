@@ -23,6 +23,8 @@ export class Application {
 
   public windows: WindowsService = new WindowsService();
 
+  public storageWorker: Worker;
+
   // public settings = new Settings();
 
   // public storage = new StorageService();
@@ -95,13 +97,13 @@ export class Application {
 
     checkFiles();
 
-    const worker = new Worker('./build/storage.bundle.js', {
+    this.storageWorker = new Worker('./build/storage.bundle.js', {
       workerData: { storagePath: getPath('storage') },
     });
 
-    worker.on('message', (e) => {
-      Application.instance.windows.list[0].webContents.send('main-message', e);
-    });
+    // worker.on('message', (e) => {
+    //   Application.instance.windows.list[0].webContents.send('main-message', e);
+    // });
 
     // this.storage.run();
     // this.dialogs.run();
@@ -120,14 +122,14 @@ export class Application {
 
     const window = Application.instance.windows.list[0].webContents;
 
-    window.on('dom-ready', () => {
-      worker.postMessage({
-        id: 'test',
-        scope: 'bookmarks',
-        method: 'get-subtree',
-        args: ['1'],
-      } as IStorageMessage);
-    });
+    // window.on('dom-ready', () => {
+    //   worker.postMessage({
+    //     id: 'test',
+    //     scope: 'bookmarks',
+    //     method: 'get-subtree',
+    //     args: ['1'],
+    //   } as IStorageMessage);
+    // });
 
     // Menu.setApplicationMenu(getMainMenu());
     // runAutoUpdaterService();
