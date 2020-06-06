@@ -6,12 +6,12 @@ export interface IBookmarksDocument {
 }
 
 export interface IBookmarksDocumentRoots {
-  bookmark_bar: IBookmarksDocumentRoot;
-  other: IBookmarksDocumentRoot;
-  synced: IBookmarksDocumentRoot;
+  bookmark_bar: IBookmarksDocumentNode;
+  other: IBookmarksDocumentNode;
+  synced: IBookmarksDocumentNode;
 }
 
-export interface IBookmarksDocumentRoot {
+export interface IBookmarksDocumentNode {
   id?: string;
   name?: string;
   type?: IBookmarksDocumentRootType;

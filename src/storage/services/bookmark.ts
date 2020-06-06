@@ -1,6 +1,6 @@
 import { readJsonFile } from '~/common/utils/files';
 import { config } from '../constants';
-import { IBookmarksDocument, IBookmarksDocumentRoot } from '../interfaces';
+import { IBookmarksDocument, IBookmarksDocumentNode } from '../interfaces';
 import {
   IBookmarkNode,
   IBookmarkSearchQuery,
@@ -8,54 +8,25 @@ import {
   IBookmarkDestination,
 } from '~/interfaces';
 import { parseStringToNumber } from '../utils';
-import { makeId, randomId, makeGuuid } from '~/common/utils/string';
+import { makeId, makeGuuid } from '~/common/utils/string';
 import { dateToChromeTime } from '~/common/utils/date';
 
 class BookmarkService {
-  private rootNode: IBookmarksDocumentRoot;
+  private rootNode: IBookmarksDocumentNode;
 
-  private idsMap = new Map<string, IBookmarksDocumentRoot>();
+  private idsMap = new Map<string, IBookmarksDocumentNode>();
 
-  private otherBookmarks: IBookmarksDocumentRoot;
+  private otherBookmarks: IBookmarksDocumentNode;
 
-  private get nodes() {
+  private get documentNodes() {
     return [...this.idsMap.values()];
   }
 
-  private format(root: IBookmarksDocumentRoot, withChildren = false) {
-    const {
-      id,
-      parentId,
-      index,
-      url,
-      name,
-      date_modified,
-      date_added,
-      children,
-    } = root;
-
-    const node: IBookmarkNode = {
-      id,
-      parentId,
-      index,
-      url,
-      title: name,
-      dateGroupModified: parseStringToNumber(date_modified),
-      dateAdded: parseStringToNumber(date_added),
-    };
-
-    if (withChildren && this.isFolder(root)) {
-      node.children = children.map((r) => this.format(r, true));
-    }
-
-    return node;
-  }
-
-  private isFolder(node: IBookmarksDocumentRoot | IBookmarkNode) {
+  private isFolder(node: IBookmarksDocumentNode | IBookmarkNode) {
     return node.url == null;
   }
 
-  private limitIndex(children: IBookmarksDocumentRoot[], index: number) {
+  private limitIndex(children: IBookmarksDocumentNode[], index: number) {
     return Math.max(0, Math.min(index ?? children.length, children.length));
   }
 
@@ -65,47 +36,77 @@ class BookmarkService {
       config.default.bookmarks,
     );
 
-    const children = [
+    const nodes = [
       roots.bookmark_bar,
       roots.other,
       roots.synced,
-    ].map((r, index) => this.formatRoot(r, index, '0'));
+    ].map((r, index) => this.formatDocumentNode(r, index, '0'));
 
-    this.otherBookmarks = children[1];
-
+    this.otherBookmarks = nodes[1];
     this.rootNode = {
       id: '0',
       name: '',
-      children,
+      children: nodes,
     };
 
     this.idsMap.set('0', this.rootNode);
   }
 
-  private formatRoot(
-    root: IBookmarksDocumentRoot,
+  private formatToNode(node: IBookmarksDocumentNode, withChildren = false) {
+    const {
+      id,
+      parentId,
+      index,
+      url,
+      name,
+      date_modified,
+      date_added,
+      children,
+    } = node;
+
+    const data: IBookmarkNode = {
+      id,
+      parentId,
+      index,
+      url,
+      title: name,
+      dateGroupModified: parseStringToNumber(date_modified),
+      dateAdded: parseStringToNumber(date_added),
+    };
+
+    if (withChildren && this.isFolder(node)) {
+      data.children = children.map((r) => this.formatToNode(r, true));
+    }
+
+    return data;
+  }
+
+  private formatDocumentNode(
+    root: IBookmarksDocumentNode,
     index?: number,
     parentId?: string,
   ) {
     let children = root.children;
 
     if (children) {
-      children = children.map((r, index) => this.formatRoot(r, index, root.id));
+      children = children.map((r, index) =>
+        this.formatDocumentNode(r, index, root.id),
+      );
     }
 
-    const data: IBookmarksDocumentRoot = { ...root, children, index, parentId };
+    const data: IBookmarksDocumentNode = { ...root, children, index, parentId };
 
     this.idsMap.set(root.id, data);
 
     return data;
   }
 
-  private getRoot(ids: string | string[]) {
+  private getDocumentNode(ids: string | string[]) {
     if (typeof ids === 'string') {
       ids = [ids];
     }
 
-    const nodes: IBookmarksDocumentRoot[] = [];
+    const nodes: IBookmarksDocumentNode[] = [];
 
     ids.forEach((r) => {
       const node = this.idsMap.get(r);
@@ -119,21 +120,23 @@ class BookmarkService {
   }
 
   public get(ids: string | string[]) {
-    return this.getRoot(ids).map((r) => this.format(r));
+    return this.getDocumentNode(ids).map((r) => this.formatToNode(r));
   }
 
   public getRecent(count: number) {
-    return this.nodes
+    return this.documentNodes
       .sort((x, y) => parseInt(y.date_added) - parseInt(x.date_added))
       .slice(0, count);
   }
 
   public getChildren(id: string) {
-    const [root] = this.getRoot(id);
+    const [node] = this.getDocumentNode(id);
 
-    if (!root.children) return [];
+    if (!node.children) {
+      return [];
+    }
 
-    return root.children.map((r) => this.format(r));
+    return node.children.map((r) => this.formatToNode(r));
   }
 
   public getTree() {
@@ -141,16 +144,16 @@ class BookmarkService {
   }
 
   public getSubTree(id: string) {
-    const [root] = this.getRoot(id);
+    const [node] = this.getDocumentNode(id);
 
-    return this.format(root, true);
+    return this.formatToNode(node, true);
   }
 
   public search(query: string | IBookmarkSearchQuery) {
     if (typeof query === 'string') {
       const value = query.toLowerCase();
 
-      return this.nodes.filter(
+      return this.documentNodes.filter(
         ({ url, name }) =>
           (url && url.toLowerCase().includes(value)) ||
           (name && name.toLowerCase().includes(value)),
@@ -159,25 +162,23 @@ class BookmarkService {
 
     const { url, title } = query;
 
-    return this.nodes.filter((r) => {
-      return !(
-        (url != null && r.url !== url) ||
-        (title != null && r.name !== title)
-      );
-    });
+    return this.documentNodes.filter(
+      (r) =>
+        (url == null || r.url === url) && (title == null || r.name === title),
+    );
   }
 
   public create(data: IBookmarkNode = {}) {
     const parentId = data?.parentId ?? this.otherBookmarks.id;
-    const [parentRoot] = this.getRoot(parentId);
+    const [parentNode] = this.getDocumentNode(parentId);
 
-    if (!this.isFolder(parentRoot)) {
-      throw new Error('Bookmark not a folder!');
+    if (!this.isFolder(parentNode)) {
+      throw new Error('Bookmark is not a folder!');
     }
 
     const chromeTime = dateToChromeTime(new Date()).toString();
 
-    const node: IBookmarksDocumentRoot = {
+    const node: IBookmarksDocumentNode = {
       id: makeId(16),
       name: data.title,
       url: data.url,
@@ -185,93 +186,92 @@ class BookmarkService {
       date_added: chromeTime,
       type: data.url == null ? 'folder' : 'url',
       guid: makeGuuid(),
-      index: this.limitIndex(parentRoot.children, data.index),
+      index: this.limitIndex(parentNode.children, data.index),
     };
 
-    parentRoot.children.splice(node.index, 0, node);
-    parentRoot.children.slice(node.index + 1).forEach((r) => r.index++);
+    this.addChild(node, parentNode, node.index);
 
-    return this.format(node);
+    return this.formatToNode(node);
   }
 
   public move(id: string, dest: IBookmarkDestination) {
-    const [root] = this.getRoot(id);
+    const [node] = this.getDocumentNode(id);
+    const newParentId = dest?.parentId ?? node.parentId;
 
-    const newParentId = dest?.parentId ?? root.parentId;
-
-    const [parentRoot, newParentRoot] = this.getRoot([
-      root.parentId,
+    const [parentNode, newParentNode] = this.getDocumentNode([
+      node.parentId,
       newParentId,
     ]);
 
-    const currentIndex = root.index;
+    const currentIndex = node.index;
     let destIndex = dest?.index;
 
     if (destIndex == null) {
-      destIndex = newParentRoot.children.length;
+      destIndex = newParentNode.children.length;
 
-      if (parentRoot.id === newParentRoot.id) {
+      if (parentNode.id === newParentNode.id) {
         destIndex--;
       }
     }
 
-    root.parentId = newParentId;
-    root.index = destIndex;
+    node.parentId = newParentId;
+    node.index = destIndex;
 
-    parentRoot.children.splice(currentIndex, 1);
-    parentRoot.children.slice(currentIndex).forEach((r) => r.index--);
+    this.removeChild(parentNode, currentIndex);
+    this.addChild(node, newParentNode, destIndex);
 
-    newParentRoot.children.splice(destIndex, 0, root);
-    newParentRoot.children.slice(destIndex + 1).forEach((r) => r.index++);
-
-    return [parentRoot, newParentRoot];
+    return [parentNode, newParentNode];
   }
 
   public update(id: string, changes: IBookmarkChanges) {
-    const [root] = this.getRoot(id);
+    const [node] = this.getDocumentNode(id);
 
-    if (changes?.title) {
-      root.name = changes.title;
-    }
+    if (changes?.title) node.name = changes.title;
+    if (changes?.url) node.url = changes.url;
 
-    if (changes?.url) {
-      root.url = changes.url;
-    }
-
-    return root;
+    return node;
   }
 
-  private removeRootReference(root: IBookmarksDocumentRoot) {
-    this.idsMap.delete(root.id);
-    root.children?.forEach((r) => this.removeRootReference(r));
+  private addChild(
+    child: IBookmarksDocumentNode,
+    parent: IBookmarksDocumentNode,
+    index: number,
+  ) {
+    parent.children.splice(index, 0, child);
+    parent.children.slice(index + 1).forEach((r) => r.index++);
   }
 
-  private removeRoot(root: IBookmarksDocumentRoot) {
-    const [parentRoot] = this.getRoot(root.parentId);
-    const index = parentRoot.children.indexOf(root);
+  private removeChild(parent: IBookmarksDocumentNode, index: number) {
+    parent.children.splice(index, 1);
+    parent.children.slice(index).forEach((r) => r.index--);
+  }
 
-    parentRoot.children.splice(index, 1);
-    parentRoot.children.slice(index).forEach((r) => r.index--);
+  private removeReference(node: IBookmarksDocumentNode) {
+    this.idsMap.delete(node.id);
+    node.children?.forEach((r) => this.removeReference(r));
+  }
 
-    this.removeRootReference(root);
+  private removeDocumentNode(node: IBookmarksDocumentNode) {
+    const [parentNode] = this.getDocumentNode(node.parentId);
+
+    this.removeChild(parentNode, node.index);
+    this.removeReference(node);
   }
 
   public remove(id: string) {
-    const [root] = this.getRoot(id);
+    const [node] = this.getDocumentNode(id);
 
-    if (this.isFolder(root) && root.children?.length) {
+    if (this.isFolder(node) && node.children?.length) {
       throw new Error(`Can't remove non-empty folder (use recursive to force)`);
     }
 
-    this.removeRoot(root);
+    this.removeDocumentNode(node);
   }
 
   public removeTree(id: string) {
-    const [root] = this.getRoot(id);
+    const [node] = this.getDocumentNode(id);
 
-    this.removeRoot(root);
-
-    return [this.rootNode.children[0], this.idsMap.get('358')];
+    this.removeDocumentNode(node);
   }
 }
 

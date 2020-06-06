@@ -10,14 +10,7 @@ export default () => {
     console.log(type);
 
     if (type === 'bookmarks-get-children') {
-      const res = BookmarkService.move('358', {
-        /* index: 0*/
-        /*, parentId: '167'*/
-        //,
-        // parentId: '167',
-        index: 6,
-      });
-      // const res = BookmarkService.getTree();
+      const res = BookmarkService.getTree();
 
       parentPort.postMessage(res);
     }
