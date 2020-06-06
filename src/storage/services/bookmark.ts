@@ -139,8 +139,12 @@ class BookmarkService {
     return node.children.map((r) => this.formatToNode(r));
   }
 
-  public getTree() {
+  public getDocumentTree() {
     return this.rootNode;
+  }
+
+  public getTree() {
+    return this.getSubTree('0');
   }
 
   public getSubTree(id: string) {
