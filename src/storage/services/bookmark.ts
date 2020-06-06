@@ -48,6 +48,25 @@ class BookmarkService extends EventEmitter {
 
   private roots: IBookmarksDocumentRoots = {};
 
+  private saveTimeout: number;
+
+  constructor() {
+    super();
+
+    this.on('changed', this.onAction);
+    this.on('created', this.onAction);
+    this.on('moved', this.onAction);
+    this.on('removed', this.onAction);
+  }
+
+  private onAction = () => {
+    clearTimeout(this.saveTimeout);
+
+    this.saveTimeout = setTimeout(() => {
+      this.save();
+    }, 1000);
+  };
+
   private get documentNodes() {
     return [...this.idsMap.values()];
   }
@@ -83,6 +102,19 @@ class BookmarkService extends EventEmitter {
     };
 
     this.idsMap.set('0', this.rootNode);
+  }
+
+  public async save() {
+    const document: IBookmarksDocument = {
+      roots: this.roots,
+      version: 1,
+    };
+
+    const data = JSON.stringify(document, null, 2);
+
+    await fs.writeFile(config.bookmarks, data, 'utf8');
+
+    console.log('Bookmarks saved!');
   }
 
   private formatToDocumentNode(

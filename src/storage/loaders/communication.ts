@@ -10,10 +10,9 @@ export default () => {
     console.log(type);
 
     if (type === 'bookmarks-get-children') {
-      const res = BookmarkService.create({ title: 'Hello aha' });
-      const tree = BookmarkService.getTree();
+      const res = BookmarkService.getTree();
 
-      parentPort.postMessage([res, tree]);
+      parentPort.postMessage(res);
     }
   });
 };
