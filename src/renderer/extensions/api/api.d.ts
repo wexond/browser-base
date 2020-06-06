@@ -1,70 +1,41 @@
-interface Window {
-  browser: typeof chrome & typeof browser;
-}
+interface Window { browser: typeof browser }
 
 declare namespace browser.browserAction {
   export type ColorArray = number[];
   export type ImageDataType = ImageData;
-  export function setTitle(
-    details: {
-      title: string;
-      tabId?: number;
-    },
-    callback?: () => void,
-  ): void;
-  export function getTitle(
-    details: {
-      tabId?: number;
-    },
-    callback?: (result: string) => void,
-  ): Promise<string>;
-  export function setIcon(
-    details: {
-      imageData?: ImageDataType | any;
-      path?: string | any;
-      tabId?: number;
-    },
-    callback?: () => void,
-  ): void;
-  export function setPopup(
-    details: {
-      tabId?: number;
-      popup: string;
-    },
-    callback?: () => void,
-  ): void;
-  export function getPopup(
-    details: {
-      tabId?: number;
-    },
-    callback?: (result: string) => void,
-  ): Promise<string>;
-  export function setBadgeText(
-    details: {
-      text?: string;
-      tabId?: number;
-    },
-    callback?: () => void,
-  ): void;
-  export function getBadgeText(
-    details: {
-      tabId?: number;
-    },
-    callback?: (result: string) => void,
-  ): Promise<string>;
-  export function setBadgeBackgroundColor(
-    details: {
-      color: string | ColorArray;
-      tabId?: number;
-    },
-    callback?: () => void,
-  ): void;
-  export function getBadgeBackgroundColor(
-    details: {
-      tabId?: number;
-    },
-    callback?: (result: ColorArray) => void,
-  ): Promise<ColorArray>;
+  export function setTitle(details: {
+    title: string;
+    tabId?: number;
+  }, callback?: () => void): void;
+  export function getTitle(details: {
+    tabId?: number;
+  }, callback?: (result: string) => void): Promise<string>;
+  export function setIcon(details: {
+    imageData?: ImageDataType | any;
+    path?: string | any;
+    tabId?: number;
+  }, callback?: () => void): void;
+  export function setPopup(details: {
+    tabId?: number;
+    popup: string;
+  }, callback?: () => void): void;
+  export function getPopup(details: {
+    tabId?: number;
+  }, callback?: (result: string) => void): Promise<string>;
+  export function setBadgeText(details: {
+    text?: string;
+    tabId?: number;
+  }, callback?: () => void): void;
+  export function getBadgeText(details: {
+    tabId?: number;
+  }, callback?: (result: string) => void): Promise<string>;
+  export function setBadgeBackgroundColor(details: {
+    color: string | ColorArray;
+    tabId?: number;
+  }, callback?: () => void): void;
+  export function getBadgeBackgroundColor(details: {
+    tabId?: number;
+  }, callback?: (result: ColorArray) => void): Promise<ColorArray>;
   export function enable(tabId?: number, callback?: () => void): void;
   export function disable(tabId?: number, callback?: () => void): void;
   export function openPopup(callback?: (popupView?: any) => void): Promise<any>;
@@ -79,10 +50,7 @@ declare namespace browser.browserActionPrivate {
   }
   export function getAll(): void;
   export function getAllInTab(tabId: number): void;
-  export function openPopup(
-    extensionId: string,
-    details: OpenPopupDetails,
-  ): void;
+  export function openPopup(extensionId: string, details: OpenPopupDetails): void;
   export const onUpdated: chrome.events.Event<(browserAction: number) => void>;
 }
 
@@ -104,60 +72,46 @@ declare namespace browser.cookies {
     id: string;
     tabIds: number[];
   }
-  export function get(
-    details: {
-      url: string;
-      name: string;
-      storeId?: string;
-    },
-    callback?: (cookie?: Cookie) => void,
-  ): Promise<Cookie>;
-  export function getAll(
-    details: {
-      url?: string;
-      name?: string;
-      domain?: string;
-      path?: string;
-      secure?: boolean;
-      session?: boolean;
-      storeId?: string;
-    },
-    callback?: (cookies: Cookie[]) => void,
-  ): Promise<Cookie[]>;
-  export function set(
-    details: {
-      url: string;
-      name?: string;
-      value?: string;
-      domain?: string;
-      path?: string;
-      secure?: boolean;
-      httpOnly?: boolean;
-      sameSite?: SameSiteStatus;
-      expirationDate?: number;
-      storeId?: string;
-    },
-    callback?: (cookie?: Cookie) => void,
-  ): Promise<Cookie>;
-  export function remove(
-    details: {
-      url: string;
-      name: string;
-      storeId?: string;
-    },
-    callback?: (details?: {
-      url: string;
-      name: string;
-      storeId: string;
-    }) => void,
-  ): Promise<{
+  export function get(details: {
+    url: string;
+    name: string;
+    storeId?: string;
+  }, callback?: (cookie?: Cookie) => void): Promise<Cookie>;
+  export function getAll(details: {
+    url?: string;
+    name?: string;
+    domain?: string;
+    path?: string;
+    secure?: boolean;
+    session?: boolean;
+    storeId?: string;
+  }, callback?: (cookies: Cookie[]) => void): Promise<Cookie[]>;
+  export function set(details: {
+    url: string;
+    name?: string;
+    value?: string;
+    domain?: string;
+    path?: string;
+    secure?: boolean;
+    httpOnly?: boolean;
+    sameSite?: SameSiteStatus;
+    expirationDate?: number;
+    storeId?: string;
+  }, callback?: (cookie?: Cookie) => void): Promise<Cookie>;
+  export function remove(details: {
+    url: string;
+    name: string;
+    storeId?: string;
+  }, callback?: (details?: {
+    url: string;
+    name: string;
+    storeId: string;
+  }) => void): Promise<{
     url: string;
     name: string;
     storeId: string;
   }>;
-  export function getAllCookieStores(
-    callback?: (cookieStores: CookieStore[]) => void,
-  ): Promise<CookieStore[]>;
+  export function getAllCookieStores(callback?: (cookieStores: CookieStore[]) => void): Promise<CookieStore[]>;
   export const onChanged: chrome.events.Event<(changeInfo: {
     removed: boolean;
     cookie: Cookie;
@@ -166,10 +120,7 @@ declare namespace browser.cookies {
 }
 
 declare namespace browser.dialogsPrivate {
-  export const onVisibilityStateChange: chrome.events.Event<(
-    name: string,
-    visible: boolean,
-  ) => void>;
+  export const onVisibilityStateChange: chrome.events.Event<(name: string, visible: boolean) => void>;
 }
 
 declare namespace browser.events {
@@ -183,10 +134,7 @@ declare namespace browser.events {
   export interface Event<T extends Function> {
     addListener(callback: T): void;
     getRules(callback: (rules: Rule[]) => void): void;
-    getRules(
-      ruleIdentifiers: string[],
-      callback: (rules: Rule[]) => void,
-    ): void;
+    getRules(ruleIdentifiers: string[], callback: (rules: Rule[]) => void): void;
     hasListener(callback: T): boolean;
     removeRules(ruleIdentifiers?: string[], callback?: () => void): void;
     removeRules(callback?: () => void): void;
@@ -237,19 +185,11 @@ declare namespace browser.extensionTypes {
 declare namespace browser.runtime {
   export function openOptionsPage(callback?: () => void): void;
   export function setUninstallURL(url: string, callback?: () => void): void;
-  export function requestUpdateCheck(
-    callback?: (
-      status: RequestUpdateCheckStatus,
-      details?: {
-        version: string;
-      },
-    ) => void,
-  ): Promise<RequestUpdateCheckStatus>;
+  export function requestUpdateCheck(callback?: (status: RequestUpdateCheckStatus, details?: {
+    version: string;
+  }) => void): Promise<RequestUpdateCheckStatus>;
   export function restart(): void;
-  export function restartAfterDelay(
-    seconds: number,
-    callback?: () => void,
-  ): void;
+  export function restartAfterDelay(seconds: number, callback?: () => void): void;
   export const onStartup: chrome.events.Event<() => void>;
   export const onInstalled: chrome.events.Event<(details: {
     reason: OnInstalledReason;
@@ -262,9 +202,7 @@ declare namespace browser.runtime {
     version: string;
   }) => void>;
   export const onBrowserUpdateAvailable: chrome.events.Event<() => void>;
-  export const onRestartRequired: chrome.events.Event<(
-    reason: OnRestartRequiredReason,
-  ) => void>;
+  export const onRestartRequired: chrome.events.Event<(reason: OnRestartRequiredReason) => void>;
 }
 
 declare namespace browser.tabs {
@@ -301,151 +239,88 @@ declare namespace browser.tabs {
     scope?: ZoomSettingsScope;
     defaultZoomFactor?: number;
   }
-  export function get(
-    tabId: number,
-    callback?: (tab: Tab) => void,
-  ): Promise<Tab>;
+  export function get(tabId: number, callback?: (tab: Tab) => void): Promise<Tab>;
   export function getCurrent(callback?: (tab?: Tab) => void): Promise<Tab>;
-  export function getSelected(
-    windowId?: number,
-    callback?: (tab: Tab) => void,
-  ): Promise<Tab>;
-  export function getAllInWindow(
-    windowId?: number,
-    callback?: (tabs: Tab[]) => void,
-  ): Promise<Tab[]>;
-  export function create(
-    createProperties: {
-      windowId?: number;
-      index?: number;
-      url?: string;
-      active?: boolean;
-      selected?: boolean;
-      pinned?: boolean;
-      openerTabId?: number;
-    },
-    callback?: (tab: Tab) => void,
-  ): Promise<Tab>;
-  export function duplicate(
-    tabId: number,
-    callback?: (tab?: Tab) => void,
-  ): Promise<Tab>;
-  export function query(
-    queryInfo: {
-      active?: boolean;
-      pinned?: boolean;
-      audible?: boolean;
-      muted?: boolean;
-      highlighted?: boolean;
-      discarded?: boolean;
-      autoDiscardable?: boolean;
-      currentWindow?: boolean;
-      lastFocusedWindow?: boolean;
-      status?: TabStatus;
-      title?: string;
-      url?: string | string[];
-      windowId?: number;
-      windowType?: WindowType;
-      index?: number;
-    },
-    callback?: (result: Tab[]) => void,
-  ): Promise<Tab[]>;
-  export function highlight(
-    highlightInfo: {
-      windowId?: number;
-      tabs: number[] | number;
-    },
-    callback?: (window: browser.windows.Window) => void,
-  ): Promise<browser.windows.Window>;
-  export function update(
-    tabId?: number,
-    updateProperties: {
-      url?: string;
-      active?: boolean;
-      highlighted?: boolean;
-      selected?: boolean;
-      pinned?: boolean;
-      muted?: boolean;
-      openerTabId?: number;
-      autoDiscardable?: boolean;
-    },
-    callback?: (tab?: Tab) => void,
-  ): Promise<Tab>;
-  export function move(
-    tabIds: number | number[],
-    moveProperties: {
-      windowId?: number;
-      index: number;
-    },
-    callback?: (tabs: Tab | Tab[]) => void,
-  ): Promise<Tab | Tab[]>;
-  export function reload(
-    tabId?: number,
-    reloadProperties?: {
-      bypassCache?: boolean;
-    },
-    callback?: () => void,
-  ): void;
-  export function remove(
-    tabIds: number | number[],
-    callback?: () => void,
-  ): void;
-  export function detectLanguage(
-    tabId?: number,
-    callback?: (language: string) => void,
-  ): Promise<string>;
-  export function captureVisibleTab(
-    windowId?: number,
-    options?: browser.extensionTypes.ImageDetails,
-    callback?: (dataUrl: string) => void,
-  ): Promise<string>;
-  export function insertCSS(
-    tabId?: number,
-    details: browser.extensionTypes.InjectDetails,
-    callback?: () => void,
-  ): void;
-  export function discard(
-    tabId?: number,
-    callback?: (tab?: Tab) => void,
-  ): Promise<Tab>;
+  export function getSelected(windowId?: number, callback?: (tab: Tab) => void): Promise<Tab>;
+  export function getAllInWindow(windowId?: number, callback?: (tabs: Tab[]) => void): Promise<Tab[]>;
+  export function create(createProperties: {
+    windowId?: number;
+    index?: number;
+    url?: string;
+    active?: boolean;
+    selected?: boolean;
+    pinned?: boolean;
+    openerTabId?: number;
+  }, callback?: (tab: Tab) => void): Promise<Tab>;
+  export function duplicate(tabId: number, callback?: (tab?: Tab) => void): Promise<Tab>;
+  export function query(queryInfo: {
+    active?: boolean;
+    pinned?: boolean;
+    audible?: boolean;
+    muted?: boolean;
+    highlighted?: boolean;
+    discarded?: boolean;
+    autoDiscardable?: boolean;
+    currentWindow?: boolean;
+    lastFocusedWindow?: boolean;
+    status?: TabStatus;
+    title?: string;
+    url?: string | string[];
+    windowId?: number;
+    windowType?: WindowType;
+    index?: number;
+  }, callback?: (result: Tab[]) => void): Promise<Tab[]>;
+  export function highlight(highlightInfo: {
+    windowId?: number;
+    tabs: number[] | number;
+  }, callback?: (window: browser.windows.Window) => void): Promise<browser.windows.Window>;
+  export function update(tabId?: number, updateProperties: {
+    url?: string;
+    active?: boolean;
+    highlighted?: boolean;
+    selected?: boolean;
+    pinned?: boolean;
+    muted?: boolean;
+    openerTabId?: number;
+    autoDiscardable?: boolean;
+  }, callback?: (tab?: Tab) => void): Promise<Tab>;
+  export function move(tabIds: number | number[], moveProperties: {
+    windowId?: number;
+    index: number;
+  }, callback?: (tabs: Tab | Tab[]) => void): Promise<Tab | Tab[]>;
+  export function reload(tabId?: number, reloadProperties?: {
+    bypassCache?: boolean;
+  }, callback?: () => void): void;
+  export function remove(tabIds: number | number[], callback?: () => void): void;
+  export function detectLanguage(tabId?: number, callback?: (language: string) => void): Promise<string>;
+  export function captureVisibleTab(windowId?: number, options?: browser.extensionTypes.ImageDetails, callback?: (dataUrl: string) => void): Promise<string>;
+  export function insertCSS(tabId?: number, details: browser.extensionTypes.InjectDetails, callback?: () => void): void;
+  export function discard(tabId?: number, callback?: (tab?: Tab) => void): Promise<Tab>;
   export function goForward(tabId?: number, callback?: () => void): void;
   export function goBack(tabId?: number, callback?: () => void): void;
   export const onCreated: chrome.events.Event<(tab: Tab) => void>;
-  export const onUpdated: chrome.events.Event<(
-    tabId: number,
-    changeInfo: {
-      status?: TabStatus;
-      url?: string;
-      pinned?: boolean;
-      audible?: boolean;
-      discarded?: boolean;
-      autoDiscardable?: boolean;
-      mutedInfo?: MutedInfo;
-      favIconUrl?: string;
-      title?: string;
-    },
-    tab: Tab,
-  ) => void>;
-  export const onMoved: chrome.events.Event<(
-    tabId: number,
-    moveInfo: {
-      windowId: number;
-      fromIndex: number;
-      toIndex: number;
-    },
-  ) => void>;
-  export const onSelectionChanged: chrome.events.Event<(
-    tabId: number,
-    selectInfo: {
-      windowId: number;
-    },
-  ) => void>;
-  export const onActiveChanged: chrome.events.Event<(
-    tabId: number,
-    selectInfo: {
-      windowId: number;
-    },
-  ) => void>;
+  export const onUpdated: chrome.events.Event<(tabId: number, changeInfo: {
+    status?: TabStatus;
+    url?: string;
+    pinned?: boolean;
+    audible?: boolean;
+    discarded?: boolean;
+    autoDiscardable?: boolean;
+    mutedInfo?: MutedInfo;
+    favIconUrl?: string;
+    title?: string;
+  }, tab: Tab) => void>;
+  export const onMoved: chrome.events.Event<(tabId: number, moveInfo: {
+    windowId: number;
+    fromIndex: number;
+    toIndex: number;
+  }) => void>;
+  export const onSelectionChanged: chrome.events.Event<(tabId: number, selectInfo: {
+    windowId: number;
+  }) => void>;
+  export const onActiveChanged: chrome.events.Event<(tabId: number, selectInfo: {
+    windowId: number;
+  }) => void>;
   export const onActivated: chrome.events.Event<(activeInfo: {
     tabId: number;
     windowId: number;
@@ -458,31 +333,19 @@ declare namespace browser.tabs {
     windowId: number;
     tabIds: number[];
   }) => void>;
-  export const onDetached: chrome.events.Event<(
-    tabId: number,
-    detachInfo: {
-      oldWindowId: number;
-      oldPosition: number;
-    },
-  ) => void>;
-  export const onAttached: chrome.events.Event<(
-    tabId: number,
-    attachInfo: {
-      newWindowId: number;
-      newPosition: number;
-    },
-  ) => void>;
-  export const onRemoved: chrome.events.Event<(
-    tabId: number,
-    removeInfo: {
-      windowId: number;
-      isWindowClosing: boolean;
-    },
-  ) => void>;
-  export const onReplaced: chrome.events.Event<(
-    addedTabId: number,
-    removedTabId: number,
-  ) => void>;
+  export const onDetached: chrome.events.Event<(tabId: number, detachInfo: {
+    oldWindowId: number;
+    oldPosition: number;
+  }) => void>;
+  export const onAttached: chrome.events.Event<(tabId: number, attachInfo: {
+    newWindowId: number;
+    newPosition: number;
+  }) => void>;
+  export const onRemoved: chrome.events.Event<(tabId: number, removeInfo: {
+    windowId: number;
+    isWindowClosing: boolean;
+  }) => void>;
+  export const onReplaced: chrome.events.Event<(addedTabId: number, removedTabId: number) => void>;
 }
 
 declare namespace browser.tabsPrivate {
@@ -491,44 +354,34 @@ declare namespace browser.tabsPrivate {
 }
 
 declare namespace browser.webNavigation {
-  export function getFrame(
-    details: {
-      tabId: number;
-      processId?: number;
-      frameId: number;
-    },
-    callback?: (details?: {
-      errorOccurred: boolean;
-      url: string;
-      parentFrameId: number;
-    }) => void,
-  ): Promise<{
+  export function getFrame(details: {
+    tabId: number;
+    processId?: number;
+    frameId: number;
+  }, callback?: (details?: {
+    errorOccurred: boolean;
+    url: string;
+    parentFrameId: number;
+  }) => void): Promise<{
     errorOccurred: boolean;
     url: string;
     parentFrameId: number;
   }>;
-  export function getAllFrames(
-    details: {
-      tabId: number;
-    },
-    callback?: (
-      details?: {
-        errorOccurred: boolean;
-        processId: number;
-        frameId: number;
-        parentFrameId: number;
-        url: string;
-      }[],
-    ) => void,
-  ): Promise<
-    {
-      errorOccurred: boolean;
-      processId: number;
-      frameId: number;
-      parentFrameId: number;
-      url: string;
-    }[]
-  >;
+  export function getAllFrames(details: {
+    tabId: number;
+  }, callback?: (details?: {
+    errorOccurred: boolean;
+    processId: number;
+    frameId: number;
+    parentFrameId: number;
+    url: string;
+  }[]) => void): Promise<{
+    errorOccurred: boolean;
+    processId: number;
+    frameId: number;
+    parentFrameId: number;
+    url: string;
+  }[]>;
   export const onBeforeNavigate: chrome.events.Event<(details: {
     tabId: number;
     url: string;
@@ -642,7 +495,8 @@ declare namespace browser.webRequest {
     parentFrameId: number;
     requestBody?: {
       error?: string;
-      formData?: {};
+      formData?: {
+      };
       raw?: UploadData[];
     };
     tabId: number;
@@ -688,30 +542,27 @@ declare namespace browser.webRequest {
     responseHeaders?: HttpHeaders;
     statusCode: number;
   }) => BlockingResponse>;
-  export const onAuthRequired: chrome.events.Event<(
-    details: {
-      requestId: string;
-      url: string;
-      method: string;
-      frameId: number;
-      parentFrameId: number;
-      tabId: number;
-      type: ResourceType;
-      initiator?: string;
-      timeStamp: number;
-      scheme: string;
-      realm?: string;
-      challenger: {
-        host: string;
-        port: number;
-      };
-      isProxy: boolean;
-      responseHeaders?: HttpHeaders;
-      statusLine: string;
-      statusCode: number;
-    },
-    asyncCallback?: (response: BlockingResponse) => void,
-  ) => BlockingResponse>;
+  export const onAuthRequired: chrome.events.Event<(details: {
+    requestId: string;
+    url: string;
+    method: string;
+    frameId: number;
+    parentFrameId: number;
+    tabId: number;
+    type: ResourceType;
+    initiator?: string;
+    timeStamp: number;
+    scheme: string;
+    realm?: string;
+    challenger: {
+      host: string;
+      port: number;
+    };
+    isProxy: boolean;
+    responseHeaders?: HttpHeaders;
+    statusLine: string;
+    statusCode: number;
+  }, asyncCallback?: (response: BlockingResponse) => void) => BlockingResponse>;
   export const onResponseStarted: chrome.events.Event<(details: {
     requestId: string;
     url: string;
@@ -796,66 +647,47 @@ declare namespace browser.windows {
     alwaysOnTop: boolean;
     sessionId?: string;
   }
-  export function get(
-    windowId: number,
-    getInfo?: {
-      populate?: boolean;
-      windowTypes?: WindowType[];
-    },
-    callback?: (window: Window) => void,
-  ): Promise<Window>;
-  export function getCurrent(
-    getInfo?: {
-      populate?: boolean;
-      windowTypes?: WindowType[];
-    },
-    callback?: (window: Window) => void,
-  ): Promise<Window>;
-  export function getLastFocused(
-    getInfo?: {
-      populate?: boolean;
-      windowTypes?: WindowType[];
-    },
-    callback?: (window: Window) => void,
-  ): Promise<Window>;
-  export function getAll(
-    getInfo?: {
-      populate?: boolean;
-      windowTypes?: WindowType[];
-    },
-    callback?: (windows: Window[]) => void,
-  ): Promise<Window[]>;
-  export function create(
-    createData?: {
-      url?: string | string[];
-      tabId?: number;
-      left?: number;
-      top?: number;
-      width?: number;
-      height?: number;
-      focused?: boolean;
-      incognito?: boolean;
-      type?: CreateType;
-      state?: WindowState;
-      setSelfAsOpener?: boolean;
-    },
-    callback?: (window?: Window) => void,
-  ): Promise<Window>;
-  export function update(
-    windowId: number,
-    updateInfo: {
-      left?: number;
-      top?: number;
-      width?: number;
-      height?: number;
-      focused?: boolean;
-      drawAttention?: boolean;
-      state?: WindowState;
-    },
-    callback?: (window: Window) => void,
-  ): Promise<Window>;
+  export function get(windowId: number, getInfo?: {
+    populate?: boolean;
+    windowTypes?: WindowType[];
+  }, callback?: (window: Window) => void): Promise<Window>;
+  export function getCurrent(getInfo?: {
+    populate?: boolean;
+    windowTypes?: WindowType[];
+  }, callback?: (window: Window) => void): Promise<Window>;
+  export function getLastFocused(getInfo?: {
+    populate?: boolean;
+    windowTypes?: WindowType[];
+  }, callback?: (window: Window) => void): Promise<Window>;
+  export function getAll(getInfo?: {
+    populate?: boolean;
+    windowTypes?: WindowType[];
+  }, callback?: (windows: Window[]) => void): Promise<Window[]>;
+  export function create(createData?: {
+    url?: string | string[];
+    tabId?: number;
+    left?: number;
+    top?: number;
+    width?: number;
+    height?: number;
+    focused?: boolean;
+    incognito?: boolean;
+    type?: CreateType;
+    state?: WindowState;
+    setSelfAsOpener?: boolean;
+  }, callback?: (window?: Window) => void): Promise<Window>;
+  export function update(windowId: number, updateInfo: {
+    left?: number;
+    top?: number;
+    width?: number;
+    height?: number;
+    focused?: boolean;
+    drawAttention?: boolean;
+    state?: WindowState;
+  }, callback?: (window: Window) => void): Promise<Window>;
   export function remove(windowId: number, callback?: () => void): void;
   export const onCreated: chrome.events.Event<(window: Window) => void>;
   export const onRemoved: chrome.events.Event<(windowId: number) => void>;
   export const onFocusChanged: chrome.events.Event<(windowId: number) => void>;
 }
+

@@ -28,7 +28,6 @@ const mainConfig = getConfig({
 
   plugins: [
     // new BundleAnalyzerPlugin(),
-    new ForkTsCheckerWebpackPlugin(),
     new CopyPlugin({
       patterns: [
         {
