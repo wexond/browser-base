@@ -42,3 +42,21 @@ export interface IBookmarkDestination {
   parentId?: string;
   index?: number;
 }
+
+export interface IBookmarkRemoveInfo {
+  parentId: string;
+  index: number;
+  node: IBookmarkNode;
+}
+
+export interface IBookmarkChangeInfo {
+  title: string;
+  url: string;
+}
+
+export interface IBookmarkMoveInfo {
+  parentId: string;
+  index: number;
+  oldParentId: string;
+  oldIndex: number;
+}

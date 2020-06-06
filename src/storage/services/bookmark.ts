@@ -1,17 +1,41 @@
-import { readJsonFile } from '~/common/utils/files';
-import { config } from '../constants';
-import { IBookmarksDocument, IBookmarksDocumentNode } from '../interfaces';
+import { EventEmitter } from 'events';
+
 import {
   IBookmarkNode,
   IBookmarkSearchQuery,
   IBookmarkChanges,
   IBookmarkDestination,
+  IBookmarkRemoveInfo,
+  IBookmarkChangeInfo,
+  IBookmarkMoveInfo,
 } from '~/interfaces';
+import { IBookmarksDocument, IBookmarksDocumentNode } from '../interfaces';
+import { readJsonFile } from '~/common/utils/files';
+import { config } from '../constants';
 import { parseStringToNumber } from '../utils';
 import { makeId, makeGuuid } from '~/common/utils/string';
 import { dateToChromeTime } from '~/common/utils/date';
 
-class BookmarkService {
+declare interface BookmarkService {
+  on(
+    event: 'created',
+    listener: (id: string, node: IBookmarkNode) => void,
+  ): this;
+  on(
+    event: 'removed',
+    listener: (id: string, removeInfo: IBookmarkRemoveInfo) => void,
+  ): this;
+  on(
+    event: 'changed',
+    listener: (id: string, changeInfo: IBookmarkChangeInfo) => void,
+  ): this;
+  on(
+    event: 'moved',
+    listener: (id: string, moveInfo: IBookmarkMoveInfo) => void,
+  ): this;
+}
+
+class BookmarkService extends EventEmitter {
   private rootNode: IBookmarksDocumentNode;
 
   private idsMap = new Map<string, IBookmarksDocumentNode>();
@@ -182,7 +206,7 @@ class BookmarkService {
 
     const chromeTime = dateToChromeTime(new Date()).toString();
 
-    const node: IBookmarksDocumentNode = {
+    const documentNode: IBookmarksDocumentNode = {
       id: makeId(16),
       name: data.title,
       url: data.url,
@@ -193,9 +217,13 @@ class BookmarkService {
       index: this.limitIndex(parentNode.children, data.index),
     };
 
-    this.addChild(node, parentNode, node.index);
+    this.addChild(documentNode, parentNode, documentNode.index);
 
-    return this.formatToNode(node);
+    const node = this.formatToNode(documentNode);
+
+    this.emit('created', node.id, node);
+
+    return node;
   }
 
   public move(id: string, dest: IBookmarkDestination) {
@@ -224,7 +252,12 @@ class BookmarkService {
     this.removeChild(parentNode, currentIndex);
     this.addChild(node, newParentNode, destIndex);
 
-    return [parentNode, newParentNode];
+    this.emit(id, {
+      index: destIndex,
+      oldIndex: currentIndex,
+      oldParentId: parentNode.id,
+      parentId: newParentNode.id,
+    } as IBookmarkMoveInfo);
   }
 
   public update(id: string, changes: IBookmarkChanges) {
@@ -232,6 +265,8 @@ class BookmarkService {
 
     if (changes?.title) node.name = changes.title;
     if (changes?.url) node.url = changes.url;
+
+    this.emit('changed', id, changes as IBookmarkChangeInfo);
 
     return node;
   }
@@ -273,9 +308,16 @@ class BookmarkService {
   }
 
   public removeTree(id: string) {
-    const [node] = this.getDocumentNode(id);
+    const [documentNode] = this.getDocumentNode(id);
+    const node = this.formatToNode(documentNode, true);
 
-    this.removeDocumentNode(node);
+    this.removeDocumentNode(documentNode);
+
+    this.emit('removed', id, {
+      index: node.index,
+      parentId: node.parentId,
+      node,
+    } as IBookmarkRemoveInfo);
   }
 }
 
