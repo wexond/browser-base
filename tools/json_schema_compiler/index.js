@@ -21,6 +21,7 @@ module.exports = (jsonObjects, apiFeaturesPath) => {
   const parameters = [];
 
   let output = '';
+  let typingsOutput = '';
 
   const apisValues = Object.values(apis);
 
@@ -106,7 +107,7 @@ module.exports = (jsonObjects, apiFeaturesPath) => {
       if (typeof fn.parameters === 'object') {
         const params = [];
         for (const param of fn.parameters) {
-          delete param.parameters;
+          if (param.type === 'function') processFunctions(param);
 
           let index = parameters.findIndex((x) => {
             return equal(x, param);
@@ -122,21 +123,24 @@ module.exports = (jsonObjects, apiFeaturesPath) => {
 
         fn.parameters = params;
       }
-    } else {
-      Object.values(fn).forEach((value) => {
-        if (value instanceof Array) {
-          value.forEach((x) => processFunctions(x));
-        } else if (typeof value === 'object') {
-          processFunctions(value);
-        }
-      });
     }
+
+    Object.values(fn).forEach((value) => {
+      if (value instanceof Array) {
+        value.forEach((x) => processFunctions(x));
+      } else if (typeof value === 'object') {
+        processFunctions(value);
+      }
+    });
   };
 
   for (const api of apisValues) {
     processRefs(api, api.namespace);
     processFunctions(api);
   }
+
+  typingsOutput +=
+    'interface Window { browser: typeof chrome & typeof browser }\n\n';
 
   output += `const getAPI = (context, processParameters) => {`;
 
@@ -154,6 +158,103 @@ module.exports = (jsonObjects, apiFeaturesPath) => {
     chrome[api.namespace] = {};
     output += `${api.namespace}:{`;
 
+    typingsOutput += `declare namespace browser.${api.namespace} {\n`;
+
+    const getRef = (obj) => {
+      if (typeof obj.ref === 'number') {
+        return types[api.namespace][obj.ref].id;
+      } else if (typeof obj.ref === 'object') {
+        return `browser.${obj.ref.n}.${types[obj.ref.n][obj.ref.i].id}`;
+      }
+
+      return null;
+    };
+
+    const getJsType = (type, isArray) => {
+      let ret = type;
+
+      if (type === 'integer' || type === 'double' || type === 'long')
+        ret = 'number';
+
+      return ret + (isArray ? '[]' : '');
+    };
+
+    const getType = (obj, level = 1, inside) => {
+      const ref = getRef(obj);
+      if (ref) return ref + (inside === 'array' ? '[]' : '');
+
+      if (obj.choices) {
+        return obj.choices
+          .map((x) => getJsType(getType(x, level), inside === 'array'))
+          .join(' | ');
+      }
+
+      if (obj.type === 'array') return getType(obj.items, level, 'array');
+      if (obj.type === 'object') {
+        if (
+          (obj.additionalProperties && (obj.properties || obj.functions)) ||
+          !obj.additionalProperties
+        ) {
+          return getJsType(
+            `{\n${processTsObject(obj, level + 1)}${'  '.repeat(level)}}`,
+            inside === 'array',
+          );
+        } else {
+          return getJsType(obj.additionalProperties.type, inside === 'array');
+        }
+      }
+
+      if (obj.type === 'function') {
+        let cb;
+        return `(${(obj.parameters || [])
+          .map((x) => {
+            const p = parameters[x];
+
+            if (p.name === 'callback') {
+              cb = p;
+            }
+
+            return `${p.name}${
+              p.name === 'callback' || p.optional ? '?' : ''
+            }: ${getType(p, level, 'object')}`;
+          })
+          .join(', ')})${inside === 'object' ? ' =>' : ':'} ${
+          obj.returns
+            ? getType(obj.returns, level, 'object')
+            : cb && cb.parameters && cb.parameters.length > 0
+            ? `Promise<${getType(
+                parameters[cb.parameters[Object.keys(cb.parameters)[0]]],
+                level,
+                'object',
+              )}>`
+            : 'void'
+        }`;
+      }
+
+      return getJsType(obj.type, inside === 'array');
+    };
+
+    const processDictionaryItem = (name, value, level = 1) => {
+      return `${'  '.repeat(level)}${name}${
+        value.optional ? '?' : ''
+      }: ${getType(value, level, 'object')};\n`;
+    };
+
+    const processTsObject = (obj, level = 1) => {
+      let out = '';
+
+      if (obj.properties)
+        out += Object.entries(obj.properties)
+          .map(([key, value]) => processDictionaryItem(key, value, level))
+          .join('');
+      if (obj.functions)
+        out += obj.functions
+          .map((x) => processDictionaryItem(x.name, x, level))
+          .join('');
+
+      return out;
+    };
+
     if (api.types) {
       for (const type of types[api.namespace]) {
         if (type.type === 'string') {
@@ -162,6 +263,29 @@ module.exports = (jsonObjects, apiFeaturesPath) => {
             output += `${replaceAll(item.toUpperCase(), '-', '_')}:'${item}',`;
           }
           output += '},';
+        } else if (type.type === 'array') {
+          typingsOutput += `  export type ${type.id} = ${getType(type)};\n`;
+        } else if (type.type === 'object') {
+          if (type.id === 'Event') {
+            typingsOutput += `  export interface Event<T extends Function> {
+    addListener(callback: T): void;
+    getRules(callback: (rules: Rule[]) => void): void;
+    getRules(ruleIdentifiers: string[], callback: (rules: Rule[]) => void): void;
+    hasListener(callback: T): boolean;
+    removeRules(ruleIdentifiers?: string[], callback?: () => void): void;
+    removeRules(callback?: () => void): void;
+    addRules(rules: Rule[], callback?: (rules: Rule[]) => void): void;
+    removeListener(callback: T): void;
+    hasListeners(): boolean;
+  }\n`;
+            continue;
+          }
+
+          if (type.isInstanceOf) {
+            typingsOutput += `  export type ${type.id} = ${type.isInstanceOf};\n`;
+          } else {
+            typingsOutput += `  export interface ${type.id} ${getType(type)}\n`;
+          }
         }
       }
     }
@@ -170,15 +294,23 @@ module.exports = (jsonObjects, apiFeaturesPath) => {
         output += `${fn.name}:i('${api.namespace}', '${
           fn.name
         }', ${JSON.stringify(fn.parameters)}),`;
+
+        typingsOutput += `  export function ${fn.name}${getType(fn)};\n`;
       }
     }
     if (api.events) {
       for (const event of api.events) {
         output += `${event.name}:e('${api.namespace}', '${event.name}'),`;
+
+        typingsOutput += `  export const ${
+          event.name
+        }: chrome.events.Event<${getType(event, 1, 'object')}>;\n`;
       }
     }
 
     output += '},';
+
+    typingsOutput += '}\n\n';
   }
 
   output += '};';
@@ -193,5 +325,5 @@ module.exports = (jsonObjects, apiFeaturesPath) => {
 
   output += 'module.exports = getAPI;';
 
-  return output;
+  return { js: output, ts: typingsOutput };
 };
