@@ -53,7 +53,7 @@ const getJsType = (chromeType) => {
 };
 
 const getChromeType = (obj) => {
-  if (obj instanceof Array) return 'array';
+  if (Array.isArray(obj)) return 'array';
   return typeof obj;
 };
 
@@ -94,7 +94,17 @@ const i = (scope, name, parameters) => async (...args) => {
     } else if (!expected.optional && expected.name !== 'callback') {
       throw new Error(
         `Error in invocation of ${scope}.${name}(${expectedParams
-          .map((x) => `${x.optional ? 'optional ' : ''}${x.type} ${x.name}`)
+          .map(
+            (x) =>
+              `${x.optional ? 'optional ' : ''}${
+                x.type ||
+                x.choices
+                  .map((x) =>
+                    x.type === 'array' ? `${x.items.type}[]` : x.type,
+                  )
+                  .join(' | ')
+              } ${x.name}`,
+          )
           .join(', ')}): No matching signature.`,
       );
     }
