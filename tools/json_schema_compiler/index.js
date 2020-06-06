@@ -139,8 +139,7 @@ module.exports = (jsonObjects, apiFeaturesPath) => {
     processFunctions(api);
   }
 
-  typingsOutput +=
-    'interface Window { browser: typeof chrome & typeof browser }\n\n';
+  typingsOutput += 'interface Window { browser: typeof browser }\n\n';
 
   output += `const getAPI = (context, processParameters) => {`;
 
