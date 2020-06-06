@@ -1,5 +1,5 @@
 import { IFormFillData } from '~/interfaces';
-import { makeId } from '~/utils/string';
+import { makeId } from '~/common/utils/string';
 
 const passwords: Map<string, string> = new Map();
 

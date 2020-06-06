@@ -1,0 +1,32 @@
+{
+  "roots": {
+    "bookmark_bar": {
+      "children": [],
+      "date_added": "13235080272761663",
+      "date_modified": "13235586520595177",
+      "id": "1",
+      "name": "Favorites bar",
+      "source": "unknown",
+      "type": "folder"
+    },
+    "other": {
+      "children": [],
+      "date_added": "13235080272761671",
+      "date_modified": "0",
+      "id": "2",
+      "name": "Other favorites",
+      "source": "unknown",
+      "type": "folder"
+    },
+    "synced": {
+      "children": [],
+      "date_added": "13235080272761672",
+      "date_modified": "0",
+      "id": "3",
+      "name": "Mobile favorites",
+      "source": "unknown",
+      "type": "folder"
+    }
+  },
+  "version": 1
+}

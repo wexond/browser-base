@@ -17,3 +17,17 @@ export interface IRemoveOperation extends IFindOperation {
 export interface IUpdateOperation extends IFindOperation, IRemoveOperation {
   value: any;
 }
+
+export interface IStorageMessage {
+  id: string;
+  scope: 'bookmarks';
+  method: string;
+  args?: any | any[];
+}
+
+export interface IStorageResponse {
+  id: string;
+  data: any;
+  error?: Error;
+  success?: boolean;
+}

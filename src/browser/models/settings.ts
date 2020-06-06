@@ -4,12 +4,13 @@ import { DEFAULT_SETTINGS, DEFAULT_SEARCH_ENGINES } from '~/constants';
 
 import { promises } from 'fs';
 
-import { getPath, makeId } from '~/utils';
+import { getPath } from '~/utils';
 import { EventEmitter } from 'events';
 import { runAdblockService, stopAdblockService } from '../services/adblock';
 import { Application } from '../application';
 import { WEBUI_BASE_URL } from '~/constants/files';
 import { ISettings } from '~/interfaces';
+import { makeId } from '~/common/utils/string';
 
 export class Settings extends EventEmitter {
   public object = DEFAULT_SETTINGS;
