@@ -22,7 +22,7 @@ import { parseStringToNumber } from '../utils';
 import { makeId, makeGuuid } from '~/common/utils/string';
 import { dateToChromeTime } from '~/common/utils/date';
 
-declare interface BookmarkService {
+declare interface BookmarksService {
   on(
     event: 'created',
     listener: (id: string, node: IBookmarkNode) => void,
@@ -41,7 +41,7 @@ declare interface BookmarkService {
   ): this;
 }
 
-class BookmarkService extends EventEmitter {
+class BookmarksService extends EventEmitter {
   private rootNode: IBookmarksDocumentNode;
 
   private idsMap = new Map<string, IBookmarksDocumentNode>();
@@ -362,4 +362,4 @@ class BookmarkService extends EventEmitter {
   }
 }
 
-export default new BookmarkService();
+export default new BookmarksService();

@@ -121,7 +121,12 @@ export class Application {
     const window = Application.instance.windows.list[0].webContents;
 
     window.on('dom-ready', () => {
-      worker.postMessage({ type: 'bookmarks-get-children' } as IStorageMessage);
+      worker.postMessage({
+        id: 'test',
+        scope: 'bookmarks',
+        method: 'get-subtree',
+        args: ['1'],
+      } as IStorageMessage);
     });
 
     // Menu.setApplicationMenu(getMainMenu());

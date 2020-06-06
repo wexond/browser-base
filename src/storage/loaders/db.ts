@@ -3,7 +3,7 @@ import * as Database from 'better-sqlite3';
 import { config } from '../constants';
 import { pathExists } from '~/common/utils/files';
 import { loadSchema } from '../utils';
-import BookmarksService from '../services/bookmark';
+import BookmarksService from '../services/bookmarks';
 
 export let db: Database.Database;
 
