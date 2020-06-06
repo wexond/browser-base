@@ -43,6 +43,13 @@ export interface IBookmarkDestination {
   index?: number;
 }
 
+export interface IBookmarkCreateInfo {
+  parentId?: string;
+  index?: number;
+  title?: string;
+  url?: string;
+}
+
 export interface IBookmarkRemoveInfo {
   parentId: string;
   index: number;

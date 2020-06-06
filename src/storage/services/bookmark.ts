@@ -1,4 +1,5 @@
 import { EventEmitter } from 'events';
+import { promises as fs } from 'fs';
 
 import {
   IBookmarkNode,
@@ -8,8 +9,13 @@ import {
   IBookmarkRemoveInfo,
   IBookmarkChangeInfo,
   IBookmarkMoveInfo,
+  IBookmarkCreateInfo,
 } from '~/interfaces';
-import { IBookmarksDocument, IBookmarksDocumentNode } from '../interfaces';
+import {
+  IBookmarksDocument,
+  IBookmarksDocumentNode,
+  IBookmarksDocumentRoots,
+} from '../interfaces';
 import { readJsonFile } from '~/common/utils/files';
 import { config } from '../constants';
 import { parseStringToNumber } from '../utils';
@@ -40,7 +46,7 @@ class BookmarkService extends EventEmitter {
 
   private idsMap = new Map<string, IBookmarksDocumentNode>();
 
-  private otherBookmarks: IBookmarksDocumentNode;
+  private roots: IBookmarksDocumentRoots = {};
 
   private get documentNodes() {
     return [...this.idsMap.values()];
@@ -64,9 +70,12 @@ class BookmarkService extends EventEmitter {
       roots.bookmark_bar,
       roots.other,
       roots.synced,
-    ].map((r, index) => this.formatDocumentNode(r, index, '0'));
+    ].map((r, index) => this.formatToDocumentNode(r, index, '0'));
 
-    this.otherBookmarks = nodes[1];
+    this.roots.bookmark_bar = nodes[0];
+    this.roots.other = nodes[1];
+    this.roots.synced = nodes[2];
+
     this.rootNode = {
       id: '0',
       name: '',
@@ -74,6 +83,26 @@ class BookmarkService extends EventEmitter {
     };
 
     this.idsMap.set('0', this.rootNode);
+  }
+
+  private formatToDocumentNode(
+    node: IBookmarksDocumentNode,
+    index?: number,
+    parentId?: string,
+  ) {
+    let children = node.children;
+
+    if (children) {
+      children = children.map((r, index) =>
+        this.formatToDocumentNode(r, index, node.id),
+      );
+    }
+
+    const data: IBookmarksDocumentNode = { ...node, children, index, parentId };
+
+    this.idsMap.set(node.id, data);
+
+    return data;
   }
 
   private formatToNode(node: IBookmarksDocumentNode, withChildren = false) {
@@ -98,29 +127,9 @@ class BookmarkService extends EventEmitter {
       dateAdded: parseStringToNumber(date_added),
     };
 
-    if (withChildren && this.isFolder(node)) {
+    if (withChildren && this.isFolder(node) && node.children) {
       data.children = children.map((r) => this.formatToNode(r, true));
     }
-
-    return data;
-  }
-
-  private formatDocumentNode(
-    root: IBookmarksDocumentNode,
-    index?: number,
-    parentId?: string,
-  ) {
-    let children = root.children;
-
-    if (children) {
-      children = children.map((r, index) =>
-        this.formatDocumentNode(r, index, root.id),
-      );
-    }
-
-    const data: IBookmarksDocumentNode = { ...root, children, index, parentId };
-
-    this.idsMap.set(root.id, data);
 
     return data;
   }
@@ -196,8 +205,8 @@ class BookmarkService extends EventEmitter {
     );
   }
 
-  public create(data: IBookmarkNode = {}) {
-    const parentId = data?.parentId ?? this.otherBookmarks.id;
+  public create(data: IBookmarkCreateInfo = {}) {
+    const parentId = data?.parentId ?? this.roots.other?.id;
     const [parentNode] = this.getDocumentNode(parentId);
 
     if (!this.isFolder(parentNode)) {
@@ -210,7 +219,7 @@ class BookmarkService extends EventEmitter {
       id: makeId(16),
       name: data.title,
       url: data.url,
-      parentId: data?.parentId ?? this.otherBookmarks.id,
+      parentId: data?.parentId ?? this.roots.other?.id,
       date_added: chromeTime,
       type: data.url == null ? 'folder' : 'url',
       guid: makeGuuid(),
