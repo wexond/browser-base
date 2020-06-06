@@ -188,12 +188,6 @@ class BookmarksService extends EventEmitter {
     return this.getDocumentNode(ids).map((r) => this.formatToNode(r));
   }
 
-  public getRecent(count: number) {
-    return this.documentNodes
-      .sort((x, y) => parseInt(y.date_added) - parseInt(x.date_added))
-      .slice(0, count);
-  }
-
   public getChildren(id: string) {
     const [node] = this.getDocumentNode(id);
 
@@ -202,6 +196,12 @@ class BookmarksService extends EventEmitter {
     }
 
     return node.children.map((r) => this.formatToNode(r));
+  }
+
+  public getRecent(count: number) {
+    return this.documentNodes
+      .sort((x, y) => parseInt(y.date_added) - parseInt(x.date_added))
+      .slice(0, count);
   }
 
   public getDocumentTree() {
@@ -299,6 +299,8 @@ class BookmarksService extends EventEmitter {
       oldParentId: parentNode.id,
       parentId: newParentNode.id,
     } as IBookmarkMoveInfo);
+
+    return node;
   }
 
   public update(id: string, changes: IBookmarkChanges) {
