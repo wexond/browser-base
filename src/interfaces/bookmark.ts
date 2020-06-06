@@ -27,3 +27,18 @@ export interface IBookmarkNode {
 export enum BookmarkTreeNodeUnmodifiable {
   'managed',
 }
+
+export interface IBookmarkSearchQuery {
+  url?: string;
+  title?: string;
+}
+
+export interface IBookmarkChanges {
+  url?: string;
+  title?: string;
+}
+
+export interface IBookmarkDestination {
+  parentId?: string;
+  index?: number;
+}

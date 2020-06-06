@@ -1,5 +1,5 @@
 import { session, ipcMain, app } from 'electron';
-import { getPath, makeId } from '~/utils';
+import { getPath } from '~/utils';
 import { promises, existsSync } from 'fs';
 import { resolve, basename, parse, extname } from 'path';
 import { Application } from './application';

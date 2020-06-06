@@ -1,4 +1,4 @@
-import { makeId } from '~/utils/string';
+import { makeId } from '~/common/utils/string';
 
 interface IAction<T> {
   item?: Partial<T>;
