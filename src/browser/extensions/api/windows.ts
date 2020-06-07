@@ -141,6 +141,8 @@ export class WindowsAPI extends EventHandler implements IWindowsEvents {
 
     if (sessionInfo.windows?.has(window.id)) return;
 
+    const { id } = window;
+
     HandlerFactory.uiToSenderSession.set(
       window.webContents.session,
       senderSession,
@@ -148,8 +150,8 @@ export class WindowsAPI extends EventHandler implements IWindowsEvents {
     sessionInfo.windows.set(window.id, window);
 
     window.once('closed', () => {
-      sessionInfo.windows.delete(window.id);
-      this.onRemoved(window);
+      sessionInfo.windows.delete(id);
+      this.onRemoved(id);
     });
 
     window.on('focus', () => {
@@ -325,10 +327,10 @@ export class WindowsAPI extends EventHandler implements IWindowsEvents {
     return details;
   };
 
-  private onRemoved(win: BrowserWindow) {
-    this.emit('removed', win.id);
+  private onRemoved(windowId: number) {
+    this.emit('removed', windowId);
     this.sendEventToAll('onRemoved', {
-      windowId: win.id,
+      windowId: windowId,
     });
   }
 
