@@ -19,38 +19,55 @@ const registry = {
       remove: BookmarksService.remove,
       'remove-tree': BookmarksService.removeTree,
     },
+    events: ['created', 'removed', 'changed', 'moved'],
   },
 };
 
+const handleInvoker = async ({ id, scope, method, args }: IStorageMessage) => {
+  const item = registry[scope];
+  const fn = (item.methods as any)[method].bind(item.instance);
+
+  if (!(args instanceof Array)) {
+    args = [args];
+  }
+
+  if (fn) {
+    let data: any;
+    let error: Error;
+
+    try {
+      data = await fn(...args);
+    } catch (err) {
+      error = err;
+      console.error(`Storage error (id: ${id}):`, error);
+    }
+
+    parentPort.postMessage({
+      action: 'invoker',
+      id,
+      data,
+      success: !error,
+      error,
+    } as IStorageResponse);
+  }
+};
+
 export default () => {
-  parentPort.on(
-    'message',
-    async ({ id, scope, method, args }: IStorageMessage) => {
-      const item = registry[scope];
-      const fn = (item.methods as any)[method].bind(item.instance);
+  for (const scope in registry) {
+    const item = registry[scope];
+    const events = item.events as string[];
 
-      if (!(args instanceof Array)) {
-        args = [args];
-      }
-
-      if (fn) {
-        let data: any;
-        let error: Error;
-
-        try {
-          data = await fn(...args);
-        } catch (err) {
-          error = err;
-          console.error(`Storage error (id: ${id}):`, error);
-        }
-
+    events.forEach((r) => {
+      item.instance.addListener(r, (...data: any[]) => {
         parentPort.postMessage({
-          id,
+          action: 'receiver',
+          scope,
+          eventName: r,
           data,
-          success: !error,
-          error,
         } as IStorageResponse);
-      }
-    },
-  );
+      });
+    });
+  }
+
+  parentPort.on('message', handleInvoker);
 };

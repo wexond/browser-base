@@ -7,7 +7,7 @@ export class StorageFactory {
     return Application.instance.storageWorker;
   }
 
-  public static create = (scope: IStorageScope) => <T>(
+  public static createInvoker = (scope: IStorageScope) => <T>(
     method: string,
     ...args: any[]
   ) => {
@@ -15,7 +15,7 @@ export class StorageFactory {
       const id = makeId(24);
 
       const onResponse = (res: IStorageResponse) => {
-        if (res.id === id) {
+        if (res.action === 'invoker' && res.id === id) {
           if (res.error || !res.success) {
             return reject(res.error);
           }
@@ -33,5 +33,28 @@ export class StorageFactory {
         args,
       } as IStorageMessage);
     });
+  };
+
+  public static createReceiver = (scope: IStorageScope) => {
+    const registry = new Map<string, Function>();
+    let listenerAdded = false;
+
+    const onMessage = (res: IStorageResponse) => {
+      if (res.action === 'receiver' && res.scope === scope) {
+        const listener = registry.get(res.data.eventName);
+
+        listener(res.data);
+      }
+    };
+
+    return (eventName: string, listener: Function) => {
+      registry.set(eventName, listener);
+
+      if (!listenerAdded) {
+        listenerAdded = true;
+        console.log('XDDDDDDDDDDDDDDDDD', Application);
+        // StorageFactory.worker.on('message', onMessage);
+      }
+    };
   };
 }

@@ -28,8 +28,11 @@ export interface IStorageMessage {
 export type IStorageScope = 'bookmarks';
 
 export interface IStorageResponse {
-  id: string;
+  id?: string;
+  scope?: IStorageScope;
+  action?: 'invoker' | 'receiver';
   data: any;
   error?: Error;
+  eventName?: string;
   success?: boolean;
 }

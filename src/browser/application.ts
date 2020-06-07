@@ -33,6 +33,10 @@ export class Application {
 
   public dialogs = new DialogsService();
 
+  constructor() {
+    console.log('siusiak');
+  }
+
   public start() {
     const gotTheLock = app.requestSingleInstanceLock();
 
