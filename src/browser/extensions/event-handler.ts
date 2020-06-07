@@ -1,5 +1,6 @@
 import { EventEmitter } from 'events';
 import { ipcMain } from 'electron';
+
 import { sessionFromIpcEvent } from './session';
 import { webContentsInvoke } from './web-contents';
 
@@ -56,4 +57,15 @@ export class EventHandler extends EventEmitter {
           x.webContents.send(x.id, null, ...args),
       );
   }
+
+  public handleEvents = (
+    emitter: EventEmitter,
+    events: { [key: string]: string },
+  ) => {
+    for (const eventName in events) {
+      emitter.on(eventName as any, (...data: any[]) => {
+        this.sendEventToAll(events[eventName], ...data);
+      });
+    }
+  };
 }

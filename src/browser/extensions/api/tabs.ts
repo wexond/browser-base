@@ -7,6 +7,8 @@ import { Extensions } from '../';
 import { HandlerFactory, ISenderDetails } from '../handler-factory';
 import { Tab } from '~/common/extensions/interfaces/tabs';
 import { EventHandler } from '../event-handler';
+import { Application } from '~/browser/application';
+import { BrowserContext } from '~/browser/browser-context';
 
 export const getParentWindowOfTab = (tab: Tab) => {
   switch (tab.getType()) {

@@ -20,14 +20,19 @@ export interface IUpdateOperation extends IFindOperation, IRemoveOperation {
 
 export interface IStorageMessage {
   id: string;
-  scope: 'bookmarks';
+  scope: IStorageScope;
   method: string;
   args?: any | any[];
 }
 
+export type IStorageScope = 'bookmarks';
+
 export interface IStorageResponse {
-  id: string;
+  id?: string;
+  scope?: IStorageScope;
+  action?: 'invoker' | 'receiver';
   data: any;
   error?: Error;
+  eventName?: string;
   success?: boolean;
 }
