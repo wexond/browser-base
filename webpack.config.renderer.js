@@ -66,7 +66,7 @@ if (process.env.ENABLE_EXTENSIONS) {
       title: 'Wexond',
       template: 'static/pages/extension-popup.html',
       filename: `extension-popup.html`,
-      chunks: [`vendor.app`, 'extension-popup'],
+      chunks: ['extension-popup'],
     }),
   );
 
