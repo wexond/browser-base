@@ -31,7 +31,14 @@ export class EventHandler extends EventEmitter {
         name,
         session: sessionFromIpcEvent(e),
       };
-      this.events.get(name).push(details);
+
+      const eventDetails = this.events.get(name);
+
+      e.sender.once('destroyed', () => {
+        eventDetails.splice(eventDetails.indexOf(details), 1);
+      });
+      eventDetails.push(details);
+
       this.emit('addListener', details, ...args);
     });
   }
@@ -43,6 +50,10 @@ export class EventHandler extends EventEmitter {
   public sendEventToAll(eventName: string, ...args: any[]) {
     this.events
       .get(eventName)
-      .forEach((x) => x.webContents.send(x.id, null, ...args));
+      .forEach(
+        (x) =>
+          !x.webContents.isDestroyed() &&
+          x.webContents.send(x.id, null, ...args),
+      );
   }
 }
