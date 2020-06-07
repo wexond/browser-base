@@ -200,7 +200,7 @@ export class View {
           this.emitEvent('favicon-updated', fav);
         } catch (e) {
           this.favicon = '';
-          console.error(e);
+          // console.error(e);
         }
       },
     );

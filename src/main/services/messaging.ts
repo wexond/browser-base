@@ -1,6 +1,6 @@
 import { ipcMain } from 'electron';
 import { parse } from 'url';
-import { getPassword, setPassword, deletePassword } from 'keytar';
+// import { getPassword, setPassword, deletePassword } from 'keytar';
 
 import { AppWindow } from '../windows';
 import { Application } from '../application';

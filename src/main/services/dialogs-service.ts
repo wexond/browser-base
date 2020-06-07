@@ -305,7 +305,9 @@ export class DialogsService {
   };
 
   public sendToAll = (channel: string, ...args: any[]) => {
-    this.getBrowserViews().forEach((x) => x.webContents.send(channel, ...args));
+    this.getBrowserViews().forEach(
+      (x) => !x.isDestroyed() && x.webContents.send(channel, ...args),
+    );
   };
 
   public get(name: string) {
