@@ -1,6 +1,3 @@
-import { EventEmitter } from 'events';
-import { promises as fs } from 'fs';
-
 import {
   IBookmarkNode,
   IBookmarkSearchQuery,
@@ -22,6 +19,7 @@ import { parseStringToNumber } from '../utils';
 import { makeId, makeGuuid } from '~/common/utils/string';
 import { dateToChromeTime } from '~/common/utils/date';
 import { BookmarksServiceBase } from '~/common/services/bookmarks';
+import { queueWriteFile } from '~/common/utils/queue-write-file';
 
 class BookmarksService extends BookmarksServiceBase {
   private rootNode: IBookmarksDocumentNode;
@@ -42,11 +40,7 @@ class BookmarksService extends BookmarksServiceBase {
   }
 
   private onAction = () => {
-    clearTimeout(this.saveTimeout);
-
-    this.saveTimeout = setTimeout(() => {
-      this.save();
-    }, 1000);
+    this.save();
   };
 
   private get documentNodes() {
@@ -94,7 +88,7 @@ class BookmarksService extends BookmarksServiceBase {
 
     const data = JSON.stringify(document, null, 2);
 
-    await fs.writeFile(config.bookmarks, data, 'utf8');
+    await queueWriteFile(config.bookmarks, data);
 
     console.log('Bookmarks saved!');
   }
