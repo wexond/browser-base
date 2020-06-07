@@ -27,20 +27,18 @@ export class Queue {
         reject,
       });
 
-      if (!this.running) {
-        this._running = true;
-        this.dequeue();
-      }
+      this.dequeue();
     });
   }
 
   public async dequeue() {
+    if (this.running) return;
+
     const item = this.queue.shift();
 
-    if (!item) {
-      this._running = false;
-      return;
-    }
+    if (!item) return;
+
+    this._running = true;
 
     try {
       const value = await item.promise();
@@ -48,6 +46,8 @@ export class Queue {
     } catch (err) {
       item.reject(err);
     }
+
+    this._running = false;
 
     this.dequeue();
   }
