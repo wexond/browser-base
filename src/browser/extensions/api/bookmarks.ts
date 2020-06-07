@@ -1,16 +1,11 @@
 import { HandlerFactory } from '../handler-factory';
-import { StorageFactory } from '~/browser/storage-factory';
-import {
-  IBookmarkNode,
-  IBookmarkSearchQuery,
-  IBookmarkCreateInfo,
-  IBookmarkDestination,
-  IBookmarkChanges,
-} from '~/interfaces';
 import { EventHandler } from '../event-handler';
+import { StorageService } from '~/browser/services/storage';
 
 export class BookmarksAPI extends EventHandler {
-  private invoker = StorageFactory.createInvoker('bookmarks');
+  private get bookmarksService() {
+    return StorageService.instance.bookmarks;
+  }
 
   constructor() {
     super('bookmarks', [
@@ -22,7 +17,9 @@ export class BookmarksAPI extends EventHandler {
       'onImportBegan',
       'onImportEnded',
     ]);
+  }
 
+  public start() {
     const handler = HandlerFactory.create('bookmarks', this);
 
     handler('get', this.get);
@@ -37,57 +34,36 @@ export class BookmarksAPI extends EventHandler {
     handler('remove', this.remove);
     handler('removeTree', this.removeTree);
 
-    const receiver = StorageFactory.createReceiver('bookmarks');
-
-    receiver('created', (data) => {
-      console.log(data);
+    this.handleEvents(this.bookmarksService, {
+      created: 'onCreated',
+      removed: 'onRemoved',
+      changed: 'onChanged',
+      moved: 'onMoved',
     });
   }
 
-  public get(e, { idOrIdList }: { idOrIdList: string | string[] }) {
-    return this.invoker<IBookmarkNode[]>('get', idOrIdList);
-  }
+  public get = (e, { idOrIdList }) => this.bookmarksService.get(idOrIdList);
 
-  public getChildren(e, { id }: { id: string }) {
-    return this.invoker<IBookmarkNode[]>('get-children', id);
-  }
+  public getChildren = (e, { id }) => this.bookmarksService.getChildren(id);
 
-  public getRecent(e, { numberOfItems }: { numberOfItems: number }) {
-    return this.invoker<IBookmarkNode[]>('get-recent', numberOfItems);
-  }
+  public getRecent = (e, { numberOfItems }) =>
+    this.bookmarksService.getRecent(numberOfItems);
 
-  public getTree() {
-    return this.invoker<IBookmarkNode[]>('get-tree');
-  }
+  public getTree = () => this.bookmarksService.getTree();
 
-  public getSubTree(e, { id }: { id: string }) {
-    return this.invoker<IBookmarkNode[]>('get-subtree', id);
-  }
+  public getSubTree = (e, { id }) => this.bookmarksService.getSubTree(id);
 
-  public search(e, { query }: { query: string | IBookmarkSearchQuery }) {
-    return this.invoker<IBookmarkNode[]>('search', query);
-  }
+  public search = (e, { query }) => this.bookmarksService.search(query);
 
-  public create(e, { bookmark }: { bookmark: IBookmarkCreateInfo }) {
-    return this.invoker<IBookmarkNode>('create', bookmark);
-  }
+  public create = (e, { bookmark }) => this.bookmarksService.create(bookmark);
 
-  public move(
-    e,
-    { id, destination }: { id: string; destination: IBookmarkDestination },
-  ) {
-    return this.invoker<IBookmarkNode>('move', id, destination);
-  }
+  public move = (e, { id, destination }) =>
+    this.bookmarksService.move(id, destination);
 
-  public update(e, { id, changes }: { id: string; changes: IBookmarkChanges }) {
-    return this.invoker<IBookmarkNode>('update', id, changes);
-  }
+  public update = (e, { id, changes }) =>
+    this.bookmarksService.update(id, changes);
 
-  public remove(e, { id }: { id: string }) {
-    return this.invoker('remove', id);
-  }
+  public remove = (e, { id }) => this.bookmarksService.remove(id);
 
-  public removeTree(e, { id }: { id: string }) {
-    return this.invoker('remove-tree', id);
-  }
+  public removeTree = (e, { id }) => this.bookmarksService.removeTree(id);
 }

@@ -23,19 +23,10 @@ export class Application {
 
   public windows: WindowsService = new WindowsService();
 
-  public storageWorker: Worker;
-
   // public settings = new Settings();
-
-  // public storage = new StorageService();
-
   public tabs = new Tabs();
 
   public dialogs = new DialogsService();
-
-  constructor() {
-    console.log('siusiak');
-  }
 
   public start() {
     const gotTheLock = app.requestSingleInstanceLock();
@@ -101,9 +92,7 @@ export class Application {
 
     checkFiles();
 
-    this.storageWorker = new Worker('./build/storage.bundle.js', {
-      workerData: { storagePath: getPath('storage') },
-    });
+    StorageService.instance.start();
 
     // worker.on('message', (e) => {
     //   Application.instance.windows.list[0].webContents.send('main-message', e);
@@ -124,7 +113,7 @@ export class Application {
 
     this.windows.create(browserContext, {});
 
-    const window = Application.instance.windows.list[0].webContents;
+    // const window = Application.instance.windows.list[0].webContents;
 
     // window.on('dom-ready', () => {
     //   worker.postMessage({

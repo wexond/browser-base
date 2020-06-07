@@ -86,8 +86,6 @@ export class TabsAPI extends EventHandler implements ITabsEvents {
       'onZoomChange',
     ]);
 
-    console.log(BrowserContext);
-
     const handler = HandlerFactory.create('tabs', this);
 
     handler('get', this.get);

@@ -4,7 +4,6 @@ if (process.env.NODE_ENV === 'development') {
 
 import { ipcMain, app, webContents } from 'electron';
 import { platform } from 'os';
-import { extensions } from './extensions';
 import { Application } from './application';
 
 export const isNightly = app.name === 'wexond-nightly';

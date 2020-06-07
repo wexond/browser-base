@@ -4,6 +4,7 @@ export class Queue {
     reject: any;
     resolve: any;
   }[] = [];
+
   private pendingPromise = false;
 
   public enqueue<T>(promise: () => Promise<T>): Promise<T> {
@@ -22,12 +23,16 @@ export class Queue {
     if (this.pendingPromise) {
       return false;
     }
+
     const item = this.queue.shift();
+
     if (!item) {
       return false;
     }
+
     try {
       this.pendingPromise = true;
+
       item
         .promise()
         .then((value) => {
@@ -45,6 +50,7 @@ export class Queue {
       item.reject(err);
       this.dequeue();
     }
+
     return true;
   }
 }
