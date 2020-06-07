@@ -40,6 +40,40 @@ const mainConfig = getConfig({
         },
       ],
     }),
+    {
+      apply: (compiler) => {
+        compiler.hooks.beforeCompile.tap('BeforeRunPlugin', () => {
+          const jsons = [];
+          const path = join(__dirname, 'src/common/extensions/api');
+          readdirSync(path).forEach((file) => {
+            if (file.startsWith('_')) return;
+            if (!file.endsWith('.json') && !file.endsWith('.idl')) return;
+
+            const content = readFileSync(join(path, file), 'utf8');
+
+            if (file.endsWith('.json')) {
+              jsons.push(JSON.parse(stripJsonComments(content)));
+            } else if (file.endsWith('.idl')) {
+              jsons.push(idlToJson(join(path, file)));
+            }
+          });
+
+          const output = jsonAPICompiler(
+            jsons,
+            join(path, '_api_features.json'),
+          );
+          writeFileSync(
+            join(__dirname, 'src/renderer/extensions/api/_generated_api.js'),
+            output.js,
+          );
+
+          writeFileSync(
+            join(__dirname, 'src/renderer/extensions/api/api.d.ts'),
+            output.ts,
+          );
+        });
+      },
+    },
   ],
 });
 
@@ -83,34 +117,6 @@ if (process.env.ENABLE_EXTENSIONS) {
 if (process.env.START === '1') {
   mainConfig.plugins.push({
     apply: (compiler) => {
-      compiler.hooks.beforeCompile.tap('BeforeRunPlugin', () => {
-        const jsons = [];
-        const path = join(__dirname, 'src/common/extensions/api');
-        readdirSync(path).forEach((file) => {
-          if (file.startsWith('_')) return;
-          if (!file.endsWith('.json') && !file.endsWith('.idl')) return;
-
-          const content = readFileSync(join(path, file), 'utf8');
-
-          if (file.endsWith('.json')) {
-            jsons.push(JSON.parse(stripJsonComments(content)));
-          } else if (file.endsWith('.idl')) {
-            jsons.push(idlToJson(join(path, file)));
-          }
-        });
-
-        const output = jsonAPICompiler(jsons, join(path, '_api_features.json'));
-        writeFileSync(
-          join(__dirname, 'src/renderer/extensions/api/_generated_api.js'),
-          output.js,
-        );
-
-        writeFileSync(
-          join(__dirname, 'src/renderer/extensions/api/api.d.ts'),
-          output.ts,
-        );
-      });
-
       compiler.hooks.afterEmit.tap('AfterEmitPlugin', () => {
         if (electronProcess) {
           try {
