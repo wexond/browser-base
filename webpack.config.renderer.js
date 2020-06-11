@@ -40,6 +40,7 @@ const extPopupConfig = getConfig({
 applyEntries('app', appConfig, [
   ...(process.env.ENABLE_AUTOFILL ? ['form-fill', 'credentials'] : []),
   'app',
+  'overlay',
   // TODO: sandbox
   // 'permissions',
   // 'auth',

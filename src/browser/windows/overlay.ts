@@ -31,6 +31,8 @@ export class OverlayWindow {
     this.setIgnoreMouseEvents(true);
 
     this.win.loadURL(getWebUIURL('overlay'));
+
+    this.win.webContents.openDevTools({ mode: 'detach' });
   }
 
   public get id() {
