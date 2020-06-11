@@ -55,7 +55,7 @@ const App = observer(() => {
         tabHeight: store.isCompact ? COMPACT_TAB_HEIGHT : DEFAULT_TAB_HEIGHT,
       }}
     >
-      <StyledApp onMouseOver={onAppEnter} onMouseLeave={onAppLeave} style={{ height: !store.isFullscreen || store.titlebarVisible ? null : 0 }}>
+      <StyledApp onMouseOver={store.isFullscreen ? onAppEnter : undefined} onMouseLeave={store.isFullscreen ? onAppLeave : undefined} style={{ height: !store.isFullscreen || store.titlebarVisible ? null : 0 }}>
         <UIStyle />
         <Titlebar />
         {store.settings.object.topBarVariant === 'default' && <Toolbar />}
