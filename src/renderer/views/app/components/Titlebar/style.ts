@@ -21,7 +21,6 @@ export const StyledTitlebar = styled.div`
     left: 4px;
     right: 4px;
     bottom: 0px;
-    -webkit-app-region: drag;
     content: '';
   }
 
@@ -38,6 +37,10 @@ export const StyledTitlebar = styled.div`
     height: ${theme.titlebarHeight}px;
     align-items: ${theme.isCompact ? 'center' : 'initial'};
     padding-left: ${platform() === 'darwin' && !isFullscreen ? 78 : 4}px;
+
+    &:before {
+      -webkit-app-region: ${isFullscreen ? 'no-drag' : 'drag'};
+    }
   `};
 `;
 

@@ -185,7 +185,7 @@ export class Store {
 
   public windowId = getCurrentWindow().id;
 
-  public barHideTimer = null;
+  public barHideTimer = 0;
 
   @observable
   public isIncognito = ipcRenderer.sendSync(`is-incognito-${this.windowId}`);

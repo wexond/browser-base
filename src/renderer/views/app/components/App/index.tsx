@@ -20,7 +20,13 @@ import {
 
 const onAppLeave = () => {
   store.barHideTimer = setTimeout(
-    function () { store.titlebarVisible = false; },
+    function () {
+      if (Object.keys(store.dialogsVisibility).some(k => store.dialogsVisibility[k])) {
+        onAppLeave()
+      } else {
+        store.titlebarVisible = false;
+      }
+    },
     500
   );
 }
