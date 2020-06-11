@@ -1,7 +1,7 @@
 import { stat, promises as fs } from 'fs';
 
 export const pathExists = (path: string) => {
-  return new Promise((resolve) => {
+  return new Promise<boolean>((resolve) => {
     stat(path, (error) => {
       resolve(!error);
     });

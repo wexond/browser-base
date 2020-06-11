@@ -5,9 +5,10 @@ const { storagePath } = workerData;
 const buildPath = resolve('build/storage');
 
 export const config = {
-  schemaPath: resolve('build/storage/schema.sql'),
   bookmarks: resolve(storagePath, 'bookmarks.json'),
+  history: resolve(storagePath, 'history.db'),
   default: {
     bookmarks: resolve(buildPath, 'bookmarks.json'),
+    history: resolve(buildPath, 'history.sql'),
   },
 };
