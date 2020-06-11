@@ -7,9 +7,12 @@ import { Application } from '../application';
 import { isNightly } from '..';
 import { getWebUIURL } from '~/common/utils/protocols';
 import { BrowserContext } from '../browser-context';
+import { OverlayWindow } from './overlay';
 
 export class AppWindow {
   public win: BrowserWindow;
+
+  public overlayWindow: OverlayWindow;
 
   public incognito: boolean;
 
@@ -133,6 +136,8 @@ export class AppWindow {
       show: false,
     });
 
+    this.overlayWindow = new OverlayWindow(this.win);
+
     const windowDataPath = getPath('window-data.json');
 
     let windowState: any = {};
@@ -164,20 +169,20 @@ export class AppWindow {
 
     this.win.show();
 
+    const onUpdateBounds = () => {
+      if (!this.win.isMaximized()) {
+        windowState.bounds = this.win.getBounds();
+      }
+
+      this.overlayWindow.win.setBounds(this.win.getContentBounds());
+    };
+
     // Update window bounds on resize and on move when window is not maximized.
-    this.win.on('resize', () => {
-      if (!this.win.isMaximized()) {
-        windowState.bounds = this.win.getBounds();
-      }
-    });
+    this.win.on('resize', onUpdateBounds);
 
-    this.win.on('move', () => {
-      if (!this.win.isMaximized()) {
-        windowState.bounds = this.win.getBounds();
-      }
-    });
+    this.win.on('move', onUpdateBounds);
 
-    const resize = () => {
+    const onStateChange = () => {
       setTimeout(() => {
         this.webContents.send('tabs-resize');
       }, 500);
@@ -185,9 +190,9 @@ export class AppWindow {
       this.webContents.send('tabs-resize');
     };
 
-    this.win.on('maximize', resize);
-    this.win.on('restore', resize);
-    this.win.on('unmaximize', resize);
+    this.win.on('maximize', onStateChange);
+    this.win.on('restore', onStateChange);
+    this.win.on('unmaximize', onStateChange);
 
     this.win.on('close', () => {
       // Save current window state to a file.
@@ -198,12 +203,7 @@ export class AppWindow {
       this.win.setBrowserView(null);
     });
 
-    if (process.env.NODE_ENV === 'development') {
-      this.webContents.openDevTools({ mode: 'detach' });
-      this.win.loadURL('http://localhost:4444/app.html');
-    } else {
-      this.win.loadURL(getWebUIURL('app'));
-    }
+    this.win.loadURL(getWebUIURL('app'));
 
     this.setBoundsListener();
   }

@@ -111,7 +111,13 @@ export class Application {
 
     await browserContext.loadExtensions();
 
-    this.windows.create(browserContext, {});
+    if (process.platform === 'linux') {
+      setTimeout(() => {
+        this.windows.create(browserContext, {});
+      }, 1000);
+    } else {
+      this.windows.create(browserContext, {});
+    }
 
     // const window = Application.instance.windows.list[0].webContents;
 
