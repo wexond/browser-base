@@ -18,7 +18,7 @@ export const readJsonFile = async <T>(
     .then((r) => JSON.parse(r));
 
   if (!exists) {
-    await fs.writeFile(path, data, 'utf8');
+    await fs.copyFile(defaultDataPath, path);
   }
 
   return data;
