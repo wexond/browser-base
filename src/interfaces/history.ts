@@ -12,21 +12,7 @@ export interface IVisitItem {
   visitId?: string;
   visitTime?: number;
   referringVisitId?: string;
-  transition?: ITransitionType;
-}
-
-export enum ITransitionType {
-  'link',
-  'typed',
-  'auto_bookmark',
-  'auto_subframe',
-  'manual_subframe',
-  'generated',
-  'auto_toplevel',
-  'form_submit',
-  'reload',
-  'keyword',
-  'keyword_generated',
+  transition?: string;
 }
 
 export interface IHistorySearchDetails {
@@ -37,5 +23,9 @@ export interface IHistorySearchDetails {
 }
 
 export interface IVisitsDetails {
+  url: string;
+}
+
+export interface IHistoryAddDetails {
   url: string;
 }

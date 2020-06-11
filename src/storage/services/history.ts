@@ -4,13 +4,31 @@ import {
   IVisitItem,
   IHistorySearchDetails,
 } from '~/interfaces';
-import { IHistoryDbVisitsItem, IHistoryDbItem } from '../interfaces';
+import {
+  IHistoryDbVisitsItem,
+  IHistoryDbItem,
+  PageTransition,
+} from '../interfaces';
 import {
   convertFromChromeTime,
   convertToChromeTime,
 } from '~/common/utils/date';
-import { IHistoryItem } from '~/interfaces/history';
+import { IHistoryItem, IHistoryAddDetails } from '~/interfaces/history';
 import { getYesterdayTime } from '../utils';
+
+const TRANSITIONS = [
+  'link',
+  'typed',
+  'auto_bookmark',
+  'auto_subframe',
+  'manual_subframe',
+  'generated',
+  'auto_toplevel',
+  'form_submit',
+  'reload',
+  'keyword',
+  'keyword_generated',
+];
 
 const ITEM_SELECT =
   'SELECT id, last_visit_time, title, typed_count, url, visit_count FROM urls';
@@ -23,14 +41,22 @@ class HistoryService {
     return DbService.history;
   }
 
-  private formatItem({
+  private stripQualifier(type: number) {
+    return TRANSITIONS[type & ~PageTransition.QUALIFIER_MASK];
+  }
+
+  private getQualifier(type: number) {
+    return type & PageTransition.QUALIFIER_MASK;
+  }
+
+  private formatItem = ({
     id,
     last_visit_time,
     title,
     typed_count,
     url,
     visit_count,
-  }: IHistoryDbItem): IHistoryItem {
+  }: IHistoryDbItem): IHistoryItem => {
     return {
       id: id.toString(),
       lastVisitTime: convertFromChromeTime(last_visit_time),
@@ -39,23 +65,23 @@ class HistoryService {
       url,
       visitCount: visit_count,
     };
-  }
+  };
 
-  private formatVisitItem({
+  private formatVisitItem = ({
     id,
     url,
     from_visit,
     visit_time,
     transition,
-  }: IHistoryDbVisitsItem): IVisitItem {
+  }: IHistoryDbVisitsItem): IVisitItem => {
     return {
       id: url.toString(),
       visitId: id.toString(),
       referringVisitId: from_visit.toString(),
       visitTime: convertFromChromeTime(visit_time),
-      transition: null, // TODO @xnerhu
+      transition: this.stripQualifier(transition),
     };
-  }
+  };
 
   public getUrlId(url: string): string {
     return this.db.prepare('SELECT id FROM urls WHERE url = ? LIMIT 1').get(url)
@@ -103,10 +129,14 @@ class HistoryService {
     if (!urlId) return [];
 
     return this.db
-      .prepare(`${VISITS_ITEM_SELECT} WHERE url = ? ORDER BY id ASC`)
+      .prepare(`${VISITS_ITEM_SELECT} WHERE url = ? ORDER BY visit_time ASC`)
       .all(urlId)
       .map(this.formatVisitItem);
   }
+
+  // public addUrl({url}: IHistoryAddDetails)  {
+
+  // }
 }
 
 export default new HistoryService();
