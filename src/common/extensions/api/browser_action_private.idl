@@ -15,5 +15,7 @@ interface Functions {
 };
 
 interface Events {
-  static void onUpdated(long browserAction);  
+  static void onUpdated(long browserAction);
+
+  static void onVisibilityChange(long browserAction, boolean visible);  
 };

@@ -1,22 +1,14 @@
-import { app, ipcMain, Menu, session } from 'electron';
+import { app, ipcMain, session } from 'electron';
 import { isAbsolute, extname } from 'path';
 import { existsSync } from 'fs';
-import { BrowserContexts } from './browser-contexts';
 import { checkFiles } from '~/utils/files';
-import { Settings } from './models/settings';
-import { isURL, prefixHttp, getPath } from '~/utils';
+import { isURL, prefixHttp } from '~/utils';
 import { WindowsService } from './windows-service';
 import { StorageService } from './services/storage';
-import { getMainMenu } from './menus/main';
-import { runAutoUpdaterService } from './services';
-import { DialogsService } from './services/dialogs-service';
 import { requestAuth } from './dialogs/auth';
 import { protocols } from './protocols';
 import { Tabs } from './tabs';
-import { extensions } from './extensions';
 import { BrowserContext } from './browser-context';
-import { Worker } from 'worker_threads';
-import { IStorageMessage } from '~/interfaces';
 
 export class Application {
   public static instance = new Application();
@@ -25,8 +17,6 @@ export class Application {
 
   // public settings = new Settings();
   public tabs = new Tabs();
-
-  public dialogs = new DialogsService();
 
   public start() {
     const gotTheLock = app.requestSingleInstanceLock();
@@ -107,7 +97,6 @@ export class Application {
     );
 
     //this.storage.run();
-    this.dialogs.run();
 
     await browserContext.loadExtensions();
 

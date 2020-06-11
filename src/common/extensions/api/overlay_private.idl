@@ -1,5 +1,9 @@
 namespace overlayPrivate {};
 
+interface Functions {
+  static void setVisibility(DOMString name, boolean visibility);
+};
+
 interface Events {
   static void onVisibilityStateChange(DOMString name, boolean visible);
 };

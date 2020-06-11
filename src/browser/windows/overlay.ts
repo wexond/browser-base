@@ -1,7 +1,8 @@
-import { BrowserWindow, session } from 'electron';
+import { BrowserWindow, session, Menu, app } from 'electron';
 
 import { getWebUIURL } from '~/common/utils/protocols';
 import { BrowserContext } from '../browser-context';
+import { resolve } from 'path';
 
 export class OverlayWindow {
   public win: BrowserWindow;
@@ -33,6 +34,47 @@ export class OverlayWindow {
     this.win.loadURL(getWebUIURL('overlay'));
 
     this.win.webContents.openDevTools({ mode: 'detach' });
+
+    this.win.webContents.on(
+      'will-attach-webview',
+      (e, webPreferences, params) => {
+        webPreferences.sandbox = true;
+        webPreferences.nodeIntegration = false;
+        webPreferences.contextIsolation = true;
+        webPreferences.enableRemoteModule = false;
+        webPreferences.preloadURL = `file:///${resolve(
+          app.getAppPath(),
+          'build',
+          'popup-preload.bundle.js',
+        )}`;
+      },
+    );
+
+    const wcCreatedListener = (e, wc) => {
+      if (wc.getType() === 'webview') {
+        // TODO: extension popup inspect
+        // if (inspect) {
+        //   wc.openDevTools();
+        // }
+
+        wc.openDevTools();
+
+        wc.on('context-menu', (e, params) => {
+          const menu = Menu.buildFromTemplate([
+            {
+              label: 'Inspect element',
+              click: () => {
+                wc.inspectElement(params.x, params.y);
+              },
+            },
+          ]);
+
+          menu.popup();
+        });
+      }
+    };
+
+    app.on('web-contents-created', wcCreatedListener);
   }
 
   public get id() {

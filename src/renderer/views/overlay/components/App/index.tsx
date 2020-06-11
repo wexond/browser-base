@@ -6,6 +6,7 @@ import { hot } from 'react-hot-loader/root';
 import { UIStyle } from '~/renderer/mixins/default-styles';
 import store from '../../store';
 import { StyledApp } from './style';
+import { ExtensionPopup } from '../ExtensionPopup';
 
 export const App = hot(
   observer(() => {
@@ -15,6 +16,7 @@ export const App = hot(
       >
         <StyledApp>
           <UIStyle />
+          <ExtensionPopup />
         </StyledApp>
       </ThemeProvider>
     );
