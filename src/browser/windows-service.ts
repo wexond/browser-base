@@ -6,6 +6,7 @@ import { Application } from './application';
 import { showExtensionDialog } from './dialogs/extension-popup';
 import { HandlerFactory, ISenderDetails } from './extensions/handler-factory';
 import { EventHandler } from './extensions/event-handler';
+import { Tab } from './tab';
 
 export class WindowsService {
   public list: AppWindow[] = [];
@@ -46,9 +47,8 @@ export class WindowsService {
 
         if (!action) return;
 
-        Application.instance.windows
-          .fromWebContents(sender)
-          .overlayWindow.win.focus();
+        const overlay = Application.instance.windows.fromWebContents(sender)
+          .overlayWindow;
 
         extensions.browserActionPrivate.sendEventToAll(
           'onVisibilityChange',
@@ -56,10 +56,13 @@ export class WindowsService {
           true,
         );
 
-        extensions.overlayPrivate.setVisibility(
+        extensions.overlayPrivate.updatePopup(
           {},
-          { name: 'extensionPopup', visibility: true },
+          { name: 'extensionPopup', info: { visible: true, x: left, y: top } },
         );
+
+        overlay.win.focus();
+        overlay.win.webContents.focus();
       },
     );
 
@@ -97,8 +100,11 @@ export class WindowsService {
   public fromWebContents(webContents: Electron.WebContents): AppWindow {
     return (
       this.list.find((x) => x.webContents === webContents) ||
-      Object.values(Application.instance.tabs.tabs).find(
-        (x) => x.webContents === webContents,
+      this.list.find(
+        (x) =>
+          Array.from(Application.instance.tabs.tabs.values()).find(
+            (y) => y.webContents === webContents,
+          )?.windowId === x.id,
       )
     );
   }

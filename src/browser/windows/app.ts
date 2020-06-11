@@ -203,6 +203,8 @@ export class AppWindow {
       this.win.setBrowserView(null);
     });
 
+    this.win.webContents.openDevTools({ mode: 'detach' });
+
     this.win.loadURL(getWebUIURL('app'));
 
     this.setBoundsListener();

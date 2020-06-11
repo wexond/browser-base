@@ -7,33 +7,58 @@ import { Application } from '~/browser/application';
 const getOverlayWindow = (sender: Electron.WebContents) => {
   const senderWindow = BrowserWindow.fromWebContents(sender);
 
-  if (senderWindow.getParentWindow()) return senderWindow;
+  if (senderWindow && senderWindow.getParentWindow()) return senderWindow;
 
-  if (sender.getType() === 'window')
+  if (sender.getType() === 'window' || sender.getType() === 'browserView')
     return Application.instance.windows.fromWebContents(sender)?.overlayWindow;
 
   return null;
 };
 
 export class OverlayPrivateAPI extends EventHandler {
-  constructor() {
-    super('overlayPrivate', ['onVisibilityStateChange']);
-  }
+  private regions: number[][] = [];
 
-  public start() {
+  private ignore = true;
+
+  constructor() {
+    super('overlayPrivate', ['onPopupUpdated', 'onRegionsUpdated']);
+
     const handler = HandlerFactory.create('overlayPrivate', this);
 
-    handler('setVisibility', this.setVisibility);
+    handler('updatePopup', this.updatePopup);
+    handler('setRegions', this.setRegions);
+    handler('getRegions', this.getRegions);
+    handler('setIgnoreMouseEvents', this.setIgnoreMouseEvents);
   }
 
-  public setVisibility(
-    {}: ISenderDetails,
-    { name, visibility }: { name: string; visibility: boolean },
+  public start() {}
+
+  public setIgnoreMouseEvents(
+    { sender }: ISenderDetails,
+    { flag }: { flag: boolean },
   ) {
-    this.onVisibilityStateChange(name, visibility);
+    const overlay = getOverlayWindow(sender);
+    if (!overlay) return;
+
+    if (this.ignore !== flag) {
+      overlay.setIgnoreMouseEvents(flag);
+      this.ignore = flag;
+    }
   }
 
-  public onVisibilityStateChange(name: string, visible: boolean) {
-    this.sendEventToAll('onVisibilityStateChange', name, visible);
+  public updatePopup(
+    {}: ISenderDetails,
+    { name, info }: { name: string; info: browser.overlayPrivate.PopupInfo },
+  ) {
+    this.sendEventToAll('onPopupUpdated', name, info);
+  }
+
+  public getRegions() {
+    return this.regions;
+  }
+
+  public setRegions({}: ISenderDetails, { regions }: { regions: number[][] }) {
+    this.regions = regions;
+    this.sendEventToAll('onRegionsUpdated', regions);
   }
 }

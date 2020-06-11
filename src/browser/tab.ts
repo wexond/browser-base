@@ -92,6 +92,8 @@ export class Tab {
       horizontal: false,
       vertical: false,
     });
+
+    this.webContents.openDevTools();
   }
 
   public get webContents() {

@@ -24,6 +24,10 @@ const close = () => {
   ipcRenderer.sendToHost('blur');
 };
 
+window.addEventListener('focus', () => {
+  console.log('focus');
+});
+
 window.addEventListener('blur', close);
 
 window.close = close;

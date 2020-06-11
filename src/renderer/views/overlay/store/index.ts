@@ -2,8 +2,9 @@ import { observable, computed } from 'mobx';
 
 import { getTheme } from '~/utils/themes';
 
-interface IPopupInfo {
-  visible: boolean;
+interface IPopupInfo extends browser.overlayPrivate.PopupInfo {
+  left?: number;
+  top?: number;
 }
 
 export class Store {
@@ -15,13 +16,6 @@ export class Store {
 
   public webviewRef: Electron.WebviewTag;
 
-  public extensionBounds = {
-    x: 0,
-    y: 0,
-    width: 0,
-    height: 0,
-  };
-
   @computed
   public get theme() {
     return getTheme('wexond-light');
@@ -32,19 +26,19 @@ export class Store {
       visible: false,
     });
 
-    browser.overlayPrivate.onVisibilityStateChange.addListener(
-      (name, visible) => {
-        const popup = this.popups.get(name);
-        popup.visible = visible;
-      },
-    );
+    browser.overlayPrivate.onPopupUpdated.addListener((name, info) => {
+      const popup = this.popups.get(name);
+      Object.assign(popup, info);
+      if (!info.visible) {
+        browser.overlayPrivate.setRegions([]);
+      }
+    });
 
     browser.browserActionPrivate.onVisibilityChange.addListener(
       (action, visible) => {
-        console.log(action);
+        if (!visible) this.extensionUrl = 'about:blank';
         if (visible) {
           this.extensionUrl = action.popup;
-          this.webviewRef.focus();
         }
       },
     );
