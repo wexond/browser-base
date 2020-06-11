@@ -3,7 +3,7 @@ import { hot } from 'react-hot-loader/root';
 import * as React from 'react';
 import { ThemeProvider } from 'styled-components';
 
-import { StyledApp } from './style';
+import { StyledApp, Line } from './style';
 import { Titlebar } from '../Titlebar';
 import { Toolbar } from '../Toolbar';
 import store from '../../store';
@@ -17,6 +17,21 @@ import {
   COMPACT_TAB_HEIGHT,
   DEFAULT_TAB_HEIGHT,
 } from '~/constants/design';
+
+const onAppLeave = () => {
+  store.barHideTimer = setTimeout(
+    function () { store.titlebarVisible = false; },
+    500
+  );
+}
+
+const onAppEnter = () => {
+  clearTimeout(store.barHideTimer);
+}
+
+const onLineEnter = () => {
+  store.titlebarVisible = true;
+}
 
 const App = observer(() => {
   return (
@@ -34,12 +49,16 @@ const App = observer(() => {
         tabHeight: store.isCompact ? COMPACT_TAB_HEIGHT : DEFAULT_TAB_HEIGHT,
       }}
     >
-      <StyledApp>
+      <StyledApp onMouseOver={onAppEnter} onMouseLeave={onAppLeave} style={{ height: !store.isFullscreen || store.titlebarVisible ? null : 0 }}>
         <UIStyle />
         <Titlebar />
         {store.settings.object.topBarVariant === 'default' && <Toolbar />}
         <BookmarkBar />
       </StyledApp>
+      <Line
+        onMouseOver={onLineEnter}
+        style={{ height: store.isFullscreen && !store.titlebarVisible ? 1 : 0 }}
+      />
     </ThemeProvider>
   );
 });
