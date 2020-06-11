@@ -1,14 +1,14 @@
 import { HandlerFactory } from '../handler-factory';
 import { sendToExtensionPages } from '../background-pages';
 
-export class DialogsPrivateAPI {
+export class OverlayPrivateAPI {
   constructor() {
-    const handler = HandlerFactory.create('dialogsPrivate', this);
+    const handler = HandlerFactory.create('overlayPrivate', this);
   }
 
   public onVisibilityStateChange(name: string, visible: boolean) {
     sendToExtensionPages(
-      'dialogsPrivate.onVisibilityStateChange',
+      'overlayPrivate.onVisibilityStateChange',
       name,
       visible,
     );

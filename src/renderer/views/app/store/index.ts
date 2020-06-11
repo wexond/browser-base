@@ -298,7 +298,7 @@ export class Store {
     // }
     // ipcRenderer.send('update-check');
 
-    browser.dialogsPrivate.onVisibilityStateChange.addListener(
+    browser.overlayPrivate.onVisibilityStateChange.addListener(
       (name, visible) => {
         this.dialogsVisibility[name] = visible;
       },

@@ -1,4 +1,4 @@
-namespace dialogsPrivate {};
+namespace overlayPrivate {};
 
 interface Events {
   static void onVisibilityStateChange(DOMString name, boolean visible);
