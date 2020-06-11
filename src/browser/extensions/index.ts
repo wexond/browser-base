@@ -10,6 +10,7 @@ import { DialogsPrivateAPI } from './api/dialogs-private';
 import { BrowserActionPrivateAPI } from './api/browser-action-private';
 import { TabsPrivateAPI } from './api/tabs-private';
 import { BookmarksAPI } from './api/bookmarks';
+import { HistoryAPI } from './api/history';
 
 export class Extensions {
   public static instance = new Extensions();
@@ -23,6 +24,7 @@ export class Extensions {
   public browserActionPrivate = new BrowserActionPrivateAPI();
   public dialogsPrivate = new DialogsPrivateAPI();
   public bookmarks = new BookmarksAPI();
+  public history = new HistoryAPI();
 
   public backgroundPages = new BackgroundPages();
 

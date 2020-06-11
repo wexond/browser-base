@@ -25,7 +25,7 @@ class DbService {
 
       db.exec(schema);
 
-      console.log(`History database created at ${path}`);
+      console.log(`Database created at ${path}`);
     }
 
     return db;

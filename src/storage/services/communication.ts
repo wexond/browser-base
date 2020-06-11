@@ -1,6 +1,7 @@
 import { parentPort } from 'worker_threads';
 
 import BookmarksService from '../services/bookmarks';
+import HistoryService from '../services/history';
 import { IStorageMessage, IStorageResponse } from '~/interfaces';
 
 const registry = {
@@ -20,6 +21,14 @@ const registry = {
       'remove-tree': BookmarksService.removeTree,
     },
     events: ['created', 'removed', 'changed', 'moved'],
+  },
+  history: {
+    instance: HistoryService,
+    methods: {
+      search: HistoryService.search,
+      'get-visits': HistoryService.getVisits,
+    },
+    events: [],
   },
 };
 

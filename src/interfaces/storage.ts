@@ -25,7 +25,7 @@ export interface IStorageMessage {
   args?: any | any[];
 }
 
-export type IStorageScope = 'bookmarks';
+export type IStorageScope = 'history' | 'bookmarks';
 
 export interface IStorageResponse {
   id?: string;

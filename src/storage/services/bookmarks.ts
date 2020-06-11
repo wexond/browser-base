@@ -28,8 +28,6 @@ class BookmarksService extends BookmarksServiceBase {
 
   private roots: IBookmarksDocumentRoots = {};
 
-  private saveTimeout: number;
-
   constructor() {
     super();
 
