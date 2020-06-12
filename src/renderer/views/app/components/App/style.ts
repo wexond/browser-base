@@ -5,12 +5,9 @@ import { ITheme } from '~/interfaces';
 export const Line = styled.div`
   height: 1px;
   width: 100%;
-  z-index: 2;
+  z-index: 100;
   position: relative;
-
-  ${({ theme }: { theme: ITheme }) => css`
-    background-color: ${theme['toolbar.bottomLine.backgroundColor']};
-  `}
+  background-color: black;
 `;
 
 export const StyledApp = styled.div`
