@@ -38,21 +38,21 @@ export const getMainMenu = () => {
   const template: any = [
     ...(isMac
       ? [
-          {
-            label: app.name,
-            submenu: [
-              { role: 'about' },
-              { type: 'separator' },
-              { role: 'services' },
-              { type: 'separator' },
-              { role: 'hide' },
-              { role: 'hideothers' },
-              { role: 'unhide' },
-              { type: 'separator' },
-              { role: 'quit' },
-            ],
-          },
-        ]
+        {
+          label: app.name,
+          submenu: [
+            { role: 'about' },
+            { type: 'separator' },
+            { role: 'services' },
+            { type: 'separator' },
+            { role: 'hide' },
+            { role: 'hideothers' },
+            { role: 'unhide' },
+            { type: 'separator' },
+            { role: 'quit' },
+          ],
+        },
+      ]
       : []),
     {
       label: 'File',
@@ -149,15 +149,15 @@ export const getMainMenu = () => {
         { role: 'paste' },
         ...(isMac
           ? [
-              { role: 'pasteAndMatchStyle' },
-              { role: 'delete' },
-              { role: 'selectAll' },
-              { type: 'separator' },
-              {
-                label: 'Speech',
-                submenu: [{ role: 'startspeaking' }, { role: 'stopspeaking' }],
-              },
-            ]
+            { role: 'pasteAndMatchStyle' },
+            { role: 'delete' },
+            { role: 'selectAll' },
+            { type: 'separator' },
+            {
+              label: 'Speech',
+              submenu: [{ role: 'startspeaking' }, { role: 'stopspeaking' }],
+            },
+          ]
           : [{ role: 'delete' }, { type: 'separator' }, { role: 'selectAll' }]),
         { type: 'separator' },
         ...createMenuItem(
@@ -331,14 +331,15 @@ export const getMainMenu = () => {
       label: 'Window',
       submenu: [
         { role: 'minimize' },
+        { role: 'togglefullscreen' },
         { role: 'zoom' },
         ...(isMac
           ? [
-              { type: 'separator' },
-              { role: 'front' },
-              { type: 'separator' },
-              { role: 'window' },
-            ]
+            { type: 'separator' },
+            { role: 'front' },
+            { type: 'separator' },
+            { role: 'window' },
+          ]
           : [{ role: 'close', accelerator: '' }]),
         { type: 'separator' },
         {
