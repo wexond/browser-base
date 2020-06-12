@@ -9,7 +9,6 @@ let loaded = false;
 export const ExtensionPopup = observer(() => {
   const info = store.popups.get('extensionPopup');
 
-  const [size, setSize] = React.useState({ width: 1, height: 1 });
   const [visible, setVisible] = React.useState(false);
 
   if (!info.visible && visible) {
@@ -24,10 +23,17 @@ export const ExtensionPopup = observer(() => {
 
     store.webviewRef.addEventListener('ipc-message', (e) => {
       if (e.channel === 'size' && store.extensionUrl !== 'about:blank') {
-        setSize({ width: e.args[0], height: e.args[1] });
+        info.width = e.args[0];
+        info.height = e.args[1];
+
+        store.webviewRef.style.width = info.width + 'px';
+        store.webviewRef.style.height = info.height + 'px';
+
         setVisible(true);
-        info.left = info.x - e.args[0];
+
+        info.left = info.x - info.width;
         info.top = info.y;
+
         store.webviewRef.focus();
       } else if (e.channel === 'blur') {
         browser.overlayPrivate.updatePopup('extensionPopup', {
@@ -39,27 +45,21 @@ export const ExtensionPopup = observer(() => {
 
   if (visible) {
     browser.overlayPrivate.setRegions([
-      [info.left, info.top, size.width, size.height],
+      [info.left, info.top, info.width, info.height],
     ]);
   }
 
   return (
     <StyledExtensionPopup
       style={{
-        left: info.left,
-        top: info.top,
-        width: size.width,
-        height: size.height,
+        left: info.left || 0,
+        top: info.top || 0,
       }}
       hideTransition={false}
       visible={visible}
     >
       <webview
         ref={(r: Electron.WebviewTag) => (store.webviewRef = r)}
-        style={{
-          width: '100%',
-          height: '100%',
-        }}
         src={store.extensionUrl}
       ></webview>
     </StyledExtensionPopup>

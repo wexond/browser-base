@@ -5,6 +5,8 @@ import { getTheme } from '~/utils/themes';
 interface IPopupInfo extends browser.overlayPrivate.PopupInfo {
   left?: number;
   top?: number;
+  width?: number;
+  height?: number;
 }
 
 export class Store {

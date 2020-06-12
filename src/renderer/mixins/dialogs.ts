@@ -29,6 +29,6 @@ export const DialogStyle = styled(DialogBaseStyle)`
   }) => css`
     transition: ${!visible && !hideTransition ? 'none' : DIALOG_TRANSITION};
     opacity: ${visible ? 1 : 0};
-    transform: ${visible ? `translate3d(0, 0, 0)` : `translate3d(0, -10px, 0)`};
+    transform: ${visible ? `translate3d(0, 0, 0)` : `translate3d(0, -7px, 0)`};
   `}
 `;
