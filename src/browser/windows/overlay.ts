@@ -33,7 +33,9 @@ export class OverlayWindow {
 
     this.win.loadURL(getWebUIURL('overlay'));
 
-    this.win.webContents.openDevTools({ mode: 'detach' });
+    if (process.env.NODE_ENV === 'development') {
+      this.win.webContents.openDevTools({ mode: 'detach' });
+    }
 
     this.win.webContents.on(
       'will-attach-webview',
@@ -57,7 +59,7 @@ export class OverlayWindow {
         //   wc.openDevTools();
         // }
 
-        wc.openDevTools();
+        // wc.openDevTools();
 
         wc.on('context-menu', (e, params) => {
           const menu = Menu.buildFromTemplate([

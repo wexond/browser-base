@@ -21,8 +21,6 @@ export class EventHandler extends EventEmitter {
 
     this.scope = scope;
 
-    console.log(scope);
-
     for (const event of events) {
       this.events.set(event, []);
     }

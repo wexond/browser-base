@@ -203,7 +203,9 @@ export class AppWindow {
       this.win.setBrowserView(null);
     });
 
-    this.win.webContents.openDevTools({ mode: 'detach' });
+    if (process.env.NODE_ENV === 'development') {
+      this.win.webContents.openDevTools({ mode: 'detach' });
+    }
 
     this.win.loadURL(getWebUIURL('app'));
 
