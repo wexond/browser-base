@@ -1,4 +1,4 @@
-import { app, ipcMain, session } from 'electron';
+import { app, ipcMain, session, screen } from 'electron';
 import { isAbsolute, extname } from 'path';
 import { existsSync } from 'fs';
 import { checkFiles } from '~/utils/files';
@@ -9,6 +9,23 @@ import { requestAuth } from './dialogs/auth';
 import { protocols } from './protocols';
 import { Tabs } from './tabs';
 import { BrowserContext } from './browser-context';
+import { extensions } from './extensions';
+import { getOverlayWindow } from './extensions/api/overlay-private';
+
+const contains = (regions: number[][], x: number, y: number) => {
+  for (const region of regions) {
+    if (
+      x >= region[0] &&
+      y >= region[1] &&
+      x <= region[0] + region[2] &&
+      y <= region[1] + region[3]
+    ) {
+      return true;
+    }
+  }
+
+  return false;
+};
 
 export class Application {
   public static instance = new Application();
@@ -107,6 +124,24 @@ export class Application {
     } else {
       this.windows.create(browserContext, {});
     }
+
+    ipcMain.on('mouse-move', (e) => {
+      const { x, y } = screen.getCursorScreenPoint();
+
+      const overlayWindow = getOverlayWindow(e.sender);
+      const pos = overlayWindow.contentBounds;
+
+      extensions.overlayPrivate.setIgnoreMouseEvents(
+        { sender: e.sender },
+        {
+          flag: !contains(
+            extensions.overlayPrivate.regions,
+            x - pos.x,
+            y - pos.y,
+          ),
+        },
+      );
+    });
 
     // const window = Application.instance.windows.list[0].webContents;
 

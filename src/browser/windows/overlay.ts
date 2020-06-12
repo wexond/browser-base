@@ -7,6 +7,13 @@ import { resolve } from 'path';
 export class OverlayWindow {
   public win: BrowserWindow;
 
+  public contentBounds: Electron.Rectangle = {
+    x: 0,
+    y: 0,
+    width: 0,
+    height: 0,
+  };
+
   public constructor(parentWindow: BrowserWindow) {
     this.win = new BrowserWindow({
       frame: false,
@@ -14,6 +21,8 @@ export class OverlayWindow {
       height: 700,
       transparent: true,
       parent: parentWindow,
+      resizable: false,
+      movable: false,
       webPreferences: {
         plugins: true,
         sandbox: true,
@@ -27,6 +36,8 @@ export class OverlayWindow {
       skipTaskbar: true,
       show: false,
     });
+
+    this.contentBounds = this.win.getContentBounds();
 
     this.win.show();
     this.setIgnoreMouseEvents(true);

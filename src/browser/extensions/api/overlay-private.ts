@@ -4,10 +4,13 @@ import { EventHandler } from '../event-handler';
 import { BrowserWindow } from 'electron';
 import { Application } from '~/browser/application';
 
-const getOverlayWindow = (sender: Electron.WebContents) => {
+export const getOverlayWindow = (sender: Electron.WebContents) => {
   const senderWindow = BrowserWindow.fromWebContents(sender);
+  const parentWindow = senderWindow?.getParentWindow();
 
-  if (senderWindow && senderWindow.getParentWindow()) return senderWindow;
+  if (senderWindow && parentWindow)
+    return Application.instance.windows.fromBrowserWindow(parentWindow)
+      .overlayWindow;
 
   if (sender.getType() === 'window' || sender.getType() === 'browserView')
     return Application.instance.windows.fromWebContents(sender)?.overlayWindow;
@@ -16,7 +19,7 @@ const getOverlayWindow = (sender: Electron.WebContents) => {
 };
 
 export class OverlayPrivateAPI extends EventHandler {
-  private regions: number[][] = [];
+  public regions: number[][] = [];
 
   private ignore = true;
 

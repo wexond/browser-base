@@ -23,16 +23,17 @@ export const ExtensionPopup = observer(() => {
 
     store.webviewRef.addEventListener('ipc-message', (e) => {
       if (e.channel === 'size' && store.extensionUrl !== 'about:blank') {
-        info.width = e.args[0];
-        info.height = e.args[1];
+        store.setPopupBounds('extensionPopup', {
+          left: info.x - info.width,
+          top: info.y,
+          width: e.args[0],
+          height: e.args[1],
+        });
 
         store.webviewRef.style.width = info.width + 'px';
         store.webviewRef.style.height = info.height + 'px';
 
         setVisible(true);
-
-        info.left = info.x - info.width;
-        info.top = info.y;
 
         store.webviewRef.focus();
       } else if (e.channel === 'blur') {
@@ -42,12 +43,6 @@ export const ExtensionPopup = observer(() => {
       }
     });
   });
-
-  if (visible) {
-    browser.overlayPrivate.setRegions([
-      [info.left, info.top, info.width, info.height],
-    ]);
-  }
 
   return (
     <StyledExtensionPopup

@@ -1,3 +1,5 @@
+import { ipcRenderer } from 'electron';
+
 const contains = (regions: number[][], x: number, y: number) => {
   for (const region of regions) {
     if (
@@ -19,9 +21,7 @@ export const registerMouseMove = async () => {
   let regions = await browser.overlayPrivate.getRegions();
 
   document.addEventListener('mousemove', (e) => {
-    browser.overlayPrivate.setIgnoreMouseEvents(
-      !contains(regions, e.pageX, e.pageY),
-    );
+    ipcRenderer.send('mouse-move');
   });
 
   browser.overlayPrivate.onRegionsUpdated.addListener((r) => (regions = r));

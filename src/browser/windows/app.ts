@@ -174,7 +174,9 @@ export class AppWindow {
         windowState.bounds = this.win.getBounds();
       }
 
-      this.overlayWindow.win.setBounds(this.win.getContentBounds());
+      const contentBounds = this.win.getContentBounds();
+      this.overlayWindow.win.setBounds(contentBounds);
+      this.overlayWindow.contentBounds = contentBounds;
     };
 
     // Update window bounds on resize and on move when window is not maximized.

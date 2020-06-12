@@ -1,6 +1,7 @@
-import { observable, computed } from 'mobx';
+import { observable, computed, observe } from 'mobx';
 
 import { getTheme } from '~/utils/themes';
+import { IRectangle } from '~/interfaces';
 
 interface IPopupInfo extends browser.overlayPrivate.PopupInfo {
   left?: number;
@@ -44,6 +45,28 @@ export class Store {
         }
       },
     );
+  }
+
+  public updateRegions() {
+    const regions: number[][] = [];
+    for (const { left, top, width, height, visible } of Array.from(
+      this.popups.values(),
+    )) {
+      if (visible) {
+        regions.push([left, top, width, height]);
+      }
+    }
+    browser.overlayPrivate.setRegions(regions);
+  }
+
+  public setPopupBounds(
+    name: string,
+    bounds: { left?: number; top?: number; width?: number; height?: number },
+  ) {
+    const popup = this.popups.get(name);
+    Object.assign(popup, bounds);
+
+    this.updateRegions();
   }
 }
 
