@@ -198,7 +198,7 @@
   },
   "history": {
     "dependencies": ["permission:history"],
-    "contexts": ["blessed_extension"]
+    "contexts": ["blessed_extension", "webui"]
   },
   "identity": {
     "dependencies": ["permission:identity"],
