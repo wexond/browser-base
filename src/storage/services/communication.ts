@@ -27,8 +27,12 @@ const registry = {
     methods: {
       search: HistoryService.search,
       'get-visits': HistoryService.getVisits,
+      'add-url': HistoryService.addUrl,
+      'delete-url': HistoryService.deleteUrl,
+      'delete-range': HistoryService.deleteRange,
+      'delete-all': HistoryService.deleteAll,
     },
-    events: [],
+    events: ['visitRemoved'],
   },
 };
 

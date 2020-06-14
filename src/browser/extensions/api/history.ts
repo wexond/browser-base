@@ -8,7 +8,7 @@ export class HistoryAPI extends EventHandler {
   }
 
   constructor() {
-    super('history', []);
+    super('history', ['onVisited', 'onVisitRemoved']);
   }
 
   public start() {
@@ -16,9 +16,25 @@ export class HistoryAPI extends EventHandler {
 
     handler('search', this.search);
     handler('getVisits', this.getVisits);
+    handler('addUrl', this.addUrl);
+    handler('deleteUrl', this.deleteUrl);
+    handler('deleteRange', this.deleteRange);
+    handler('deleteAll', this.deleteAll);
+
+    this.handleEvents(this.historyService, {
+      visitRemoved: 'onVisitRemoved',
+    });
   }
 
   public search = (e, { query }) => this.historyService.search(query);
 
   public getVisits = (e, { details }) => this.historyService.getVisits(details);
+
+  public addUrl = (e, { details }) => this.historyService.addUrl(details);
+
+  public deleteUrl = (e, { details }) => this.historyService.deleteUrl(details);
+
+  public deleteRange = (e, { range }) => this.historyService.deleteRange(range);
+
+  public deleteAll = () => this.historyService.deleteAll();
 }

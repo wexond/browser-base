@@ -29,3 +29,17 @@ export interface IVisitsDetails {
 export interface IHistoryAddDetails {
   url: string;
 }
+
+export interface IHistoryDeleteDetails {
+  url: string;
+}
+
+export interface IHistoryDeleteRange {
+  startTime: number;
+  endTime: number;
+}
+
+export interface IHistoryVisitsRemoved {
+  allHistory: boolean;
+  urls?: string[];
+}
