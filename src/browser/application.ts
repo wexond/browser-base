@@ -11,21 +11,7 @@ import { Tabs } from './tabs';
 import { BrowserContext } from './browser-context';
 import { extensions } from './extensions';
 import { getOverlayWindow } from './extensions/api/overlay-private';
-
-const contains = (regions: number[][], x: number, y: number) => {
-  for (const region of regions) {
-    if (
-      x >= region[0] &&
-      y >= region[1] &&
-      x <= region[0] + region[2] &&
-      y <= region[1] + region[3]
-    ) {
-      return true;
-    }
-  }
-
-  return false;
-};
+import { OverlayService } from './services/overlay';
 
 export class Application {
   public static instance = new Application();
@@ -34,6 +20,8 @@ export class Application {
 
   // public settings = new Settings();
   public tabs = new Tabs();
+
+  public overlay: OverlayService;
 
   public start() {
     const gotTheLock = app.requestSingleInstanceLock();
@@ -100,59 +88,22 @@ export class Application {
     checkFiles();
 
     StorageService.instance.start();
-
-    // worker.on('message', (e) => {
-    //   Application.instance.windows.list[0].webContents.send('main-message', e);
-    // });
-
-    // this.storage.run();
-    // this.dialogs.run();
+    this.overlay = OverlayService.start();
 
     const browserContext = await BrowserContext.from(
       session.defaultSession,
       false,
     );
 
-    //this.storage.run();
-
     await browserContext.loadExtensions();
 
     if (process.platform === 'linux') {
       setTimeout(() => {
-        this.windows.create(browserContext, {});
+        Application.instance.windows.create(browserContext, {});
       }, 1000);
     } else {
       this.windows.create(browserContext, {});
     }
-
-    ipcMain.on('mouse-move', (e) => {
-      const { x, y } = screen.getCursorScreenPoint();
-
-      const overlayWindow = getOverlayWindow(e.sender);
-      const pos = overlayWindow.contentBounds;
-
-      extensions.overlayPrivate.setIgnoreMouseEvents(
-        { sender: e.sender },
-        {
-          flag: !contains(
-            extensions.overlayPrivate.regions,
-            x - pos.x,
-            y - pos.y,
-          ),
-        },
-      );
-    });
-
-    // const window = Application.instance.windows.list[0].webContents;
-
-    // window.on('dom-ready', () => {
-    //   worker.postMessage({
-    //     id: 'test',
-    //     scope: 'bookmarks',
-    //     method: 'get-subtree',
-    //     args: ['1'],
-    //   } as IStorageMessage);
-    // });
 
     // Menu.setApplicationMenu(getMainMenu());
     // runAutoUpdaterService();

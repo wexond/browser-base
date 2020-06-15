@@ -5,7 +5,11 @@ import { BrowserContext } from '../browser-context';
 import { resolve } from 'path';
 
 export class OverlayWindow {
+  private ignore = false;
+
   public win: BrowserWindow;
+
+  public regions: number[][] = [];
 
   public contentBounds: Electron.Rectangle = {
     x: 0,
@@ -99,7 +103,10 @@ export class OverlayWindow {
   }
 
   public setIgnoreMouseEvents(flag: boolean) {
-    this.win.setIgnoreMouseEvents(flag, { forward: false });
+    if (this.ignore !== flag) {
+      this.win.setIgnoreMouseEvents(flag, { forward: false });
+      this.ignore = flag;
+    }
   }
 
   public send(channel: string, ...args: any[]) {

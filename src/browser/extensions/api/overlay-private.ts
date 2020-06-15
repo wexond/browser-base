@@ -1,30 +1,16 @@
 import { HandlerFactory, ISenderDetails } from '../handler-factory';
-import { sendToExtensionPages } from '../background-pages';
 import { EventHandler } from '../event-handler';
-import { BrowserWindow } from 'electron';
-import { Application } from '~/browser/application';
-
-export const getOverlayWindow = (sender: Electron.WebContents) => {
-  const senderWindow = BrowserWindow.fromWebContents(sender);
-  const parentWindow = senderWindow?.getParentWindow();
-
-  if (senderWindow && parentWindow)
-    return Application.instance.windows.fromBrowserWindow(parentWindow)
-      .overlayWindow;
-
-  if (sender.getType() === 'window' || sender.getType() === 'browserView')
-    return Application.instance.windows.fromWebContents(sender)?.overlayWindow;
-
-  return null;
-};
+import { OverlayService } from '~/browser/services/overlay';
 
 export class OverlayPrivateAPI extends EventHandler {
-  public regions: number[][] = [];
-
-  private ignore = true;
+  private service: OverlayService;
 
   constructor() {
     super('overlayPrivate', ['onPopupUpdated', 'onRegionsUpdated']);
+  }
+
+  public start(service: OverlayService) {
+    this.service = service;
 
     const handler = HandlerFactory.create('overlayPrivate', this);
 
@@ -34,19 +20,11 @@ export class OverlayPrivateAPI extends EventHandler {
     handler('setIgnoreMouseEvents', this.setIgnoreMouseEvents);
   }
 
-  public start() {}
-
   public setIgnoreMouseEvents(
     { sender }: ISenderDetails,
     { flag }: { flag: boolean },
   ) {
-    const overlay = getOverlayWindow(sender);
-    if (!overlay) return;
-
-    if (this.ignore !== flag) {
-      overlay.setIgnoreMouseEvents(flag);
-      this.ignore = flag;
-    }
+    this.service.fromWebContents(sender)?.setIgnoreMouseEvents(flag);
   }
 
   public updatePopup(
@@ -56,12 +34,19 @@ export class OverlayPrivateAPI extends EventHandler {
     this.sendEventToAll('onPopupUpdated', name, info);
   }
 
-  public getRegions() {
-    return this.regions;
+  public getRegions({ sender }: ISenderDetails) {
+    return this.service.fromWebContents(sender)?.regions;
   }
 
-  public setRegions({}: ISenderDetails, { regions }: { regions: number[][] }) {
-    this.regions = regions;
+  public setRegions(
+    { sender }: ISenderDetails,
+    { regions }: { regions: number[][] },
+  ) {
+    const overlay = this.service.fromWebContents(sender);
+    if (!overlay) return;
+
+    overlay.regions = regions;
+
     this.sendEventToAll('onRegionsUpdated', regions);
   }
 }
