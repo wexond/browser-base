@@ -17,6 +17,8 @@ export class StorageFactory {
 
       const onResponse = (res: IStorageResponse) => {
         if (res.action === 'invoker' && res.id === id) {
+          StorageFactory.worker.removeListener('message', onResponse);
+
           if (res.error || !res.success) {
             return reject(res.error);
           }
