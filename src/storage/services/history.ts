@@ -4,11 +4,7 @@ import {
   IVisitItem,
   IHistorySearchDetails,
 } from '~/interfaces';
-import {
-  IHistoryDbVisitsItem,
-  IHistoryDbItem,
-  PageTransition,
-} from '../interfaces';
+import { IHistoryDbVisitsItem, IHistoryDbItem } from '../interfaces';
 import {
   convertFromChromeTime,
   convertToChromeTime,
@@ -20,6 +16,7 @@ import {
   IHistoryDeleteDetails,
   IHistoryDeleteRange,
   IHistoryVisitsRemoved,
+  PageTransition,
 } from '~/interfaces/history';
 import { getYesterdayTime } from '../utils';
 import { HistoryServiceBase } from '~/common/services/history';
@@ -168,14 +165,12 @@ class HistoryService extends HistoryServiceBase {
       .map(this.formatVisitItem);
   }
 
-  public addUrl({ url }: IHistoryAddDetails) {
+  public addCustomUrl(url: string, type = PageTransition.PAGE_TRANSITION_LINK) {
+    const transition = this.getPageTransition(type);
+
     let item = this.getUrlData(url, 'id, visit_count');
 
     const time = dateToChromeTime(new Date());
-
-    const transition = this.getPageTransition(
-      PageTransition.PAGE_TRANSITION_LINK,
-    );
 
     if (item) {
       this.db
@@ -195,11 +190,15 @@ class HistoryService extends HistoryServiceBase {
       item = this.getUrlData(url, 'id');
     }
 
-    return this.db
+    this.db
       .prepare(
         'INSERT INTO visits (url, visit_time, transition, from_visit, segment_id) VALUES (@url, @visitTime, @transition, 0, 0)',
       )
       .run({ url: item.id, visitTime: time, transition });
+  }
+
+  public addUrl({ url }: IHistoryAddDetails) {
+    this.addCustomUrl(url, PageTransition.PAGE_TRANSITION_LINK);
   }
 
   public deleteUrl({ url }: IHistoryDeleteDetails) {

@@ -6,6 +6,7 @@ import {
   IHistoryItem,
   IHistoryAddDetails,
   IHistoryDeleteRange,
+  PageTransition,
 } from '~/interfaces';
 import { extensions } from '../extensions';
 import { HistoryServiceBase } from '~/common/services/history';
@@ -30,6 +31,9 @@ export class HistoryService extends HistoryServiceBase {
 
   public addUrl = (details: IHistoryAddDetails) =>
     this.invoker('add-url', details);
+
+  public addCustomUrl = (url: string, transition: PageTransition) =>
+    this.invoker('add-custom-url', url, transition);
 
   public deleteUrl = (details: IHistoryAddDetails) =>
     this.invoker('delete-url', details);
