@@ -20,6 +20,7 @@ import {
 } from '~/interfaces/history';
 import { getYesterdayTime } from '../utils';
 import { HistoryServiceBase } from '~/common/services/history';
+import { HandlerFactory } from '../handler-factory';
 
 const ITEM_SELECT =
   'SELECT id, last_visit_time, title, typed_count, url, visit_count FROM urls';
@@ -28,6 +29,22 @@ const VISITS_ITEM_SELECT =
   'SELECT id, url, from_visit, visit_time, transition FROM visits';
 
 class HistoryService extends HistoryServiceBase {
+  constructor() {
+    super();
+
+    const handler = HandlerFactory.createInvoker('history', this);
+
+    handler('search', this.search);
+    handler('get-visits', this.getVisits);
+    handler('add-url', this.addUrl);
+    handler('add-custom-url', this.addCustomUrl);
+    handler('delete-url', this.deleteUrl);
+    handler('delete-range', this.deleteRange);
+    handler('delete-all', this.deleteAll);
+
+    HandlerFactory.createReceiver('history', this, ['visitRemoved']);
+  }
+
   private get db() {
     return DbService.history;
   }
