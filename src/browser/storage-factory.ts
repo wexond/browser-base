@@ -1,18 +1,14 @@
 import { IStorageScope, IStorageMessage, IStorageResponse } from '~/interfaces';
 import { makeId } from '~/common/utils/string';
-import { StorageService } from './services/storage';
 import { Application } from './application';
 
-export class StorageFactory {
-  private static get worker() {
-    return Application.instance.storage.worker;
-  }
-
+export class StorageInvokerFactory {
   public static create = (scope: IStorageScope) => <T>(
     method: string,
     ...args: any[]
   ) => {
     return new Promise<T>((resolve, reject) => {
+      const { worker } = Application.instance.storage;
       const id = makeId(24);
 
       const onResponse = (res: IStorageResponse) => {
@@ -27,9 +23,9 @@ export class StorageFactory {
         }
       };
 
-      StorageFactory.worker.on('message', onResponse);
+      worker.on('message', onResponse);
 
-      StorageFactory.worker.postMessage({
+      worker.postMessage({
         id,
         method,
         scope,
