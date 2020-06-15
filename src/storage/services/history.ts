@@ -35,12 +35,12 @@ class HistoryService extends HistoryServiceBase {
     const handler = HandlerFactory.createInvoker('history', this);
 
     handler('search', this.search);
-    handler('get-visits', this.getVisits);
-    handler('add-url', this.addUrl);
-    handler('add-custom-url', this.addCustomUrl);
-    handler('delete-url', this.deleteUrl);
-    handler('delete-range', this.deleteRange);
-    handler('delete-all', this.deleteAll);
+    handler('getVisits', this.getVisits);
+    handler('addUrl', this.addUrl);
+    handler('addCustomUrl', this.addCustomUrl);
+    handler('deleteUrl', this.deleteUrl);
+    handler('deleteRange', this.deleteRange);
+    handler('deleteAll', this.deleteAll);
 
     HandlerFactory.createReceiver('history', this, ['visitRemoved']);
   }

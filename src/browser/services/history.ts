@@ -27,19 +27,19 @@ export class HistoryService extends HistoryServiceBase {
     this.invoker<IHistoryItem[]>('search', details);
 
   public getVisits = (details: IVisitsDetails) =>
-    this.invoker<IVisitItem[]>('get-visits', details);
+    this.invoker<IVisitItem[]>('getVisits', details);
 
   public addUrl = (details: IHistoryAddDetails) =>
-    this.invoker('add-url', details);
+    this.invoker('addUrl', details);
 
   public addCustomUrl = (url: string, transition: PageTransition) =>
-    this.invoker('add-custom-url', url, transition);
+    this.invoker('addCustomUrl', url, transition);
 
   public deleteUrl = (details: IHistoryAddDetails) =>
-    this.invoker('delete-url', details);
+    this.invoker('deleteUrl', details);
 
   public deleteRange = (range: IHistoryDeleteRange) =>
-    this.invoker('delete-range', range);
+    this.invoker('deleteRange', range);
 
-  public deleteAll = () => this.invoker('delete-all');
+  public deleteAll = () => this.invoker('deleteAll');
 }

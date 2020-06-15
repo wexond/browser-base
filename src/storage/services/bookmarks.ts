@@ -40,16 +40,16 @@ class BookmarksService extends BookmarksServiceBase {
     const handler = HandlerFactory.createInvoker('bookmarks', this);
 
     handler('get', this.get);
-    handler('get-children', this.getChildren);
-    handler('get-recent', this.getRecent);
-    handler('get-tree', this.getTree);
-    handler('get-subtree', this.getSubTree);
+    handler('getChildren', this.getChildren);
+    handler('getRecent', this.getRecent);
+    handler('getTree', this.getTree);
+    handler('getSubtree', this.getSubTree);
     handler('search', this.search);
     handler('create', this.create);
     handler('move', this.move);
     handler('update', this.update);
     handler('remove', this.remove);
-    handler('remove-tree', this.removeTree);
+    handler('removeTree', this.removeTree);
 
     HandlerFactory.createReceiver('bookmarks', this, [
       'created',

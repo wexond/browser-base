@@ -25,15 +25,15 @@ export class BookmarksService extends BookmarksServiceBase {
     this.invoker<IBookmarkNode[]>('get', ids);
 
   public getChildren = (id: string) =>
-    this.invoker<IBookmarkNode[]>('get-children', id);
+    this.invoker<IBookmarkNode[]>('getChildren', id);
 
   public getRecent = (numberOfItems: number) =>
-    this.invoker<IBookmarkNode[]>('get-recent', numberOfItems);
+    this.invoker<IBookmarkNode[]>('getRecent', numberOfItems);
 
-  public getTree = () => this.invoker<IBookmarkNode[]>('get-tree');
+  public getTree = () => this.invoker<IBookmarkNode[]>('getTree');
 
   public getSubTree = (id: string) =>
-    this.invoker<IBookmarkNode[]>('get-subtree', id);
+    this.invoker<IBookmarkNode[]>('getSubtree', id);
 
   public search = (query: string | IBookmarkSearchQuery) =>
     this.invoker<IBookmarkNode[]>('search', query);
@@ -50,5 +50,5 @@ export class BookmarksService extends BookmarksServiceBase {
   public remove = (id: string) => this.invoker<IBookmarkNode[]>('remove', id);
 
   public removeTree = (id: string) =>
-    this.invoker<IBookmarkNode[]>('remove-tree', id);
+    this.invoker<IBookmarkNode[]>('removeTree', id);
 }
