@@ -1,17 +1,17 @@
 import { HandlerFactory } from '../handler-factory';
 import { EventHandler } from '../event-handler';
-import { StorageService } from '~/browser/services/storage';
+import { HistoryService } from '~/browser/services/history';
 
 export class HistoryAPI extends EventHandler {
-  private get historyService() {
-    return StorageService.instance.history;
-  }
+  private service: HistoryService;
 
   constructor() {
     super('history', ['onVisited', 'onVisitRemoved']);
   }
 
-  public start() {
+  public start(service: HistoryService) {
+    this.service = service;
+
     const handler = HandlerFactory.create('history', this);
 
     handler('search', this.search);
@@ -21,20 +21,20 @@ export class HistoryAPI extends EventHandler {
     handler('deleteRange', this.deleteRange);
     handler('deleteAll', this.deleteAll);
 
-    this.handleEvents(this.historyService, {
+    this.handleEvents(this.service, {
       visitRemoved: 'onVisitRemoved',
     });
   }
 
-  public search = (e, { query }) => this.historyService.search(query);
+  public search = (e, { query }) => this.service.search(query);
 
-  public getVisits = (e, { details }) => this.historyService.getVisits(details);
+  public getVisits = (e, { details }) => this.service.getVisits(details);
 
-  public addUrl = (e, { details }) => this.historyService.addUrl(details);
+  public addUrl = (e, { details }) => this.service.addUrl(details);
 
-  public deleteUrl = (e, { details }) => this.historyService.deleteUrl(details);
+  public deleteUrl = (e, { details }) => this.service.deleteUrl(details);
 
-  public deleteRange = (e, { range }) => this.historyService.deleteRange(range);
+  public deleteRange = (e, { range }) => this.service.deleteRange(range);
 
-  public deleteAll = () => this.historyService.deleteAll();
+  public deleteAll = () => this.service.deleteAll();
 }
