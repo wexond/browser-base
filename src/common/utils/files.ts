@@ -1,7 +1,7 @@
 import { stat, promises as fs } from 'fs';
 
 export const pathExists = (path: string) => {
-  return new Promise((resolve) => {
+  return new Promise<boolean>((resolve) => {
     stat(path, (error) => {
       resolve(!error);
     });
@@ -18,7 +18,7 @@ export const readJsonFile = async <T>(
     .then((r) => JSON.parse(r));
 
   if (!exists) {
-    await fs.writeFile(path, data, 'utf8');
+    await fs.copyFile(defaultDataPath, path);
   }
 
   return data;

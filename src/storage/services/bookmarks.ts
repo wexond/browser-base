@@ -28,8 +28,6 @@ class BookmarksService extends BookmarksServiceBase {
 
   private roots: IBookmarksDocumentRoots = {};
 
-  private saveTimeout: number;
-
   constructor() {
     super();
 
@@ -55,7 +53,7 @@ class BookmarksService extends BookmarksServiceBase {
     return Math.max(0, Math.min(index ?? children.length, children.length));
   }
 
-  public async load() {
+  public async start() {
     const { roots } = await readJsonFile<IBookmarksDocument>(
       config.bookmarks,
       config.default.bookmarks,

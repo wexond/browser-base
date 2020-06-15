@@ -10,6 +10,7 @@ import { OverlayPrivateAPI } from './api/overlay-private';
 import { BrowserActionPrivateAPI } from './api/browser-action-private';
 import { TabsPrivateAPI } from './api/tabs-private';
 import { BookmarksAPI } from './api/bookmarks';
+import { HistoryAPI } from './api/history';
 
 export class Extensions {
   public static instance = new Extensions();
@@ -21,6 +22,7 @@ export class Extensions {
   public webRequest = new WebRequestAPI();
   public browserAction = new BrowserActionAPI();
   public bookmarks = new BookmarksAPI();
+  public history = new HistoryAPI();
 
   public tabsPrivate = new TabsPrivateAPI();
   public browserActionPrivate = new BrowserActionPrivateAPI();

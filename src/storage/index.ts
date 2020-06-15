@@ -1,5 +1,7 @@
-import loader from './loaders';
+import DbService from './services/db';
+import CommunicationService from './services/communication';
 
 (async () => {
-  await loader();
+  await DbService.start();
+  await CommunicationService.start();
 })();
