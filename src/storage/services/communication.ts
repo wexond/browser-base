@@ -28,6 +28,7 @@ const registry = {
       search: HistoryService.search,
       'get-visits': HistoryService.getVisits,
       'add-url': HistoryService.addUrl,
+      'add-custom-url': HistoryService.addCustomUrl,
       'delete-url': HistoryService.deleteUrl,
       'delete-range': HistoryService.deleteRange,
       'delete-all': HistoryService.deleteAll,
