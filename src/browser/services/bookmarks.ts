@@ -9,11 +9,16 @@ import {
 import { BookmarksServiceBase } from '~/common/services/bookmarks';
 import { extensions } from '../extensions';
 
-export class BoomarksService extends BookmarksServiceBase {
+export class BookmarksService extends BookmarksServiceBase {
   private invoker = StorageFactory.create('bookmarks');
 
-  public start() {
-    extensions.bookmarks.start();
+  private constructor() {
+    super();
+    extensions.bookmarks.start(this);
+  }
+
+  public static start() {
+    return new BookmarksService();
   }
 
   public get = (ids: string | string[]) =>

@@ -1,11 +1,9 @@
 import { HandlerFactory } from '../handler-factory';
 import { EventHandler } from '../event-handler';
-import { StorageService } from '~/browser/services/storage';
+import { BookmarksService } from '../../services/bookmarks';
 
 export class BookmarksAPI extends EventHandler {
-  private get bookmarksService() {
-    return StorageService.instance.bookmarks;
-  }
+  private service: BookmarksService;
 
   constructor() {
     super('bookmarks', [
@@ -19,7 +17,9 @@ export class BookmarksAPI extends EventHandler {
     ]);
   }
 
-  public start() {
+  public start(service: BookmarksService) {
+    this.service = service;
+
     const handler = HandlerFactory.create('bookmarks', this);
 
     handler('get', this.get);
@@ -34,7 +34,7 @@ export class BookmarksAPI extends EventHandler {
     handler('remove', this.remove);
     handler('removeTree', this.removeTree);
 
-    this.handleEvents(this.bookmarksService, {
+    this.handleEvents(this.service, {
       created: 'onCreated',
       removed: 'onRemoved',
       changed: 'onChanged',
@@ -42,28 +42,26 @@ export class BookmarksAPI extends EventHandler {
     });
   }
 
-  public get = (e, { idOrIdList }) => this.bookmarksService.get(idOrIdList);
+  public get = (e, { idOrIdList }) => this.service.get(idOrIdList);
 
-  public getChildren = (e, { id }) => this.bookmarksService.getChildren(id);
+  public getChildren = (e, { id }) => this.service.getChildren(id);
 
   public getRecent = (e, { numberOfItems }) =>
-    this.bookmarksService.getRecent(numberOfItems);
+    this.service.getRecent(numberOfItems);
 
-  public getTree = () => this.bookmarksService.getTree();
+  public getTree = () => this.service.getTree();
 
-  public getSubTree = (e, { id }) => this.bookmarksService.getSubTree(id);
+  public getSubTree = (e, { id }) => this.service.getSubTree(id);
 
-  public search = (e, { query }) => this.bookmarksService.search(query);
+  public search = (e, { query }) => this.service.search(query);
 
-  public create = (e, { bookmark }) => this.bookmarksService.create(bookmark);
+  public create = (e, { bookmark }) => this.service.create(bookmark);
 
-  public move = (e, { id, destination }) =>
-    this.bookmarksService.move(id, destination);
+  public move = (e, { id, destination }) => this.service.move(id, destination);
 
-  public update = (e, { id, changes }) =>
-    this.bookmarksService.update(id, changes);
+  public update = (e, { id, changes }) => this.service.update(id, changes);
 
-  public remove = (e, { id }) => this.bookmarksService.remove(id);
+  public remove = (e, { id }) => this.service.remove(id);
 
-  public removeTree = (e, { id }) => this.bookmarksService.removeTree(id);
+  public removeTree = (e, { id }) => this.service.removeTree(id);
 }

@@ -13,8 +13,13 @@ import { HistoryServiceBase } from '~/common/services/history';
 export class HistoryService extends HistoryServiceBase {
   private invoker = StorageFactory.create('history');
 
-  public start() {
-    extensions.history.start();
+  private constructor() {
+    super();
+    extensions.history.start(this);
+  }
+
+  public static start() {
+    return new HistoryService();
   }
 
   public search = (details: IHistorySearchDetails) =>
