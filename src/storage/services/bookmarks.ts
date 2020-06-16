@@ -20,6 +20,8 @@ import { makeId, makeGuuid } from '~/common/utils/string';
 import { dateToChromeTime } from '~/common/utils/date';
 import { BookmarksServiceBase } from '~/common/services/bookmarks';
 import { queueWriteFile } from '~/common/utils/queue-write-file';
+import { WorkerMessengerFactory } from '~/common/worker-messenger-factory';
+import { registerWorkerEventPropagator } from '../worker-event-handler';
 
 class BookmarksService extends BookmarksServiceBase {
   private rootNode: IBookmarksDocumentNode;
@@ -35,6 +37,26 @@ class BookmarksService extends BookmarksServiceBase {
     this.on('created', this.onAction);
     this.on('moved', this.onAction);
     this.on('removed', this.onAction);
+
+    const handler = WorkerMessengerFactory.createHandler('bookmarks', this);
+
+    handler('get', this.get);
+    handler('getChildren', this.getChildren);
+    handler('getRecent', this.getRecent);
+    handler('getTree', this.getTree);
+    handler('getSubtree', this.getSubTree);
+    handler('search', this.search);
+    handler('create', this.create);
+    handler('move', this.move);
+    handler('update', this.update);
+    handler('remove', this.remove);
+    handler('removeTree', this.removeTree);
+
+    registerWorkerEventPropagator(
+      'bookmarks',
+      ['created', 'removed', 'changed', 'moved'],
+      this,
+    );
   }
 
   private onAction = () => {

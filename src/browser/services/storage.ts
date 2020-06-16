@@ -1,21 +1,21 @@
 import { Worker } from 'worker_threads';
 import { EventEmitter } from 'events';
 
-import { BoomarksService } from './bookmarks';
 import { getPath } from '~/utils/paths';
 import { IStorageResponse } from '~/interfaces';
 import { HistoryService } from './history';
+import { BookmarksService } from './bookmarks';
 
 export class StorageService extends EventEmitter {
-  public static instance = new StorageService();
-
   public worker: Worker;
 
-  public bookmarks: BoomarksService;
+  public bookmarks: BookmarksService;
 
   public history: HistoryService;
 
-  public start() {
+  constructor() {
+    super();
+
     console.log('Storage service is running.');
 
     this.worker = new Worker('./build/storage.bundle.js', {
@@ -24,11 +24,8 @@ export class StorageService extends EventEmitter {
 
     this.worker.on('message', this.onMessage);
 
-    this.bookmarks = new BoomarksService();
-    this.bookmarks.start();
-
-    this.history = new HistoryService();
-    this.history.start();
+    this.bookmarks = new BookmarksService(this.worker);
+    this.history = new HistoryService(this.worker);
   }
 
   private onMessage = (e: IStorageResponse) => {

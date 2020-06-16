@@ -1,4 +1,4 @@
-import { app, ipcMain, session, screen } from 'electron';
+import { app, ipcMain, session } from 'electron';
 import { isAbsolute, extname } from 'path';
 import { existsSync } from 'fs';
 import { checkFiles } from '~/utils/files';
@@ -9,8 +9,6 @@ import { requestAuth } from './dialogs/auth';
 import { protocols } from './protocols';
 import { Tabs } from './tabs';
 import { BrowserContext } from './browser-context';
-import { extensions } from './extensions';
-import { getOverlayWindow } from './extensions/api/overlay-private';
 import { OverlayService } from './services/overlay';
 
 export class Application {
@@ -22,6 +20,8 @@ export class Application {
   public tabs = new Tabs();
 
   public overlay: OverlayService;
+
+  public storage: StorageService;
 
   public start() {
     const gotTheLock = app.requestSingleInstanceLock();
@@ -87,8 +87,8 @@ export class Application {
 
     checkFiles();
 
-    StorageService.instance.start();
-    this.overlay = OverlayService.start();
+    this.storage = new StorageService();
+    this.overlay = new OverlayService();
 
     const browserContext = await BrowserContext.from(
       session.defaultSession,

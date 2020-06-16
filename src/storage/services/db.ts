@@ -10,12 +10,12 @@ class DbService {
   public history: Database;
 
   public async start() {
-    this.history = await this.create(config.history, config.default.history);
+    this.history = await this.createDb(config.history, config.default.history);
 
     await BookmarksService.start();
   }
 
-  private async create(path: string, schemaPath: string) {
+  private async createDb(path: string, schemaPath: string) {
     const exists = await pathExists(path);
 
     const db = sqlite(path, { verbose: console.log });

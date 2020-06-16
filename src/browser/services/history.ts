@@ -1,4 +1,3 @@
-import { StorageFactory } from '../storage-factory';
 import {
   IVisitsDetails,
   IVisitItem,
@@ -6,31 +5,39 @@ import {
   IHistoryItem,
   IHistoryAddDetails,
   IHistoryDeleteRange,
+  PageTransition,
 } from '~/interfaces';
 import { extensions } from '../extensions';
 import { HistoryServiceBase } from '~/common/services/history';
+import { WorkerMessengerFactory } from '~/common/worker-messenger-factory';
+import { Worker } from 'worker_threads';
 
 export class HistoryService extends HistoryServiceBase {
-  private invoker = StorageFactory.create('history');
+  private invoker = WorkerMessengerFactory.createInvoker('history');
 
-  public start() {
-    extensions.history.start();
+  constructor(worker: Worker) {
+    super();
+    this.invoker.initialize(worker);
+    extensions.history.start(this);
   }
 
   public search = (details: IHistorySearchDetails) =>
-    this.invoker<IHistoryItem[]>('search', details);
+    this.invoker.invoke<IHistoryItem[]>('search', details);
 
   public getVisits = (details: IVisitsDetails) =>
-    this.invoker<IVisitItem[]>('get-visits', details);
+    this.invoker.invoke<IVisitItem[]>('getVisits', details);
 
   public addUrl = (details: IHistoryAddDetails) =>
-    this.invoker('add-url', details);
+    this.invoker.invoke('addUrl', details);
+
+  public addCustomUrl = (url: string, transition: PageTransition) =>
+    this.invoker.invoke('addCustomUrl', url, transition);
 
   public deleteUrl = (details: IHistoryAddDetails) =>
-    this.invoker('delete-url', details);
+    this.invoker.invoke('deleteUrl', details);
 
   public deleteRange = (range: IHistoryDeleteRange) =>
-    this.invoker('delete-range', range);
+    this.invoker.invoke('deleteRange', range);
 
-  public deleteAll = () => this.invoker('delete-all');
+  public deleteAll = () => this.invoker.invoke('deleteAll');
 }

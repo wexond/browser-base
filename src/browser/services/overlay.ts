@@ -18,7 +18,7 @@ const contains = (regions: number[][], x: number, y: number) => {
 };
 
 export class OverlayService {
-  private constructor() {
+  constructor() {
     ipcMain.on('mouse-move', (e) => {
       const { x, y } = screen.getCursorScreenPoint();
 
@@ -31,10 +31,6 @@ export class OverlayService {
     });
 
     extensions.overlayPrivate.start(this);
-  }
-
-  public static start() {
-    return new OverlayService();
   }
 
   public fromWebContents(sender: Electron.WebContents) {

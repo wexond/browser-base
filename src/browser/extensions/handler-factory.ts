@@ -1,7 +1,5 @@
 import { ipcMain } from 'electron';
 import { sessionFromIpcEvent } from './session';
-import { BoomarksService } from '~/browser/services/bookmarks';
-import { EventHandler } from './event-handler';
 
 export interface ISenderDetails {
   session?: Electron.Session;
