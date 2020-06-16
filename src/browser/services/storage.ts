@@ -24,8 +24,8 @@ export class StorageService extends EventEmitter {
 
     this.worker.on('message', this.onMessage);
 
-    this.bookmarks = new BookmarksService();
-    this.history = new HistoryService();
+    this.bookmarks = new BookmarksService(this.worker);
+    this.history = new HistoryService(this.worker);
   }
 
   private onMessage = (e: IStorageResponse) => {

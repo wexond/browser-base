@@ -3,34 +3,42 @@ import { makeId } from '~/common/utils/string';
 import { MessagePort, parentPort, Worker } from 'worker_threads';
 
 export class WorkerMessengerFactory {
-  public static createInvoker = (
-    scope: IStorageScope,
-    port: MessagePort | Worker,
-  ) => <T>(method: string, ...args: any[]) => {
-    return new Promise<T>((resolve, reject) => {
-      const id = makeId(24);
+  public static createInvoker = (scope: IStorageScope) => {
+    let p: MessagePort | Worker;
 
-      const onResponse = (res: IStorageResponse) => {
-        if (res.action === 'invoker' && res.id === id) {
-          port.removeListener('message', onResponse);
+    return {
+      initialize: (port: MessagePort | Worker) => {
+        p = port;
+      },
+      invoke: <T>(method: string, ...args: any[]) => {
+        if (!p) throw new Error("Invoker hasn't been initialized.");
 
-          if (res.error || !res.success) {
-            return reject(res.error);
-          }
+        return new Promise<T>((resolve, reject) => {
+          const id = makeId(24);
 
-          resolve(res.data);
-        }
-      };
+          const onResponse = (res: IStorageResponse) => {
+            if (res.action === 'invoker' && res.id === id) {
+              p.removeListener('message', onResponse);
 
-      port.on('message', onResponse);
+              if (res.error || !res.success) {
+                return reject(res.error);
+              }
 
-      port.postMessage({
-        id,
-        method,
-        scope,
-        args,
-      } as IStorageMessage);
-    });
+              resolve(res.data);
+            }
+          };
+
+          p.on('message', onResponse);
+
+          p.postMessage({
+            id,
+            method,
+            scope,
+            args,
+          } as IStorageMessage);
+        });
+      },
+    };
   };
 
   public static createHandler(scope: IStorageScope, bind: any) {

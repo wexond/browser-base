@@ -10,36 +10,34 @@ import {
 import { extensions } from '../extensions';
 import { HistoryServiceBase } from '~/common/services/history';
 import { WorkerMessengerFactory } from '~/common/worker-messenger-factory';
-import { Application } from '../application';
+import { Worker } from 'worker_threads';
 
 export class HistoryService extends HistoryServiceBase {
-  private invoke = WorkerMessengerFactory.createInvoker(
-    'history',
-    Application.instance.storage.worker,
-  );
+  private invoker = WorkerMessengerFactory.createInvoker('history');
 
-  constructor() {
+  constructor(worker: Worker) {
     super();
+    this.invoker.initialize(worker);
     extensions.history.start(this);
   }
 
   public search = (details: IHistorySearchDetails) =>
-    this.invoke<IHistoryItem[]>('search', details);
+    this.invoker.invoke<IHistoryItem[]>('search', details);
 
   public getVisits = (details: IVisitsDetails) =>
-    this.invoke<IVisitItem[]>('getVisits', details);
+    this.invoker.invoke<IVisitItem[]>('getVisits', details);
 
   public addUrl = (details: IHistoryAddDetails) =>
-    this.invoke('addUrl', details);
+    this.invoker.invoke('addUrl', details);
 
   public addCustomUrl = (url: string, transition: PageTransition) =>
-    this.invoke('addCustomUrl', url, transition);
+    this.invoker.invoke('addCustomUrl', url, transition);
 
   public deleteUrl = (details: IHistoryAddDetails) =>
-    this.invoke('deleteUrl', details);
+    this.invoker.invoke('deleteUrl', details);
 
   public deleteRange = (range: IHistoryDeleteRange) =>
-    this.invoke('deleteRange', range);
+    this.invoker.invoke('deleteRange', range);
 
-  public deleteAll = () => this.invoke('deleteAll');
+  public deleteAll = () => this.invoker.invoke('deleteAll');
 }
