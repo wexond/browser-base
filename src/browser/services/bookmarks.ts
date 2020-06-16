@@ -11,48 +11,44 @@ import { WorkerMessengerFactory } from '~/common/worker-messenger-factory';
 import { Application } from '../application';
 
 export class BookmarksService extends BookmarksServiceBase {
-  private invoker = WorkerMessengerFactory.createInvoker(
+  private invoke = WorkerMessengerFactory.createInvoker(
     'bookmarks',
     Application.instance.storage.worker,
   );
 
-  private constructor() {
+  constructor() {
     super();
     extensions.bookmarks.start(this);
   }
 
-  public static start() {
-    return new BookmarksService();
-  }
-
   public get = (ids: string | string[]) =>
-    this.invoker<IBookmarkNode[]>('get', ids);
+    this.invoke<IBookmarkNode[]>('get', ids);
 
   public getChildren = (id: string) =>
-    this.invoker<IBookmarkNode[]>('getChildren', id);
+    this.invoke<IBookmarkNode[]>('getChildren', id);
 
   public getRecent = (numberOfItems: number) =>
-    this.invoker<IBookmarkNode[]>('getRecent', numberOfItems);
+    this.invoke<IBookmarkNode[]>('getRecent', numberOfItems);
 
-  public getTree = () => this.invoker<IBookmarkNode[]>('getTree');
+  public getTree = () => this.invoke<IBookmarkNode[]>('getTree');
 
   public getSubTree = (id: string) =>
-    this.invoker<IBookmarkNode[]>('getSubtree', id);
+    this.invoke<IBookmarkNode[]>('getSubtree', id);
 
   public search = (query: string | IBookmarkSearchQuery) =>
-    this.invoker<IBookmarkNode[]>('search', query);
+    this.invoke<IBookmarkNode[]>('search', query);
 
   public create = (bookmark: IBookmarkCreateInfo) =>
-    this.invoker<IBookmarkNode[]>('create', bookmark);
+    this.invoke<IBookmarkNode[]>('create', bookmark);
 
   public move = (id: string, destination: IBookmarkDestination) =>
-    this.invoker<IBookmarkNode[]>('move', id, destination);
+    this.invoke<IBookmarkNode[]>('move', id, destination);
 
   public update = (id: string, changes: IBookmarkChanges) =>
-    this.invoker<IBookmarkNode[]>('update', id, changes);
+    this.invoke<IBookmarkNode[]>('update', id, changes);
 
-  public remove = (id: string) => this.invoker<IBookmarkNode[]>('remove', id);
+  public remove = (id: string) => this.invoke<IBookmarkNode[]>('remove', id);
 
   public removeTree = (id: string) =>
-    this.invoker<IBookmarkNode[]>('removeTree', id);
+    this.invoke<IBookmarkNode[]>('removeTree', id);
 }
