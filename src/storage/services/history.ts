@@ -20,7 +20,8 @@ import {
 } from '~/interfaces/history';
 import { getYesterdayTime } from '../utils';
 import { HistoryServiceBase } from '~/common/services/history';
-import { HandlerFactory } from '../handler-factory';
+import { WorkerMessengerFactory } from '~/common/worker-messenger-factory';
+import { registerWorkerEventPropagator } from '../worker-event-handler';
 
 const ITEM_SELECT =
   'SELECT id, last_visit_time, title, typed_count, url, visit_count FROM urls';
@@ -32,7 +33,7 @@ class HistoryService extends HistoryServiceBase {
   constructor() {
     super();
 
-    const handler = HandlerFactory.createInvoker('history', this);
+    const handler = WorkerMessengerFactory.createHandler('history', this);
 
     handler('search', this.search);
     handler('getVisits', this.getVisits);
@@ -42,7 +43,7 @@ class HistoryService extends HistoryServiceBase {
     handler('deleteRange', this.deleteRange);
     handler('deleteAll', this.deleteAll);
 
-    HandlerFactory.createReceiver('history', this, ['visitRemoved']);
+    registerWorkerEventPropagator('history', ['visitRemoved'], this);
   }
 
   private get db() {

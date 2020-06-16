@@ -1,10 +1,39 @@
-import { parentPort } from 'worker_threads';
-import { EventEmitter } from 'events';
-
 import { IStorageScope, IStorageMessage, IStorageResponse } from '~/interfaces';
+import { makeId } from '~/common/utils/string';
+import { MessagePort, parentPort, Worker } from 'worker_threads';
 
-export class HandlerFactory {
-  public static createInvoker(scope: IStorageScope, bind: any) {
+export class WorkerMessengerFactory {
+  public static createInvoker = (
+    scope: IStorageScope,
+    port: MessagePort | Worker,
+  ) => <T>(method: string, ...args: any[]) => {
+    return new Promise<T>((resolve, reject) => {
+      const id = makeId(24);
+
+      const onResponse = (res: IStorageResponse) => {
+        if (res.action === 'invoker' && res.id === id) {
+          port.removeListener('message', onResponse);
+
+          if (res.error || !res.success) {
+            return reject(res.error);
+          }
+
+          resolve(res.data);
+        }
+      };
+
+      port.on('message', onResponse);
+
+      port.postMessage({
+        id,
+        method,
+        scope,
+        args,
+      } as IStorageMessage);
+    });
+  };
+
+  public static createHandler(scope: IStorageScope, bind: any) {
     const registry = new Map<string, Function>();
 
     const listener = async (message: IStorageMessage) => {
@@ -45,22 +74,5 @@ export class HandlerFactory {
     return (name: string, fn: (...args: any[]) => void) => {
       registry.set(name, fn.bind(bind));
     };
-  }
-
-  public static createReceiver(
-    scope: IStorageScope,
-    bind: EventEmitter,
-    events: string[],
-  ) {
-    events.forEach((r) => {
-      bind.addListener(r, (...data: any[]) => {
-        parentPort.postMessage({
-          action: 'receiver',
-          scope,
-          eventName: r,
-          data,
-        } as IStorageResponse);
-      });
-    });
   }
 }

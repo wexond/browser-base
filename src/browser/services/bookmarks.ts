@@ -1,4 +1,3 @@
-import { StorageInvokerFactory } from '../storage-factory';
 import {
   IBookmarkNode,
   IBookmarkSearchQuery,
@@ -8,9 +7,14 @@ import {
 } from '~/interfaces';
 import { BookmarksServiceBase } from '~/common/services/bookmarks';
 import { extensions } from '../extensions';
+import { WorkerMessengerFactory } from '~/common/worker-messenger-factory';
+import { Application } from '../application';
 
 export class BookmarksService extends BookmarksServiceBase {
-  private invoker = StorageInvokerFactory.create('bookmarks');
+  private invoker = WorkerMessengerFactory.createInvoker(
+    'bookmarks',
+    Application.instance.storage.worker,
+  );
 
   private constructor() {
     super();

@@ -1,4 +1,3 @@
-import { StorageInvokerFactory } from '../storage-factory';
 import {
   IVisitsDetails,
   IVisitItem,
@@ -10,9 +9,14 @@ import {
 } from '~/interfaces';
 import { extensions } from '../extensions';
 import { HistoryServiceBase } from '~/common/services/history';
+import { WorkerMessengerFactory } from '~/common/worker-messenger-factory';
+import { Application } from '../application';
 
 export class HistoryService extends HistoryServiceBase {
-  private invoker = StorageInvokerFactory.create('history');
+  private invoker = WorkerMessengerFactory.createInvoker(
+    'history',
+    Application.instance.storage.worker,
+  );
 
   private constructor() {
     super();
