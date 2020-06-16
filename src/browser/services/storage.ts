@@ -13,7 +13,7 @@ export class StorageService extends EventEmitter {
 
   public history: HistoryService;
 
-  private constructor() {
+  constructor() {
     super();
 
     console.log('Storage service is running.');
@@ -24,12 +24,8 @@ export class StorageService extends EventEmitter {
 
     this.worker.on('message', this.onMessage);
 
-    this.bookmarks = BookmarksService.start();
-    this.history = HistoryService.start();
-  }
-
-  public static start() {
-    return new StorageService();
+    this.bookmarks = new BookmarksService(this.worker);
+    this.history = new HistoryService(this.worker);
   }
 
   private onMessage = (e: IStorageResponse) => {

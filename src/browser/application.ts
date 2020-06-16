@@ -87,7 +87,7 @@ export class Application {
 
     checkFiles();
 
-    this.storage = StorageService.start();
+    this.storage = new StorageService();
 
     const browserContext = await BrowserContext.from(
       session.defaultSession,
