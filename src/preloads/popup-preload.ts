@@ -2,8 +2,8 @@ import { ipcRenderer } from 'electron';
 
 const updateBounds = () => {
   const { width, height } = document.body.getBoundingClientRect();
-  ipcRenderer.send(
-    `extension-popup-size`,
+  ipcRenderer.sendToHost(
+    `size`,
     width === 0 ? 1 : width,
     height === 0 ? 1 : height,
   );
@@ -21,7 +21,7 @@ window.addEventListener('load', () => {
 });
 
 const close = () => {
-  ipcRenderer.send('webview-blur');
+  ipcRenderer.sendToHost('blur');
 };
 
 window.addEventListener('blur', close);

@@ -5,11 +5,11 @@ import { checkFiles } from '~/utils/files';
 import { isURL, prefixHttp } from '~/utils';
 import { WindowsService } from './windows-service';
 import { StorageService } from './services/storage';
-import { DialogsService } from './services/dialogs-service';
 import { requestAuth } from './dialogs/auth';
 import { protocols } from './protocols';
 import { Tabs } from './tabs';
 import { BrowserContext } from './browser-context';
+import { OverlayService } from './services/overlay';
 
 export class Application {
   public static instance = new Application();
@@ -19,7 +19,7 @@ export class Application {
   // public settings = new Settings();
   public tabs = new Tabs();
 
-  public dialogs = new DialogsService();
+  public overlay: OverlayService;
 
   public storage: StorageService;
 
@@ -88,17 +88,22 @@ export class Application {
     checkFiles();
 
     this.storage = new StorageService();
+    this.overlay = new OverlayService();
 
     const browserContext = await BrowserContext.from(
       session.defaultSession,
       false,
     );
 
-    this.dialogs.run();
-
     await browserContext.loadExtensions();
 
-    this.windows.create(browserContext, {});
+    if (process.platform === 'linux') {
+      setTimeout(() => {
+        Application.instance.windows.create(browserContext, {});
+      }, 1000);
+    } else {
+      this.windows.create(browserContext, {});
+    }
 
     // Menu.setApplicationMenu(getMainMenu());
     // runAutoUpdaterService();

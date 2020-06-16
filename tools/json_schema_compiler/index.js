@@ -169,37 +169,39 @@ module.exports = (jsonObjects, apiFeaturesPath) => {
       return null;
     };
 
-    const getJsType = (type, isArray) => {
+    const getJsType = (type) => {
       let ret = type;
 
       if (type === 'integer' || type === 'double' || type === 'long')
         ret = 'number';
 
-      return ret + (isArray ? '[]' : '');
+      return ret;
     };
 
     const getType = (obj, level = 1, inside) => {
       const ref = getRef(obj);
-      if (ref) return ref + (inside === 'array' ? '[]' : '');
+      if (ref) return ref;
 
       if (obj.choices) {
-        return obj.choices
-          .map((x) => getJsType(getType(x, level), inside === 'array'))
-          .join(' | ');
+        const a = obj.choices.map((x) => getType(x, level));
+        if (inside === 'array') {
+          for (let i = 0; i < a.length - 1; i++) {
+            a[i] += '[]';
+          }
+        }
+        return a.join(' | ');
       }
 
-      if (obj.type === 'array') return getType(obj.items, level, 'array');
+      if (obj.type === 'array')
+        return getType(obj.items, level, 'array') + '[]';
       if (obj.type === 'object') {
         if (
           (obj.additionalProperties && (obj.properties || obj.functions)) ||
           !obj.additionalProperties
         ) {
-          return getJsType(
-            `{\n${processTsObject(obj, level + 1)}${'  '.repeat(level)}}`,
-            inside === 'array',
-          );
+          return `{\n${processTsObject(obj, level + 1)}${'  '.repeat(level)}}`;
         } else {
-          return getJsType(obj.additionalProperties.type, inside === 'array');
+          return getJsType(obj.additionalProperties.type);
         }
       }
 
@@ -230,7 +232,7 @@ module.exports = (jsonObjects, apiFeaturesPath) => {
         }`;
       }
 
-      return getJsType(obj.type, inside === 'array');
+      return getJsType(obj.type);
     };
 
     const processDictionaryItem = (name, value, level = 1) => {

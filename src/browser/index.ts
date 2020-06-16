@@ -42,6 +42,10 @@ ipcMain.on('get-webcontents-id', (e) => {
   e.returnValue = e.sender.id;
 });
 
+ipcMain.on('get-webcontents-type', (e) => {
+  e.returnValue = e.sender.getType();
+});
+
 ipcMain.on('get-window-id', (e) => {
   e.returnValue = (e.sender as any).windowId;
 });

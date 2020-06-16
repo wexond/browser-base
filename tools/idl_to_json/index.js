@@ -14,49 +14,53 @@ const idlToJsonMap = {
 
 const allTypes = [];
 
-const parseMember = (member) => {
-  const isArray = member.idlType.generic === 'sequence';
-  const name = isArray
-    ? member.idlType.idlType[0].idlType
-    : member.idlType.idlType;
+const parseIdlType = (idlType) => {
+  const name = idlType;
   const type = idlToJsonMap[name];
 
+  if (typeof name === 'string') {
+    if (type) {
+      return { type };
+    } else {
+      const foundType = allTypes.find((x) => x.id === name);
+
+      if (!foundType) {
+        console.log(name);
+        console.log(JSON.stringify(idlType, null, 2));
+        throw new Error(`Type ${name} not found.`);
+      }
+
+      if (foundType.private) {
+        const item = { ...foundType };
+        delete item.id;
+        delete item.private;
+        return item;
+      } else {
+        return { $ref: name };
+      }
+    }
+  }
+
+  if (Array.isArray(idlType.idlType))
+    return { type: 'array', items: parseIdlType(idlType.idlType[0]) };
+
+  const t = { ...idlType.idlType };
+
+  if (t.required === false || t.optional === true) {
+    t.optional = true;
+  }
+
+  return parseIdlType(idlType.idlType);
+};
+
+const parseMember = (member) => {
   const prop = {
+    ...parseIdlType(member.idlType),
     name: member.name,
   };
 
   if (member.required === false || member.optional === true) {
     prop.optional = true;
-  }
-
-  if (!type) {
-    const foundType = allTypes.find((x) => x.id === name);
-
-    if (!foundType) {
-      console.log(JSON.stringify(member, null, 2));
-      throw new Error(`Type ${name} not found.`);
-    }
-
-    let tmpProp = prop;
-
-    if (isArray) {
-      tmpProp = {};
-      prop.type = 'array';
-    }
-
-    if (foundType.private) {
-      Object.assign(tmpProp, foundType);
-      delete tmpProp.id;
-      delete tmpProp.private;
-    } else {
-      tmpProp['$ref'] = name;
-    }
-
-    if (isArray) {
-      prop.items = tmpProp;
-    }
-  } else {
-    prop.type = type;
   }
 
   return prop;

@@ -13,7 +13,7 @@ const getActionForTab = (action: IBrowserAction, tabId: number) =>
 
 export class BrowserActionPrivateAPI extends EventHandler {
   constructor() {
-    super('browserActionPrivate', ['onUpdated']);
+    super('browserActionPrivate', ['onUpdated', 'onVisibilityChange']);
 
     const handler = HandlerFactory.create('browserActionPrivate', this);
     handler('getAll', this.getAllInSession);
