@@ -11,4 +11,7 @@ export class FaviconsService {
 
   public getFavicon = (pageUrl: string) =>
     this.invoker.invoke<Buffer>('getFavicon', pageUrl);
+
+  public saveFavicon = (pageUrl: string, faviconUrl: string) =>
+    this.invoker.invoke<Buffer>('saveFavicon', pageUrl, faviconUrl);
 }

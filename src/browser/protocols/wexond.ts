@@ -18,7 +18,14 @@ export default {
         let buffer: Buffer;
         let mimeType: string;
 
-        if (parsed.hostname === 'favicon') {
+        if (parsed.hostname === 'test') {
+          await Application.instance.storage.favicons.saveFavicon(
+            'https://wexond.net/',
+            'https://wexond.net/favicon.ico',
+          );
+
+          buffer = Buffer.from('xd');
+        } else if (parsed.hostname === 'favicon') {
           const favicon = await Application.instance.storage.favicons.getFavicon(
             parsed.path.substr(1),
           );
