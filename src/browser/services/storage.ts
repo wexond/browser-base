@@ -29,6 +29,7 @@ export class StorageService extends EventEmitter {
 
     this.bookmarks = new BookmarksService(this.worker);
     this.history = new HistoryService(this.worker);
+    this.favicons = new FaviconsService(this.worker);
   }
 
   private onMessage = (e: IStorageResponse) => {

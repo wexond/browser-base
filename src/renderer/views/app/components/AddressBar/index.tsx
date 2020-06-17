@@ -73,7 +73,8 @@ const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     const { value } = e.currentTarget;
     let url = value;
 
-    if (isURL(value)) {
+    if (isURL(value) || true) {
+      // TODO @sentialx
       url = value.indexOf('://') === -1 ? `http://${value}` : value;
     } else {
       url = store.settings.searchEngine.url.replace('%s', value);

@@ -2,10 +2,9 @@ import DbService from './db';
 import { WorkerMessengerFactory } from '~/common/worker-messenger-factory';
 
 class FaviconsService {
-  constructor() {
+  public start() {
     const handler = WorkerMessengerFactory.createHandler('favicons', this);
 
-    handler('getFaviconUrl', this.getFaviconUrl);
     handler('getFavicon', this.getFavicon);
   }
 
@@ -13,38 +12,20 @@ class FaviconsService {
     return DbService.favicons;
   }
 
-  private getIconId(pageUrl: string): number {
-    const { icon_id } = this.db
+  public getFavicon(pageUrl: string) {
+    const data = this.db
       .prepare(
-        'SELECT icon_id FROM icon_mappping WHERE page_url = @pageUrl LIMIT 1',
+        `
+      SELECT image_data
+      FROM favicon_bitmaps
+      INNER JOIN icon_mapping
+        ON favicon_bitmaps.icon_id=icon_mapping.icon_id
+      WHERE icon_mapping.page_url=@pageUrl AND favicon_bitmaps.width = 32 LIMIT 1
+      `,
       )
       .get({ pageUrl });
 
-    return icon_id;
-  }
-
-  public getFaviconUrl(pageUrl: string): string {
-    const id = this.getIconId(pageUrl);
-
-    const { url } = this.db
-      .prepare('SELECT url FROM favicons WHERE id = @id')
-      .get({ id });
-
-    return url;
-  }
-
-  public getFavicon(url: string) {
-    const { id } = this.db
-      .prepare('SELECT id FROM favicons WHERE url = @url')
-      .get({ url });
-
-    const { last_updated, image_data, width, height } = this.db
-      .prepare(
-        'SELECT last_updated, image_data, widht, height FROM favicon_bitmaps WHERE id = @id',
-      )
-      .get({ id });
-
-    console.log(width, height);
+    return data?.image_data;
   }
 }
 

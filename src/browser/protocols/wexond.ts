@@ -1,9 +1,12 @@
-import { join } from 'path';
+import { join, resolve } from 'path';
 import { parse } from 'url';
 import { protocol } from 'electron';
 import { promises } from 'fs';
 import { fromBuffer } from 'file-type';
 import { lookup } from 'mime-types';
+
+import { Application } from '../application';
+import { ICON_PAGE } from '~/renderer/constants';
 
 export default {
   register: (session: Electron.Session) => {
@@ -16,9 +19,19 @@ export default {
         let mimeType: string;
 
         if (parsed.hostname === 'favicon') {
-          // TODO(xnerhu): get favicon buffer from db
-          buffer = Buffer.from('test');
-          mimeType = 'image/png';
+          const favicon = await Application.instance.storage.favicons.getFavicon(
+            parsed.path.substr(1),
+          );
+
+          if (favicon) {
+            buffer = favicon;
+            mimeType = 'image/png';
+          } else {
+            const imgPath = resolve('build', ICON_PAGE);
+
+            buffer = await promises.readFile(imgPath);
+            mimeType = 'image/svg+xml';
+          }
         } else {
           const path = join(
             __dirname,
