@@ -5,6 +5,7 @@ import { getPath } from '~/utils/paths';
 import { IStorageResponse } from '~/interfaces';
 import { HistoryService } from './history';
 import { BookmarksService } from './bookmarks';
+import { FaviconsService } from './favicons';
 
 export class StorageService extends EventEmitter {
   public worker: Worker;
@@ -12,6 +13,8 @@ export class StorageService extends EventEmitter {
   public bookmarks: BookmarksService;
 
   public history: HistoryService;
+
+  public favicons: FaviconsService;
 
   constructor() {
     super();
@@ -30,7 +33,7 @@ export class StorageService extends EventEmitter {
 
   private onMessage = (e: IStorageResponse) => {
     if (e.action === 'receiver') {
-      this[e.scope].emit(e.eventName, ...e.data);
+      (this[e.scope] as any)?.emit(e.eventName, ...e.data);
     }
   };
 }

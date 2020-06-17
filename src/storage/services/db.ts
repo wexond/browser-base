@@ -9,8 +9,14 @@ import BookmarksService from './bookmarks';
 class DbService {
   public history: Database;
 
+  public favicons: Database;
+
   public async start() {
     this.history = await this.createDb(config.history, config.default.history);
+    this.favicons = await this.createDb(
+      config.favicons,
+      config.default.favicons,
+    );
 
     await BookmarksService.start();
   }
