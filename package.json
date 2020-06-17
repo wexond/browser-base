@@ -109,7 +109,9 @@
     "webpack-merge": "^4.2.2"
   },
   "dependencies": {
+    "@types/sharp": "^0.25.0",
     "better-sqlite3": "^7.0.1",
+    "sharp": "^0.25.4",
     "sqlstring": "^2.3.2"
   }
 }
