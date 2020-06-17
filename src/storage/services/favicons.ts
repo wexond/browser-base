@@ -1,12 +1,10 @@
 import axios from 'axios';
 import { fromBuffer } from 'file-type';
-import { promises as fs } from 'fs';
 import * as sharp from 'sharp';
 
 import DbService from './db';
 import { WorkerMessengerFactory } from '~/common/worker-messenger-factory';
 import { convertIcoToPng } from '../utils';
-import { resolve } from 'path';
 import { dateToChromeTime } from '~/common/utils/date';
 
 class FaviconsService {
