@@ -1,21 +1,47 @@
 import { join } from 'path';
 import { parse } from 'url';
 import { protocol } from 'electron';
+import { promises } from 'fs';
+import { fromBuffer } from 'file-type';
+import { lookup } from 'mime-types';
 
 export default {
   register: (session: Electron.Session) => {
-    session.protocol.registerFileProtocol(
+    session.protocol.registerBufferProtocol(
       'wexond',
-      (request, callback: any) => {
+      async (request, callback) => {
         const parsed = parse(request.url);
 
-        if (parsed.path === '/') {
-          return callback({
-            path: join(__dirname, `${parsed.hostname}.html`),
-          });
+        let buffer: Buffer;
+        let mimeType: string;
+
+        if (parsed.hostname === 'favicon') {
+          // TODO(xnerhu): get favicon buffer from db
+          buffer = Buffer.from('test');
+          mimeType = 'image/png';
+        } else {
+          const path = join(
+            __dirname,
+            parsed.path === '/' ? `${parsed.hostname}.html` : parsed.path,
+          );
+          buffer = await promises.readFile(path);
+
+          const mime = lookup(path);
+          if (mime) mimeType = mime;
         }
 
-        callback({ path: join(__dirname, parsed.path) });
+        if (!mimeType) {
+          mimeType = '';
+          const type = await fromBuffer(buffer);
+          if (type) {
+            mimeType = type.mime;
+          }
+        }
+
+        callback({
+          data: buffer,
+          mimeType,
+        });
       },
       (error) => {
         if (error) console.error(error);
