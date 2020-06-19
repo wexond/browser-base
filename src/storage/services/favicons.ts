@@ -36,11 +36,25 @@ class FaviconsService {
   }
 
   private addIconMapping(iconId: number, pageUrl: string) {
-    this.db
-      .prepare(
-        `INSERT INTO icon_mapping (page_url, icon_id) VALUES (@pageUrl, @iconId)`,
-      )
-      .run({ pageUrl, iconId });
+    const iconMapping = this.db
+      .prepare(`SELECT icon_id FROM icon_mapping WHERE page_url = @pageUrl`)
+      .get({ pageUrl });
+
+    if (iconMapping) {
+      if (iconMapping.icon_id === iconId) return;
+
+      this.db
+        .prepare(
+          `UPDATE icon_mapping SET icon_id = @iconId WHERE page_url = @pageUrl`,
+        )
+        .run({ pageUrl, iconId });
+    } else {
+      this.db
+        .prepare(
+          `INSERT INTO icon_mapping (page_url, icon_id) VALUES (@pageUrl, @iconId)`,
+        )
+        .run({ pageUrl, iconId });
+    }
   }
 
   public async saveFavicon(pageUrl: string, faviconUrl: string) {

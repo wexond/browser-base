@@ -49,7 +49,6 @@ export class Tabs {
     });
 
     extensions.tabs.on('updated', (tabId, changeInfo, details) => {
-      console.log(details.url);
       Application.instance.storage.favicons.saveFavicon(
         details.url,
         details.favIconUrl,
