@@ -56,11 +56,18 @@ export class Tabs {
         );
       }
 
-      if (changeInfo.url || changeInfo.title) {
+      if (changeInfo.url) {
         Application.instance.storage.history.addUrl({
           url: details.url,
           title: details.title,
         });
+      }
+
+      if (changeInfo.title) {
+        Application.instance.storage.history.setTitleForUrl(
+          details.url,
+          changeInfo.title,
+        );
       }
     });
 

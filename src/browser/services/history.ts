@@ -29,6 +29,9 @@ export class HistoryService extends HistoryServiceBase {
   public addUrl = (details: IHistoryAddDetails) =>
     this.invoker.invoke('addUrl', details);
 
+  public setTitleForUrl = (url: string, title: string) =>
+    this.invoker.invoke('setTitleForUrl', url, title);
+
   public deleteUrl = (details: IHistoryAddDetails) =>
     this.invoker.invoke('deleteUrl', details);
 

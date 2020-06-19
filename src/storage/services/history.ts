@@ -36,6 +36,7 @@ class HistoryService extends HistoryServiceBase {
     handler('search', this.search);
     handler('getVisits', this.getVisits);
     handler('addUrl', this.addUrl);
+    handler('setTitleForUrl', this.setTitleForUrl);
     handler('deleteUrl', this.deleteUrl);
     handler('deleteRange', this.deleteRange);
     handler('deleteAll', this.deleteAll);
@@ -178,6 +179,12 @@ class HistoryService extends HistoryServiceBase {
       .prepare(`${VISITS_ITEM_SELECT} WHERE url = ? ORDER BY visit_time ASC`)
       .all(id)
       .map(this.formatVisitItem);
+  }
+
+  public setTitleForUrl(url: string, title: string) {
+    this.db
+      .prepare(`UPDATE urls SET title = @title WHERE url = @url`)
+      .run({ url, title });
   }
 
   public addUrl({ url, title, transition }: IHistoryAddDetails) {
