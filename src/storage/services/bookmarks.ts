@@ -30,9 +30,23 @@ class BookmarksService extends BookmarksServiceBase {
 
   private roots: IBookmarksDocumentRoots = {};
 
-  constructor() {
-    super();
+  private onAction = () => {
+    this.save();
+  };
 
+  private get documentNodes() {
+    return [...this.idsMap.values()];
+  }
+
+  private isFolder(node: IBookmarksDocumentNode | IBookmarkNode) {
+    return node.url == null;
+  }
+
+  private limitIndex(children: IBookmarksDocumentNode[], index: number) {
+    return Math.max(0, Math.min(index ?? children.length, children.length));
+  }
+
+  public async start() {
     this.on('changed', this.onAction);
     this.on('created', this.onAction);
     this.on('moved', this.onAction);
@@ -57,25 +71,7 @@ class BookmarksService extends BookmarksServiceBase {
       ['created', 'removed', 'changed', 'moved'],
       this,
     );
-  }
 
-  private onAction = () => {
-    this.save();
-  };
-
-  private get documentNodes() {
-    return [...this.idsMap.values()];
-  }
-
-  private isFolder(node: IBookmarksDocumentNode | IBookmarkNode) {
-    return node.url == null;
-  }
-
-  private limitIndex(children: IBookmarksDocumentNode[], index: number) {
-    return Math.max(0, Math.min(index ?? children.length, children.length));
-  }
-
-  public async start() {
     const { roots } = await readJsonFile<IBookmarksDocument>(
       config.bookmarks,
       config.default.bookmarks,

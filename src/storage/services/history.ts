@@ -30,9 +30,7 @@ const VISITS_ITEM_SELECT =
   'SELECT id, url, from_visit, visit_time, transition FROM visits';
 
 class HistoryService extends HistoryServiceBase {
-  constructor() {
-    super();
-
+  public start() {
     const handler = WorkerMessengerFactory.createHandler('history', this);
 
     handler('search', this.search);

@@ -1,21 +1,60 @@
-import { join } from 'path';
+import { join, resolve } from 'path';
 import { parse } from 'url';
 import { protocol } from 'electron';
+import { promises } from 'fs';
+import { fromBuffer } from 'file-type';
+import { lookup } from 'mime-types';
+
+import { Application } from '../application';
+import { ICON_PAGE } from '~/renderer/constants';
 
 export default {
   register: (session: Electron.Session) => {
-    session.protocol.registerFileProtocol(
+    session.protocol.registerBufferProtocol(
       'wexond',
-      (request, callback: any) => {
+      async (request, callback) => {
         const parsed = parse(request.url);
 
-        if (parsed.path === '/') {
-          return callback({
-            path: join(__dirname, `${parsed.hostname}.html`),
-          });
+        let buffer: Buffer;
+        let mimeType: string;
+
+        if (parsed.hostname === 'favicon') {
+          const favicon = await Application.instance.storage.favicons.getFavicon(
+            parsed.path.substr(1),
+          );
+
+          if (favicon) {
+            buffer = favicon;
+            mimeType = 'image/png';
+          } else {
+            const imgPath = resolve('build', ICON_PAGE);
+
+            buffer = await promises.readFile(imgPath);
+            mimeType = 'image/svg+xml';
+          }
+        } else {
+          const path = join(
+            __dirname,
+            parsed.path === '/' ? `${parsed.hostname}.html` : parsed.path,
+          );
+          buffer = await promises.readFile(path);
+
+          const mime = lookup(path);
+          if (mime) mimeType = mime;
         }
 
-        callback({ path: join(__dirname, parsed.path) });
+        if (!mimeType) {
+          mimeType = '';
+          const type = await fromBuffer(buffer);
+          if (type) {
+            mimeType = type.mime;
+          }
+        }
+
+        callback({
+          data: buffer,
+          mimeType,
+        });
       },
       (error) => {
         if (error) console.error(error);
