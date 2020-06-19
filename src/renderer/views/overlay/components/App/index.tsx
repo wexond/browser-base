@@ -7,9 +7,14 @@ import { UIStyle } from '~/renderer/mixins/default-styles';
 import store from '../../store';
 import { StyledApp } from './style';
 import { ExtensionPopup } from '../ExtensionPopup';
+import { Menu } from '../Menu';
 
 export const App = hot(
   observer(() => {
+    const onMenusBlur = React.useCallback(() => {
+      store.closeMenu();
+    }, []);
+
     return (
       <ThemeProvider
         theme={{ ...store.theme, dark: store.theme['dialog.lightForeground'] }}
@@ -17,6 +22,11 @@ export const App = hot(
         <StyledApp>
           <UIStyle />
           <ExtensionPopup />
+          <div id="menus" tabIndex={0} onBlur={onMenusBlur}>
+            {store.menus.map((data) => (
+              <Menu key={data.id} data={data}></Menu>
+            ))}
+          </div>
         </StyledApp>
       </ThemeProvider>
     );

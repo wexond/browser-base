@@ -6,7 +6,7 @@ export class OverlayPrivateAPI extends EventHandler {
   private service: OverlayService;
 
   constructor() {
-    super('overlayPrivate', ['onPopupUpdated', 'onRegionsUpdated']);
+    super('overlayPrivate', ['onPopupToggled', 'onRegionsUpdated', 'onBlur']);
   }
 
   public start(service: OverlayService) {
@@ -14,7 +14,7 @@ export class OverlayPrivateAPI extends EventHandler {
 
     const handler = HandlerFactory.create('overlayPrivate', this);
 
-    handler('updatePopup', this.updatePopup);
+    handler('setPopupVisible', this.setPopupVisible);
     handler('setRegions', this.setRegions);
     handler('getRegions', this.getRegions);
     handler('setIgnoreMouseEvents', this.setIgnoreMouseEvents);
@@ -27,11 +27,11 @@ export class OverlayPrivateAPI extends EventHandler {
     this.service.fromWebContents(sender)?.setIgnoreMouseEvents(flag);
   }
 
-  public updatePopup(
-    {}: ISenderDetails,
-    { name, info }: { name: string; info: browser.overlayPrivate.PopupInfo },
+  public setPopupVisible(
+    { sender }: ISenderDetails,
+    { name, visible }: { name: string; visible: boolean },
   ) {
-    this.sendEventToAll('onPopupUpdated', name, info);
+    this.service.fromWebContents(sender)?.setPopupVisible(name, visible);
   }
 
   public getRegions({ sender }: ISenderDetails) {

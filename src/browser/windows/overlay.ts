@@ -3,6 +3,9 @@ import { BrowserWindow, session, Menu, app } from 'electron';
 import { getWebUIURL } from '~/common/utils/protocols';
 import { BrowserContext } from '../browser-context';
 import { resolve } from 'path';
+import { getCursorPointRelativeToPoint } from '../utils/point';
+import { extensions } from '../extensions';
+import { Application } from '../application';
 
 export class OverlayWindow {
   private ignore = false;
@@ -67,6 +70,10 @@ export class OverlayWindow {
       },
     );
 
+    this.win.on('blur', () => {
+      extensions.overlayPrivate.sendEventToAll('onBlur');
+    });
+
     const wcCreatedListener = (e, wc) => {
       if (wc.getType() === 'webview') {
         // TODO: extension popup inspect
@@ -77,16 +84,15 @@ export class OverlayWindow {
         // wc.openDevTools();
 
         wc.on('context-menu', (e, params) => {
-          const menu = Menu.buildFromTemplate([
+          Application.instance.contextMenus.popup([
             {
-              label: 'Inspect element',
-              click: () => {
+              type: 'normal',
+              title: 'Inspect element',
+              onClick: () => {
                 wc.inspectElement(params.x, params.y);
               },
             },
           ]);
-
-          menu.popup();
         });
       }
     };
@@ -100,6 +106,18 @@ export class OverlayWindow {
 
   public get webContents() {
     return this.win.webContents;
+  }
+
+  public getCursorPoint() {
+    return getCursorPointRelativeToPoint(this.contentBounds);
+  }
+
+  public setPopupVisible(name: string, visible: boolean) {
+    if (visible) {
+      this.win.focus();
+    }
+
+    extensions.overlayPrivate.sendEventToAll('onPopupToggled', name, visible);
   }
 
   public setIgnoreMouseEvents(flag: boolean) {
