@@ -36,7 +36,6 @@ class HistoryService extends HistoryServiceBase {
     handler('search', this.search);
     handler('getVisits', this.getVisits);
     handler('addUrl', this.addUrl);
-    handler('addCustomUrl', this.addCustomUrl);
     handler('deleteUrl', this.deleteUrl);
     handler('deleteRange', this.deleteRange);
     handler('deleteAll', this.deleteAll);
@@ -181,8 +180,11 @@ class HistoryService extends HistoryServiceBase {
       .map(this.formatVisitItem);
   }
 
-  public addCustomUrl(url: string, type = PageTransition.PAGE_TRANSITION_LINK) {
-    const transition = this.getPageTransition(type);
+  public addUrl({ url, title, transition }: IHistoryAddDetails) {
+    if (!title) title = '';
+
+    if (!transition) transition = PageTransition.PAGE_TRANSITION_LINK;
+    transition = this.getPageTransition(transition);
 
     let item = this.getUrlData(url, 'id, visit_count');
 
@@ -190,17 +192,20 @@ class HistoryService extends HistoryServiceBase {
 
     if (item) {
       this.db
-        .prepare(`UPDATE urls SET visit_count = @visitCount WHERE id = @id`)
-        .run({ id: item.id, visitCount: item.visit_count + 1 });
+        .prepare(
+          `UPDATE urls SET title = @title, visit_count = @visitCount WHERE id = @id`,
+        )
+        .run({ id: item.id, visitCount: item.visit_count + 1, title });
     } else {
       this.db
         .prepare(
-          `INSERT INTO urls (url, visit_count, last_visit_time, title) VALUES (@url, @visitCount, @lastVisitTime, '')`,
+          `INSERT INTO urls (url, visit_count, last_visit_time, title) VALUES (@url, @visitCount, @lastVisitTime, @title)`,
         )
         .run({
           url,
           visitCount: 1,
           lastVisitTime: time,
+          title,
         });
 
       item = this.getUrlData(url, 'id');
@@ -211,10 +216,6 @@ class HistoryService extends HistoryServiceBase {
         'INSERT INTO visits (url, visit_time, transition, from_visit, segment_id) VALUES (@url, @visitTime, @transition, 0, 0)',
       )
       .run({ url: item.id, visitTime: time, transition });
-  }
-
-  public addUrl({ url }: IHistoryAddDetails) {
-    this.addCustomUrl(url, PageTransition.PAGE_TRANSITION_LINK);
   }
 
   public deleteUrl({ url }: IHistoryDeleteDetails) {

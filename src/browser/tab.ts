@@ -84,14 +84,14 @@ export class Tab {
       return this.errorURL;
     });
 
-    // hookTabEvents(this);
-
     this.browserView.setAutoResize({
       width: true,
       height: true,
       horizontal: false,
       vertical: false,
     });
+
+    hookTabEvents(this);
   }
 
   public get webContents() {

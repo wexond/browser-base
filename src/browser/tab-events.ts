@@ -1,6 +1,10 @@
 import { Tab } from './tab';
+import { Application } from './application';
+import { extensions } from './extensions';
 
-export const hookTabEvents = (tab: Tab) => {
+export const hookTabEvents = (tab: Tab) => {};
+
+export const hookTabEvents1 = (tab: Tab) => {
   tab.webContents.on('context-menu', (e, params) => {
     const menu = getViewMenu(this.window, params, this.webContents);
     menu.popup();

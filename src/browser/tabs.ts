@@ -48,6 +48,22 @@ export class Tabs {
       // this.emit('activated', id);
     });
 
+    extensions.tabs.on('updated', (tabId, changeInfo, details) => {
+      if (changeInfo.favIconUrl) {
+        Application.instance.storage.favicons.saveFavicon(
+          details.url,
+          changeInfo.favIconUrl,
+        );
+      }
+
+      if (changeInfo.url || changeInfo.title) {
+        Application.instance.storage.history.addUrl({
+          url: details.url,
+          title: details.title,
+        });
+      }
+    });
+
     extensions.tabs.on('will-remove', (tabId) => {
       this.destroy(tabId);
     });

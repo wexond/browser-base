@@ -1,6 +1,7 @@
 import { HandlerFactory } from '../handler-factory';
 import { EventHandler } from '../event-handler';
 import { HistoryService } from '~/browser/services/history';
+import { PageTransition } from '~/interfaces';
 
 export class HistoryAPI extends EventHandler {
   private service: HistoryService;
@@ -30,7 +31,11 @@ export class HistoryAPI extends EventHandler {
 
   public getVisits = (e, { details }) => this.service.getVisits(details);
 
-  public addUrl = (e, { details }) => this.service.addUrl(details);
+  public addUrl = (e, { details }) =>
+    this.service.addUrl({
+      url: details.url,
+      transition: PageTransition.PAGE_TRANSITION_LINK,
+    });
 
   public deleteUrl = (e, { details }) => this.service.deleteUrl(details);
 
