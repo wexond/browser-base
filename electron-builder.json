@@ -5,7 +5,6 @@
     "include": "static/installer.nsh"
   },
   "generateUpdatesFilesForAllChannels": true,
-  "buildDependenciesFromSource": true,
   "asar": true,
   "directories": {
     "output": "dist",
