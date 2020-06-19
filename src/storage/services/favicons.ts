@@ -35,12 +35,23 @@ class FaviconsService {
     return data?.image_data;
   }
 
+  private addIconMapping(iconId: number, pageUrl: string) {
+    this.db
+      .prepare(
+        `INSERT INTO icon_mapping (page_url, icon_id) VALUES (@pageUrl, @iconId)`,
+      )
+      .run({ pageUrl, iconId });
+  }
+
   public async saveFavicon(pageUrl: string, faviconUrl: string) {
     let iconId = this.db
       .prepare(`SELECT id FROM favicons WHERE url = @faviconUrl`)
       .get({ faviconUrl })?.id;
 
-    if (iconId) return;
+    if (iconId) {
+      this.addIconMapping(iconId, pageUrl);
+      return;
+    }
 
     const res = await axios.get(faviconUrl, { responseType: 'arraybuffer' });
     const [image16, image32] = await this.processFavicon(res.data);
@@ -54,11 +65,7 @@ class FaviconsService {
 
       iconId = this.db.prepare(`SELECT last_insert_rowid() as id`).get().id;
 
-      this.db
-        .prepare(
-          `INSERT INTO icon_mapping (page_url, icon_id) VALUES (@pageUrl, @iconId)`,
-        )
-        .run({ pageUrl, iconId });
+      this.addIconMapping(iconId, pageUrl);
 
       const bitmapOptions = {
         iconId,

@@ -212,18 +212,21 @@ const onContextMenu = (tab: ITab) => () => {
 };
 
 const Content = observer(({ tab }: { tab: ITab }) => {
+  const loading = true;
+
   return (
     <StyledContent>
-      {!tab.loading && tab.favicon !== '' && (
+      {tab.favicon !== '' && (
         <StyledIcon
           isIconSet={tab.favicon !== ''}
+          loading={loading}
           style={{ backgroundImage: `url(${tab.favicon})` }}
         >
           <PinnedVolume tab={tab} />
         </StyledIcon>
       )}
 
-      {tab.loading && (
+      {loading && (
         <Preloader
           color={store.theme.accentColor}
           thickness={6}

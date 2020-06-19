@@ -235,8 +235,9 @@ export class TabsStore {
         if (title) tab.title = title;
         if (mutedInfo) tab.isMuted = mutedInfo.muted;
         if (audible !== undefined) tab.isPlaying = audible;
-        if (favIconUrl) tab.favicon = favIconUrl;
+        //if (favIconUrl) tab.favicon = favIconUrl;
         if (url) {
+          tab.favicon = `wexond://favicon/${url}`;
           tab.url = url;
           if (tab.id === this.selectedTabId && !store.addressbarFocused) {
             this.selectedTab.addressbarValue = null;

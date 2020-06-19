@@ -49,12 +49,11 @@ export class Tabs {
     });
 
     extensions.tabs.on('updated', (tabId, changeInfo, details) => {
-      if (changeInfo.favIconUrl) {
-        Application.instance.storage.favicons.saveFavicon(
-          details.url,
-          changeInfo.favIconUrl,
-        );
-      }
+      console.log(details.url);
+      Application.instance.storage.favicons.saveFavicon(
+        details.url,
+        details.favIconUrl,
+      );
 
       if (changeInfo.url) {
         Application.instance.storage.history.addUrl({
