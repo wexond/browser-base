@@ -19,7 +19,6 @@ class DbService {
     this.favicons = await this.createDb(
       config.favicons,
       config.default.favicons,
-      true,
     );
 
     await BookmarksService.start();
