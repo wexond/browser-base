@@ -131,7 +131,7 @@ class HistoryService extends HistoryServiceBase {
 
   private getUrlData(url: string, select = '*') {
     return this.db
-      .prepare(`SELECT ${select} FROM urls WHERE url = ? LIMIT 1`)
+      .getCachedStatement(`SELECT ${select} FROM urls WHERE url = ? LIMIT 1`)
       .get(url);
   }
 
@@ -160,7 +160,7 @@ class HistoryService extends HistoryServiceBase {
     }
 
     return this.db
-      .prepare(`${query} ORDER BY last_visit_time DESC LIMIT @limit`)
+      .getCachedStatement(`${query} ORDER BY last_visit_time DESC LIMIT @limit`)
       .all({
         text: text != null ? `%${text}%` : null,
         limit,
@@ -176,14 +176,16 @@ class HistoryService extends HistoryServiceBase {
     if (!id) return [];
 
     return this.db
-      .prepare(`${VISITS_ITEM_SELECT} WHERE url = ? ORDER BY visit_time ASC`)
+      .getCachedStatement(
+        `${VISITS_ITEM_SELECT} WHERE url = ? ORDER BY visit_time ASC`,
+      )
       .all(id)
       .map(this.formatVisitItem);
   }
 
   public setTitleForUrl(url: string, title: string) {
     this.db
-      .prepare(`UPDATE urls SET title = @title WHERE url = @url`)
+      .getCachedStatement(`UPDATE urls SET title = @title WHERE url = @url`)
       .run({ url, title });
   }
 
@@ -199,13 +201,13 @@ class HistoryService extends HistoryServiceBase {
 
     if (item) {
       this.db
-        .prepare(
+        .getCachedStatement(
           `UPDATE urls SET title = @title, visit_count = @visitCount WHERE id = @id`,
         )
         .run({ id: item.id, visitCount: item.visit_count + 1, title });
     } else {
       this.db
-        .prepare(
+        .getCachedStatement(
           `INSERT INTO urls (url, visit_count, last_visit_time, title) VALUES (@url, @visitCount, @lastVisitTime, @title)`,
         )
         .run({
@@ -219,7 +221,7 @@ class HistoryService extends HistoryServiceBase {
     }
 
     this.db
-      .prepare(
+      .getCachedStatement(
         'INSERT INTO visits (url, visit_time, transition, from_visit, segment_id) VALUES (@url, @visitTime, @transition, 0, 0)',
       )
       .run({ url: item.id, visitTime: time, transition });
@@ -228,8 +230,10 @@ class HistoryService extends HistoryServiceBase {
   public deleteUrl({ url }: IHistoryDeleteDetails) {
     const { id } = this.getUrlData(url, 'id');
 
-    this.db.prepare('DELETE FROM urls WHERE id = @id').run({ id });
-    this.db.prepare('DELETE FROM visits WHERE url = @url').run({ url: id });
+    this.db.getCachedStatement('DELETE FROM urls WHERE id = @id').run({ id });
+    this.db
+      .getCachedStatement('DELETE FROM visits WHERE url = @url')
+      .run({ url: id });
 
     this.emit('visitRemoved', {
       allHistory: false,
@@ -244,17 +248,21 @@ class HistoryService extends HistoryServiceBase {
     const range = { start, end };
 
     const pages = this.db
-      .prepare(
+      .getCachedStatement(
         `SELECT id, url FROM urls WHERE (last_visit_time >= @start AND last_visit_time <= @end)`,
       )
       .all(range);
 
-    const visitQuery = this.db.prepare(
+    const visitQuery = this.db.getCachedStatement(
       `SELECT visit_time FROM visits WHERE url = @url`,
     );
 
-    const removeUrl = this.db.prepare('DELETE FROM urls where id = @id');
-    const removeVisit = this.db.prepare('DELETE FROM visits where url = @url');
+    const removeUrl = this.db.getCachedStatement(
+      'DELETE FROM urls where id = @id',
+    );
+    const removeVisit = this.db.getCachedStatement(
+      'DELETE FROM visits where url = @url',
+    );
 
     const urls: string[] = [];
 
@@ -284,13 +292,13 @@ class HistoryService extends HistoryServiceBase {
 
   public deleteAll() {
     const urls: string[] = this.db
-      .prepare('SELECT url FROM urls')
+      .getCachedStatement('SELECT url FROM urls')
       .all()
       .map((r) => r.url);
 
-    this.db.prepare('DELETE FROM urls').run();
-    this.db.prepare('DELETE FROM visits').run();
-    this.db.prepare('DELETE FROM visit_source').run();
+    this.db.getCachedStatement('DELETE FROM urls').run();
+    this.db.getCachedStatement('DELETE FROM visits').run();
+    this.db.getCachedStatement('DELETE FROM visit_source').run();
 
     this.emit('visitRemoved', {
       allHistory: true,
