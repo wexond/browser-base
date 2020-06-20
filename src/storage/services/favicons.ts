@@ -28,19 +28,19 @@ class FaviconsService {
 
     if (iconUrl) {
       sql = this.db.prepare(`
-      SELECT image_data
-      FROM favicon_bitmaps
-      INNER JOIN icon_mapping
-        ON icon_mapping.icon_id=favicon_bitmaps.icon_id
-      WHERE icon_mapping.page_url=@pageUrl AND favicon_bitmaps.width = 32 LIMIT 1
-      `);
-    } else if (pageUrl) {
-      sql = this.db.prepare(`
-      SELECT image_data
+      SELECT *
       FROM favicon_bitmaps
       INNER JOIN favicons
         ON favicons.id=favicon_bitmaps.icon_id
       WHERE favicons.url=@iconUrl AND favicon_bitmaps.width = 32 LIMIT 1
+      `);
+    } else if (pageUrl) {
+      sql = this.db.prepare(`
+      SELECT *
+      FROM favicon_bitmaps
+      INNER JOIN icon_mapping
+        ON icon_mapping.icon_id=favicon_bitmaps.icon_id
+      WHERE icon_mapping.page_url=@pageUrl AND favicon_bitmaps.width = 32 LIMIT 1
       `);
     } else {
       throw new Error('Neither icon or page url specified.');
