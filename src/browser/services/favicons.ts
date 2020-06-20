@@ -24,9 +24,16 @@ export class FaviconsService {
     );
   };
 
-  public getFaviconForPageURL = async (pageUrl: string) => {
+  public getRawFaviconForPageURL = async (pageUrl: string) => {
     return bufferFromUint8Array(
-      await this.invoker.invoke<Uint8Array>('getFaviconForPageURL', pageUrl),
+      await this.invoker.invoke<Uint8Array>('getRawFaviconForPageURL', pageUrl),
+    );
+  };
+
+  public getFaviconURLForPageURL = async (pageUrl: string) => {
+    return await this.invoker.invoke<string>(
+      'getFaviconURLForPageURL',
+      pageUrl,
     );
   };
 

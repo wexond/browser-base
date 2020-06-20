@@ -1,13 +1,16 @@
 import { HandlerFactory, ISenderDetails } from '../handler-factory';
 import { Extensions } from '..';
+import { EventHandler } from '../event-handler';
 
 interface INavigationState {
   canGoBack?: boolean;
   canGoForward?: boolean;
 }
 
-export class TabsPrivateAPI {
+export class TabsPrivateAPI extends EventHandler {
   constructor() {
+    super('tabsPrivate', ['onFaviconUpdated']);
+
     const handler = HandlerFactory.create('tabsPrivate', this);
 
     handler('stop', this.stop);

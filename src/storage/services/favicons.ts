@@ -12,7 +12,8 @@ class FaviconsService {
     const handler = WorkerMessengerFactory.createHandler('favicons', this);
 
     handler('getPageURLForHost', this.getPageURLForHost);
-    handler('getFaviconForPageURL', this.getFaviconForPageURL);
+    handler('getRawFaviconForPageURL', this.getRawFaviconForPageURL);
+    handler('getFaviconURLForPageURL', this.getFaviconURLForPageURL);
     handler('getFavicon', this.getFavicon);
     handler('saveFavicon', this.saveFavicon);
     handler('faviconExists', this.faviconExists);
@@ -51,7 +52,7 @@ class FaviconsService {
       .get({ iconUrl })?.image_data;
   }
 
-  public getFaviconForPageURL(pageUrl: string) {
+  public getRawFaviconForPageURL(pageUrl: string) {
     return this.db
       .getCachedStatement(
         `
@@ -63,6 +64,20 @@ class FaviconsService {
     `,
       )
       .get({ pageUrl })?.image_data;
+  }
+
+  public getFaviconURLForPageURL(pageUrl: string) {
+    return this.db
+      .getCachedStatement(
+        `
+    SELECT url
+    FROM favicons
+    INNER JOIN icon_mapping
+      ON icon_mapping.icon_id=favicons.id
+    WHERE icon_mapping.page_url=@pageUrl LIMIT 1
+    `,
+      )
+      .get({ pageUrl })?.url;
   }
 
   private addIconMapping(iconId: number, pageUrl: string) {

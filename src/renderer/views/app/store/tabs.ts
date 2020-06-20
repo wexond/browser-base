@@ -227,12 +227,16 @@ export class TabsStore {
       tab.close();
     });
 
+    browser.tabsPrivate.onFaviconUpdated.addListener((tabId, faviconUrl) => {
+      const tab = this.getTabById(tabId);
+      if (!tab) return;
+
+      if (faviconUrl) tab.favicon = `wexond://favicon2/?iconUrl=${faviconUrl}`;
+      else tab.favicon = 'wexond://favicon/';
+    });
+
     browser.tabs.onUpdated.addListener(
-      async (
-        tabId,
-        { title, status, mutedInfo, audible, favIconUrl, url },
-        details,
-      ) => {
+      async (tabId, { title, status, mutedInfo, audible, url }, details) => {
         const tab = this.getTabById(tabId);
         if (!tab) return;
 
@@ -240,22 +244,8 @@ export class TabsStore {
         if (title) tab.title = title;
         if (mutedInfo) tab.isMuted = mutedInfo.muted;
         if (audible !== undefined) tab.isPlaying = audible;
-        if (favIconUrl) tab.favicon = `wexond://favicon/${details.url}`;
         if (url) {
           tab.url = url;
-
-          (async () => {
-            const exists = await browser.ipcRenderer.invoke(
-              'favicon-exists',
-              url,
-            );
-
-            if (exists) {
-              tab.favicon = `wexond://favicon/${url}`;
-            } else {
-              tab.favicon = 'wexond://favicon/';
-            }
-          })();
 
           if (tab.id === this.selectedTabId && !store.addressbarFocused) {
             this.selectedTab.addressbarValue = null;
