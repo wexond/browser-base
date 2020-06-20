@@ -15,6 +15,7 @@ class FaviconsService {
 
     handler('getFavicon', this.getFavicon);
     handler('saveFavicon', this.saveFavicon);
+    handler('faviconExists', this.faviconExists);
   }
 
   private get db() {
@@ -28,7 +29,7 @@ class FaviconsService {
 
     if (iconUrl) {
       sql = this.db.prepare(`
-      SELECT *
+      SELECT image_data
       FROM favicon_bitmaps
       INNER JOIN favicons
         ON favicons.id=favicon_bitmaps.icon_id
@@ -36,7 +37,7 @@ class FaviconsService {
       `);
     } else if (pageUrl) {
       sql = this.db.prepare(`
-      SELECT *
+      SELECT image_data
       FROM favicon_bitmaps
       INNER JOIN icon_mapping
         ON icon_mapping.icon_id=favicon_bitmaps.icon_id
@@ -100,6 +101,20 @@ class FaviconsService {
       bitmap(image16, 16);
       bitmap(image32, 32);
     })();
+  }
+
+  public async faviconExists(pageUrl: string) {
+    return (
+      this.db
+        .prepare(
+          `
+        SELECT EXISTS
+        (SELECT 1 FROM icon_mapping WHERE page_url = @pageUrl LIMIT 1)
+        as "exists"
+    `,
+        )
+        .get({ pageUrl }).exists != 0
+    );
   }
 
   private insertBitmap = (iconId: number) => {

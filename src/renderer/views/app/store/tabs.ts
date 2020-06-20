@@ -240,11 +240,22 @@ export class TabsStore {
         if (title) tab.title = title;
         if (mutedInfo) tab.isMuted = mutedInfo.muted;
         if (audible !== undefined) tab.isPlaying = audible;
-        if (favIconUrl)
-          tab.favicon = `wexond://favicon2/?iconUrl=${favIconUrl}`;
+        if (favIconUrl) tab.favicon = `wexond://favicon/${details.url}`;
         if (url) {
           tab.url = url;
-          tab.favicon = `wexond://favicon/${url}`;
+
+          (async () => {
+            const exists = await browser.ipcRenderer.invoke(
+              'favicon-exists',
+              url,
+            );
+
+            if (exists) {
+              tab.favicon = `wexond://favicon/${url}`;
+            } else {
+              tab.favicon = 'wexond://favicon/';
+            }
+          })();
 
           if (tab.id === this.selectedTabId && !store.addressbarFocused) {
             this.selectedTab.addressbarValue = null;
