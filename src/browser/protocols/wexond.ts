@@ -27,8 +27,6 @@ export default {
             }),
           );
 
-          console.log(favicon?.toString('base64'));
-
           if (favicon) {
             buffer = favicon;
             mimeType = 'image/png';
