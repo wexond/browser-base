@@ -240,8 +240,7 @@ export class TabsStore {
         if (title) tab.title = title;
         if (mutedInfo) tab.isMuted = mutedInfo.muted;
         if (audible !== undefined) tab.isPlaying = audible;
-        // if (favIconUrl)
-        //   tab.favicon = `wexond://favicon/${details.url}?v=${randomId()}`;
+        if (favIconUrl) tab.favicon = `wexond://favicon/${details.url}`;
         if (url) {
           tab.url = url;
           tab.favicon = `wexond://favicon/${url}`;

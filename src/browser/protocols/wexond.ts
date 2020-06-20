@@ -19,11 +19,11 @@ export default {
         let mimeType: string;
 
         if (parsed.hostname === 'favicon') {
-          const favicon = await Application.instance.storage.favicons.getFavicon(
-            parsed.path.substr(1),
+          const favicon = Buffer.from(
+            await Application.instance.storage.favicons.getFavicon(
+              parsed.path.substr(1),
+            ),
           );
-
-          console.log(favicon?.toString('base64'));
 
           if (favicon) {
             buffer = favicon;
