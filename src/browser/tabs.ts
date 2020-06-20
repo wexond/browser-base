@@ -48,19 +48,32 @@ export class Tabs {
       // this.emit('activated', id);
     });
 
-    extensions.tabs.on('updated', (tabId, changeInfo, details) => {
+    extensions.tabs.on('updated', async (tabId, changeInfo, details) => {
+      const { storage } = Application.instance;
+
       if (changeInfo.url) {
-        Application.instance.storage.history.addUrl({
+        storage.history.addUrl({
           url: details.url,
           title: details.title,
         });
+
+        const faviconUrl = await storage.favicons.getFaviconURLForPageURL(
+          changeInfo.url,
+        );
+
+        if (faviconUrl) {
+          await storage.favicons.saveFavicon(changeInfo.url, faviconUrl);
+        }
+
+        extensions.tabsPrivate.sendEventToAll(
+          'onFaviconUpdated',
+          tabId,
+          faviconUrl,
+        );
       }
 
       if (changeInfo.title) {
-        Application.instance.storage.history.setTitleForUrl(
-          details.url,
-          changeInfo.title,
-        );
+        storage.history.setTitleForUrl(details.url, changeInfo.title);
       }
     });
 

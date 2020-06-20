@@ -5,3 +5,7 @@ interface Functions {
 
   static void stop(long tabId);
 };
+
+interface Events {
+  static void onFaviconUpdated(long tabId, DOMString faviconUrl);
+};

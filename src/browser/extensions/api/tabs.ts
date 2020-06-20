@@ -555,13 +555,6 @@ export class TabsAPI extends EventHandler implements ITabsEvents {
 
     if (!didUpdate) return;
 
-    if (changeInfo.favIconUrl || changeInfo.url) {
-      await Application.instance.storage.favicons.saveFavicon(
-        details.url || '',
-        details.favIconUrl || '',
-      );
-    }
-
     this.emit('updated', tab.id, changeInfo, details);
     this.sendEventToAll('onUpdated', tab.id, changeInfo, details);
   }

@@ -34,20 +34,19 @@ const handleFavicon = async (
   url: UrlWithStringQuery,
   urlFormat: FaviconUrlFormat,
 ) => {
+  const { storage } = Application.instance;
   const { pageUrl, iconUrl } = parseFaviconUrl(url, urlFormat);
 
   let favicon = pageUrl
-    ? await Application.instance.storage.favicons.getFaviconForPageURL(pageUrl)
-    : await Application.instance.storage.favicons.getFavicon(iconUrl);
+    ? await storage.favicons.getRawFaviconForPageURL(pageUrl)
+    : await storage.favicons.getFavicon(iconUrl);
 
   if (pageUrl && !favicon) {
-    const url = await Application.instance.storage.favicons.getPageURLForHost(
+    const url = await storage.favicons.getPageURLForHost(
       parse(pageUrl).hostname,
     );
 
-    favicon = await Application.instance.storage.favicons.getFaviconForPageURL(
-      url,
-    );
+    favicon = await storage.favicons.getRawFaviconForPageURL(url);
   }
 
   if (favicon) {
