@@ -8,6 +8,8 @@ export class Database {
 
   private statements: Map<string, sqlite.Statement> = new Map();
 
+  public transaction = this._db.transaction;
+
   constructor(path: string, schemaPath: string, verbose = false) {
     this.init(path, schemaPath, verbose);
   }

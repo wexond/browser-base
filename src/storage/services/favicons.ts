@@ -1,13 +1,11 @@
 import axios from 'axios';
 import { fromBuffer } from 'file-type';
 import * as sharp from 'sharp';
-import { Statement } from 'better-sqlite3';
 
 import DbService from './db';
 import { WorkerMessengerFactory } from '~/common/worker-messenger-factory';
 import { convertIcoToPng } from '../utils';
 import { dateToChromeTime } from '~/common/utils/date';
-import { IFaviconOptions } from '~/interfaces';
 
 class FaviconsService {
   public start() {
@@ -26,7 +24,7 @@ class FaviconsService {
 
   public getPageURLForHost(host: string) {
     return this.db
-      .prepare(
+      .getCachedStatement(
         `
       SELECT icon_mapping.page_url
       FROM icon_mapping
@@ -41,7 +39,7 @@ class FaviconsService {
 
   public getFavicon(iconUrl: string) {
     return this.db
-      .prepare(
+      .getCachedStatement(
         `
       SELECT image_data
       FROM favicon_bitmaps
@@ -55,7 +53,7 @@ class FaviconsService {
 
   public getFaviconForPageURL(pageUrl: string) {
     return this.db
-      .prepare(
+      .getCachedStatement(
         `
     SELECT image_data
     FROM favicon_bitmaps
@@ -69,20 +67,22 @@ class FaviconsService {
 
   private addIconMapping(iconId: number, pageUrl: string) {
     const iconMapping = this.db
-      .prepare(`SELECT icon_id FROM icon_mapping WHERE page_url = @pageUrl`)
+      .getCachedStatement(
+        `SELECT icon_id FROM icon_mapping WHERE page_url = @pageUrl`,
+      )
       .get({ pageUrl });
 
     if (iconMapping) {
       if (iconMapping.icon_id === iconId) return;
 
       this.db
-        .prepare(
+        .getCachedStatement(
           `UPDATE icon_mapping SET icon_id = @iconId WHERE page_url = @pageUrl`,
         )
         .run({ pageUrl, iconId });
     } else {
       this.db
-        .prepare(
+        .getCachedStatement(
           `INSERT INTO icon_mapping (page_url, icon_id) VALUES (@pageUrl, @iconId)`,
         )
         .run({ pageUrl, iconId });
@@ -91,7 +91,7 @@ class FaviconsService {
 
   public async saveFavicon(pageUrl: string, faviconUrl: string) {
     let iconId = this.db
-      .prepare(`SELECT id FROM favicons WHERE url = @faviconUrl`)
+      .getCachedStatement(`SELECT id FROM favicons WHERE url = @faviconUrl`)
       .get({ faviconUrl })?.id;
 
     if (iconId) {
@@ -104,12 +104,14 @@ class FaviconsService {
 
     this.db.transaction(() => {
       this.db
-        .prepare(
+        .getCachedStatement(
           `INSERT INTO favicons (url, icon_type) VALUES (@faviconUrl, 1)`,
         )
         .run({ faviconUrl });
 
-      iconId = this.db.prepare(`SELECT last_insert_rowid() as id`).get().id;
+      iconId = this.db
+        .getCachedStatement(`SELECT last_insert_rowid() as id`)
+        .get().id;
 
       this.addIconMapping(iconId, pageUrl);
 
@@ -123,7 +125,7 @@ class FaviconsService {
   public async faviconExists(pageUrl: string) {
     return (
       this.db
-        .prepare(
+        .getCachedStatement(
           `
         SELECT EXISTS
         (SELECT 1 FROM icon_mapping WHERE page_url = @pageUrl LIMIT 1)
@@ -140,7 +142,7 @@ class FaviconsService {
       lastUpdated: dateToChromeTime(new Date()),
     };
 
-    const query = this.db.prepare(
+    const query = this.db.getCachedStatement(
       `INSERT INTO favicon_bitmaps (icon_id, last_updated, image_data, width, height, last_requested) VALUES (@iconId, @lastUpdated, @imageData, @width, @height, 0)`,
     );
 
