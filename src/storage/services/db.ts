@@ -30,7 +30,7 @@ class DbService {
   private async createDb(path: string, schemaPath: string) {
     const exists = await pathExists(path);
 
-    const db = sqlite(path, { verbose: console.log });
+    const db = sqlite(path, {/* verbose: console.log*/ });
 
     if (!exists) {
       const schema = await fs.readFile(schemaPath, 'utf8');

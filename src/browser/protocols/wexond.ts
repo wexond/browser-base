@@ -23,7 +23,7 @@ export default {
             parsed.path.substr(1),
           );
 
-          console.log(favicon.toString('base64'));
+          console.log(favicon?.toString('base64'));
 
           if (favicon) {
             buffer = favicon;
