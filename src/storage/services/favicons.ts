@@ -81,30 +81,27 @@ class FaviconsService {
 
       this.addIconMapping(iconId, pageUrl);
 
-      const bitmapOptions = {
-        iconId,
-        lastUpdated: dateToChromeTime(new Date()),
-      };
+      const bitmap = this.insertBitmap(iconId);
 
-      const bitmapSql = this.db.prepare(
-        `INSERT INTO favicon_bitmaps (icon_id, last_updated, image_data, width, height, last_requested) VALUES (@iconId, @lastUpdated, @imageData, @width, @height, 0)`,
-      );
-
-      bitmapSql.run({
-        ...bitmapOptions,
-        imageData: image16,
-        width: 16,
-        height: 16,
-      });
-
-      bitmapSql.run({
-        ...bitmapOptions,
-        imageData: image32,
-        width: 32,
-        height: 32,
-      });
+      bitmap(image16, 16);
+      bitmap(image32, 32);
     })();
   }
+
+  private insertBitmap = (iconId: number) => {
+    const options = {
+      iconId,
+      lastUpdated: dateToChromeTime(new Date()),
+    };
+
+    const query = this.db.prepare(
+      `INSERT INTO favicon_bitmaps (icon_id, last_updated, image_data, width, height, last_requested) VALUES (@iconId, @lastUpdated, @imageData, @width, @height, 0)`,
+    );
+
+    return (buffer: Buffer, size: number) => {
+      query.run({ ...options, imageData: buffer, width: size, height: size });
+    };
+  };
 
   private async processFavicon(buffer: Buffer) {
     const type = await fromBuffer(buffer);

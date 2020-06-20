@@ -19,6 +19,7 @@ class DbService {
     this.favicons = await this.createDb(
       config.favicons,
       config.default.favicons,
+      true,
     );
 
     await BookmarksService.start();
@@ -27,10 +28,10 @@ class DbService {
     FaviconsService.start();
   }
 
-  private async createDb(path: string, schemaPath: string) {
+  private async createDb(path: string, schemaPath: string, verbose = false) {
     const exists = await pathExists(path);
 
-    const db = sqlite(path, {/* verbose: console.log*/ });
+    const db = sqlite(path, { verbose: verbose ? console.log : undefined });
 
     if (!exists) {
       const schema = await fs.readFile(schemaPath, 'utf8');
