@@ -30,6 +30,12 @@ export default {
             buffer = favicon;
             mimeType = 'image/png';
           } else {
+            const url = await Application.instance.storage.favicons.getPageURLForHost(
+              pageUrl,
+            );
+
+            console.log(parsed);
+
             const imgPath = resolve('build', ICON_PAGE);
 
             buffer = await promises.readFile(imgPath);

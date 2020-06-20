@@ -13,6 +13,7 @@ class FaviconsService {
   public start() {
     const handler = WorkerMessengerFactory.createHandler('favicons', this);
 
+    handler('getPageURLForHost', this.getPageURLForHost);
     handler('getFavicon', this.getFavicon);
     handler('saveFavicon', this.saveFavicon);
     handler('faviconExists', this.faviconExists);
@@ -20,6 +21,21 @@ class FaviconsService {
 
   private get db() {
     return DbService.favicons;
+  }
+
+  public getPageURLForHost(host: string) {
+    return this.db
+      .prepare(
+        `
+      SELECT icon_mapping.page_url
+      FROM icon_mapping
+      INNER JOIN favicons
+      ON
+        icon_mapping.icon_id = favicons.id
+      WHERE icon_mapping.page_url LIKE "%%://@host/%%"
+    `,
+      )
+      .get({ host });
   }
 
   public getFavicon(options: IFaviconOptions) {

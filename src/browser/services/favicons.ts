@@ -16,6 +16,9 @@ export class FaviconsService {
     });
   }
 
+  public getPageURLForHost = (host: string) =>
+    this.invoker.invoke<boolean>('getPageURLForHost', host);
+
   public getFavicon = async (options: IFaviconOptions) => {
     return bufferFromUint8Array(
       await this.invoker.invoke<Uint8Array>('getFavicon', options),
