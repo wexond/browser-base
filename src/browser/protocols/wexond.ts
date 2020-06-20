@@ -4,9 +4,11 @@ import { protocol } from 'electron';
 import { promises } from 'fs';
 import { fromBuffer } from 'file-type';
 import { lookup } from 'mime-types';
+import { parse as parseQuery } from 'querystring';
 
 import { Application } from '../application';
 import { ICON_PAGE } from '~/renderer/constants';
+import { IFaviconOptions } from '~/interfaces';
 
 export default {
   register: (session: Electron.Session) => {
@@ -20,12 +22,30 @@ export default {
 
         if (parsed.hostname === 'favicon') {
           const favicon = Buffer.from(
-            await Application.instance.storage.favicons.getFavicon(
-              parsed.path.substr(1),
-            ),
+            await Application.instance.storage.favicons.getFavicon({
+              pageUrl: parsed.path.substr(1),
+            }),
           );
 
           console.log(favicon?.toString('base64'));
+
+          if (favicon) {
+            buffer = favicon;
+            mimeType = 'image/png';
+          } else {
+            const imgPath = resolve('build', ICON_PAGE);
+
+            buffer = await promises.readFile(imgPath);
+            mimeType = 'image/svg+xml';
+          }
+        } else if (parsed.hostname === 'favicon2') {
+          const query = parseQuery(parsed.query) as IFaviconOptions;
+
+          const favicon = Buffer.from(
+            await Application.instance.storage.favicons.getFavicon({
+              ...query,
+            }),
+          );
 
           if (favicon) {
             buffer = favicon;

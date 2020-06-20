@@ -1,12 +1,13 @@
 import axios from 'axios';
 import { fromBuffer } from 'file-type';
 import * as sharp from 'sharp';
+import { Statement } from 'better-sqlite3';
 
 import DbService from './db';
 import { WorkerMessengerFactory } from '~/common/worker-messenger-factory';
 import { convertIcoToPng } from '../utils';
 import { dateToChromeTime } from '~/common/utils/date';
-import { Queue } from '~/utils/queue';
+import { IFaviconOptions } from '~/interfaces';
 
 class FaviconsService {
   public start() {
@@ -20,22 +21,32 @@ class FaviconsService {
     return DbService.favicons;
   }
 
-  public getFavicon(pageUrl: string) {
-    const data = this.db
-      .prepare(
-        `
+  public getFavicon(options: IFaviconOptions) {
+    const { pageUrl, iconUrl } = options;
+
+    let sql: Statement;
+
+    if (iconUrl) {
+      sql = this.db.prepare(`
       SELECT image_data
       FROM favicon_bitmaps
       INNER JOIN icon_mapping
-        ON favicon_bitmaps.icon_id=icon_mapping.icon_id
+        ON icon_mapping.icon_id=favicon_bitmaps.icon_id
       WHERE icon_mapping.page_url=@pageUrl AND favicon_bitmaps.width = 32 LIMIT 1
-      `,
-      )
-      .get({ pageUrl });
+      `);
+    } else if (pageUrl) {
+      sql = this.db.prepare(`
+      SELECT image_data
+      FROM favicon_bitmaps
+      INNER JOIN favicons
+        ON favicons.id=favicon_bitmaps.icon_id
+      WHERE favicons.url=@iconUrl AND favicon_bitmaps.width = 32 LIMIT 1
+      `);
+    } else {
+      throw new Error('Neither icon or page url specified.');
+    }
 
-    console.log(pageUrl, data?.image_data.toString('base64'));
-
-    return data?.image_data;
+    return sql.get({ pageUrl, iconUrl })?.image_data;
   }
 
   private addIconMapping(iconId: number, pageUrl: string) {

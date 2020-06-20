@@ -1,7 +1,7 @@
 import { Worker } from 'worker_threads';
 
 import { WorkerMessengerFactory } from '~/common/worker-messenger-factory';
-import { bufferFromUint8Array } from '~/common/utils/buffer';
+import { IFaviconOptions } from '~/interfaces';
 
 export class FaviconsService {
   private invoker = WorkerMessengerFactory.createInvoker('favicons');
@@ -10,9 +10,9 @@ export class FaviconsService {
     this.invoker.initialize(worker);
   }
 
-  public getFavicon = async (pageUrl: string) => {
+  public getFavicon = async (options: IFaviconOptions) => {
     return Buffer.from(
-      await this.invoker.invoke<Uint8Array>('getFavicon', pageUrl),
+      await this.invoker.invoke<Uint8Array>('getFavicon', options),
     );
   };
 
