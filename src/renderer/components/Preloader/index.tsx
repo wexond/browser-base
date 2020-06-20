@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { BLUE_500 } from '~/renderer/constants';
-import { Path, StyledPreloader } from './style';
+import { Path, StyledPreloader, Spinner } from './style';
 
 export interface Props {
   style?: any;
@@ -23,19 +23,22 @@ export const Preloader = ({
   return (
     <div style={style}>
       <StyledPreloader indeterminate={indeterminate} size={size}>
-        <svg viewBox="25 25 50 50">
+        <Spinner
+          stroke={color}
+          viewBox="0 0 66 66"
+          indeterminate={indeterminate}
+        >
           <Path
-            cx="50"
-            cy="50"
-            r="20"
-            fill="none"
-            strokeMiterlimit="10"
-            color={color}
-            thickness={thickness}
             indeterminate={indeterminate}
             value={value}
-          />
-        </svg>
+            fill="none"
+            strokeWidth={thickness}
+            strokeLinecap="square"
+            cx="33"
+            cy="33"
+            r="30"
+          ></Path>
+        </Spinner>
       </StyledPreloader>
     </div>
   );

@@ -125,7 +125,7 @@ export const StyledTitle = styled.div`
   flex: 1;
 
   ${({ isIcon, selected, theme }: TitleProps) => css`
-    margin-left: ${!isIcon ? 0 : 12}px;
+    margin-left: ${!isIcon ? 0 : 24}px;
     color: ${selected
       ? theme['tab.selected.textColor']
       : theme['tab.textColor']};
@@ -135,11 +135,16 @@ export const StyledTitle = styled.div`
 export const StyledIcon = styled.div`
   height: 16px;
   min-width: 16px;
-  transition: 0.2s opacity, 0.2s min-width;
+  transition: 0.2s opacity, 0.2s min-width, 0.15s transform, 0.15s border-radius;
+  position: absolute;
+  left: 0;
+  transform-origin: center;
   ${centerIcon()};
-  ${({ isIconSet }: { isIconSet: boolean }) => css`
+  ${({ isIconSet, loading }: { isIconSet: boolean; loading: boolean }) => css`
+    transform: scale(${loading ? 0.65 : 1});
     min-width: ${isIconSet ? 0 : 16},
     opacity: ${isIconSet ? 0 : 1};
+    border-radius: ${loading ? '50%' : 0};
   `};
 `;
 
@@ -147,6 +152,7 @@ export const StyledContent = styled.div`
   overflow: hidden;
   z-index: 2;
   align-items: center;
+  position: relative;
   display: flex;
   margin-left: 10px;
   flex: 1;

@@ -11,6 +11,7 @@ import {
 
 import store from '.';
 import { TOOLBAR_HEIGHT } from '~/constants/design';
+import { randomId } from '~/common/utils/string';
 
 export class TabsStore {
   @observable
@@ -227,7 +228,11 @@ export class TabsStore {
     });
 
     browser.tabs.onUpdated.addListener(
-      async (tabId, { title, status, mutedInfo, audible, favIconUrl, url }) => {
+      async (
+        tabId,
+        { title, status, mutedInfo, audible, favIconUrl, url },
+        details,
+      ) => {
         const tab = this.getTabById(tabId);
         if (!tab) return;
 
@@ -235,9 +240,11 @@ export class TabsStore {
         if (title) tab.title = title;
         if (mutedInfo) tab.isMuted = mutedInfo.muted;
         if (audible !== undefined) tab.isPlaying = audible;
-        if (favIconUrl) tab.favicon = favIconUrl;
+        if (favIconUrl) tab.favicon = `wexond://favicon/${details.url}`;
         if (url) {
           tab.url = url;
+          tab.favicon = `wexond://favicon/${url}`;
+
           if (tab.id === this.selectedTabId && !store.addressbarFocused) {
             this.selectedTab.addressbarValue = null;
           }

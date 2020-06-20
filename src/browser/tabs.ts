@@ -49,13 +49,6 @@ export class Tabs {
     });
 
     extensions.tabs.on('updated', (tabId, changeInfo, details) => {
-      if (changeInfo.favIconUrl) {
-        Application.instance.storage.favicons.saveFavicon(
-          details.url,
-          changeInfo.favIconUrl,
-        );
-      }
-
       if (changeInfo.url) {
         Application.instance.storage.history.addUrl({
           url: details.url,

@@ -1,58 +1,64 @@
 import styled, { css } from 'styled-components';
 
-export const StyledPreloader = styled.div`
-  transform-origin: center center;
-  z-index: 5;
-  transform: rotate(-89deg);
-  ${({ size, indeterminate }: { size: number; indeterminate: boolean }) => css`
-    width: ${size}px;
-    height: ${size}px;
-    animation: ${indeterminate ? `preloader-rotate 2s linear infinite` : ''};
+export const Spinner = styled.svg`
+  transform-origin: center;
+
+  ${({ indeterminate }: { indeterminate: boolean }) => css`
+    animation: ${indeterminate ? `rotation 1.35s linear infinite` : ''};
   `};
 
-  @keyframes preloader-rotate {
+  @keyframes turn {
+    0% {
+      stroke-dashoffset: 180;
+    }
+
+    50% {
+      stroke-dashoffset: 45;
+      -webkit-transform: rotate(135deg);
+      transform: rotate(135deg);
+    }
+
     100% {
-      -webkit-transform: rotate(360deg);
-      transform: rotate(360deg);
+      stroke-dashoffset: 180;
+      -webkit-transform: rotate(450deg);
+      transform: rotate(450deg);
     }
   }
-  @keyframes preloader-dash {
+
+  @keyframes rotation {
     0% {
-      stroke-dasharray: 1, 200;
-      stroke-dashoffset: 0;
+      -webkit-transform: rotate(0deg);
+      transform: rotate(0deg);
     }
-    50% {
-      stroke-dasharray: 89, 200;
-      stroke-dashoffset: -35px;
-    }
+
     100% {
-      stroke-dasharray: 89, 200;
-      stroke-dashoffset: -124px;
+      -webkit-transform: rotate(270deg);
+      transform: rotate(270deg);
     }
   }
 `;
 
+export const StyledPreloader = styled.div`
+  z-index: 5;
+
+  ${({ size, indeterminate }: { size: number; indeterminate: boolean }) => css`
+    width: ${size}px;
+    height: ${size}px;
+  `};
+`;
+
 export const Path = styled.circle`
   stroke-linecap: square;
+  transform-origin: center;
+
   ${({
-    color,
-    thickness,
     value,
     indeterminate,
   }: {
-    color: string;
-    thickness: number;
     value: number;
     indeterminate: boolean;
   }) => css`
-    stroke-dasharray: ${indeterminate ? '1, 200' : `199, 200`};
-    stroke-dashoffset: ${199 - value * (199 - 82)}px;
-    stroke-width: ${thickness};
-    stroke: ${color};
-    animation: ${indeterminate
-      ? `preloader-dash 1.5s ease-in-out infinite,
-    color 6s ease-in-out infinite`
-      : ''};
-    transition: 0.3s stroke ${indeterminate ? ', 0.3s stroke-dasharray' : ''};
+    stroke-dasharray: ${indeterminate ? '180' : `0`};
+    animation: ${indeterminate ? `turn 1.35s ease-in-out infinite` : ''};
   `};
 `;

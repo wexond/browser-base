@@ -391,8 +391,12 @@ export class TabsAPI extends EventHandler implements ITabsEvents {
       this.onUpdated(tab);
     });
 
-    tab.on('page-favicon-updated', (event, favicons) => {
+    tab.on('page-favicon-updated', async (event, favicons) => {
       tab.favicon = favicons[0];
+      await Application.instance.storage.favicons.saveFavicon(
+        tab.getURL(),
+        tab.favicon,
+      );
       this.onUpdated(tab);
     });
 

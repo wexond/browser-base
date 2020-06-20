@@ -6,6 +6,7 @@ import DbService from './db';
 import { WorkerMessengerFactory } from '~/common/worker-messenger-factory';
 import { convertIcoToPng } from '../utils';
 import { dateToChromeTime } from '~/common/utils/date';
+import { Queue } from '~/utils/queue';
 
 class FaviconsService {
   public start() {
@@ -32,7 +33,31 @@ class FaviconsService {
       )
       .get({ pageUrl });
 
+    console.log(pageUrl, data?.image_data.toString('base64'));
+
     return data?.image_data;
+  }
+
+  private addIconMapping(iconId: number, pageUrl: string) {
+    const iconMapping = this.db
+      .prepare(`SELECT icon_id FROM icon_mapping WHERE page_url = @pageUrl`)
+      .get({ pageUrl });
+
+    if (iconMapping) {
+      if (iconMapping.icon_id === iconId) return;
+
+      this.db
+        .prepare(
+          `UPDATE icon_mapping SET icon_id = @iconId WHERE page_url = @pageUrl`,
+        )
+        .run({ pageUrl, iconId });
+    } else {
+      this.db
+        .prepare(
+          `INSERT INTO icon_mapping (page_url, icon_id) VALUES (@pageUrl, @iconId)`,
+        )
+        .run({ pageUrl, iconId });
+    }
   }
 
   public async saveFavicon(pageUrl: string, faviconUrl: string) {
@@ -40,7 +65,10 @@ class FaviconsService {
       .prepare(`SELECT id FROM favicons WHERE url = @faviconUrl`)
       .get({ faviconUrl })?.id;
 
-    if (iconId) return;
+    if (iconId) {
+      this.addIconMapping(iconId, pageUrl);
+      return;
+    }
 
     const res = await axios.get(faviconUrl, { responseType: 'arraybuffer' });
     const [image16, image32] = await this.processFavicon(res.data);
@@ -54,36 +82,29 @@ class FaviconsService {
 
       iconId = this.db.prepare(`SELECT last_insert_rowid() as id`).get().id;
 
-      this.db
-        .prepare(
-          `INSERT INTO icon_mapping (page_url, icon_id) VALUES (@pageUrl, @iconId)`,
-        )
-        .run({ pageUrl, iconId });
+      this.addIconMapping(iconId, pageUrl);
 
-      const bitmapOptions = {
-        iconId,
-        lastUpdated: dateToChromeTime(new Date()),
-      };
+      const bitmap = this.insertBitmap(iconId);
 
-      const bitmapSql = this.db.prepare(
-        `INSERT INTO favicon_bitmaps (icon_id, last_updated, image_data, width, height, last_requested) VALUES (@iconId, @lastUpdated, @imageData, @width, @height, 0)`,
-      );
-
-      bitmapSql.run({
-        ...bitmapOptions,
-        imageData: image16,
-        width: 16,
-        height: 16,
-      });
-
-      bitmapSql.run({
-        ...bitmapOptions,
-        imageData: image32,
-        width: 32,
-        height: 32,
-      });
+      bitmap(image16, 16);
+      bitmap(image32, 32);
     })();
   }
+
+  private insertBitmap = (iconId: number) => {
+    const options = {
+      iconId,
+      lastUpdated: dateToChromeTime(new Date()),
+    };
+
+    const query = this.db.prepare(
+      `INSERT INTO favicon_bitmaps (icon_id, last_updated, image_data, width, height, last_requested) VALUES (@iconId, @lastUpdated, @imageData, @width, @height, 0)`,
+    );
+
+    return (buffer: Buffer, size: number) => {
+      query.run({ ...options, imageData: buffer, width: size, height: size });
+    };
+  };
 
   private async processFavicon(buffer: Buffer) {
     const type = await fromBuffer(buffer);
