@@ -8,7 +8,7 @@ export class Database {
 
   private statements: Map<string, sqlite.Statement> = new Map();
 
-  public transaction = this._db.transaction;
+  public transaction: SqliteDatabase['transaction'];
 
   constructor(path: string, schemaPath: string, verbose = false) {
     this.init(path, schemaPath, verbose);
@@ -26,6 +26,8 @@ export class Database {
 
       console.log(`Database created at ${path}`);
     }
+
+    this.transaction = db.transaction.bind(db);
 
     this._db = db;
   }

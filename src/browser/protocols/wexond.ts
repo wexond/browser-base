@@ -23,19 +23,25 @@ export default {
         if (parsed.hostname === 'favicon') {
           const pageUrl = parsed.path.substr(1);
 
-          const favicon = await (pageUrl &&
-            Application.instance.storage.favicons.getFavicon({ pageUrl }));
+          let favicon = await (pageUrl &&
+            Application.instance.storage.favicons.getFaviconForPageURL(
+              pageUrl,
+            ));
+
+          if (!favicon) {
+            const url = await Application.instance.storage.favicons.getPageURLForHost(
+              parse(pageUrl).hostname,
+            );
+
+            favicon = await Application.instance.storage.favicons.getFaviconForPageURL(
+              url,
+            );
+          }
 
           if (favicon) {
             buffer = favicon;
             mimeType = 'image/png';
           } else {
-            const url = await Application.instance.storage.favicons.getPageURLForHost(
-              pageUrl,
-            );
-
-            console.log(parsed);
-
             const imgPath = resolve('build', ICON_PAGE);
 
             buffer = await promises.readFile(imgPath);

@@ -12,7 +12,7 @@ class FaviconsService {
     const handler = WorkerMessengerFactory.createHandler('favicons', this);
 
     handler('getPageURLForHost', this.getPageURLForHost);
-    handler('getFaviconForPageURL', this.getPageURLForHost);
+    handler('getFaviconForPageURL', this.getFaviconForPageURL);
     handler('getFavicon', this.getFavicon);
     handler('saveFavicon', this.saveFavicon);
     handler('faviconExists', this.faviconExists);
@@ -31,10 +31,10 @@ class FaviconsService {
       INNER JOIN favicons
       ON
         icon_mapping.icon_id = favicons.id
-      WHERE icon_mapping.page_url LIKE "%%://%@host/%%"
+      WHERE icon_mapping.page_url LIKE @template
     `,
       )
-      .get({ host });
+      .get({ template: `%%://%${host}/%%` })?.page_url;
   }
 
   public getFavicon(iconUrl: string) {
