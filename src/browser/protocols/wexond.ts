@@ -21,10 +21,8 @@ export default {
         let mimeType: string;
 
         if (parsed.hostname === 'favicon') {
-          const favicon = Buffer.from(
-            await Application.instance.storage.favicons.getFavicon({
-              pageUrl: parsed.path.substr(1),
-            }),
+          const favicon = await Application.instance.storage.favicons.getFavicon(
+            { pageUrl: parsed.path.substr(1) },
           );
 
           if (favicon) {
@@ -39,10 +37,8 @@ export default {
         } else if (parsed.hostname === 'favicon2') {
           const query = parseQuery(parsed.query) as IFaviconOptions;
 
-          const favicon = Buffer.from(
-            await Application.instance.storage.favicons.getFavicon({
-              ...query,
-            }),
+          const favicon = await Application.instance.storage.favicons.getFavicon(
+            { ...query },
           );
 
           if (favicon) {
