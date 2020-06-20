@@ -135,15 +135,16 @@ export const StyledTitle = styled.div`
 export const StyledIcon = styled.div`
   height: 16px;
   min-width: 16px;
-  transition: 0.2s opacity, 0.2s min-width, 0.2s transform;
+  transition: 0.2s opacity, 0.2s min-width, 0.15s transform, 0.15s border-radius;
   position: absolute;
   left: 0;
   transform-origin: center;
   ${centerIcon()};
   ${({ isIconSet, loading }: { isIconSet: boolean; loading: boolean }) => css`
-    transform: scale(${loading ? 0.7 : 1});
+    transform: scale(${loading ? 0.65 : 1});
     min-width: ${isIconSet ? 0 : 16},
     opacity: ${isIconSet ? 0 : 1};
+    border-radius: ${loading ? '50%' : 0};
   `};
 `;
 

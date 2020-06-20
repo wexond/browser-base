@@ -212,7 +212,7 @@ const onContextMenu = (tab: ITab) => () => {
 };
 
 const Content = observer(({ tab }: { tab: ITab }) => {
-  const loading = true;
+  const loading = !!tab.loading;
 
   return (
     <StyledContent>
@@ -232,7 +232,7 @@ const Content = observer(({ tab }: { tab: ITab }) => {
           thickness={6}
           size={16}
           indeterminate
-          style={{ minWidth: 16 }}
+          style={{ minWidth: 16, position: 'absolute', left: 0, marginTop: -1 }}
         />
       )}
       {!tab.isPinned && (
