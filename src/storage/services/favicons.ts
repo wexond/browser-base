@@ -14,6 +14,7 @@ class FaviconsService {
     const handler = WorkerMessengerFactory.createHandler('favicons', this);
 
     handler('getPageURLForHost', this.getPageURLForHost);
+    handler('getFaviconForPageURL', this.getPageURLForHost);
     handler('getFavicon', this.getFavicon);
     handler('saveFavicon', this.saveFavicon);
     handler('faviconExists', this.faviconExists);
@@ -32,38 +33,38 @@ class FaviconsService {
       INNER JOIN favicons
       ON
         icon_mapping.icon_id = favicons.id
-      WHERE icon_mapping.page_url LIKE "%%://@host/%%"
+      WHERE icon_mapping.page_url LIKE "%%://%@host/%%"
     `,
       )
       .get({ host });
   }
 
-  public getFavicon(options: IFaviconOptions) {
-    const { pageUrl, iconUrl } = options;
-
-    let sql: Statement;
-
-    if (iconUrl) {
-      sql = this.db.prepare(`
+  public getFavicon(iconUrl: string) {
+    return this.db
+      .prepare(
+        `
       SELECT image_data
       FROM favicon_bitmaps
       INNER JOIN favicons
         ON favicons.id=favicon_bitmaps.icon_id
       WHERE favicons.url=@iconUrl AND favicon_bitmaps.width = 32 LIMIT 1
-      `);
-    } else if (pageUrl) {
-      sql = this.db.prepare(`
-      SELECT image_data
-      FROM favicon_bitmaps
-      INNER JOIN icon_mapping
-        ON icon_mapping.icon_id=favicon_bitmaps.icon_id
-      WHERE icon_mapping.page_url=@pageUrl AND favicon_bitmaps.width = 32 LIMIT 1
-      `);
-    } else {
-      throw new Error('Neither icon or page url specified.');
-    }
+      `,
+      )
+      .get({ iconUrl })?.image_data;
+  }
 
-    return sql.get({ pageUrl, iconUrl })?.image_data;
+  public getFaviconForPageURL(pageUrl: string) {
+    return this.db
+      .prepare(
+        `
+    SELECT image_data
+    FROM favicon_bitmaps
+    INNER JOIN icon_mapping
+      ON icon_mapping.icon_id=favicon_bitmaps.icon_id
+    WHERE icon_mapping.page_url=@pageUrl AND favicon_bitmaps.width = 32 LIMIT 1
+    `,
+      )
+      .get({ pageUrl })?.image_data;
   }
 
   private addIconMapping(iconId: number, pageUrl: string) {
