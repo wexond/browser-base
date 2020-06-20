@@ -6,6 +6,7 @@ import DbService from './db';
 import { WorkerMessengerFactory } from '~/common/worker-messenger-factory';
 import { convertIcoToPng } from '../utils';
 import { dateToChromeTime } from '~/common/utils/date';
+import { Queue } from '~/utils/queue';
 
 class FaviconsService {
   public start() {
@@ -31,6 +32,8 @@ class FaviconsService {
       `,
       )
       .get({ pageUrl });
+
+    console.log(pageUrl, data?.image_data.toString('base64'));
 
     return data?.image_data;
   }
