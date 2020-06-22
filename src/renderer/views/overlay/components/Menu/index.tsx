@@ -29,7 +29,6 @@ const Item = observer(
     const ref = React.useRef<HTMLTableRowElement>(null);
 
     const onItemClick = React.useCallback(() => {
-      // store.contextMenu.visible = false;
       if (onClick && enabled) {
         browser.ipcRenderer.send('menu-click', id);
       }
@@ -48,6 +47,8 @@ const Item = observer(
           y: ref.current.getBoundingClientRect().top - 4,
           parentId: menuId,
         });
+      } else {
+        store.closeMenu();
       }
     }, [onClick, hasSubMenu, ref]);
 
