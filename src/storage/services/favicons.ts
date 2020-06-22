@@ -8,7 +8,11 @@ import { convertIcoToPng } from '../utils';
 import { dateToChromeTime } from '~/common/utils/date';
 
 const fixPageURL = (url: string) =>
-  url[url.length - 1] === '/' ? url : `${url}/`;
+  typeof url === 'string'
+    ? url[url.length - 1] === '/'
+      ? url
+      : `${url}/`
+    : undefined;
 
 class FaviconsService {
   public start() {
