@@ -81,6 +81,11 @@ const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     }
 
     store.tabs.selectedTab.addressbarValue = url;
+    browser.ipcRenderer.send(
+      'trigger-favicon-update',
+      store.tabs.selectedTab.id,
+      url,
+    );
     browser.tabs.update(store.tabs.selectedTabId, { url });
   }
 };

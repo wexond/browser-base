@@ -7,6 +7,9 @@ import { WorkerMessengerFactory } from '~/common/worker-messenger-factory';
 import { convertIcoToPng } from '../utils';
 import { dateToChromeTime } from '~/common/utils/date';
 
+const fixPageURL = (url: string) =>
+  url[url.length - 1] === '/' ? url : `${url}/`;
+
 class FaviconsService {
   public start() {
     const handler = WorkerMessengerFactory.createHandler('favicons', this);
@@ -63,7 +66,7 @@ class FaviconsService {
     WHERE icon_mapping.page_url=@pageUrl AND favicon_bitmaps.width = 32 LIMIT 1
     `,
       )
-      .get({ pageUrl })?.image_data;
+      .get({ pageUrl: fixPageURL(pageUrl) })?.image_data;
   }
 
   public getFaviconURLForPageURL(pageUrl: string) {
@@ -77,7 +80,7 @@ class FaviconsService {
     WHERE icon_mapping.page_url=@pageUrl LIMIT 1
     `,
       )
-      .get({ pageUrl })?.url;
+      .get({ pageUrl: fixPageURL(pageUrl) })?.url;
   }
 
   private addIconMapping(iconId: number, pageUrl: string) {

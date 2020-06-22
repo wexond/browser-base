@@ -135,7 +135,8 @@ export const StyledTitle = styled.div`
 export const StyledIcon = styled.div`
   height: 16px;
   min-width: 16px;
-  transition: 0.2s opacity, 0.2s min-width, 0.15s transform, 0.15s border-radius;
+  transition: 0.2s opacity, 0.2s min-width, 0.15s transform, 0.15s border-radius,
+    0.15s background-image;
   position: absolute;
   left: 0;
   transform-origin: center;
