@@ -63,7 +63,7 @@ export const getViewMenu = (
       },
       {
         label: 'Copy image',
-        click: () => webContents.copy(),
+        click: () => webContents.copyImageAt(params.x, params.y),
       },
       {
         label: 'Copy image address',
