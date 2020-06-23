@@ -126,6 +126,9 @@ export class Store {
   public isHTMLFullscreen = false;
 
   @observable
+  public titlebarVisible = false;
+
+  @observable
   public updateAvailable = false;
 
   @observable
@@ -181,6 +184,8 @@ export class Store {
   };
 
   public windowId = getCurrentWindow().id;
+
+  public barHideTimer = 0;
 
   @observable
   public isIncognito = ipcRenderer.sendSync(`is-incognito-${this.windowId}`);

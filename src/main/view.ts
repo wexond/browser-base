@@ -70,7 +70,7 @@ export class View {
     this.webContents.userAgent = this.webContents.userAgent
       .replace(/ Wexond\\?.([^\s]+)/g, '')
       .replace(/ Electron\\?.([^\s]+)/g, '')
-      .replace(/Chrome\\?.([^\s]+)/g, 'Chrome/80.0.3987.162');
+      .replace(/Chrome\\?.([^\s]+)/g, 'Chrome/83.0.4103.97');
 
     (this.webContents as any).windowId = window.win.id;
 
