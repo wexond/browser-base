@@ -133,9 +133,11 @@ export class AppWindow {
 
       this.win.setBrowserView(null);
 
-      Application.instance.dialogs.destroy();
-
       this.viewManager.clear();
+
+      if (Application.instance.windows.list.length === 1) {
+        Application.instance.dialogs.destroy();
+      }
 
       if (
         incognito &&
