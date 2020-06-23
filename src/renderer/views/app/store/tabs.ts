@@ -557,7 +557,7 @@ export class TabsStore {
       for (let i = index - 1; i >= 0; i--) {
         const tab = tabs[i];
 
-        if (callingTab.isPinned && callingTab.isPinned && tab.isPinned) break;
+        if (callingTab.isPinned && !tab.isPinned) break;
 
         const { tabGroup } = tab;
 
@@ -584,7 +584,7 @@ export class TabsStore {
       for (let i = index + 1; i < tabs.length; i++) {
         const tab = tabs[i];
 
-        if (callingTab.isPinned && callingTab.isPinned && tab.isPinned) break;
+        if (callingTab.isPinned && !tab.isPinned) break;
 
         const { tabGroup } = tab;
 
