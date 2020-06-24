@@ -22,6 +22,7 @@ import { getYesterdayTime } from '../utils';
 import { HistoryServiceBase } from '~/common/services/history';
 import { WorkerMessengerFactory } from '~/common/worker-messenger-factory';
 import { registerWorkerEventPropagator } from '../worker-event-handler';
+import { IHistoryPrivateChunkDetails } from '~/interfaces/history-private';
 
 const ITEM_SELECT =
   'SELECT id, last_visit_time, title, typed_count, url, visit_count FROM urls';
@@ -40,6 +41,7 @@ class HistoryService extends HistoryServiceBase {
     handler('deleteUrl', this.deleteUrl);
     handler('deleteRange', this.deleteRange);
     handler('deleteAll', this.deleteAll);
+    handler('getChunk', this.getChunk);
 
     registerWorkerEventPropagator('history', ['visitRemoved'], this);
   }
@@ -304,6 +306,10 @@ class HistoryService extends HistoryServiceBase {
       allHistory: true,
       urls,
     } as IHistoryVisitsRemoved);
+  }
+
+  public getChunk(details: IHistoryPrivateChunkDetails) {
+    return [];
   }
 }
 

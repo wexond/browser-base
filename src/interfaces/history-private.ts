@@ -1,4 +1,4 @@
 export interface IHistoryPrivateChunkDetails {
-  text: string;
+  text?: string;
   offset?: number;
 }
