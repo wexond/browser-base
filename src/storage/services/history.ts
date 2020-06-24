@@ -308,8 +308,26 @@ class HistoryService extends HistoryServiceBase {
     } as IHistoryVisitsRemoved);
   }
 
-  public getChunk(details: IHistoryPrivateChunkDetails) {
-    return [];
+  public getChunk(details: IHistoryPrivateChunkDetails): IHistoryItem[] {
+    const limit = 32;
+    const offset = (details.offset ?? 0) * limit;
+
+    return this.db
+      .getCachedStatement(
+        `
+      SELECT visits.id, urls.url, urls.title, visits.visit_time as last_visit_time FROM visits
+      INNER JOIN urls
+        ON urls.id = visits.url
+      WHERE visits.transition = @transition
+      ORDER BY visits.visit_time DESC LIMIT 100 OFFSET 0
+    `,
+      )
+      .all({
+        limit,
+        offset,
+        transition: this.getPageTransition(PageTransition.PAGE_TRANSITION_LINK),
+      })
+      .map(this.formatItem);
   }
 }
 
