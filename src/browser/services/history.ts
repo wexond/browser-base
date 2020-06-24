@@ -1,3 +1,5 @@
+import { Worker } from 'worker_threads';
+
 import {
   IVisitsDetails,
   IVisitItem,
@@ -9,7 +11,7 @@ import {
 import { extensions } from '../extensions';
 import { HistoryServiceBase } from '~/common/services/history';
 import { WorkerMessengerFactory } from '~/common/worker-messenger-factory';
-import { Worker } from 'worker_threads';
+import { IHistoryPrivateChunkDetails } from '~/interfaces/history-private';
 
 export class HistoryService extends HistoryServiceBase {
   private invoker = WorkerMessengerFactory.createInvoker('history');
@@ -17,7 +19,9 @@ export class HistoryService extends HistoryServiceBase {
   constructor(worker: Worker) {
     super();
     this.invoker.initialize(worker);
+
     extensions.history.start(this);
+    extensions.historyPrivate.start(this);
   }
 
   public search = (details: IHistorySearchDetails) =>
@@ -39,4 +43,7 @@ export class HistoryService extends HistoryServiceBase {
     this.invoker.invoke('deleteRange', range);
 
   public deleteAll = () => this.invoker.invoke('deleteAll');
+
+  public getChunk = (details: IHistoryPrivateChunkDetails) =>
+    this.invoker.invoke<IHistoryItem[]>('getChunk', details);
 }

@@ -1,0 +1,10 @@
+namespace historyPrivate {};
+
+dictionary ChunkDetails {
+  DOMString? text;
+  double? offset;
+};
+
+interface Functions {
+  static void getChunk(ChunkDetails details);
+};

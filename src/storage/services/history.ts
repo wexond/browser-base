@@ -22,6 +22,7 @@ import { getYesterdayTime } from '../utils';
 import { HistoryServiceBase } from '~/common/services/history';
 import { WorkerMessengerFactory } from '~/common/worker-messenger-factory';
 import { registerWorkerEventPropagator } from '../worker-event-handler';
+import { IHistoryPrivateChunkDetails } from '~/interfaces/history-private';
 
 const ITEM_SELECT =
   'SELECT id, last_visit_time, title, typed_count, url, visit_count FROM urls';
@@ -40,6 +41,7 @@ class HistoryService extends HistoryServiceBase {
     handler('deleteUrl', this.deleteUrl);
     handler('deleteRange', this.deleteRange);
     handler('deleteAll', this.deleteAll);
+    handler('getChunk', this.getChunk);
 
     registerWorkerEventPropagator('history', ['visitRemoved'], this);
   }
@@ -304,6 +306,28 @@ class HistoryService extends HistoryServiceBase {
       allHistory: true,
       urls,
     } as IHistoryVisitsRemoved);
+  }
+
+  public getChunk(details: IHistoryPrivateChunkDetails): IHistoryItem[] {
+    const limit = 32;
+    const offset = (details.offset ?? 0) * limit;
+
+    return this.db
+      .getCachedStatement(
+        `
+      SELECT visits.id, urls.url, urls.title, visits.visit_time as last_visit_time FROM visits
+      INNER JOIN urls
+        ON urls.id = visits.url
+      WHERE visits.transition = @transition
+      ORDER BY visits.visit_time DESC LIMIT 100 OFFSET 0
+    `,
+      )
+      .all({
+        limit,
+        offset,
+        transition: this.getPageTransition(PageTransition.PAGE_TRANSITION_LINK),
+      })
+      .map(this.formatItem);
   }
 }
 
