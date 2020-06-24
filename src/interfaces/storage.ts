@@ -25,7 +25,11 @@ export interface IStorageMessage {
   args?: any | any[];
 }
 
-export type IStorageScope = 'history' | 'bookmarks' | 'favicons';
+export type IStorageScope =
+  | 'history'
+  | 'bookmarks'
+  | 'favicons'
+  | 'history_private';
 
 export interface IStorageResponse {
   id?: string;
