@@ -1,10 +1,8 @@
 import * as React from 'react';
 
-import { ipcRenderer } from 'electron';
 import { observable, computed } from 'mobx';
 import { ISuggestion, IVisitedItem } from '~/interfaces';
-import { SuggestionsStore } from './suggestions';
-import { DialogStore } from '~/models/dialog-store';
+import store from '.';
 
 let lastSuggestion: string;
 
@@ -15,8 +13,18 @@ interface ISearchTab {
   favicon?: string;
 }
 
-export class Store extends DialogStore {
-  public suggestions = new SuggestionsStore(this);
+export class OmniboxStore {
+  @observable
+  public x = 0;
+
+  @observable
+  public y = 0;
+
+  @observable
+  public width = 0;
+
+  @observable
+  public visible = false;
 
   @observable
   public visitedItems: IVisitedItem[] = [];
@@ -29,7 +37,7 @@ export class Store extends DialogStore {
 
   @computed
   public get searchedTabs(): ISuggestion[] {
-    const lastItem = this.suggestions.list[this.suggestions.list.length - 1];
+    const lastItem = store.suggestions.list[store.suggestions.list.length - 1];
 
     let id = 0;
 
@@ -54,61 +62,40 @@ export class Store extends DialogStore {
 
   @computed
   public get searchEngine() {
-    return this.settings.searchEngines[this.settings.searchEngine];
+    return store.settings.searchEngines[store.settings.searchEngine];
   }
 
   public canSuggest = false;
 
   public inputRef = React.createRef<HTMLInputElement>();
 
-  public tabId = 1;
-
   public constructor() {
-    super({
-      visibilityWrapper: false,
-      persistent: true,
+    browser.ipcRenderer.on('omnibox-input', (e, data) => {
+      this.x = data.x;
+      this.y = data.y;
+      this.width = data.width;
+
+      this.visible = true;
+
+      this.tabs = [];
+      store.tabId = data.id;
+
+      this.canSuggest = this.inputText.length <= data.text.length;
+
+      this.inputRef.current.value = data.text;
+      this.inputRef.current.focus();
+
+      this.inputRef.current.setSelectionRange(data.cursorPos, data.cursorPos);
+
+      const event = new Event('input', { bubbles: true });
+      this.inputRef.current.dispatchEvent(event);
     });
 
-    ipcRenderer.on('visible', (e, visible, data) => {
-      this.visible = visible;
-
-      if (visible) {
-        this.tabs = [];
-        this.tabId = data.id;
-
-        this.canSuggest = this.inputText.length <= data.text.length;
-
-        this.inputRef.current.value = data.text;
-        this.inputRef.current.focus();
-
-        this.inputRef.current.setSelectionRange(data.cursorPos, data.cursorPos);
-
-        const event = new Event('input', { bubbles: true });
-        this.inputRef.current.dispatchEvent(event);
-      }
-    });
-
-    ipcRenderer.on('search-tabs', (e, tabs) => {
+    browser.ipcRenderer.on('search-tabs', (e, tabs) => {
       this.tabs = tabs;
     });
 
-    this.loadHistory();
-
-    ipcRenderer.send(`can-show-${this.id}`);
-
-    this.onHide = (data) => {
-      ipcRenderer.send(`addressbar-update-input-${this.id}`, {
-        id: this.tabId,
-        text: this.inputRef.current.value,
-        selectionStart: this.inputRef.current.selectionStart,
-        selectionEnd: this.inputRef.current.selectionEnd,
-        ...data,
-      });
-
-      this.tabs = [];
-      this.inputRef.current.value = '';
-      this.suggestions.list = [];
-    };
+    // this.loadHistory();
   }
 
   public getCanSuggest(key: number) {
@@ -130,11 +117,11 @@ export class Store extends DialogStore {
   }
 
   public async loadHistory() {
-    this.visitedItems = await ipcRenderer.invoke('topsites-get');
+    this.visitedItems = await browser.ipcRenderer.invoke('topsites-get');
   }
 
   public suggest() {
-    const { suggestions } = this;
+    const { suggestions } = store;
     const input = this.inputRef.current;
 
     if (this.canSuggest) {
@@ -152,7 +139,7 @@ export class Store extends DialogStore {
       }
     });
 
-    suggestions.selected = 0;
+    suggestions.selectedId = 0;
   }
 
   public autoComplete(text: string, suggestion: string) {
@@ -175,6 +162,21 @@ export class Store extends DialogStore {
       input.setSelectionRange(start, input.value.length);
     }
   }
-}
 
-export default new Store();
+  public hide(data: { focus?: boolean; escape?: boolean } = {}) {
+    if (!this.visible) return;
+
+    browser.ipcRenderer.send(`omnibox-update-input`, {
+      id: store.tabId,
+      text: this.inputRef.current.value,
+      selectionStart: this.inputRef.current.selectionStart,
+      selectionEnd: this.inputRef.current.selectionEnd,
+      ...data,
+    });
+
+    this.visible = false;
+    this.tabs = [];
+    this.inputRef.current.value = '';
+    store.suggestions.list = [];
+  }
+}

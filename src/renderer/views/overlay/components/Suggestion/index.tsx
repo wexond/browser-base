@@ -12,8 +12,6 @@ import {
 } from './style';
 import { ISuggestion } from '~/interfaces';
 import store from '../../store';
-import { ipcRenderer } from 'electron';
-import { callViewMethod } from '~/utils/view';
 
 interface Props {
   suggestion: ISuggestion;
@@ -31,29 +29,33 @@ const onClick = (suggestion: ISuggestion) => () => {
   let url = suggestion.isSearch ? suggestion.primaryText : suggestion.url;
 
   if (suggestion.isSearch) {
-    url = store.searchEngine.url.replace('%s', url);
+    url = store.omnibox.searchEngine.url.replace('%s', url);
   } else if (url.indexOf('://') === -1) {
     url = `http://${url}`;
   }
 
-  callViewMethod(store.tabId, 'loadURL', url);
+  browser.tabs.update(store.tabId, { url });
 
-  store.hide();
+  store.omnibox.hide();
 };
 
 export const Suggestion = observer(({ suggestion }: Props) => {
   const { hovered } = suggestion;
   const { primaryText, secondaryText, url } = suggestion;
 
-  const selected = store.suggestions.selected === suggestion.id;
+  const selected = store.suggestions.selectedId === suggestion.id;
 
   let { favicon } = suggestion;
 
-  if (favicon == null || favicon.trim() === '') {
-    favicon = ICON_PAGE;
+  if (suggestion.isSearch) {
+    favicon = ICON_SEARCH;
+  } else {
+    let u = suggestion.url;
+    if (!u.startsWith('http')) u = `http://${u}`;
+    favicon = `wexond://favicon/${u}`;
   }
 
-  const customFavicon = favicon !== ICON_PAGE && favicon !== ICON_SEARCH;
+  const customFavicon = !suggestion.isSearch;
 
   return (
     <StyledSuggestion

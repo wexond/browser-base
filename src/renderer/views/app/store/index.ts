@@ -231,32 +231,6 @@ export class Store {
     //     ipcRenderer.send(`find-show-${this.windowId}`, tab.id);
     //   }
     // });
-    // ipcRenderer.on(`addressbar-update-input`, (e, data) => {
-    //   const tab = this.tabs.getTabById(data.id);
-    //   this.addressbarEditing = false;
-    //   if (tab) {
-    //     tab.addressbarValue = data.text;
-    //     tab.addressbarSelectionRange = [data.selectionStart, data.selectionEnd];
-    //     if (tab.isSelected) {
-    //       this.inputRef.value = data.text;
-    //       this.inputRef.setSelectionRange(
-    //         data.selectionStart,
-    //         data.selectionEnd,
-    //       );
-    //       if (data.focus) {
-    //         remote.getCurrentWebContents().focus();
-    //         this.inputRef.focus();
-    //       }
-    //       if (data.escape) {
-    //         this.addressbarFocused = false;
-    //         this.tabs.selectedTab.addressbarValue = null;
-    //         requestAnimationFrame(() => {
-    //           this.inputRef.select();
-    //         });
-    //       }
-    //     }
-    //   }
-    // });
     // if (process.env.ENABLE_EXTENSIONS) {
     //   ipcRenderer.on(
     //     'set-browserAction-info',
@@ -300,6 +274,34 @@ export class Store {
 
     browser.overlayPrivate.onPopupToggled.addListener((name, visible) => {
       this.dialogsVisibility[name] = visible;
+    });
+
+    browser.ipcRenderer.on(`addressbar-update-input`, (e, data) => {
+      const tab = this.tabs.getTabById(data.id);
+      this.addressbarEditing = false;
+
+      if (tab) {
+        tab.addressbarValue = data.text;
+        tab.addressbarSelectionRange = [data.selectionStart, data.selectionEnd];
+
+        if (tab.isSelected) {
+          this.inputRef.value = data.text;
+          this.inputRef.setSelectionRange(
+            data.selectionStart,
+            data.selectionEnd,
+          );
+          if (data.focus) {
+            this.inputRef.focus();
+          }
+          if (data.escape) {
+            this.addressbarFocused = false;
+            this.tabs.selectedTab.addressbarValue = null;
+            requestAnimationFrame(() => {
+              this.inputRef.select();
+            });
+          }
+        }
+      }
     });
   }
 }

@@ -39,10 +39,6 @@ export class SearchDialog extends PersistentDialog {
           : HEIGHT + height,
       });
     });
-
-    ipcMain.on(`addressbar-update-input-${this.id}`, (e, data) => {
-      this.browserWindow.webContents.send('addressbar-update-input', data);
-    });
   }
 
   public rearrange() {

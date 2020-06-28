@@ -14,8 +14,10 @@ export const DialogBaseStyle = styled.div`
   overflow: hidden;
   position: absolute;
 
-  ${({ theme }: { theme?: ITheme }) => css`
+  ${({ theme, visible }: { theme?: ITheme; visible?: boolean }) => css`
     background-color: ${theme['dialog.backgroundColor']};
+    opacity: ${visible ? 1 : 0};
+    pointer-events: ${visible ? 'inherit' : 'none'};
   `}
 `;
 
@@ -28,8 +30,6 @@ export const DialogStyle = styled(DialogBaseStyle)`
     hideTransition?: boolean;
   }) => css`
     transition: ${!visible && !hideTransition ? 'none' : DIALOG_TRANSITION};
-    opacity: ${visible ? 1 : 0};
     transform: ${visible ? `translate3d(0, 0, 0)` : `translate3d(0, -10px, 0)`};
-    pointer-events: ${visible ? 'inherit' : 'none'};
   `}
 `;

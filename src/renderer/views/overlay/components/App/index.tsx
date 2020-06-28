@@ -8,6 +8,8 @@ import store from '../../store';
 import { StyledApp } from './style';
 import { ExtensionPopup } from '../ExtensionPopup';
 import { Menu } from '../Menu';
+import { COMPACT_TITLEBAR_HEIGHT, TOOLBAR_HEIGHT } from '~/constants/design';
+import { Omnibox } from '../Omnibox';
 
 export const App = hot(
   observer(() => {
@@ -17,7 +19,14 @@ export const App = hot(
 
     return (
       <ThemeProvider
-        theme={{ ...store.theme, dark: store.theme['dialog.lightForeground'] }}
+        theme={{
+          ...store.theme,
+          dark: store.theme['dialog.lightForeground'],
+          searchBoxHeight:
+            store.settings.topBarVariant === 'compact'
+              ? COMPACT_TITLEBAR_HEIGHT
+              : TOOLBAR_HEIGHT - 1,
+        }}
       >
         <StyledApp>
           <UIStyle />
@@ -27,6 +36,7 @@ export const App = hot(
               <Menu key={data.id} data={data}></Menu>
             ))}
           </div>
+          <Omnibox />
         </StyledApp>
       </ThemeProvider>
     );

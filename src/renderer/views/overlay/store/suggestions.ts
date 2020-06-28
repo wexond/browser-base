@@ -4,34 +4,27 @@ import {
   getHistorySuggestions,
   getSearchSuggestions,
 } from '../utils/suggestions';
-import { isURL } from '~/utils';
+import { isURL } from '~/utils/url';
 import { ISuggestion } from '~/interfaces';
-import { Store } from '.';
-import { ICON_SEARCH, ICON_PAGE } from '~/renderer/constants';
+import store from '.';
 
 let searchSuggestions: ISuggestion[] = [];
 
 const MAX_SUGGESTIONS_COUNT = 8;
 
 export class SuggestionsStore {
-  private store: Store;
-
   @observable
   public list: ISuggestion[] = [];
 
   @observable
-  public selected = 0;
+  public selectedId = 0;
 
   @observable
   public height = 0;
 
   @computed
-  public get selectedSuggestion() {
-    return this.list.find((x) => x.id === this.selected);
-  }
-
-  constructor(store: Store) {
-    this.store = store;
+  public get selected() {
+    return this.list.find((x) => x.id === this.selectedId);
   }
 
   public load(input: HTMLInputElement): Promise<string> {
@@ -46,13 +39,11 @@ export class SuggestionsStore {
           historySuggestions.push({
             primaryText: item.title,
             url: item.url,
-            favicon: item.favicon,
             canSuggest: item.canSuggest,
           });
         } else {
           historySuggestions.push({
             primaryText: item.url,
-            favicon: ICON_SEARCH,
             canSuggest: item.canSuggest,
             isSearch: true,
           });
@@ -65,7 +56,6 @@ export class SuggestionsStore {
         if (isURL(filter) || filter.indexOf('://') !== -1) {
           historySuggestions.unshift({
             url: filter,
-            favicon: ICON_PAGE,
           });
         } else {
           idx = 0;
@@ -74,8 +64,7 @@ export class SuggestionsStore {
 
       historySuggestions.splice(idx, 0, {
         primaryText: filter,
-        secondaryText: `${this.store.searchEngine.name} Search`,
-        favicon: ICON_SEARCH,
+        secondaryText: `${store.omnibox.searchEngine.name} Search`,
         isSearch: true,
       });
 
@@ -104,7 +93,6 @@ export class SuggestionsStore {
           for (const item of searchData) {
             searchSuggestions.push({
               primaryText: item,
-              favicon: ICON_SEARCH,
               isSearch: true,
             });
           }
@@ -123,7 +111,7 @@ export class SuggestionsStore {
           this.list = suggestions;
         }
       } catch (e) {
-        console.error(e);
+        // console.error(e);
       }
     });
   }

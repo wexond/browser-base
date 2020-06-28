@@ -3,6 +3,10 @@ import { observable, computed, action } from 'mobx';
 import { getTheme } from '~/utils/themes';
 import { IMenuItem } from '~/browser/services/context-menus';
 import { randomId } from '~/common/utils/string';
+import { SuggestionsStore } from './suggestions';
+import { OmniboxStore } from './omnibox';
+import { ISettings } from '~/interfaces';
+import { DEFAULT_SETTINGS } from '~/constants/settings';
 
 interface IRegion {
   left?: number;
@@ -24,6 +28,12 @@ export interface IMenu {
 }
 
 export class Store {
+  public suggestions = new SuggestionsStore();
+  public omnibox = new OmniboxStore();
+
+  @observable
+  public settings: ISettings = DEFAULT_SETTINGS;
+
   @observable
   public regions = new Map<string, IRegion>();
 
@@ -33,6 +43,8 @@ export class Store {
   public webviewRef: Electron.WebviewTag;
 
   public lastFocus: any;
+
+  public tabId = 1;
 
   @observable
   public extensionPopupInfo = {
@@ -44,7 +56,7 @@ export class Store {
 
   @computed
   public get theme() {
-    return getTheme('wexond-light');
+    return getTheme(this.settings.theme);
   }
 
   constructor() {
