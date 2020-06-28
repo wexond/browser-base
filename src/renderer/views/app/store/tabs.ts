@@ -36,6 +36,8 @@ export class TabsStore {
   private scrollTimeout: any;
 
   public scrollingToEnd = false;
+
+  @observable
   public scrollable = false;
 
   public closedUrl = '';

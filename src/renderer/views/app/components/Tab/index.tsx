@@ -11,6 +11,8 @@ import {
   StyledAction,
   StyledPinAction,
   TabContainer,
+  Border,
+  TabOverlay,
 } from './style';
 import { ICON_VOLUME_HIGH, ICON_VOLUME_OFF } from '~/renderer/constants';
 import { ITab } from '../../models';
@@ -216,15 +218,13 @@ const Content = observer(({ tab }: { tab: ITab }) => {
 
   return (
     <StyledContent>
-      {tab.favicon !== '' && (
-        <StyledIcon
-          isIconSet={tab.favicon !== ''}
-          loading={loading}
-          style={{ backgroundImage: `url(${tab.favicon})` }}
-        >
-          <PinnedVolume tab={tab} />
-        </StyledIcon>
-      )}
+      <StyledIcon
+        isIconSet={tab.favicon !== ''}
+        loading={loading}
+        style={{ backgroundImage: `url(${tab.favicon})` }}
+      >
+        <PinnedVolume tab={tab} />
+      </StyledIcon>
 
       {loading && (
         <Preloader
@@ -279,18 +279,6 @@ const Close = observer(({ tab }: { tab: ITab }) => {
 });
 
 export default observer(({ tab }: { tab: ITab }) => {
-  const defaultColor = store.theme['toolbar.lightForeground']
-    ? 'rgba(255, 255, 255, 0.04)'
-    : 'rgba(255, 255, 255, 0.3)';
-
-  const defaultHoverColor = store.theme['toolbar.lightForeground']
-    ? 'rgba(255, 255, 255, 0.08)'
-    : 'rgba(255, 255, 255, 0.5)';
-
-  const defaultSelectedHoverColor = store.theme['toolbar.lightForeground']
-    ? '#393939'
-    : '#fcfcfc';
-
   return (
     <StyledTab
       selected={tab.isSelected}
@@ -307,20 +295,28 @@ export default observer(({ tab }: { tab: ITab }) => {
         pinned={tab.isPinned}
         style={{
           backgroundColor: tab.isSelected
-            ? store.isCompact && tab.isHovered
-              ? defaultSelectedHoverColor
-              : store.theme['toolbar.backgroundColor']
-            : tab.isHovered
-            ? defaultHoverColor
-            : defaultColor,
-          borderColor:
+            ? store.theme['toolbar.backgroundColor']
+            : 'transparent',
+          border:
             tab.isSelected && tab.tabGroupId != undefined && !store.isCompact
-              ? tab.tabGroup.color
-              : 'transparent',
+              ? `2px solid ${tab.tabGroup.color}`
+              : 'none',
         }}
       >
         <Content tab={tab} />
+        <TabOverlay
+          style={{
+            backgroundColor: store.theme['toolbar.lightForeground']
+              ? 'rgba(255, 255, 255, 0.08)'
+              : 'rgba(255, 255, 255, 0.2)',
+          }}
+          visible={
+            tab.isSelected ? tab.isHovered && store.isCompact : tab.isHovered
+          }
+        />
       </TabContainer>
+
+      {tab.isBorderVisible && <Border />}
     </StyledTab>
   );
 });
