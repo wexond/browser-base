@@ -4,6 +4,7 @@ import { ITheme } from '~/interfaces';
 import { DialogBaseStyle } from '~/renderer/mixins/dialogs';
 
 export const StyledOmnibox = styled(DialogBaseStyle)`
+  transition: 0.1s opacity;
   padding-bottom: 4px;
 
   ${({ theme }: { theme?: ITheme }) => css`
