@@ -20,12 +20,13 @@ const contains = (regions: number[][], x: number, y: number) => {
 
 export class OverlayService {
   constructor() {
-    ipcMain.on('mouse-move', (e) => {
-      const overlay = this.fromWebContents(e.sender);
+    setInterval(() => {
+      // TODO(sentialx): make sure it works on other windows
+      const overlay = Application.instance.windows.list[0].overlayWindow;
       const [x, y] = overlay.getCursorPoint();
 
       overlay.setIgnoreMouseEvents(!contains(overlay.regions, x, y));
-    });
+    }, 1);
 
     extensions.overlayPrivate.start(this);
   }

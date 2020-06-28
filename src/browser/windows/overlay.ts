@@ -30,6 +30,7 @@ export class OverlayWindow {
       parent: parentWindow,
       resizable: false,
       movable: false,
+      hasShadow: false,
       webPreferences: {
         plugins: true,
         sandbox: true,

@@ -1,4 +1,4 @@
-import { observable, computed, observe, action } from 'mobx';
+import { observable, computed, action } from 'mobx';
 
 import { getTheme } from '~/utils/themes';
 import { IMenuItem } from '~/browser/services/context-menus';
