@@ -11,6 +11,7 @@ import {
   StyledAction,
   StyledPinAction,
   TabContainer,
+  Border,
 } from './style';
 import { ICON_VOLUME_HIGH, ICON_VOLUME_OFF } from '~/renderer/constants';
 import { ITab } from '../../models';
@@ -279,13 +280,9 @@ const Close = observer(({ tab }: { tab: ITab }) => {
 });
 
 export default observer(({ tab }: { tab: ITab }) => {
-  const defaultColor = store.theme['toolbar.lightForeground']
-    ? 'rgba(255, 255, 255, 0.04)'
-    : 'rgba(255, 255, 255, 0.3)';
-
   const defaultHoverColor = store.theme['toolbar.lightForeground']
     ? 'rgba(255, 255, 255, 0.08)'
-    : 'rgba(255, 255, 255, 0.5)';
+    : 'rgba(255, 255, 255, 0.2)';
 
   const defaultSelectedHoverColor = store.theme['toolbar.lightForeground']
     ? '#393939'
@@ -312,7 +309,7 @@ export default observer(({ tab }: { tab: ITab }) => {
               : store.theme['toolbar.backgroundColor']
             : tab.isHovered
             ? defaultHoverColor
-            : defaultColor,
+            : 'transparent',
           borderColor:
             tab.isSelected && tab.tabGroupId != undefined && !store.isCompact
               ? tab.tabGroup.color
@@ -321,6 +318,8 @@ export default observer(({ tab }: { tab: ITab }) => {
       >
         <Content tab={tab} />
       </TabContainer>
+
+      {tab.isBorderVisible && <Border></Border>}
     </StyledTab>
   );
 });

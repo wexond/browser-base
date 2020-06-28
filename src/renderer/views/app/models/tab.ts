@@ -82,6 +82,20 @@ export class ITab {
   }
 
   @computed
+  public get isBorderVisible() {
+    if (this.isSelected || this.isHovered) return false;
+
+    const index = store.tabs.list.indexOf(this);
+
+    if (store.tabs.list.length - 1 > index) {
+      const nextTab = store.tabs.list[index + 1];
+      if (nextTab.isSelected || nextTab.isHovered) return false;
+    }
+
+    return true;
+  }
+
+  @computed
   public get isIconSet() {
     return this.favicon !== '' || this.loading;
   }

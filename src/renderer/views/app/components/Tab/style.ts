@@ -167,7 +167,6 @@ interface TabContainerProps {
 
 export const TabContainer = styled.div`
   position: relative;
-
   width: 100%;
   align-items: center;
   overflow: hidden;
@@ -184,5 +183,18 @@ export const TabContainer = styled.div`
     border-radius: ${theme.isCompact && !hasTabGroup ? '4px' : 'auto'};
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
+  `};
+`;
+
+export const Border = styled.div`
+  height: 18px;
+  background-color: rgba(0, 0, 0, 0.12);
+  width: 1px;
+  position: absolute;
+  right: -1px;
+  ${({ theme }: { theme?: ITheme }) => css`
+    margin-top: ${theme.tabMarginTop / 2}px;
+    top: 50%;
+    transform: translateY(-50%);
   `};
 `;
