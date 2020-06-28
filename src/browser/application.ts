@@ -10,6 +10,7 @@ import { protocols } from './protocols';
 import { Tabs } from './tabs';
 import { BrowserContext } from './browser-context';
 import { OverlayService } from './services/overlay';
+import { ContextMenusService } from './services/context-menus';
 
 export class Application {
   public static instance = new Application();
@@ -18,6 +19,8 @@ export class Application {
 
   // public settings = new Settings();
   public tabs = new Tabs();
+
+  public contextMenus: ContextMenusService;
 
   public overlay: OverlayService;
 
@@ -89,6 +92,7 @@ export class Application {
 
     this.storage = new StorageService();
     this.overlay = new OverlayService();
+    this.contextMenus = new ContextMenusService();
 
     const browserContext = await BrowserContext.from(
       session.defaultSession,

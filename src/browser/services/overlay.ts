@@ -1,6 +1,7 @@
 import { Application } from '../application';
 import { extensions } from '../extensions';
-import { ipcMain, screen, BrowserWindow } from 'electron';
+import { ipcMain, BrowserWindow } from 'electron';
+import { OverlayWindow } from '../windows/overlay';
 
 const contains = (regions: number[][], x: number, y: number) => {
   for (const region of regions) {
@@ -19,21 +20,20 @@ const contains = (regions: number[][], x: number, y: number) => {
 
 export class OverlayService {
   constructor() {
-    ipcMain.on('mouse-move', (e) => {
-      const { x, y } = screen.getCursorScreenPoint();
+    setInterval(() => {
+      // TODO(sentialx): make sure it works on other windows
+      const overlay = Application.instance.windows.list[0].overlayWindow;
+      const [x, y] = overlay.getCursorPoint();
 
-      const overlay = this.fromWebContents(e.sender);
-      const pos = overlay.contentBounds;
-
-      overlay.setIgnoreMouseEvents(
-        !contains(overlay.regions, x - pos.x, y - pos.y),
-      );
-    });
+      overlay.setIgnoreMouseEvents(!contains(overlay.regions, x, y));
+    }, 1);
 
     extensions.overlayPrivate.start(this);
   }
 
-  public fromWebContents(sender: Electron.WebContents) {
+  public fromWebContents(sender: Electron.WebContents): OverlayWindow {
+    if (!sender) return null;
+
     const senderWindow = BrowserWindow.fromWebContents(sender);
     const parentWindow = senderWindow?.getParentWindow();
 
@@ -41,10 +41,12 @@ export class OverlayService {
       return Application.instance.windows.fromBrowserWindow(parentWindow)
         .overlayWindow;
 
-    if (sender.getType() === 'window' || sender.getType() === 'browserView')
-      return Application.instance.windows.fromWebContents(sender)
-        ?.overlayWindow;
+    if (sender.getType() === 'webview') {
+      return this.fromWebContents(
+        (sender as any).getOwnerBrowserWindow()?.webContents,
+      );
+    }
 
-    return null;
+    return Application.instance.windows.fromWebContents(sender)?.overlayWindow;
   }
 }

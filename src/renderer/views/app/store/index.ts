@@ -298,8 +298,8 @@ export class Store {
     // }
     // ipcRenderer.send('update-check');
 
-    browser.overlayPrivate.onPopupUpdated.addListener((name, info) => {
-      if (info.visible != null) this.dialogsVisibility[name] = info.visible;
+    browser.overlayPrivate.onPopupToggled.addListener((name, visible) => {
+      this.dialogsVisibility[name] = visible;
     });
   }
 }

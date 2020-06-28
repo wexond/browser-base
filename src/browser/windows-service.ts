@@ -47,8 +47,7 @@ export class WindowsService {
 
         if (!action) return;
 
-        const overlay = Application.instance.windows.fromWebContents(sender)
-          .overlayWindow;
+        const overlay = Application.instance.overlay.fromWebContents(sender);
 
         extensions.browserActionPrivate.sendEventToAll(
           'onVisibilityChange',
@@ -56,13 +55,7 @@ export class WindowsService {
           true,
         );
 
-        extensions.overlayPrivate.updatePopup(
-          {},
-          { name: 'extensionPopup', info: { visible: true, x: left, y: top } },
-        );
-
-        overlay.win.focus();
-        overlay.win.webContents.focus();
+        overlay.send('extensionPopup-show', left, top);
       },
     );
 

@@ -15,6 +15,7 @@ import { Queue } from '~/utils/queue';
 import { Application } from './application';
 import { hookTabEvents } from './tab-events';
 import { extensions } from './extensions';
+import { ICON_WINDOW } from '~/renderer/constants';
 
 interface IAuthInfo {
   url: string;
@@ -91,6 +92,110 @@ export class Tab {
       vertical: false,
     });
 
+    this.webContents.on('context-menu', (e, params) => {
+      Application.instance.contextMenus.popup([
+        {
+          type: 'normal',
+          title: 'New window',
+          accelerator: 'Ctrl+N',
+          icon: ICON_WINDOW,
+        },
+        {
+          type: 'normal',
+          title: 'New incognito window',
+          accelerator: 'Ctrl+Shift+N',
+        },
+        {
+          type: 'separator',
+        },
+        {
+          type: 'normal',
+          title: 'Submenu 1',
+          submenu: [
+            {
+              type: 'normal',
+              title: 'Test item 1',
+            },
+            {
+              type: 'normal',
+              title: 'Test item dsfdfsfsdfsd',
+            },
+            {
+              type: 'normal',
+              title: 'Test item 3',
+            },
+            {
+              type: 'normal',
+              title: 'Test item 4',
+            },
+            {
+              type: 'normal',
+              title: 'Test item 5',
+            },
+            {
+              type: 'normal',
+              title: 'Test item 6',
+            },
+            {
+              type: 'normal',
+              title: 'Test item 7',
+            },
+          ],
+        },
+        {
+          type: 'normal',
+          title: 'Submenu 2',
+          submenu: [
+            {
+              type: 'normal',
+              title: 'Test item',
+              accelerator: 'Ctrl+S',
+            },
+            {
+              type: 'normal',
+              title: 'Test item',
+              accelerator: 'Ctrl+S',
+            },
+            {
+              type: 'normal',
+              title: 'Test item',
+              accelerator: 'Ctrl+S',
+            },
+            {
+              type: 'normal',
+              title: 'Test item',
+              accelerator: 'Ctrl+S',
+            },
+          ],
+        },
+        {
+          type: 'normal',
+          title: 'Submenu 3',
+          submenu: [
+            {
+              type: 'normal',
+              title: 'Test item',
+              accelerator: 'Ctrl+S',
+            },
+            {
+              type: 'normal',
+              title: 'Test item',
+            },
+            {
+              type: 'normal',
+              title: 'Sub menu',
+              submenu: [
+                {
+                  type: 'normal',
+                  title: 'Test',
+                },
+              ],
+            },
+          ],
+        },
+      ]);
+    });
+    
     hookTabEvents(this);
   }
 

@@ -13,13 +13,15 @@ interface Functions {
 
   static void setRegions(sequence<sequence<double>> regions);
 
-  static void updatePopup(DOMString name, PopupInfo info);
+  static void setPopupVisible(DOMString name, boolean visible);
 
   static void setIgnoreMouseEvents(boolean flag);
 };
 
 interface Events {
-  static void onPopupUpdated(DOMString name, PopupInfo info);
+  static void onPopupToggled(DOMString name, boolean visible);
+
+  static void onBlur();
 
   static void onRegionsUpdated(sequence<sequence<double>> regions);
 };
