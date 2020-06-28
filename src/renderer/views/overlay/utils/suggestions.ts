@@ -1,6 +1,5 @@
 import { IHistoryItem } from '~/interfaces';
-import { requestURL } from '~/utils';
-
+import { requestURL } from '~/utils/network';
 import store from '../store';
 
 interface HistorySuggestion extends IHistoryItem {
@@ -23,7 +22,7 @@ export const getHistorySuggestions = (filter: string) => {
 
   const filterPart = filter.replace(regex, '');
 
-  for (const item of store.visitedItems) {
+  for (const item of store.omnibox.visitedItems) {
     let urlPart = item.url.replace(regex, '');
 
     if (urlPart.endsWith('/')) {
@@ -37,7 +36,7 @@ export const getHistorySuggestions = (filter: string) => {
 
     if (
       urlPart.indexOf(
-        store.searchEngine.url.replace('%s', '').replace(regex, ''),
+        store.omnibox.searchEngine.url.replace('%s', '').replace(regex, ''),
       ) !== -1
     ) {
       const query = urlPart
@@ -89,13 +88,13 @@ export const getSearchSuggestions = (filter: string) =>
     }
 
     try {
-      if (store.searchEngine.keywordsUrl === '')
+      if (store.omnibox.searchEngine.keywordsUrl === '')
         return reject(new Error('No search engine keyword URL specified'));
 
       const data = JSON.parse(
         (
           await requestURL(
-            store.searchEngine.keywordsUrl.replace(
+            store.omnibox.searchEngine.keywordsUrl.replace(
               '%s',
               encodeURIComponent(input),
             ),

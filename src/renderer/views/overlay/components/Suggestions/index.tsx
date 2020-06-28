@@ -2,8 +2,8 @@ import { observer } from 'mobx-react-lite';
 import * as React from 'react';
 
 import { StyledSuggestions } from './style';
-import store from '../../store';
 import { Suggestion } from '../Suggestion';
+import store from '../../store';
 
 interface Props {
   visible: boolean;

@@ -1,11 +1,10 @@
 import styled, { css } from 'styled-components';
-import { centerIcon, body2 } from '~/renderer/mixins';
+import { centerIcon } from '~/renderer/mixins';
 import { ITheme } from '~/interfaces';
-import { DialogStyle } from '~/renderer/mixins/dialogs';
-import { TOOLBAR_HEIGHT } from '~/constants/design';
+import { DialogBaseStyle } from '~/renderer/mixins/dialogs';
 
-export const StyledApp = styled(DialogStyle)`
-  transition: none;
+export const StyledOmnibox = styled(DialogBaseStyle)`
+  transition: 0.1s opacity;
   padding-bottom: 4px;
 
   ${({ theme }: { theme?: ITheme }) => css`

@@ -3,7 +3,6 @@ import * as React from 'react';
 import { observable } from 'mobx';
 import { ipcRenderer } from 'electron';
 import { DialogStore } from '~/models/dialog-store';
-import { callViewMethod } from '~/utils/view';
 
 interface IFindInfo {
   occurrences: string;

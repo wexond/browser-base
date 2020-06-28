@@ -11,6 +11,7 @@ import { Tabs } from './tabs';
 import { BrowserContext } from './browser-context';
 import { OverlayService } from './services/overlay';
 import { ContextMenusService } from './services/context-menus';
+import { OmniboxService } from './services/omnibox';
 
 export class Application {
   public static instance = new Application();
@@ -23,6 +24,8 @@ export class Application {
   public contextMenus: ContextMenusService;
 
   public overlay: OverlayService;
+
+  public omnibox: OmniboxService;
 
   public storage: StorageService;
 
@@ -92,6 +95,7 @@ export class Application {
 
     this.storage = new StorageService();
     this.overlay = new OverlayService();
+    this.omnibox = new OmniboxService();
     this.contextMenus = new ContextMenusService();
 
     const browserContext = await BrowserContext.from(

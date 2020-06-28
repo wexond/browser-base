@@ -98,7 +98,8 @@ export class WindowsService {
           Array.from(Application.instance.tabs.tabs.values()).find(
             (y) => y.webContents === webContents,
           )?.windowId === x.id,
-      )
+      ) ||
+      this.list.find((x) => x.overlayWindow.webContents === webContents)
     );
   }
 
