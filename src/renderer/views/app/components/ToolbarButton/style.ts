@@ -10,8 +10,6 @@ import { ITheme } from '~/interfaces';
 export const Icon = styled.div`
   width: 100%;
   height: 100%;
-  will-change: background-image;
-  transition: 0.15s background-image;
   backface-visibility: hidden;
 
   ${({

@@ -11,10 +11,10 @@ interface CloseProps {
 }
 
 export const StyledClose = styled.div`
-  height: 20px;
-  width: 20px;
+  height: 18px;
+  width: 18px;
   margin-left: 2px;
-  margin-right: 6px;
+  margin-right: 5px;
   border-radius: 2px;
   background-image: url('${ICON_CLOSE}');
   transition: 0.1s background-color;
@@ -155,7 +155,7 @@ export const StyledContent = styled.div`
   align-items: center;
   position: relative;
   display: flex;
-  margin-left: 10px;
+  margin-left: 8px;
   flex: 1;
 `;
 
