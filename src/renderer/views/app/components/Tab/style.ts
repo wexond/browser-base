@@ -200,7 +200,7 @@ export const TabOverlay = styled.div`
 `;
 
 export const Border = styled.div`
-  height: 18px;
+  height: 20px;
   background-color: rgba(0, 0, 0, 0.12);
   width: 1px;
   position: absolute;
