@@ -6,6 +6,8 @@ import { IStorageResponse } from '~/interfaces';
 import { HistoryService } from './history';
 import { BookmarksService } from './bookmarks';
 import { FaviconsService } from './favicons';
+import { app } from 'electron';
+import { join } from 'path';
 
 export class StorageService extends EventEmitter {
   public worker: Worker;
@@ -21,9 +23,19 @@ export class StorageService extends EventEmitter {
 
     console.log('Storage service is running.');
 
-    this.worker = new Worker('./build/storage.bundle.js', {
-      workerData: { storagePath: getPath('storage') },
-    });
+    this.worker = new Worker(
+      app.getAppPath().includes('app.asar')
+        ? join(
+            app.getAppPath(),
+            '..',
+            'app.asar.unpacked',
+            'build/storage.bundle.js',
+          )
+        : `${app.getAppPath()}/build/storage.bundle.js`,
+      {
+        workerData: { storagePath: getPath('storage') },
+      },
+    );
 
     this.worker.on('message', this.onMessage);
 
