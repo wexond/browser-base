@@ -305,7 +305,6 @@ export default observer(({ tab }: { tab: ITab }) => {
       <TabContainer
         hasTabGroup={tab.tabGroupId != undefined}
         pinned={tab.isPinned}
-        selected={tab.isSelected}
         style={{
           backgroundColor: tab.isSelected
             ? store.isCompact && tab.isHovered
