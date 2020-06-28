@@ -11,10 +11,9 @@ interface CloseProps {
 }
 
 export const StyledClose = styled.div`
-  height: 20px;
-  width: 20px;
+  height: 18px;
+  width: 18px;
   margin-left: 2px;
-  margin-right: 6px;
   border-radius: 2px;
   background-image: url('${ICON_CLOSE}');
   transition: 0.1s background-color;
@@ -120,12 +119,11 @@ export const StyledTitle = styled.div`
   text-overflow: ellipsis;
   white-space: nowrap;
   transition: 0.2s margin-left;
-  margin-left: 8px;
   min-width: 0;
   flex: 1;
 
   ${({ isIcon, selected, theme }: TitleProps) => css`
-    margin-left: ${!isIcon ? 0 : 12}px;
+    margin-left: ${!isIcon ? 0 : 24}px;
     color: ${selected
       ? theme['tab.selected.textColor']
       : theme['tab.textColor']};
@@ -135,11 +133,17 @@ export const StyledTitle = styled.div`
 export const StyledIcon = styled.div`
   height: 16px;
   min-width: 16px;
-  transition: 0.2s opacity, 0.2s min-width;
+  transition: 0.2s opacity, 0.2s min-width, 0.15s transform, 0.15s border-radius,
+    0.15s background-image;
+  position: absolute;
+  left: 0;
+  transform-origin: center;
   ${centerIcon()};
-  ${({ isIconSet }: { isIconSet: boolean }) => css`
+  ${({ isIconSet, loading }: { isIconSet: boolean; loading: boolean }) => css`
+    transform: scale(${loading ? 0.65 : 1});
     min-width: ${isIconSet ? 0 : 16},
     opacity: ${isIconSet ? 0 : 1};
+    border-radius: ${loading ? '50%' : 0};
   `};
 `;
 
@@ -147,8 +151,10 @@ export const StyledContent = styled.div`
   overflow: hidden;
   z-index: 2;
   align-items: center;
+  position: relative;
   display: flex;
-  margin-left: 10px;
+  margin-left: 8px;
+  padding-right: 6px;
   flex: 1;
 `;
 
@@ -156,12 +162,10 @@ interface TabContainerProps {
   pinned: boolean;
   theme?: ITheme;
   hasTabGroup: boolean;
-  selected?: boolean;
 }
 
 export const TabContainer = styled.div`
   position: relative;
-
   width: 100%;
   align-items: center;
   overflow: hidden;
@@ -169,15 +173,41 @@ export const TabContainer = styled.div`
   backface-visibility: hidden;
   transition: 0.1s background-color;
   border-bottom: transparent !important;
-  border: 2px solid;
 
-  ${({ pinned, theme, hasTabGroup, selected }: TabContainerProps) => css`
+  ${({ pinned, theme, hasTabGroup }: TabContainerProps) => css`
     max-width: ${pinned ? `${TAB_PINNED_WIDTH}px` : '100%'};
     margin-top: ${theme.tabMarginTop}px;
     height: ${theme.tabHeight}px;
     border-radius: ${theme.isCompact && !hasTabGroup ? '4px' : 'auto'};
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
-    box-shadow: ${selected ? '0px 0px 6px 0px rgba(0,0,0,0.12)' : 'none'};
+  `};
+`;
+
+export const TabOverlay = styled.div`
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  pointer-events: none;
+  transition: 0.1s opacity;
+  border: 2px solid transparent;
+
+  ${({ visible }: { visible: boolean }) => css`
+    opacity: ${visible ? 1 : 0};
+  `}
+`;
+
+export const Border = styled.div`
+  height: 20px;
+  background-color: rgba(0, 0, 0, 0.12);
+  width: 1px;
+  position: absolute;
+  right: -1px;
+  ${({ theme }: { theme?: ITheme }) => css`
+    margin-top: ${theme.tabMarginTop / 2}px;
+    top: 50%;
+    transform: translateY(-50%);
   `};
 `;

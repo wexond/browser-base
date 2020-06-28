@@ -28,6 +28,8 @@ export interface IVisitsDetails {
 
 export interface IHistoryAddDetails {
   url: string;
+  title?: string;
+  transition?: PageTransition;
 }
 
 export interface IHistoryDeleteDetails {

@@ -1,6 +1,22 @@
 import { Tab } from './tab';
+import { Application } from './application';
+import { extensions } from './extensions';
 
 export const hookTabEvents = (tab: Tab) => {
+  tab.webContents.on('page-favicon-updated', async (e, favicons) => {
+    await Application.instance.storage.favicons.saveFavicon(
+      tab.webContents.getURL(),
+      favicons[0],
+    );
+    extensions.tabsPrivate.sendEventToAll(
+      'onFaviconUpdated',
+      tab.id,
+      favicons[0],
+    );
+  });
+};
+
+export const hookTabEvents1 = (tab: Tab) => {
   tab.webContents.on('context-menu', (e, params) => {
     const menu = getViewMenu(this.window, params, this.webContents);
     menu.popup();

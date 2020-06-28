@@ -11,6 +11,7 @@ import {
 
 import store from '.';
 import { TOOLBAR_HEIGHT } from '~/constants/design';
+import { randomId } from '~/common/utils/string';
 
 export class TabsStore {
   @observable
@@ -35,6 +36,8 @@ export class TabsStore {
   private scrollTimeout: any;
 
   public scrollingToEnd = false;
+
+  @observable
   public scrollable = false;
 
   public closedUrl = '';
@@ -226,8 +229,18 @@ export class TabsStore {
       tab.close();
     });
 
+    browser.tabsPrivate.onFaviconUpdated.addListener((tabId, faviconUrl) => {
+      const tab = this.getTabById(tabId);
+      if (!tab) return;
+
+      console.log(faviconUrl);
+
+      if (faviconUrl) tab.favicon = `wexond://favicon2/?iconUrl=${faviconUrl}`;
+      else tab.favicon = 'wexond://favicon/';
+    });
+
     browser.tabs.onUpdated.addListener(
-      async (tabId, { title, status, mutedInfo, audible, favIconUrl, url }) => {
+      async (tabId, { title, status, mutedInfo, audible, url }, details) => {
         const tab = this.getTabById(tabId);
         if (!tab) return;
 
@@ -235,9 +248,9 @@ export class TabsStore {
         if (title) tab.title = title;
         if (mutedInfo) tab.isMuted = mutedInfo.muted;
         if (audible !== undefined) tab.isPlaying = audible;
-        if (favIconUrl) tab.favicon = favIconUrl;
         if (url) {
           tab.url = url;
+
           if (tab.id === this.selectedTabId && !store.addressbarFocused) {
             this.selectedTab.addressbarValue = null;
           }
@@ -546,7 +559,7 @@ export class TabsStore {
       for (let i = index - 1; i >= 0; i--) {
         const tab = tabs[i];
 
-        if (callingTab.isPinned && callingTab.isPinned && tab.isPinned) break;
+        if (callingTab.isPinned && !tab.isPinned) break;
 
         const { tabGroup } = tab;
 
@@ -573,7 +586,7 @@ export class TabsStore {
       for (let i = index + 1; i < tabs.length; i++) {
         const tab = tabs[i];
 
-        if (callingTab.isPinned && callingTab.isPinned && tab.isPinned) break;
+        if (callingTab.isPinned && !tab.isPinned) break;
 
         const { tabGroup } = tab;
 

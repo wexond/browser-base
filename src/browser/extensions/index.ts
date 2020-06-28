@@ -11,6 +11,7 @@ import { BrowserActionPrivateAPI } from './api/browser-action-private';
 import { TabsPrivateAPI } from './api/tabs-private';
 import { BookmarksAPI } from './api/bookmarks';
 import { HistoryAPI } from './api/history';
+import { HistoryPrivateAPI } from './api/history-private';
 
 export class Extensions {
   public static instance = new Extensions();
@@ -27,6 +28,7 @@ export class Extensions {
   public tabsPrivate = new TabsPrivateAPI();
   public browserActionPrivate = new BrowserActionPrivateAPI();
   public overlayPrivate = new OverlayPrivateAPI();
+  public historyPrivate = new HistoryPrivateAPI();
 
   public backgroundPages = new BackgroundPages();
 

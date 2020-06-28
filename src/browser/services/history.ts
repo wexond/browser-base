@@ -1,3 +1,5 @@
+import { Worker } from 'worker_threads';
+
 import {
   IVisitsDetails,
   IVisitItem,
@@ -5,12 +7,11 @@ import {
   IHistoryItem,
   IHistoryAddDetails,
   IHistoryDeleteRange,
-  PageTransition,
 } from '~/interfaces';
 import { extensions } from '../extensions';
 import { HistoryServiceBase } from '~/common/services/history';
 import { WorkerMessengerFactory } from '~/common/worker-messenger-factory';
-import { Worker } from 'worker_threads';
+import { IHistoryPrivateChunkDetails } from '~/interfaces/history-private';
 
 export class HistoryService extends HistoryServiceBase {
   private invoker = WorkerMessengerFactory.createInvoker('history');
@@ -18,7 +19,9 @@ export class HistoryService extends HistoryServiceBase {
   constructor(worker: Worker) {
     super();
     this.invoker.initialize(worker);
+
     extensions.history.start(this);
+    extensions.historyPrivate.start(this);
   }
 
   public search = (details: IHistorySearchDetails) =>
@@ -30,8 +33,8 @@ export class HistoryService extends HistoryServiceBase {
   public addUrl = (details: IHistoryAddDetails) =>
     this.invoker.invoke('addUrl', details);
 
-  public addCustomUrl = (url: string, transition: PageTransition) =>
-    this.invoker.invoke('addCustomUrl', url, transition);
+  public setTitleForUrl = (url: string, title: string) =>
+    this.invoker.invoke('setTitleForUrl', url, title);
 
   public deleteUrl = (details: IHistoryAddDetails) =>
     this.invoker.invoke('deleteUrl', details);
@@ -40,4 +43,7 @@ export class HistoryService extends HistoryServiceBase {
     this.invoker.invoke('deleteRange', range);
 
   public deleteAll = () => this.invoker.invoke('deleteAll');
+
+  public getChunk = (details: IHistoryPrivateChunkDetails) =>
+    this.invoker.invoke<IHistoryItem[]>('getChunk', details);
 }

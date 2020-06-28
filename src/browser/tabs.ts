@@ -1,7 +1,8 @@
 import { Tab } from './tab';
 import { extensions } from './extensions';
-import { BrowserWindow } from 'electron';
+import { BrowserWindow, ipcMain } from 'electron';
 import { Application } from './application';
+import { parse } from 'url';
 
 export class Tabs {
   public tabs: Map<number, Tab> = new Map();
@@ -48,9 +49,54 @@ export class Tabs {
       // this.emit('activated', id);
     });
 
+    ipcMain.on('trigger-favicon-update', (e, tabId, url) => {
+      this.triggerFaviconUpdateForURL(tabId, url, true);
+    });
+
+    extensions.tabs.on('updated', async (tabId, changeInfo, details) => {
+      const { storage } = Application.instance;
+
+      if (changeInfo.url) {
+        storage.history.addUrl({
+          url: details.url,
+          title: details.title,
+        });
+
+        this.triggerFaviconUpdateForURL(tabId, changeInfo.url, false);
+      }
+
+      if (changeInfo.title) {
+        storage.history.setTitleForUrl(details.url, changeInfo.title);
+      }
+    });
+
     extensions.tabs.on('will-remove', (tabId) => {
       this.destroy(tabId);
     });
+  }
+
+  private async triggerFaviconUpdateForURL(
+    tabId: number,
+    url: string,
+    fallbackToHost: boolean,
+  ) {
+    const { favicons } = Application.instance.storage;
+
+    let faviconUrl = await favicons.getFaviconURLForPageURL(url);
+
+    if (faviconUrl) {
+      await favicons.saveFavicon(url, faviconUrl);
+    } else if (fallbackToHost) {
+      faviconUrl = await favicons.getFaviconURLForPageURL(
+        await favicons.getPageURLForHost(parse(url).hostname),
+      );
+    }
+
+    extensions.tabsPrivate.sendEventToAll(
+      'onFaviconUpdated',
+      tabId,
+      faviconUrl,
+    );
   }
 
   public destroy(id: number) {

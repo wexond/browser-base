@@ -391,7 +391,7 @@ export class TabsAPI extends EventHandler implements ITabsEvents {
       this.onUpdated(tab);
     });
 
-    tab.on('page-favicon-updated', (event, favicons) => {
+    tab.on('page-favicon-updated', async (event, favicons) => {
       tab.favicon = favicons[0];
       this.onUpdated(tab);
     });
@@ -523,7 +523,7 @@ export class TabsAPI extends EventHandler implements ITabsEvents {
     return details;
   }
 
-  private onUpdated(tab: Tab) {
+  private async onUpdated(tab: Tab) {
     if (!tab) return;
 
     const prevDetails: DetailsType = this.detailsCache.get(tab) as any;

@@ -85,8 +85,6 @@ export class Tab {
       return this.errorURL;
     });
 
-    // hookTabEvents(this);
-
     this.browserView.setAutoResize({
       width: true,
       height: true,
@@ -197,6 +195,8 @@ export class Tab {
         },
       ]);
     });
+    
+    hookTabEvents(this);
   }
 
   public get webContents() {
