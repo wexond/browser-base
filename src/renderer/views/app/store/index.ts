@@ -45,21 +45,30 @@ export class Store {
   @observable
   public addressbarEditing = false;
 
+  private addressbarText = '';
+
   @computed
   public get isCompact() {
     // return this.settings.object.topBarVariant === 'compact';
     return false;
   }
 
-  @computed
-  public get addressbarValue() {
+  private getAddressbarValue() {
     const tab = this.tabs.selectedTab;
-    if (tab?.addressbarValue != null) return tab?.addressbarValue;
+    if (tab?.addressbarValue != null) return tab.addressbarValue;
     else if (tab && !tab?.url?.startsWith(NEWTAB_URL))
       return tab.url[tab.url.length - 1] === '/'
         ? tab.url.slice(0, -1)
         : tab.url;
     return '';
+  }
+
+  @computed
+  public get addressbarValue() {
+    if (this.addressbarFocused) return this.addressbarText;
+
+    this.addressbarText = this.getAddressbarValue();
+    return this.addressbarText;
   }
 
   @computed
@@ -294,7 +303,7 @@ export class Store {
             this.inputRef.focus();
           }
           if (data.escape) {
-            this.addressbarFocused = false;
+            this.addressbarFocused = true;
             this.tabs.selectedTab.addressbarValue = null;
             requestAnimationFrame(() => {
               this.inputRef.select();
