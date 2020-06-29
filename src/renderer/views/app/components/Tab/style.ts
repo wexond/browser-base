@@ -171,7 +171,6 @@ export const TabContainer = styled.div`
   overflow: hidden;
   display: flex;
   backface-visibility: hidden;
-  transition: 0.1s background-color;
   border-bottom: transparent !important;
 
   ${({ pinned, theme, hasTabGroup }: TabContainerProps) => css`
@@ -191,7 +190,7 @@ export const TabOverlay = styled.div`
   top: 0;
   bottom: 0;
   pointer-events: none;
-  transition: 0.1s opacity;
+  transition: 0.2s opacity;
   border: 2px solid transparent;
 
   ${({ visible }: { visible: boolean }) => css`
@@ -201,7 +200,7 @@ export const TabOverlay = styled.div`
 
 export const Border = styled.div`
   height: 20px;
-  background-color: rgba(0, 0, 0, 0.12);
+  background-color: rgba(0, 0, 0, 0.22);
   width: 1px;
   position: absolute;
   right: -1px;

@@ -308,7 +308,7 @@ export default observer(({ tab }: { tab: ITab }) => {
           style={{
             backgroundColor: store.theme['toolbar.lightForeground']
               ? 'rgba(255, 255, 255, 0.08)'
-              : 'rgba(255, 255, 255, 0.2)',
+              : 'rgba(255, 255, 255, 0.3)',
           }}
           visible={
             tab.isSelected ? tab.isHovered && store.isCompact : tab.isHovered
