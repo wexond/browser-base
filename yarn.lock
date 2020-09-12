@@ -2446,10 +2446,10 @@ electron-builder@22.7.0:
     update-notifier "^4.1.0"
     yargs "^15.3.1"
 
-electron-extensions@^7.0.0-beta.2:
-  version "7.0.0-beta.2"
-  resolved "https://registry.yarnpkg.com/electron-extensions/-/electron-extensions-7.0.0-beta.2.tgz#a1d6ff48fcaae61598761bb3b20edea383f3f5f5"
-  integrity sha512-40Zn4lrGf9ZuPggFjxitc95o8K3qCDeiTm3XA6Ff4+0EE3wcCXNy/48oew4AsLfE5WfWpie+f//cC8DrcjexvQ==
+electron-extensions@^7.0.0-beta.3:
+  version "7.0.0-beta.3"
+  resolved "https://registry.yarnpkg.com/electron-extensions/-/electron-extensions-7.0.0-beta.3.tgz#03bf2115a062d637af928ea521cfb221d449cb2f"
+  integrity sha512-b1fRJp7RW+pSmF22oMBmtNzuKSnmgFXNWDfk62WBDE6dgrLSPpArlEsPx5EMEUZAHcBQeLaelkW2nt4m2pO6vQ==
 
 electron-publish@22.7.0:
   version "22.7.0"
@@ -4843,10 +4843,10 @@ node-bookmarks-parser@^2.0.0:
   dependencies:
     cheerio "^1.0.0-rc.3"
 
-node-fetch@^2.6.0:
-  version "2.6.0"
-  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.0.tgz#e633456386d4aa55863f676a7ab0daa8fdecb0fd"
-  integrity sha512-8dG4H5ujfvFiqDmVu9fQ5bOHUC15JMjMY/Zumv26oOvvVJjM67KF8koCWIabKQ1GJIa9r2mMZscBq/TbdOcmNA==
+node-fetch@^2.6.1:
+  version "2.6.1"
+  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.1.tgz#045bd323631f76ed2e2b55573394416b639a0052"
+  integrity sha512-V4aYg89jEoVRxRb2fJdAg8FHvI7cEyYdVAh94HH0UIK8oJxUfkjlDQN9RbMx+bEjP7+ggMiFRprSti032Oipxw==
 
 node-forge@0.9.0:
   version "0.9.0"
