@@ -83,15 +83,7 @@ $ npm run dev
 
 Guides and the API reference are located in [`docs`](docs) directory.
 
-### Sponsors
-
-[![Sponsors](https://opencollective.com/wexond/tiers/sponsor.svg?avatarHeight=48)](https://opencollective.com/wexond)
-
-### Backers
-
-[![Backers](https://opencollective.com/wexond/tiers/backer.svg?avatarHeight=48)](https://opencollective.com/wexond)
-
-## License
+# License
 
 For commercial or proprietary purposes, please contact me on sentialx@gmail.com
 
