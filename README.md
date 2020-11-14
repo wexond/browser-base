@@ -15,8 +15,6 @@ Wexond is an extensible and privacy-focused web browser with a totally different
 
 </div>
 
-> Note: This project is no longer under active development, though, we will still accept Pull Requests.
-
 # Features
 
 - **Wexond Shield** - Browse the web without any ads and don't let websites to track you. Thanks to the Wexond Shield powered by [Cliqz](https://github.com/cliqz-oss/adblocker), websites can load even 8 times faster!
