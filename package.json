@@ -56,7 +56,7 @@
     "@typescript-eslint/parser": "^2.30.0",
     "animejs": "^3.2.0",
     "awesome-node-loader": "^1.1.1",
-    "axios": "0.19.2",
+    "axios": "0.21.1",
     "cache-loader": "^4.1.0",
     "concurrently": "^5.2.0",
     "copy-webpack-plugin": "^5.1.1",
