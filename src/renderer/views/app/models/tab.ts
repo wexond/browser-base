@@ -16,7 +16,7 @@ import { animateTab } from '../utils/tabs';
 import { NEWTAB_URL } from '~/constants/tabs';
 
 export class ITab {
-  public id: number;
+  public id = -1;
 
   public addressbarFocused = false;
   public addressbarSelectionRange = [0, 0];

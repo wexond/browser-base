@@ -463,8 +463,12 @@ export class TabsStore {
   public replaceTab(firstTab: ITab, secondTab: ITab) {
     const index = this.list.indexOf(secondTab);
 
-    this.list[this.list.indexOf(firstTab)] = secondTab;
-    this.list[index] = firstTab;
+    const list = [...this.list];
+
+    list[this.list.indexOf(firstTab)] = secondTab;
+    list[index] = firstTab;
+
+    this.list = list;
 
     firstTab.updateData();
     secondTab.updateData();
