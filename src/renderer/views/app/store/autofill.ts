@@ -1,4 +1,4 @@
-import { observable, action } from 'mobx';
+import { action, makeAutoObservable } from 'mobx';
 import { ipcRenderer } from 'electron';
 
 import { IFormFillData } from '~/interfaces';
@@ -7,25 +7,21 @@ import { Database } from '~/models/database';
 export class AutoFillStore {
   public db = new Database<IFormFillData>('formfill');
 
-  @observable
   public credentials: IFormFillData[] = [];
 
-  @observable
   public addresses: IFormFillData[] = [];
 
-  @observable
   public menuVisible = false;
 
-  @observable
   public menuTop = 0;
 
-  @observable
   public menuLeft = 0;
 
-  @observable
   public selectedItem: IFormFillData;
 
   public constructor() {
+    makeAutoObservable(this, { load: action, removeItem: action, db: false });
+
     this.load();
 
     ipcRenderer.on('credentials-insert', (e, data) => {
@@ -43,7 +39,6 @@ export class AutoFillStore {
     });
   }
 
-  @action
   public async load() {
     const items = await this.db.get({});
 

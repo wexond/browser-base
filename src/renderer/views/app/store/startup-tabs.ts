@@ -1,4 +1,4 @@
-import { observable } from 'mobx';
+import { makeObservable, observable } from 'mobx';
 
 import { Store } from '.';
 import { remote } from 'electron';
@@ -15,12 +15,13 @@ export class StartupTabsStore {
 
   public isLoaded = false;
 
-  @observable
   public list: IStartupTab[] = [];
 
   private store: Store;
 
   public constructor(store: Store) {
+    makeObservable(this, { list: observable });
+
     this.store = store;
   }
 

@@ -1,13 +1,14 @@
-import { observable } from 'mobx';
+import { makeObservable, observable } from 'mobx';
 import { ipcRenderer } from 'electron';
 
 import { IDownloadItem } from '~/interfaces';
 
 export class DownloadsStore {
-  @observable
   public list: IDownloadItem[] = [];
 
   public constructor() {
+    makeObservable(this, { list: observable });
+
     ipcRenderer.on('download-started', (e, item: IDownloadItem) => {
       this.list.push(item);
 

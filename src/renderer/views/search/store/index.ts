@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { ipcRenderer } from 'electron';
-import { observable, computed } from 'mobx';
+import { observable, computed, makeObservable } from 'mobx';
 import { ISuggestion, IVisitedItem } from '~/interfaces';
 import { SuggestionsStore } from './suggestions';
 import { DialogStore } from '~/models/dialog-store';
@@ -67,6 +67,14 @@ export class Store extends DialogStore {
     super({
       visibilityWrapper: false,
       persistent: true,
+    });
+
+    makeObservable(this, {
+      visitedItems: observable,
+      tabs: observable,
+      inputText: observable,
+      searchedTabs: computed,
+      searchEngine: computed,
     });
 
     ipcRenderer.on('visible', (e, visible, data) => {

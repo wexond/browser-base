@@ -1,26 +1,25 @@
 import { ipcRenderer } from 'electron';
-import { observable, computed } from 'mobx';
+import { observable, computed, makeObservable } from 'mobx';
 import { parse } from 'url';
 import { WEBUI_BASE_URL, WEBUI_PROTOCOL } from '~/constants/files';
 import { DialogStore } from '~/models/dialog-store';
 
 export class Store extends DialogStore {
-  @observable
-  public title = '';
-
-  @observable
-  public url = '';
-
-  @observable
-  public x = 0;
-
-  @observable
-  public xTransition = false;
-
   private timeout: any;
   private timeout1: any;
 
-  @computed
+  // Observable
+
+  public title = '';
+
+  public url = '';
+
+  public x = 0;
+
+  public xTransition = false;
+
+  // Computed
+
   public get domain() {
     const parsed = parse(this.url);
     if (
@@ -39,6 +38,14 @@ export class Store extends DialogStore {
 
   constructor() {
     super({ visibilityWrapper: false, persistent: true });
+
+    makeObservable(this, {
+      title: observable,
+      url: observable,
+      x: observable,
+      xTransition: observable,
+      domain: computed,
+    });
 
     ipcRenderer.on('visible', (e, visible, tab) => {
       clearTimeout(this.timeout);

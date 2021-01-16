@@ -1,6 +1,6 @@
 import { ipcRenderer } from 'electron';
 import * as React from 'react';
-import { observable } from 'mobx';
+import { action, makeObservable, observable } from 'mobx';
 
 import { Textfield } from '~/renderer/components/Textfield';
 import { PasswordInput } from '~/renderer/components/PasswordInput';
@@ -8,10 +8,8 @@ import { IFormFillData } from '~/interfaces';
 import { DialogStore } from '~/models/dialog-store';
 
 export class Store extends DialogStore {
-  @observable
   public content: 'save' | 'update' | 'list';
 
-  @observable
   public list: IFormFillData[] = [];
 
   public usernameRef = React.createRef<Textfield>();
@@ -22,6 +20,12 @@ export class Store extends DialogStore {
 
   public constructor() {
     super({ hideOnBlur: false });
+
+    makeObservable(this, {
+      content: observable,
+      list: observable,
+      remove: action,
+    });
 
     ipcRenderer.on('credentials-update', (e, data) => {
       const { username, password, content, list } = data;

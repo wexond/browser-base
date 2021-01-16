@@ -1,21 +1,21 @@
 /* eslint-disable */
 const { resolve, join } = require('path');
 const { writeFileSync, readFileSync, existsSync } = require('fs');
-const merge = require('webpack-merge');
+const { merge } = require('webpack-merge');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const createStyledComponentsTransformer = require('typescript-plugin-styled-components')
   .default;
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 /* eslint-enable */
 
 const INCLUDE = resolve(__dirname, 'src');
 
 const BUILD_FLAGS = {
   ENABLE_EXTENSIONS: true,
-  ENABLE_AUTOFILL: false,
+  ENABLE_AUTOFILL: false
 };
 
 process.env = {
@@ -49,7 +49,7 @@ const styledComponentsTransformer = createStyledComponentsTransformer({
 const config = {
   mode: dev ? 'development' : 'production',
 
-  devtool: dev ? 'eval-source-map' : 'none',
+  devtool: dev ? 'eval-source-map' : false,
 
   output: {
     path: resolve(__dirname, 'build'),
@@ -77,7 +77,7 @@ const config = {
             loader: 'ts-loader',
             options: {
               experimentalWatchApi: dev,
-              transpileOnly: true, // TODO: dev
+              transpileOnly: true, // |dev| to throw CI when a ts error occurs
               getCustomTransformers: () => ({
                 before: [styledComponentsTransformer],
               }),
@@ -101,6 +101,7 @@ const config = {
     alias: {
       '~': INCLUDE,
     },
+    plugins: [new TsconfigPathsPlugin()],
   },
 
   plugins: [
@@ -124,17 +125,11 @@ const config = {
                 },
               },
               parallel: true,
-              cache: true,
             }),
           ]
         : [],
   },
 };
-
-if (dev) {
-  config.plugins.push(new ForkTsCheckerWebpackPlugin());
-  config.plugins.push(new HardSourceWebpackPlugin());
-}
 
 function getConfig(...cfg) {
   return merge(config, ...cfg);
@@ -215,16 +210,14 @@ const getBaseConfig = (name) => {
       cacheGroups: {
         commons: {
           test: /[\\/]node_modules[\\/]/,
-          name(module) {
+          name(module, chunks) {
             const packageName = module.context
               .match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1]
               .replace('@', 'at');
 
             const bundleName = `npm.${packageName}.${name}`;
 
-            chunksEntriesMap[bundleName] = Array.from(module._chunks).map(
-              (x) => x.name,
-            );
+            chunksEntriesMap[bundleName] = chunks.map((x) => x.name);
 
             if (prebuild) {
               writeFileSync(
@@ -248,6 +241,8 @@ const getBaseConfig = (name) => {
             'AfterOptimizeChunkAssets',
             (chunks) => {
               for (const chunk of chunks) {
+                if (!chunk.name) continue;
+
                 if (chunk.name.indexOf('~') !== -1) {
                   chunksEntriesMap[chunk.name] = chunk.name
                     .split('.')[0]

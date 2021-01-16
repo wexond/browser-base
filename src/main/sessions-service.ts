@@ -12,7 +12,7 @@ import { extractZip } from '~/utils/zip';
 import { extensions, _setFallbackSession } from 'electron-extensions';
 import { requestPermission } from './dialogs/permissions';
 
-// TODO: move windows list to the corresponding sessions
+// TODO: sessions should be separate.  This structure actually doesn't make sense.
 export class SessionsService {
   public view = session.fromPartition('persist:view');
   public viewIncognito = session.fromPartition('view_incognito');
@@ -298,6 +298,7 @@ export class SessionsService {
     */
   }
 
+  // Loading extensions in an off the record BrowserContext is not supported.
   public async loadExtensions() {
     if (!process.env.ENABLE_EXTENSIONS) return;
 

@@ -1,6 +1,7 @@
 import { protocol } from 'electron';
 import { join } from 'path';
 import { parse } from 'url';
+import { ERROR_PROTOCOL, WEBUI_PROTOCOL } from '~/constants/files';
 
 protocol.registerSchemesAsPrivileged([
   {
@@ -18,7 +19,7 @@ protocol.registerSchemesAsPrivileged([
 
 export const registerProtocol = (session: Electron.Session) => {
   session.protocol.registerFileProtocol(
-    'wexond-error',
+    ERROR_PROTOCOL,
     (request, callback: any) => {
       const parsed = parse(request.url);
 
@@ -28,14 +29,11 @@ export const registerProtocol = (session: Electron.Session) => {
         });
       }
     },
-    (error) => {
-      if (error) console.error(error);
-    },
   );
 
   if (process.env.NODE_ENV !== 'development') {
     session.protocol.registerFileProtocol(
-      'wexond',
+      WEBUI_PROTOCOL,
       (request, callback: any) => {
         const parsed = parse(request.url);
 
@@ -46,9 +44,6 @@ export const registerProtocol = (session: Electron.Session) => {
         }
 
         callback({ path: join(__dirname, parsed.path) });
-      },
-      (error) => {
-        if (error) console.error(error);
       },
     );
   }

@@ -27,14 +27,6 @@ const extPopupConfig = getConfig({
 
   entry: {},
   output: {},
-
-  devServer: {
-    contentBase: join(__dirname, 'build'),
-    port: PORT,
-    hot: true,
-    inline: true,
-    disableHostCheck: true,
-  },
 });
 
 applyEntries('app', appConfig, [

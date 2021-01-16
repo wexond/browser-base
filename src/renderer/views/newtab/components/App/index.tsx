@@ -7,7 +7,6 @@ import { ThemeProvider } from 'styled-components';
 import { Wrapper, Content, IconItem, Menu, Image, RightBar } from './style';
 import { TopSites } from '../TopSites';
 import { News } from '../News';
-import { WEBUI_BASE_URL, WEBUI_URL_SUFFIX } from '~/constants/files';
 import { Preferences } from '../Preferences';
 import {
   ICON_TUNE,
@@ -18,13 +17,14 @@ import {
   ICON_EXTENSIONS,
 } from '~/renderer/constants/icons';
 import { WebUIStyle } from '~/renderer/mixins/default-styles';
+import { getWebUIURL } from '~/common/webui';
 
 window.addEventListener('mousedown', () => {
   store.dashboardSettingsVisible = false;
 });
 
 const onIconClick = (name: string) => () => {
-  window.location.href = `${WEBUI_BASE_URL}${name}${WEBUI_URL_SUFFIX}`;
+  window.location.href = getWebUIURL(name);
 };
 
 const onTuneClick = () => {

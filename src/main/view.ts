@@ -3,7 +3,11 @@ import { parse as parseUrl } from 'url';
 import { getViewMenu } from './menus/view';
 import { AppWindow } from './windows';
 import { IHistoryItem, IBookmark } from '~/interfaces';
-import { WEBUI_BASE_URL } from '~/constants/files';
+import {
+  ERROR_PROTOCOL,
+  NETWORK_ERROR_HOST,
+  WEBUI_BASE_URL,
+} from '~/constants/files';
 import { NEWTAB_URL } from '~/constants/tabs';
 import {
   ZOOM_FACTOR_MIN,
@@ -27,6 +31,8 @@ export class View {
   public incognito = false;
 
   public errorURL = '';
+
+  private hasError = false;
 
   private window: AppWindow;
 
@@ -70,7 +76,7 @@ export class View {
     this.webContents.userAgent = this.webContents.userAgent
       .replace(/ Wexond\\?.([^\s]+)/g, '')
       .replace(/ Electron\\?.([^\s]+)/g, '')
-      .replace(/Chrome\\?.([^\s]+)/g, 'Chrome/83.0.4103.97');
+      .replace(/Chrome\\?.([^\s]+)/g, 'Chrome/87.0.4280.141');
 
     (this.webContents as any).windowId = window.win.id;
 
@@ -105,6 +111,7 @@ export class View {
       this.updateData();
 
       this.emitEvent('title-updated', title);
+      this.updateURL(this.webContents.getURL());
     });
 
     this.webContents.addListener('did-navigate', async (e, url) => {
@@ -129,11 +136,14 @@ export class View {
     this.webContents.addListener('did-stop-loading', () => {
       this.updateNavigationState();
       this.emitEvent('loading', false);
+      this.updateURL(this.webContents.getURL());
     });
 
     this.webContents.addListener('did-start-loading', () => {
+      this.hasError = false;
       this.updateNavigationState();
       this.emitEvent('loading', true);
+      this.updateURL(this.webContents.getURL());
     });
 
     this.webContents.addListener('did-start-navigation', async (e, ...args) => {
@@ -142,6 +152,7 @@ export class View {
       this.favicon = '';
 
       this.emitEvent('load-commit', ...args);
+      this.updateURL(this.webContents.getURL());
     });
 
     this.webContents.addListener(
@@ -174,11 +185,15 @@ export class View {
     this.webContents.addListener(
       'did-fail-load',
       (e, errorCode, errorDescription, validatedURL, isMainFrame) => {
-        //ignore -3 (ABORTED) - An operation was aborted (due to user action).
+        // ignore -3 (ABORTED) - An operation was aborted (due to user action).
         if (isMainFrame && errorCode !== -3) {
           this.errorURL = validatedURL;
 
-          this.webContents.loadURL(`wexond-error://network-error/${errorCode}`);
+          this.hasError = true;
+
+          this.webContents.loadURL(
+            `${ERROR_PROTOCOL}://${NETWORK_ERROR_HOST}/${errorCode}`,
+          );
         }
       },
     );
@@ -281,7 +296,7 @@ export class View {
   }
 
   public updateNavigationState() {
-    if (this.browserView.isDestroyed()) return;
+    if (this.browserView.webContents.isDestroyed()) return;
 
     if (this.window.viewManager.selectedId === this.id) {
       this.window.send('update-navigation-state', {
@@ -292,12 +307,16 @@ export class View {
   }
 
   public destroy() {
-    this.browserView.destroy();
+    (this.browserView.webContents as any).destroy();
     this.browserView = null;
   }
 
   public async updateCredentials() {
-    if (!process.env.ENABLE_AUTOFILL || this.browserView.isDestroyed()) return;
+    if (
+      !process.env.ENABLE_AUTOFILL ||
+      this.browserView.webContents.isDestroyed()
+    )
+      return;
 
     const item = await Application.instance.storage.findOne<any>({
       scope: 'formfill',
@@ -313,7 +332,7 @@ export class View {
     if (
       url !== this.lastUrl &&
       !url.startsWith(WEBUI_BASE_URL) &&
-      !url.startsWith('wexond-error://') &&
+      !url.startsWith(`${ERROR_PROTOCOL}://`) &&
       !this.incognito
     ) {
       const historyItem: IHistoryItem = {
@@ -343,9 +362,9 @@ export class View {
   }
 
   public updateURL = (url: string) => {
-    this.emitEvent('url-updated', url);
-
     if (this.lastUrl === url) return;
+
+    this.emitEvent('url-updated', this.hasError ? this.errorURL : url);
 
     this.lastUrl = url;
 

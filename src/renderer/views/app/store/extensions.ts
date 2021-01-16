@@ -1,6 +1,6 @@
 /* eslint @typescript-eslint/camelcase: 0 */
 
-import { observable } from 'mobx';
+import { makeObservable, observable } from 'mobx';
 import { join } from 'path';
 
 import { IBrowserAction } from '../models';
@@ -9,16 +9,19 @@ import { ipcRenderer } from 'electron';
 import store from '.';
 
 export class ExtensionsStore {
-  @observable
   public browserActions: IBrowserAction[] = [];
 
-  @observable
   public defaultBrowserActions: IBrowserAction[] = [];
 
-  @observable
   public currentlyToggledPopup = '';
 
   public constructor() {
+    makeObservable(this, {
+      browserActions: observable,
+      defaultBrowserActions: observable,
+      currentlyToggledPopup: observable,
+    });
+
     this.load();
 
     ipcRenderer.on('load-browserAction', async (e, extension) => {

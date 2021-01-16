@@ -1,4 +1,4 @@
-import { observable } from 'mobx';
+import { makeObservable, observable } from 'mobx';
 
 import { IStartupTab } from '~/interfaces/startup-tab';
 import { PreloadDatabase } from '~/preloads/models/database';
@@ -10,6 +10,10 @@ export class StartupTabsStore {
 
   @observable
   public list: IStartupTab[] = [];
+
+  constructor() {
+    makeObservable(this);
+  }
 
   public async load() {
     if (this.isLoaded) return;

@@ -1,5 +1,5 @@
 import { Menu, ipcRenderer } from 'electron';
-import { observable, toJS } from 'mobx';
+import { makeObservable, observable, toJS } from 'mobx';
 import { IBookmark } from '~/interfaces';
 import { Store } from '../store';
 
@@ -9,14 +9,19 @@ export class BookmarkBarStore {
   private staticMainID: string;
   private store: Store;
 
-  @observable
   public list: IBookmark[] = [];
-  @observable
+
   public bookmarkBarItems: IBookmark[] = [];
-  @observable
+
   public overflowItems: IBookmark[] = [];
 
   public constructor(store: Store) {
+    makeObservable(this, {
+      list: observable,
+      bookmarkBarItems: observable,
+      overflowItems: observable,
+    });
+
     this.store = store;
     this.load();
 
@@ -74,10 +79,7 @@ export class BookmarkBarStore {
     }
     this.list = this.list.filter((x) => !ids.includes(x._id));
 
-    ipcRenderer.send(
-      'bookmarks-remove',
-      toJS(ids, { recurseEverything: true }),
-    );
+    ipcRenderer.send('bookmarks-remove', toJS(ids));
   }
 
   public showOverflow = (event: any) => {
@@ -88,7 +90,7 @@ export class BookmarkBarStore {
     ipcRenderer.invoke(
       `show-bookmarks-bar-dropdown-${this.store.windowId}`,
       this.staticMainID,
-      toJS(this.overflowItems, { recurseEverything: true }),
+      toJS(this.overflowItems),
       { x, y },
     );
   };
@@ -98,7 +100,7 @@ export class BookmarkBarStore {
     const y = Math.floor(clientRect.bottom) + 12;
     const x = Math.floor(clientRect.left) - 30;
 
-    const bookmarks = toJS(this.list, { recurseEverything: true });
+    const bookmarks = toJS(this.list);
     ipcRenderer.invoke(
       `show-bookmarks-bar-dropdown-${this.store.windowId}`,
       id,
@@ -114,12 +116,12 @@ export class BookmarkBarStore {
     const item = this.list.find(({ _id }) => _id === id);
     ipcRenderer.invoke(
       `show-bookmarks-bar-context-menu-${this.store.windowId}`,
-      toJS(item, { recurseEverything: true }),
+      toJS(item),
     );
   }
 
   private handleWindowResize() {
-    let debounceTimer: number;
+    let debounceTimer: any;
 
     window.addEventListener('resize', () => {
       if (debounceTimer) {

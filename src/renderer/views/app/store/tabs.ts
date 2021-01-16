@@ -1,4 +1,10 @@
-import { observable, action, computed } from 'mobx';
+import {
+  observable,
+  action,
+  computed,
+  makeObservable,
+  makeAutoObservable,
+} from 'mobx';
 import * as React from 'react';
 
 import { ITab, ITabGroup } from '../models';
@@ -16,17 +22,13 @@ import { TOOLBAR_HEIGHT } from '~/constants/design';
 import { TabEvent } from '~/interfaces/tabs';
 
 export class TabsStore {
-  @observable
   public isDragging = false;
 
-  @observable
-  public hoveredTabId: number;
+  public hoveredTabId = -1;
 
-  @observable
   public list: ITab[] = [];
 
-  @observable
-  public selectedTabId: number;
+  public selectedTabId = -1;
 
   public removedTabs = 0;
 
@@ -48,17 +50,24 @@ export class TabsStore {
 
   public leftMargins = 0;
 
-  @computed
   public get selectedTab() {
     return this.getTabById(this.selectedTabId);
   }
 
-  @computed
   public get hoveredTab() {
     return this.getTabById(this.hoveredTabId);
   }
 
   public constructor() {
+    makeObservable(this, {
+      list: observable,
+      isDragging: observable,
+      hoveredTabId: observable,
+      selectedTabId: observable,
+      selectedTab: computed,
+      hoveredTab: computed,
+    });
+
     window.addEventListener('mouseup', this.onMouseUp);
     window.addEventListener('mousemove', this.onMouseMove);
     window.addEventListener('resize', this.onResize);
@@ -126,52 +135,29 @@ export class TabsStore {
       const tab = this.getTabById(tabId);
 
       if (tab) {
-        if (event === 'blocked-ad') {
-          tab.blockedAds++;
-        } else if (
-          event === 'url-updated' ||
-          event === 'title-updated' ||
-          event === 'favicon-updated'
-        ) {
-          if (event === 'url-updated') {
-            const [url] = args;
-            tab.url = url;
+        if (event === 'blocked-ad') tab.blockedAds++;
+        if (event === 'title-updated') tab.title = args[0];
+        if (event === 'favicon-updated') tab.favicon = args[0];
+        if (event === 'did-navigate') tab.favicon = '';
+        if (event === 'media-playing') tab.isPlaying = true;
+        if (event === 'media-paused') tab.isPlaying = false;
+        if (event === 'loading') tab.loading = args[0];
+        if (event === 'pinned') tab.isPinned = args[0];
+        if (event === 'credentials') tab.hasCredentials = args[0];
 
-            if (tab.id === this.selectedTabId && !store.addressbarFocused) {
-              this.selectedTab.addressbarValue = null;
-            }
-          } else if (event === 'title-updated') {
-            const [title] = args;
-            tab.title = title;
-          } else if (event === 'favicon-updated') {
-            const [favicon] = args;
-            tab.favicon = favicon;
+        if (event === 'url-updated') {
+          const [url] = args;
+          tab.url = url;
+
+          if (tab.id === this.selectedTabId && !store.addressbarFocused) {
+            this.selectedTab.addressbarValue = null;
           }
+        }
 
-          tab.updateData();
-        } else if (event === 'load-commit') {
+        if (event === 'load-commit') {
           const [, , isMainFrame] = args;
           if (isMainFrame) {
             tab.blockedAds = 0;
-          }
-        } else if (event === 'did-navigate') {
-          tab.favicon = '';
-        } else if (event === 'media-playing') {
-          tab.isPlaying = true;
-        } else if (event === 'media-paused') {
-          tab.isPlaying = false;
-        } else if (
-          event === 'loading' ||
-          event === 'pinned' ||
-          event === 'credentials'
-        ) {
-          const [state] = args;
-          if (event === 'loading') {
-            tab.loading = state;
-          } else if (event === 'pinned') {
-            tab.isPinned = state;
-          } else if (event === 'credentials') {
-            tab.hasCredentials = state;
           }
         }
       }
@@ -216,7 +202,7 @@ export class TabsStore {
   @action public createTab(
     options: chrome.tabs.CreateProperties,
     id: number,
-    tabGroupId: number = undefined,
+    tabGroupId = -1,
   ) {
     this.removedTabs = 0;
 
@@ -477,8 +463,12 @@ export class TabsStore {
   public replaceTab(firstTab: ITab, secondTab: ITab) {
     const index = this.list.indexOf(secondTab);
 
-    this.list[this.list.indexOf(firstTab)] = secondTab;
-    this.list[index] = firstTab;
+    const list = [...this.list];
+
+    list[this.list.indexOf(firstTab)] = secondTab;
+    list[index] = firstTab;
+
+    this.list = list;
 
     firstTab.updateData();
     secondTab.updateData();

@@ -1,4 +1,4 @@
-import { observable, computed } from 'mobx';
+import { observable, computed, makeObservable } from 'mobx';
 import { EXTENSIONS_PROTOCOL } from '~/constants';
 import { format } from 'url';
 
@@ -10,11 +10,24 @@ interface Options {
 }
 
 export class IBrowserAction {
-  @observable
-  public icon?: string;
+  // Observable
+  public icon?: string = '';
 
-  @observable
-  private _popup?: string;
+  public _popup?: string = '';
+
+  public title?: string = '';
+
+  public badgeBackgroundColor?: string = 'gray';
+
+  public badgeTextColor?: string = 'white';
+
+  public badgeText?: string = '';
+
+  // Computed
+  public get popup() {
+    return this._popup;
+  }
+  // ---
 
   public set popup(url: string) {
     if (!url) {
@@ -31,23 +44,6 @@ export class IBrowserAction {
     }
   }
 
-  @computed
-  public get popup() {
-    return this._popup;
-  }
-
-  @observable
-  public title?: string;
-
-  @observable
-  public badgeBackgroundColor?: string = 'gray';
-
-  @observable
-  public badgeTextColor?: string = 'white';
-
-  @observable
-  public badgeText?: string = '';
-
   public tabId?: number;
 
   public extensionId?: string;
@@ -55,6 +51,16 @@ export class IBrowserAction {
   public wasOpened = false;
 
   public constructor(options: Options) {
+    makeObservable(this, {
+      icon: observable,
+      _popup: observable,
+      title: observable,
+      badgeBackgroundColor: observable,
+      badgeText: observable,
+      badgeTextColor: observable,
+      popup: computed,
+    });
+
     const { icon, title, extensionId, popup } = options;
     this.icon = icon;
     this.title = title;

@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { observable } from 'mobx';
+import { makeObservable, observable } from 'mobx';
 import { ipcRenderer } from 'electron';
 import { DialogStore } from '~/models/dialog-store';
 import { callViewMethod } from '~/utils/view';
@@ -16,19 +16,23 @@ const defaultFindInfo = {
 };
 
 export class Store extends DialogStore {
-  @observable
-  public tabId = -1;
-
-  @observable
-  public tabsFindInfo = new Map<number, IFindInfo>();
-
   public findInputRef = React.createRef<HTMLInputElement>();
 
-  @observable
+  // Observable
+  public tabId = -1;
+
+  public tabsFindInfo = new Map<number, IFindInfo>();
+
   public findInfo = defaultFindInfo;
 
   public constructor() {
     super({ hideOnBlur: false });
+
+    makeObservable(this, {
+      tabId: observable,
+      tabsFindInfo: observable,
+      findInfo: observable,
+    });
 
     this.init();
 

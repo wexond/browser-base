@@ -1,12 +1,9 @@
 import * as http from 'http';
 import * as https from 'https';
 import { parse } from 'url';
+import { ResponseDetails } from '~/common/rpc/network';
 
-interface Data extends http.IncomingMessage {
-  data: string;
-}
-
-export const requestURL = (url: string): Promise<Data> =>
+export const requestURL = (url: string): Promise<ResponseDetails> =>
   new Promise((resolve, reject) => {
     const options = parse(url);
 
@@ -25,8 +22,10 @@ export const requestURL = (url: string): Promise<Data> =>
       });
 
       res.on('end', () => {
-        const d: any = { ...res, data };
-        resolve(d);
+        resolve({
+          statusCode: res.statusCode,
+          data,
+        });
       });
 
       res.on('error', (e) => {
