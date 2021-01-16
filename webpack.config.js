@@ -28,8 +28,8 @@ const mainConfig = getConfig({
           from:
             'node_modules/@cliqz/adblocker-electron-preload/dist/preload.cjs.js',
           to: 'preload.js',
-          transform: (fileContent, path) => {
-            return terser.minify(fileContent.toString()).code.toString();
+          transform: async (fileContent, path) => {
+            return (await terser.minify(fileContent.toString())).code.toString();
           },
         },
       ],
