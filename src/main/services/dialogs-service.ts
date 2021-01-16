@@ -73,7 +73,7 @@ export class DialogsService {
 
     this.browserViews.push(view);
 
-    this.browserViewDetails.set(view.id, false);
+    this.browserViewDetails.set(view.webContents.id, false);
 
     return view;
   }
@@ -94,7 +94,9 @@ export class DialogsService {
 
     let browserView = foundDialog
       ? foundDialog.browserView
-      : this.browserViews.find((x) => !this.browserViewDetails.get(x.id));
+      : this.browserViews.find(
+          (x) => !this.browserViewDetails.get(x.webContents.id),
+        );
 
     if (!browserView) {
       browserView = this.createBrowserView();
@@ -111,7 +113,7 @@ export class DialogsService {
 
     browserWindow.webContents.send('dialog-visibility-change', name, true);
 
-    this.browserViewDetails.set(browserView.id, true);
+    this.browserViewDetails.set(browserView.webContents.id, true);
 
     if (foundDialog) {
       browserWindow.addBrowserView(browserView);
@@ -140,7 +142,7 @@ export class DialogsService {
 
     const dialog: IDialog = {
       browserView,
-      id: browserView.id,
+      id: browserView.webContents.id,
       name,
       tabIds: [tabAssociation?.tabId],
       _sendTabInfo: (tabId) => {
@@ -172,7 +174,7 @@ export class DialogsService {
 
         this.dialogs = this.dialogs.filter((x) => x.id !== dialog.id);
 
-        this.browserViewDetails.set(browserView.id, false);
+        this.browserViewDetails.set(browserView.webContents.id, false);
 
         if (this.browserViews.length > 1) {
           // TODO: garbage collect unused BrowserViews?
@@ -301,12 +303,13 @@ export class DialogsService {
   };
 
   public destroy = () => {
-    this.getBrowserViews().forEach((x) => x.destroy());
+    this.getBrowserViews().forEach((x) => (x.webContents as any).destroy());
   };
 
   public sendToAll = (channel: string, ...args: any[]) => {
     this.getBrowserViews().forEach(
-      (x) => !x.isDestroyed() && x.webContents.send(channel, ...args),
+      (x) =>
+        !x.webContents.isDestroyed() && x.webContents.send(channel, ...args),
     );
   };
 

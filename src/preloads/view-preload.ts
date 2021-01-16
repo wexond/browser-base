@@ -2,7 +2,7 @@ import { ipcRenderer, webFrame } from 'electron';
 
 import AutoComplete from './models/auto-complete';
 import { getTheme } from '~/utils/themes';
-import { WEBUI_BASE_URL } from '~/constants/files';
+import { ERROR_PROTOCOL, WEBUI_BASE_URL } from '~/constants/files';
 import { injectChromeWebstoreInstallButton } from './chrome-webstore';
 
 const tabId = ipcRenderer.sendSync('get-webcontents-id');
@@ -122,7 +122,7 @@ if (
 const settings = ipcRenderer.sendSync('get-settings-sync');
 if (
   window.location.href.startsWith(WEBUI_BASE_URL) ||
-  window.location.protocol === 'wexond-error:'
+  window.location.protocol === `${ERROR_PROTOCOL}:`
 ) {
   (async function () {
     const w = await webFrame.executeJavaScript('window');

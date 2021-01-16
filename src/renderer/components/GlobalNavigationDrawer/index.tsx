@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { NavigationDrawer } from '../NavigationDrawer';
 import { observer } from 'mobx-react-lite';
-import { WEBUI_BASE_URL, WEBUI_URL_SUFFIX } from '~/constants/files';
 import {
   ICON_SETTINGS,
   ICON_HISTORY,
@@ -9,6 +8,7 @@ import {
   ICON_EXTENSIONS,
   ICON_DOWNLOAD,
 } from '~/renderer/constants/icons';
+import { getWebUIURL } from '~/common/webui';
 
 const MenuItem = observer(
   ({
@@ -21,12 +21,8 @@ const MenuItem = observer(
     icon?: string;
   }) => (
     <NavigationDrawer.Item
-      onClick={() =>
-        (window.location.href = `${WEBUI_BASE_URL}${name}${WEBUI_URL_SUFFIX}`)
-      }
-      selected={window.location.href.startsWith(
-        `${WEBUI_BASE_URL}${name}${WEBUI_URL_SUFFIX}`,
-      )}
+      onClick={() => (window.location.href = getWebUIURL(name))}
+      selected={window.location.href.startsWith(getWebUIURL(name))}
       icon={icon}
     >
       {children}

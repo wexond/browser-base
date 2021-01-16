@@ -1,18 +1,18 @@
-import { observable } from 'mobx';
+import { makeObservable, observable } from 'mobx';
 import { ipcRenderer } from 'electron';
 
 import { getDomain } from '~/utils';
 import { DialogStore } from '~/models/dialog-store';
 
 export class Store extends DialogStore {
-  @observable
   public permissions: string[] = [];
 
-  @observable
-  public domain: string;
+  public domain = '';
 
   public constructor() {
     super({ hideOnBlur: false });
+
+    makeObservable(this, { permissions: observable, domain: observable });
 
     ipcRenderer.on('update-tab-info', (e, tabId, { url, name, details }) => {
       this.domain = getDomain(url);

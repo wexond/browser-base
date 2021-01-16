@@ -1,5 +1,4 @@
-import { observable, computed } from 'mobx';
-import * as React from 'react';
+import { observable, computed, makeObservable, makeAutoObservable } from 'mobx';
 
 import { TabsStore } from './tabs';
 import { TabGroupsStore } from './tab-groups';
@@ -10,7 +9,6 @@ import { SettingsStore } from './settings';
 import { getCurrentWindow } from '../utils/windows';
 import { StartupTabsStore } from './startup-tabs';
 import { getTheme } from '~/utils/themes';
-import { HistoryStore } from './history';
 import { AutoFillStore } from './autofill';
 import { IDownloadItem, BrowserActionChangeType } from '~/interfaces';
 import { IBrowserAction } from '../models';
@@ -20,7 +18,6 @@ import { BookmarkBarStore } from './bookmark-bar';
 
 export class Store {
   public settings = new SettingsStore(this);
-  public history = new HistoryStore();
   public addTab = new AddTabStore();
   public tabs = new TabsStore();
   public extensions = new ExtensionsStore();
@@ -29,30 +26,87 @@ export class Store {
   public autoFill = new AutoFillStore();
   public bookmarksBar = new BookmarkBarStore(this);
 
-  @computed
-  public get theme() {
-    return getTheme(this.settings.object.theme);
-  }
-
   public inputRef: HTMLInputElement;
 
   public canOpenSearch = false;
 
-  @observable
+  public mouse = {
+    x: 0,
+    y: 0,
+  };
+
+  public windowId = getCurrentWindow().id;
+
+  public barHideTimer = 0;
+
+  public isIncognito = ipcRenderer.sendSync(`is-incognito-${this.windowId}`);
+
+  // Observable
   public addressbarTextVisible = true;
 
-  @observable
   public addressbarFocused = false;
 
-  @observable
   public addressbarEditing = false;
 
-  @computed
+  public isAlwaysOnTop = false;
+
+  public isFullscreen = false;
+
+  public isHTMLFullscreen = false;
+
+  public titlebarVisible = false;
+
+  public updateAvailable = false;
+
+  public navigationState = {
+    canGoBack: false,
+    canGoForward: false,
+  };
+
+  public downloadsButtonVisible = false;
+
+  public downloadNotification = false;
+
+  public downloads: IDownloadItem[] = [];
+
+  public isBookmarked = false;
+
+  public zoomFactor = 1;
+
+  public dialogsVisibility: { [key: string]: boolean } = {
+    menu: false,
+    'add-bookmark': false,
+    zoom: false,
+    'extension-popup': false,
+    'downloads-dialog': false,
+  };
+
+  // Computed
+
+  public get downloadProgress() {
+    const downloading = this.downloads.filter((x) => !x.completed);
+
+    if (downloading.length === 0) return 0;
+
+    const { totalBytes } = this.downloads.reduce((prev, cur) => ({
+      totalBytes: prev.totalBytes + cur.totalBytes,
+    }));
+
+    const { receivedBytes } = this.downloads.reduce((prev, cur) => ({
+      receivedBytes: prev.receivedBytes + cur.receivedBytes,
+    }));
+
+    return receivedBytes / totalBytes;
+  }
+
   public get isCompact() {
     return this.settings.object.topBarVariant === 'compact';
   }
 
-  @computed
+  public get theme() {
+    return getTheme(this.settings.object.theme);
+  }
+
   public get addressbarValue() {
     const tab = this.tabs.selectedTab;
     if (tab?.addressbarValue != null) return tab?.addressbarValue;
@@ -63,7 +117,6 @@ export class Store {
     return '';
   }
 
-  @computed
   public get addressbarUrlSegments() {
     let capturedText = '';
     let grayOutCaptured = false;
@@ -116,81 +169,30 @@ export class Store {
     return segments;
   }
 
-  @observable
-  public isAlwaysOnTop = false;
-
-  @observable
-  public isFullscreen = false;
-
-  @observable
-  public isHTMLFullscreen = false;
-
-  @observable
-  public titlebarVisible = false;
-
-  @observable
-  public updateAvailable = false;
-
-  @observable
-  public navigationState = {
-    canGoBack: false,
-    canGoForward: false,
-  };
-
-  @observable
-  public downloadsButtonVisible = false;
-
-  @observable
-  public downloadNotification = false;
-
-  @observable
-  public downloads: IDownloadItem[] = [];
-
-  @observable
-  public isBookmarked = false;
-
-  @observable
-  public zoomFactor = 1;
-
-  @observable
-  public dialogsVisibility: { [key: string]: boolean } = {
-    menu: false,
-    'add-bookmark': false,
-    zoom: false,
-    'extension-popup': false,
-    'downloads-dialog': false,
-  };
-
-  @computed
-  public get downloadProgress() {
-    const downloading = this.downloads.filter((x) => !x.completed);
-
-    if (downloading.length === 0) return 0;
-
-    const { totalBytes } = this.downloads.reduce((prev, cur) => ({
-      totalBytes: prev.totalBytes + cur.totalBytes,
-    }));
-
-    const { receivedBytes } = this.downloads.reduce((prev, cur) => ({
-      receivedBytes: prev.receivedBytes + cur.receivedBytes,
-    }));
-
-    return receivedBytes / totalBytes;
-  }
-
-  public mouse = {
-    x: 0,
-    y: 0,
-  };
-
-  public windowId = getCurrentWindow().id;
-
-  public barHideTimer = 0;
-
-  @observable
-  public isIncognito = ipcRenderer.sendSync(`is-incognito-${this.windowId}`);
-
   public constructor() {
+    makeObservable(this, {
+      addressbarTextVisible: observable,
+      addressbarFocused: observable,
+      addressbarEditing: observable,
+      isAlwaysOnTop: observable,
+      isFullscreen: observable,
+      isHTMLFullscreen: observable,
+      titlebarVisible: observable,
+      updateAvailable: observable,
+      navigationState: observable,
+      downloadsButtonVisible: observable,
+      downloadNotification: observable,
+      downloads: observable,
+      isBookmarked: observable,
+      zoomFactor: observable,
+      dialogsVisibility: observable,
+      addressbarUrlSegments: computed,
+      addressbarValue: computed,
+      theme: computed,
+      isCompact: computed,
+      downloadProgress: computed,
+    });
+
     ipcRenderer.on('update-navigation-state', (e, data) => {
       this.navigationState = data;
     });

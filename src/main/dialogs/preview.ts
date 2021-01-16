@@ -2,6 +2,7 @@ import { BrowserWindow } from 'electron';
 import { Application } from '../application';
 import { DIALOG_MARGIN_TOP, DIALOG_MARGIN } from '~/constants/design';
 import { PersistentDialog } from './dialog';
+import { ERROR_PROTOCOL } from '~/constants/files';
 
 const HEIGHT = 256;
 
@@ -38,7 +39,7 @@ export class PreviewDialog extends PersistentDialog {
 
     this.send('visible', true, {
       id,
-      url: url.startsWith('wexond-error') ? errorURL : url,
+      url: url.startsWith(`${ERROR_PROTOCOL}://`) ? errorURL : url,
       title,
       x: this.tab.x - 8,
     });

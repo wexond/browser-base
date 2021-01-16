@@ -1,16 +1,19 @@
 import { ipcRenderer, remote } from 'electron';
-import { observable } from 'mobx';
+import { makeObservable, observable } from 'mobx';
 import { DialogStore } from '~/models/dialog-store';
 
 export class Store extends DialogStore {
-  @observable
   public alwaysOnTop = false;
 
-  @observable
   public updateAvailable = false;
 
   public constructor() {
     super();
+
+    makeObservable(this, {
+      alwaysOnTop: observable,
+      updateAvailable: observable,
+    });
 
     this.init();
 

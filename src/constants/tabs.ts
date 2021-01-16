@@ -1,6 +1,6 @@
-import { WEBUI_BASE_URL, WEBUI_URL_SUFFIX } from './files';
+import { getWebUIURL } from '~/common/webui';
 
-export const NEWTAB_URL = `${WEBUI_BASE_URL}newtab${WEBUI_URL_SUFFIX}`;
+export const NEWTAB_URL = getWebUIURL('newtab');
 
 export const defaultTabOptions: chrome.tabs.CreateProperties = {
   url: NEWTAB_URL,

@@ -29,6 +29,7 @@ import {
   ICON_FIND,
   ICON_PRINT,
 } from '~/renderer/constants/icons';
+import { getWebUIURL } from '~/common/webui';
 
 const onFindClick = () => {
   /*
@@ -77,7 +78,7 @@ const addNewTab = (url: string) => {
 };
 
 const goToWebUIPage = (name: string) => () => {
-  addNewTab(`${WEBUI_BASE_URL}${name}${WEBUI_URL_SUFFIX}`);
+  addNewTab(getWebUIURL(name));
 };
 
 const goToURL = (url: string) => () => {

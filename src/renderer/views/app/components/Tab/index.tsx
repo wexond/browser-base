@@ -302,7 +302,7 @@ export default observer(({ tab }: { tab: ITab }) => {
       ref={tab.ref}
     >
       <TabContainer
-        hasTabGroup={tab.tabGroupId != undefined}
+        hasTabGroup={tab.tabGroupId !== -1}
         pinned={tab.isPinned}
         selected={tab.isSelected}
         style={{
@@ -314,7 +314,7 @@ export default observer(({ tab }: { tab: ITab }) => {
             ? defaultHoverColor
             : defaultColor,
           borderColor:
-            tab.isSelected && tab.tabGroupId != undefined && !store.isCompact
+            tab.isSelected && tab.tabGroupId !== -1 && !store.isCompact
               ? tab.tabGroup.color
               : 'transparent',
         }}

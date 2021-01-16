@@ -54,6 +54,7 @@ const loadFilters = async () => {
 
 const emitBlockedEvent = (request: Request) => {
   const win = Application.instance.windows.findByBrowserView(request.tabId);
+  if (!win) return;
   win.viewManager.views.get(request.tabId).emitEvent('blocked-ad');
 };
 

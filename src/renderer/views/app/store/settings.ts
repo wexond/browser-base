@@ -1,4 +1,4 @@
-import { observable, action, computed } from 'mobx';
+import { observable, action, computed, makeObservable } from 'mobx';
 import { ipcRenderer } from 'electron';
 
 import { ISettings } from '~/interfaces';
@@ -18,15 +18,20 @@ export type SettingsSection =
   | 'system';
 
 export class SettingsStore {
-  @observable
   public selectedSection: SettingsSection = 'appearance';
 
-  @observable
   public object: ISettings = DEFAULT_SETTINGS;
 
   public store: Store;
 
   public constructor(store: Store) {
+    makeObservable(this, {
+      selectedSection: observable,
+      object: observable,
+      searchEngine: computed,
+      updateSettings: action,
+    });
+
     this.store = store;
 
     let firstTime = false;
@@ -43,12 +48,10 @@ export class SettingsStore {
     });
   }
 
-  @computed
   public get searchEngine() {
     return this.object.searchEngines[this.object.searchEngine];
   }
 
-  @action
   public updateSettings(newSettings: ISettings) {
     const prevState = { ...this.object };
     this.object = { ...this.object, ...newSettings };

@@ -3,7 +3,7 @@ import * as Datastore from 'nedb';
 import { fromBuffer } from 'file-type';
 import * as icojs from 'icojs';
 
-import { getPath, requestURL } from '~/utils';
+import { getPath } from '~/utils';
 import {
   IFindOperation,
   IInsertOperation,
@@ -17,6 +17,8 @@ import {
 import { countVisitedTimes } from '~/utils/history';
 import { promises } from 'fs';
 import { Application } from '../application';
+import { requestURL } from '../network/request';
+import parse from 'node-bookmarks-parser';
 
 interface Databases {
   [key: string]: Datastore;
@@ -86,7 +88,7 @@ export class StorageService {
 
       try {
         const file = await promises.readFile(dialogRes.filePaths[0], 'utf8');
-        return file;
+        return parse(file);
       } catch (err) {
         console.error(err);
       }
@@ -211,7 +213,6 @@ export class StorageService {
     for (const key in this.databases) {
       this.databases[key] = this.createDatabase(key.toLowerCase());
     }
-
     this.loadBookmarks();
     await this.loadFavicons();
     this.loadHistory();
