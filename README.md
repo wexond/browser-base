@@ -11,9 +11,23 @@
 [![PayPal](https://img.shields.io/badge/PayPal-Donate-brightgreen?style=flat-square)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=VCPPFUAL4R6M6&source=url)
 [![Discord](https://discordapp.com/api/guilds/307605794680209409/widget.png?style=shield)](https://discord.gg/P7Vn4VX)
 
-Wexond is an extensible and privacy-focused web browser with a totally different user experience, built on top of `Electron` and `React`. It aims to be fast, private, beautiful, extensible and functional.
+Wexond is an extensible and privacy-focused web browser, built on top of `Electron` and `React`, that can also be used as a framework to create a custom web browser.
 
 </div>
+
+# Table of Contents:
+- [Motivation](#motivation)
+- [Features](#features)
+- [Screenshots](#screenshots)
+- [Downloads](#downloads)
+- [Contributing](#contributing)
+  - [Running](#running)
+- [Documentation](#documentation)
+- [License](#license)
+
+# Motivation
+
+Compiling and editing Chromium directly may be challenging and time consuming, so we decided to build Wexond with modern web technologies. Hence, the development effort and time is greatly reduced. Either way Firefox is based on Web Components and Chrome implements new dialogs in WebUI (which essentially is hosted in WebContents).
 
 # Features
 
@@ -53,29 +67,31 @@ If you have found any bugs or just want to see some new features in Wexond, feel
 
 Before running Wexond, please ensure you have **latest** [`Node.js`](https://nodejs.org/en/) and [`Yarn`](https://classic.yarnpkg.com/en/docs/install/#windows-stable) installed on your machine.
 
-When running on Windows, make sure you have build tools installed. You can install them by running this command as **administrator**:
+### Windows
+
+Make sure you have build tools installed. You can install them by running this command as **administrator**:
 
 ```bash
 $ npm i -g windows-build-tools
 ```
 
-Firstly, run this command to install all needed dependencies. If you have encountered any problems, please report it.
-
 ```bash
-$ yarn
+$ yarn # Install needed depedencies.
+$ yarn rebuild # Rebuild native modules using Electron headers.
+$ yarn dev # Run Wexond in development mode
 ```
 
-After a successful installation, the native modules need to be rebuilt using Electron headers. To do this, run:
+### More commands
 
 ```bash
-$ npm run rebuild
+$ yarn compile-win32 # Package Wexond for Windows
+$ yarn compile-linux # Package Wexond for Linux
+$ yarn compile-darwin # Package Wexond for macOS
+$ yarn lint # Runs linter
+$ yarn lint-fix # Runs linter and automatically applies fixes
 ```
 
-The given command below will run Wexond in the development mode.
-
-```bash
-$ npm run dev
-```
+More commands can be found in [`package.json`](package.json).
 
 # Documentation
 
@@ -83,6 +99,8 @@ Guides and the API reference are located in [`docs`](docs) directory.
 
 # License
 
-For commercial or proprietary purposes, please contact me on sentialx@gmail.com
+This project is licensed under [GPL-3](LICENSE) and an additional license under [PATENTS](PATENTS) file.
+
+#### To acquire a license for commercial or proprietary purposes, please contact me on sentialx@gmail.com
 
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fwexond%2Fwexond.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fwexond%2Fwexond?ref=badge_large)
