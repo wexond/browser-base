@@ -21,6 +21,7 @@ Wexond Base is a modern web browser, built on top of modern web technologies suc
 - [Screenshots](#screenshots)
 - [Downloads](#downloads)
 - [Contributing](#contributing)
+- [Development](#development)
   - [Running](#running)
 - [Documentation](#documentation)
 - [License](#license)
@@ -39,6 +40,17 @@ Compiling and editing Chromium directly may be challenging and time consuming, s
 - **Tab groups** - Easily group tabs, so it's hard to get lost.
 - **Scrollable tabs**
 - **Partial support for Chrome extensions** - Install some extensions directly from Chrome Web Store\* (see [#110](https://github.com/wexond/wexond/issues/110)) (WIP)
+
+## Other basic features
+
+- Downloads popup with currently downloaded items (download manager WebUI page is WIP)
+- History manager
+- Bookmarks bar & manager
+- Settings
+- Find in page
+- Dark and light theme
+- Omnibox with autocomplete algorithm similar to Chromium
+- State of the art tab system
 
 # Screenshots
 
@@ -62,6 +74,8 @@ UI compact variant:
 If you have found any bugs or just want to see some new features in Wexond, feel free to open an issue. Every suggestion is very valuable for us, as they help us improve the browsing experience. Also, please don't hesitate to open a pull request. This is really important to us and for the further development of this project.
 
 By opening a pull request, you agree to the conditions of the [Contributor License Agreement](cla.md).
+
+# Development
 
 ## Running
 
