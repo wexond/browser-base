@@ -11,6 +11,10 @@ import { pathExists } from '~/utils/files';
 import { extractZip } from '~/utils/zip';
 import { extensions, _setFallbackSession } from 'electron-extensions';
 import { requestPermission } from './dialogs/permissions';
+import * as rimraf from 'rimraf';
+import { promisify } from 'util';
+
+const rf = promisify(rimraf);
 
 // TODO: sessions should be separate.  This structure actually doesn't make sense.
 export class SessionsService {
@@ -29,9 +33,6 @@ export class SessionsService {
     this.clearCache('incognito');
 
     if (process.env.ENABLE_EXTENSIONS) {
-      // TODO: remove this after fix for e.sender.session
-      _setFallbackSession(this.view);
-
       extensions.initializeSession(
         this.view,
         `${app.getAppPath()}/build/extensions-preload.bundle.js`,
@@ -329,6 +330,17 @@ export class SessionsService {
     }*/
 
     this.extensionsLoaded = true;
+  }
+
+  async uninstallExtension(id: string) {
+    if (!process.env.ENABLE_EXTENSIONS) return;
+
+    const extension = this.view.getExtension(id);
+    if (!extension) return;
+
+    await this.view.removeExtension(id);
+
+    await rf(extension.path);
   }
 
   public onCreateTab = async (details: chrome.tabs.CreateProperties) => {
