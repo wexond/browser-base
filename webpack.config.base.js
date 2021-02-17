@@ -97,6 +97,10 @@ const config = {
 
   externals: {
     keytar: `require('keytar')`,
+    electron: 'require("electron")',
+    fs: 'require("fs")',
+    os: 'require("os")',
+    path: 'require("path")',
   },
 
   optimization: {
@@ -116,6 +120,13 @@ const config = {
       : [],
   },
 };
+
+if (dev) {
+  config.module.rules[1].use.splice(0, 0, {
+    loader: 'babel-loader',
+    options: { plugins: ['react-refresh/babel'] },
+  });
+}
 
 function getConfig(...cfg) {
   return merge(config, ...cfg);

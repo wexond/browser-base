@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { observer } from 'mobx-react-lite';
-import { hot } from 'react-hot-loader/root';
 
 import { SettingsSection } from '../../store';
 import { Appearance } from '../Appearance';
@@ -140,145 +139,143 @@ const onSaveClick = () => {
   }
 };
 
-export default hot(
-  observer(() => {
-    const { selectedSection } = store;
+export default observer(() => {
+  const { selectedSection } = store;
 
-    let dialogTitle = '';
+  let dialogTitle = '';
 
-    if (store.dialogContent === 'edit-search-engine') {
-      dialogTitle = 'Edit search engine';
-    } else if (store.dialogContent === 'add-search-engine') {
-      dialogTitle = 'Add search engine';
-    }
+  if (store.dialogContent === 'edit-search-engine') {
+    dialogTitle = 'Edit search engine';
+  } else if (store.dialogContent === 'add-search-engine') {
+    dialogTitle = 'Add search engine';
+  }
 
-    return (
-      <ThemeProvider
-        theme={{ ...store.theme, dark: store.theme['pages.lightForeground'] }}
+  return (
+    <ThemeProvider
+      theme={{ ...store.theme, dark: store.theme['pages.lightForeground'] }}
+    >
+      <Container
+        onMouseDown={(e) => (store.dialogVisible = false)}
+        darken={store.dialogVisible}
       >
-        <Container
-          onMouseDown={(e) => (store.dialogVisible = false)}
-          darken={store.dialogVisible}
+        <WebUIStyle />
+        <GlobalNavigationDrawer></GlobalNavigationDrawer>
+        <ContextMenu
+          tabIndex={1}
+          ref={store.menuRef}
+          onBlur={onBlur}
+          style={{
+            top: store.menuInfo.top,
+            left: store.menuInfo.left,
+          }}
+          visible={store.menuVisible}
         >
-          <WebUIStyle />
-          <GlobalNavigationDrawer></GlobalNavigationDrawer>
-          <ContextMenu
-            tabIndex={1}
-            ref={store.menuRef}
-            onBlur={onBlur}
+          {store.editedSearchEngine &&
+            store.editedSearchEngine.keyword !== store.searchEngine.keyword && (
+              <>
+                <ContextMenuItem onClick={onMakeDefaultClick} icon=" ">
+                  Make default
+                </ContextMenuItem>
+                <ContextMenuItem onClick={onRemoveClick} icon={ICON_TRASH}>
+                  Remove
+                </ContextMenuItem>
+              </>
+            )}
+          {store.editedSearchEngine && (
+            <ContextMenuItem onClick={onEditClick} icon={ICON_EDIT}>
+              Edit
+            </ContextMenuItem>
+          )}
+        </ContextMenu>
+        <Dialog
+          onMouseDown={(e) => e.stopPropagation()}
+          visible={store.dialogVisible}
+          ref={store.dialogRef}
+          style={{ width: 350 }}
+        >
+          <DialogTitle>{dialogTitle}</DialogTitle>
+          <Textfield
+            style={{ width: '100%' }}
+            dark={store.theme['dialog.lightForeground']}
+            ref={store.searchEngineInputRef}
+            label="Search engine"
+          ></Textfield>
+
+          <Textfield
             style={{
-              top: store.menuInfo.top,
-              left: store.menuInfo.left,
+              width: '100%',
+              marginTop: 16,
             }}
-            visible={store.menuVisible}
+            dark={store.theme['dialog.lightForeground']}
+            ref={store.searchEngineKeywordInputRef}
+            label="Keyword"
+          ></Textfield>
+
+          <Textfield
+            style={{
+              width: '100%',
+              marginTop: 16,
+            }}
+            dark={store.theme['dialog.lightForeground']}
+            ref={store.searchEngineUrlInputRef}
+            label="URL with %s in place of query"
+          ></Textfield>
+
+          <DialogButtons>
+            <NormalButton onClick={() => (store.dialogVisible = false)}>
+              Cancel
+            </NormalButton>
+            <Button onClick={onSaveClick} style={{ marginLeft: 8 }}>
+              Save
+            </Button>
+          </DialogButtons>
+          <div style={{ clear: 'both' }}></div>
+        </Dialog>
+        <NavigationDrawer title="Settings" search>
+          <MenuItem icon={ICON_PALETTE} section="appearance">
+            Appearance
+          </MenuItem>
+          {process.env.ENABLE_AUTOFILL && (
+            <MenuItem icon={ICON_AUTOFILL} section="autofill">
+              Autofill
+            </MenuItem>
+          )}
+          <MenuItem icon={ICON_POWER} section="startup">
+            On startup
+          </MenuItem>
+          <MenuItem
+            icon={ICON_SEARCH}
+            section="address-bar"
+            subSections={['search-engines']}
           >
-            {store.editedSearchEngine &&
-              store.editedSearchEngine.keyword !==
-                store.searchEngine.keyword && (
-                <>
-                  <ContextMenuItem onClick={onMakeDefaultClick} icon=" ">
-                    Make default
-                  </ContextMenuItem>
-                  <ContextMenuItem onClick={onRemoveClick} icon={ICON_TRASH}>
-                    Remove
-                  </ContextMenuItem>
-                </>
-              )}
-            {store.editedSearchEngine && (
-              <ContextMenuItem onClick={onEditClick} icon={ICON_EDIT}>
-                Edit
-              </ContextMenuItem>
+            Address bar
+          </MenuItem>
+          <MenuItem icon={ICON_DOWNLOAD} section="downloads">
+            Downloads
+          </MenuItem>
+          <MenuItem icon={ICON_SHIELD} section="privacy">
+            Privacy
+          </MenuItem>
+          {/* <MenuItem section="permissions">Site permissions</MenuItem> */}
+
+          {/* <MenuItem section="language">Languages</MenuItem> */}
+          {/* <MenuItem section="shortcuts">Keyboard shortcuts</MenuItem> */}
+          {/* <MenuItem section="system">System</MenuItem> */}
+        </NavigationDrawer>
+        <Content>
+          <LeftContent style={{ maxWidth: 800, marginTop: 56 }}>
+            {selectedSection === 'appearance' && <Appearance />}
+            {selectedSection === 'autofill' && process.env.ENABLE_AUTOFILL && (
+              <Autofill />
             )}
-          </ContextMenu>
-          <Dialog
-            onMouseDown={(e) => e.stopPropagation()}
-            visible={store.dialogVisible}
-            ref={store.dialogRef}
-            style={{ width: 350 }}
-          >
-            <DialogTitle>{dialogTitle}</DialogTitle>
-            <Textfield
-              style={{ width: '100%' }}
-              dark={store.theme['dialog.lightForeground']}
-              ref={store.searchEngineInputRef}
-              label="Search engine"
-            ></Textfield>
-
-            <Textfield
-              style={{
-                width: '100%',
-                marginTop: 16,
-              }}
-              dark={store.theme['dialog.lightForeground']}
-              ref={store.searchEngineKeywordInputRef}
-              label="Keyword"
-            ></Textfield>
-
-            <Textfield
-              style={{
-                width: '100%',
-                marginTop: 16,
-              }}
-              dark={store.theme['dialog.lightForeground']}
-              ref={store.searchEngineUrlInputRef}
-              label="URL with %s in place of query"
-            ></Textfield>
-
-            <DialogButtons>
-              <NormalButton onClick={() => (store.dialogVisible = false)}>
-                Cancel
-              </NormalButton>
-              <Button onClick={onSaveClick} style={{ marginLeft: 8 }}>
-                Save
-              </Button>
-            </DialogButtons>
-            <div style={{ clear: 'both' }}></div>
-          </Dialog>
-          <NavigationDrawer title="Settings" search>
-            <MenuItem icon={ICON_PALETTE} section="appearance">
-              Appearance
-            </MenuItem>
-            {process.env.ENABLE_AUTOFILL && (
-              <MenuItem icon={ICON_AUTOFILL} section="autofill">
-                Autofill
-              </MenuItem>
-            )}
-            <MenuItem icon={ICON_POWER} section="startup">
-              On startup
-            </MenuItem>
-            <MenuItem
-              icon={ICON_SEARCH}
-              section="address-bar"
-              subSections={['search-engines']}
-            >
-              Address bar
-            </MenuItem>
-            <MenuItem icon={ICON_DOWNLOAD} section="downloads">
-              Downloads
-            </MenuItem>
-            <MenuItem icon={ICON_SHIELD} section="privacy">
-              Privacy
-            </MenuItem>
-            {/* <MenuItem section="permissions">Site permissions</MenuItem> */}
-
-            {/* <MenuItem section="language">Languages</MenuItem> */}
-            {/* <MenuItem section="shortcuts">Keyboard shortcuts</MenuItem> */}
-            {/* <MenuItem section="system">System</MenuItem> */}
-          </NavigationDrawer>
-          <Content>
-            <LeftContent style={{ maxWidth: 800, marginTop: 56 }}>
-              {selectedSection === 'appearance' && <Appearance />}
-              {selectedSection === 'autofill' &&
-                process.env.ENABLE_AUTOFILL && <Autofill />}
-              {selectedSection === 'address-bar' && <AddressBar />}
-              {selectedSection === 'search-engines' && <ManageSearchEngines />}
-              {selectedSection === 'startup' && <OnStartup />}
-              {selectedSection === 'privacy' && <Privacy />}
-              {selectedSection === 'downloads' && <Downloads />}
-            </LeftContent>
-          </Content>
-        </Container>
-      </ThemeProvider>
-    );
-  }),
-);
+            {selectedSection === 'address-bar' && <AddressBar />}
+            {selectedSection === 'search-engines' && <ManageSearchEngines />}
+            {selectedSection === 'startup' && <OnStartup />}
+            {selectedSection === 'privacy' && <Privacy />}
+            {selectedSection === 'downloads' && <Downloads />}
+          </LeftContent>
+        </Content>
+      </Container>
+    </ThemeProvider>
+  );
+});

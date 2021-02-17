@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { observer } from 'mobx-react-lite';
-import { hot } from 'react-hot-loader/root';
 
 import store from '../../store';
 import { NavigationDrawer } from '~/renderer/components/NavigationDrawer';
@@ -155,110 +154,108 @@ const BookmarksList = observer(() => {
   );
 });
 
-export default hot(
-  observer(() => {
-    let dialogTitle = 'New folder';
+export default observer(() => {
+  let dialogTitle = 'New folder';
 
-    if (store.dialogContent === 'edit') {
-      dialogTitle = 'Edit bookmark';
-    } else if (store.dialogContent === 'rename-folder') {
-      dialogTitle = 'Rename folder';
-    }
+  if (store.dialogContent === 'edit') {
+    dialogTitle = 'Edit bookmark';
+  } else if (store.dialogContent === 'rename-folder') {
+    dialogTitle = 'Rename folder';
+  }
 
-    return (
-      <ThemeProvider theme={{ ...store.theme }}>
-        <Container
-          onMouseDown={onContainerMouseDown}
-          darken={store.dialogVisible}
-        >
-          <WebUIStyle />
-          <GlobalNavigationDrawer></GlobalNavigationDrawer>
-          <NavigationDrawer title="Bookmarks" search onSearchInput={onInput}>
-            <Tree />
-            <div style={{ flex: 1 }} />
-            <NavigationDrawer.Item
-              icon={ICON_NEW_FOLDER}
-              onClick={onNewFolderClick}
-            >
-              New folder
-            </NavigationDrawer.Item>
-            <NavigationDrawer.Item icon={ICON_DOWNLOAD} onClick={onImportClick}>
-              Import
-            </NavigationDrawer.Item>
-            <NavigationDrawer.Item icon={ICON_SAVE} onClick={onExportClick}>
-              Export
-            </NavigationDrawer.Item>
-          </NavigationDrawer>
-          <ContextMenu
-            onMouseDown={onContextMenuMouseDown}
-            style={{
-              top: store.menuTop,
-              left: store.menuLeft,
-            }}
-            visible={store.menuVisible}
+  return (
+    <ThemeProvider theme={{ ...store.theme }}>
+      <Container
+        onMouseDown={onContainerMouseDown}
+        darken={store.dialogVisible}
+      >
+        <WebUIStyle />
+        <GlobalNavigationDrawer></GlobalNavigationDrawer>
+        <NavigationDrawer title="Bookmarks" search onSearchInput={onInput}>
+          <Tree />
+          <div style={{ flex: 1 }} />
+          <NavigationDrawer.Item
+            icon={ICON_NEW_FOLDER}
+            onClick={onNewFolderClick}
           >
-            {store.currentBookmark && !store.currentBookmark.isFolder && (
-              <ContextMenuItem onClick={onEditClick} icon={ICON_EDIT}>
-                Edit
-              </ContextMenuItem>
-            )}
-            {store.currentBookmark && store.currentBookmark.isFolder && (
-              <ContextMenuItem onClick={onRenameClick} icon={ICON_EDIT}>
-                Rename
-              </ContextMenuItem>
-            )}
-            <ContextMenuItem
-              onClick={onRemoveClick(store.currentBookmark)}
-              icon={ICON_TRASH}
-            >
-              Delete
+            New folder
+          </NavigationDrawer.Item>
+          <NavigationDrawer.Item icon={ICON_DOWNLOAD} onClick={onImportClick}>
+            Import
+          </NavigationDrawer.Item>
+          <NavigationDrawer.Item icon={ICON_SAVE} onClick={onExportClick}>
+            Export
+          </NavigationDrawer.Item>
+        </NavigationDrawer>
+        <ContextMenu
+          onMouseDown={onContextMenuMouseDown}
+          style={{
+            top: store.menuTop,
+            left: store.menuLeft,
+          }}
+          visible={store.menuVisible}
+        >
+          {store.currentBookmark && !store.currentBookmark.isFolder && (
+            <ContextMenuItem onClick={onEditClick} icon={ICON_EDIT}>
+              Edit
             </ContextMenuItem>
-          </ContextMenu>
-          <Content onScroll={onScroll}>
-            <BookmarksList />
-          </Content>
-        </Container>
-        <Dialog onMouseDown={onDialogMouseDown} visible={store.dialogVisible}>
-          <DialogTitle>{dialogTitle}</DialogTitle>
-          <Textfield
-            style={{ width: '100%' }}
-            dark={store.theme['dialog.lightForeground']}
-            ref={store.nameInputRef}
-            label="Name"
-          ></Textfield>
+          )}
+          {store.currentBookmark && store.currentBookmark.isFolder && (
+            <ContextMenuItem onClick={onRenameClick} icon={ICON_EDIT}>
+              Rename
+            </ContextMenuItem>
+          )}
+          <ContextMenuItem
+            onClick={onRemoveClick(store.currentBookmark)}
+            icon={ICON_TRASH}
+          >
+            Delete
+          </ContextMenuItem>
+        </ContextMenu>
+        <Content onScroll={onScroll}>
+          <BookmarksList />
+        </Content>
+      </Container>
+      <Dialog onMouseDown={onDialogMouseDown} visible={store.dialogVisible}>
+        <DialogTitle>{dialogTitle}</DialogTitle>
+        <Textfield
+          style={{ width: '100%' }}
+          dark={store.theme['dialog.lightForeground']}
+          ref={store.nameInputRef}
+          label="Name"
+        ></Textfield>
 
-          <Textfield
-            style={{
-              width: '100%',
-              marginTop: 16,
-              display: store.dialogContent === 'edit' ? 'block' : 'none',
-            }}
-            dark={store.theme['dialog.lightForeground']}
-            ref={store.urlInputRef}
-            label="URL"
-          ></Textfield>
+        <Textfield
+          style={{
+            width: '100%',
+            marginTop: 16,
+            display: store.dialogContent === 'edit' ? 'block' : 'none',
+          }}
+          dark={store.theme['dialog.lightForeground']}
+          ref={store.urlInputRef}
+          label="URL"
+        ></Textfield>
 
-          <DialogButtons>
-            <Button
-              onClick={() => (store.dialogVisible = false)}
-              background={
-                store.theme['dialog.lightForeground']
-                  ? 'rgba(255, 255, 255, 0.08)'
-                  : 'rgba(0, 0, 0, 0.08)'
-              }
-              foreground={
-                store.theme['dialog.lightForeground'] ? 'white' : 'black'
-              }
-            >
-              Cancel
-            </Button>
-            <Button onClick={onSaveClick} style={{ marginLeft: 8 }}>
-              Save
-            </Button>
-          </DialogButtons>
-          <div style={{ clear: 'both' }}></div>
-        </Dialog>
-      </ThemeProvider>
-    );
-  }),
-);
+        <DialogButtons>
+          <Button
+            onClick={() => (store.dialogVisible = false)}
+            background={
+              store.theme['dialog.lightForeground']
+                ? 'rgba(255, 255, 255, 0.08)'
+                : 'rgba(0, 0, 0, 0.08)'
+            }
+            foreground={
+              store.theme['dialog.lightForeground'] ? 'white' : 'black'
+            }
+          >
+            Cancel
+          </Button>
+          <Button onClick={onSaveClick} style={{ marginLeft: 8 }}>
+            Save
+          </Button>
+        </DialogButtons>
+        <div style={{ clear: 'both' }}></div>
+      </Dialog>
+    </ThemeProvider>
+  );
+});

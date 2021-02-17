@@ -40,7 +40,7 @@ const mainConfig = getConfig({
 });
 
 const preloadConfig = getConfig({
-  target: 'electron-renderer',
+  target: 'web',
 
   devtool: false,
 

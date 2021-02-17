@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { observer } from 'mobx-react-lite';
 import { ThemeProvider } from 'styled-components';
-import { hot } from 'react-hot-loader/root';
 
 import { StyledApp, Title, Row, Label, Buttons } from './style';
 import store from '../../store';
@@ -51,51 +50,49 @@ const onRemove = () => {
   store.hide();
 };
 
-export const App = hot(
-  observer(() => {
-    return (
-      <ThemeProvider theme={{ ...store.theme }}>
-        <StyledApp visible={store.visible}>
-          <UIStyle />
-          <Title>{store.dialogTitle}</Title>
-          <Row>
-            <Label>Name</Label>
-            <Input
-              tabIndex={0}
-              className="textfield"
-              ref={store.titleRef}
-              onChange={onChange}
-            />
-          </Row>
-          <Row>
-            <Label>Folder</Label>
-            <Dropdown
-              dark={store.theme['dialog.lightForeground']}
-              tabIndex={1}
-              className="dropdown"
-              onMouseDown={onDropdownClick}
-            >
-              {store.currentFolder && getBookmarkTitle(store.currentFolder)}
-            </Dropdown>
-          </Row>
-          <Buttons>
-            <Button onClick={onDone}>Done</Button>
-            <Button
-              onClick={onRemove}
-              background={
-                store.theme['dialog.lightForeground']
-                  ? 'rgba(255, 255, 255, 0.08)'
-                  : 'rgba(0, 0, 0, 0.08)'
-              }
-              foreground={
-                store.theme['dialog.lightForeground'] ? 'white' : 'black'
-              }
-            >
-              Remove
-            </Button>
-          </Buttons>
-        </StyledApp>
-      </ThemeProvider>
-    );
-  }),
-);
+export const App = observer(() => {
+  return (
+    <ThemeProvider theme={{ ...store.theme }}>
+      <StyledApp visible={store.visible}>
+        <UIStyle />
+        <Title>{store.dialogTitle}</Title>
+        <Row>
+          <Label>Name</Label>
+          <Input
+            tabIndex={0}
+            className="textfield"
+            ref={store.titleRef}
+            onChange={onChange}
+          />
+        </Row>
+        <Row>
+          <Label>Folder</Label>
+          <Dropdown
+            dark={store.theme['dialog.lightForeground']}
+            tabIndex={1}
+            className="dropdown"
+            onMouseDown={onDropdownClick}
+          >
+            {store.currentFolder && getBookmarkTitle(store.currentFolder)}
+          </Dropdown>
+        </Row>
+        <Buttons>
+          <Button onClick={onDone}>Done</Button>
+          <Button
+            onClick={onRemove}
+            background={
+              store.theme['dialog.lightForeground']
+                ? 'rgba(255, 255, 255, 0.08)'
+                : 'rgba(0, 0, 0, 0.08)'
+            }
+            foreground={
+              store.theme['dialog.lightForeground'] ? 'white' : 'black'
+            }
+          >
+            Remove
+          </Button>
+        </Buttons>
+      </StyledApp>
+    </ThemeProvider>
+  );
+});
