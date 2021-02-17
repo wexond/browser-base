@@ -82,6 +82,8 @@ const onMouseEnter = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {
 
 const onMouseLeave = () => {
   store.tabs.hoveredTabId = -1;
+  ipcRenderer.send(`hide-tab-preview-${store.windowId}`);
+  store.tabs.canShowPreview = true;
 };
 
 const onClick = (tab: ITab) => (e: React.MouseEvent<HTMLDivElement>) => {
