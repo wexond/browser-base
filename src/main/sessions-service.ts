@@ -33,9 +33,6 @@ export class SessionsService {
     this.clearCache('incognito');
 
     if (process.env.ENABLE_EXTENSIONS) {
-      // TODO: remove this after fix for e.sender.session
-      _setFallbackSession(this.view);
-
       extensions.initializeSession(
         this.view,
         `${app.getAppPath()}/build/extensions-preload.bundle.js`,
