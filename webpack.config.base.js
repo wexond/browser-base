@@ -15,7 +15,7 @@ const INCLUDE = resolve(__dirname, 'src');
 
 const BUILD_FLAGS = {
   ENABLE_EXTENSIONS: true,
-  ENABLE_AUTOFILL: false
+  ENABLE_AUTOFILL: false,
 };
 
 process.env = {
@@ -24,22 +24,8 @@ process.env = {
 };
 
 const dev = process.env.DEV === '1';
-let prebuild = process.env.PREBUILD === '1';
 
 process.env.NODE_ENV = dev ? 'development' : 'production';
-
-if (dev) prebuild = false;
-
-const CHUNKS_ENTRIES_MAP_PATH = 'chunks-entries-map.json';
-
-if (!dev && !prebuild && !existsSync(CHUNKS_ENTRIES_MAP_PATH)) {
-  throw new Error('Chunks to entries map file does not exist.');
-}
-
-const chunksEntriesMap =
-  prebuild || dev
-    ? {}
-    : JSON.parse(readFileSync(CHUNKS_ENTRIES_MAP_PATH, 'utf8'));
 
 const styledComponentsTransformer = createStyledComponentsTransformer({
   minify: !dev,
@@ -66,6 +52,7 @@ const config = {
             loader: 'file-loader',
             options: {
               esModule: false,
+              outputPath: 'res',
             },
           },
         ],
@@ -110,60 +97,57 @@ const config = {
 
   externals: {
     keytar: `require('keytar')`,
+    electron: 'require("electron")',
+    fs: 'require("fs")',
+    os: 'require("os")',
+    path: 'require("path")',
   },
 
   optimization: {
-    minimizer:
-      !dev && !prebuild
-        ? [
-            new TerserPlugin({
-              extractComments: true,
-              terserOptions: {
-                ecma: 8,
-                output: {
-                  comments: false,
-                },
+    minimizer: !dev
+      ? [
+          new TerserPlugin({
+            extractComments: true,
+            terserOptions: {
+              ecma: 8,
+              output: {
+                comments: false,
               },
-              parallel: true,
-            }),
-          ]
-        : [],
+            },
+            parallel: true,
+          }),
+        ]
+      : [],
   },
 };
+
+if (dev) {
+  config.module.rules[1].use.splice(0, 0, {
+    loader: 'babel-loader',
+    options: { plugins: ['react-refresh/babel'] },
+  });
+}
 
 function getConfig(...cfg) {
   return merge(config, ...cfg);
 }
 
-const getHtml = (scope, name, entries = []) => {
-  let excludeChunks = entries.filter((x) => x !== name);
-
-  if (!dev) {
-    excludeChunks = excludeChunks.concat(
-      Object.entries(chunksEntriesMap)
-        .filter((x) => !x[1].includes(name))
-        .map((x) => x[0]),
-    );
-  }
-
+const getHtml = (name) => {
   return new HtmlWebpackPlugin({
     title: 'Wexond',
     template: 'static/pages/app.html',
     filename: `${name}.html`,
-    excludeChunks,
+    chunks: [name],
   });
 };
 
-const applyEntries = (scope, config, entries) => {
+const applyEntries = (config, entries) => {
   for (const entry of entries) {
-    config.entry[entry] = [`./src/renderer/views/${entry}`];
-    if (!prebuild) {
-      config.plugins.push(getHtml(scope, entry, entries));
-    }
-
-    if (dev) {
-      config.entry[entry].unshift('react-hot-loader/patch');
-    }
+    config.entry[entry] = [
+      `./src/renderer/pre-entry`,
+      `./src/renderer/views/${entry}`,
+    ];
+    config.plugins.push(getHtml(entry));
   }
 };
 
@@ -179,87 +163,12 @@ const getBaseConfig = (name) => {
       runtimeChunk: {
         name: `runtime.${name}`,
       },
+      splitChunks: {
+        chunks: 'all',
+        maxInitialRequests: Infinity,
+      },
     },
   };
-
-  if (dev) {
-    config.entry.vendor = [
-      'styled-components',
-      'react-hot-loader',
-      'react',
-      'react-dom',
-      'mobx',
-      'mobx-react-lite',
-    ];
-
-    config.optimization.splitChunks = {
-      cacheGroups: {
-        vendor: {
-          chunks: 'initial',
-          name: `vendor.${name}`,
-          test: 'vendor',
-          enforce: true,
-        },
-      },
-    };
-  } else {
-    config.optimization.splitChunks = {
-      chunks: 'all',
-      maxInitialRequests: Infinity,
-      minSize: 0,
-      cacheGroups: {
-        commons: {
-          test: /[\\/]node_modules[\\/]/,
-          name(module, chunks) {
-            const packageName = module.context
-              .match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1]
-              .replace('@', 'at');
-
-            const bundleName = `npm.${packageName}.${name}`;
-
-            chunksEntriesMap[bundleName] = chunks.map((x) => x.name);
-
-            if (prebuild) {
-              writeFileSync(
-                CHUNKS_ENTRIES_MAP_PATH,
-                JSON.stringify(chunksEntriesMap),
-              );
-            }
-
-            return bundleName;
-          },
-        },
-      },
-    };
-  }
-
-  if (prebuild) {
-    config.plugins.push({
-      apply: (compiler) => {
-        compiler.hooks.compilation.tap('Compilation', (compilation) => {
-          compilation.hooks.afterOptimizeChunkAssets.tap(
-            'AfterOptimizeChunkAssets',
-            (chunks) => {
-              for (const chunk of chunks) {
-                if (!chunk.name) continue;
-
-                if (chunk.name.indexOf('~') !== -1) {
-                  chunksEntriesMap[chunk.name] = chunk.name
-                    .split('.')[0]
-                    .split('~');
-                }
-              }
-
-              writeFileSync(
-                CHUNKS_ENTRIES_MAP_PATH,
-                JSON.stringify(chunksEntriesMap),
-              );
-            },
-          );
-        });
-      },
-    });
-  }
 
   return config;
 };

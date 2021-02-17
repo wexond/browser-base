@@ -29,7 +29,9 @@ const mainConfig = getConfig({
             'node_modules/@cliqz/adblocker-electron-preload/dist/preload.cjs.js',
           to: 'preload.js',
           transform: async (fileContent, path) => {
-            return (await terser.minify(fileContent.toString())).code.toString();
+            return (
+              await terser.minify(fileContent.toString())
+            ).code.toString();
           },
         },
       ],
@@ -38,7 +40,7 @@ const mainConfig = getConfig({
 });
 
 const preloadConfig = getConfig({
-  target: 'electron-renderer',
+  target: 'web',
 
   devtool: false,
 

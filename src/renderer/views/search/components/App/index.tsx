@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { observer } from 'mobx-react-lite';
 import { ThemeProvider } from 'styled-components';
-import { hot } from 'react-hot-loader/root';
 
 import { StyledApp, Input, CurrentIcon, SearchBox } from './style';
 import store from '../../store';
@@ -86,75 +85,73 @@ const onInput = (e: any) => {
   // }
 };
 
-export const App = hot(
-  observer(() => {
-    const suggestionsVisible = store.suggestions.list.length !== 0;
+export const App = observer(() => {
+  const suggestionsVisible = store.suggestions.list.length !== 0;
 
-    let height = 0;
+  let height = 0;
 
-    if (suggestionsVisible) {
-      for (const s of store.suggestions.list) {
-        height += 38;
-      }
+  if (suggestionsVisible) {
+    for (const s of store.suggestions.list) {
+      height += 38;
     }
+  }
 
-    requestAnimationFrame(() => {
-      ipcRenderer.send(`height-${store.id}`, height);
-    });
+  requestAnimationFrame(() => {
+    ipcRenderer.send(`height-${store.id}`, height);
+  });
 
-    const suggestion = store.suggestions.selectedSuggestion;
-    let favicon = ICON_SEARCH;
-    let customIcon = true;
+  const suggestion = store.suggestions.selectedSuggestion;
+  let favicon = ICON_SEARCH;
+  let customIcon = true;
 
-    if (suggestion && suggestionsVisible) {
-      favicon = suggestion.favicon;
-      customIcon = false;
+  if (suggestion && suggestionsVisible) {
+    favicon = suggestion.favicon;
+    customIcon = false;
 
-      if (suggestion.isSearch) {
-        favicon = store.searchEngine.icon;
-      } else if (
-        favicon == null ||
-        favicon.trim() === '' ||
-        favicon === ICON_PAGE
-      ) {
-        favicon = ICON_PAGE;
-        customIcon = true;
-      }
+    if (suggestion.isSearch) {
+      favicon = store.searchEngine.icon;
+    } else if (
+      favicon == null ||
+      favicon.trim() === '' ||
+      favicon === ICON_PAGE
+    ) {
+      favicon = ICON_PAGE;
+      customIcon = true;
     }
+  }
 
-    return (
-      <ThemeProvider
-        theme={{
-          ...store.theme,
-          searchBoxHeight:
-            store.settings.topBarVariant === 'compact'
-              ? COMPACT_TITLEBAR_HEIGHT
-              : TOOLBAR_HEIGHT - 1,
-        }}
-      >
-        <StyledApp>
-          <UIStyle />
-          <SearchBox>
-            <CurrentIcon
-              style={{
-                backgroundImage: `url(${favicon})`,
-                filter:
-                  customIcon && store.theme['dialog.lightForeground']
-                    ? 'invert(100%)'
-                    : 'none',
-                opacity: customIcon ? 0.54 : 1,
-              }}
-            ></CurrentIcon>
-            <Input
-              onKeyDown={onKeyDown}
-              onInput={onInput}
-              ref={store.inputRef}
-              onKeyPress={onKeyPress}
-            ></Input>
-          </SearchBox>
-          <Suggestions visible={suggestionsVisible}></Suggestions>
-        </StyledApp>
-      </ThemeProvider>
-    );
-  }),
-);
+  return (
+    <ThemeProvider
+      theme={{
+        ...store.theme,
+        searchBoxHeight:
+          store.settings.topBarVariant === 'compact'
+            ? COMPACT_TITLEBAR_HEIGHT
+            : TOOLBAR_HEIGHT - 1,
+      }}
+    >
+      <StyledApp>
+        <UIStyle />
+        <SearchBox>
+          <CurrentIcon
+            style={{
+              backgroundImage: `url(${favicon})`,
+              filter:
+                customIcon && store.theme['dialog.lightForeground']
+                  ? 'invert(100%)'
+                  : 'none',
+              opacity: customIcon ? 0.54 : 1,
+            }}
+          ></CurrentIcon>
+          <Input
+            onKeyDown={onKeyDown}
+            onInput={onInput}
+            ref={store.inputRef}
+            onKeyPress={onKeyPress}
+          ></Input>
+        </SearchBox>
+        <Suggestions visible={suggestionsVisible}></Suggestions>
+      </StyledApp>
+    </ThemeProvider>
+  );
+});

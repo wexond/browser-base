@@ -1,8 +1,11 @@
+import { ipcMain, app, webContents } from 'electron';
+import { setIpcMain } from '@wexond/rpc-electron';
+setIpcMain(ipcMain);
+
 if (process.env.NODE_ENV === 'development') {
   require('source-map-support').install();
 }
 
-import { ipcMain, app, webContents } from 'electron';
 import { platform } from 'os';
 import { Application } from './application';
 

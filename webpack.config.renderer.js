@@ -3,15 +3,18 @@ const {
   getConfig,
   applyEntries,
   getBaseConfig,
+  dev,
 } = require('./webpack.config.base');
 const { join } = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+const webpack = require('webpack');
 /* eslint-enable */
 
 const PORT = 4444;
 
 const appConfig = getConfig(getBaseConfig('app'), {
-  target: 'electron-renderer',
+  target: 'web',
 
   devServer: {
     contentBase: join(__dirname, 'build'),
@@ -20,16 +23,23 @@ const appConfig = getConfig(getBaseConfig('app'), {
     inline: true,
     disableHostCheck: true,
   },
+
+  plugins: dev
+    ? [
+        new webpack.HotModuleReplacementPlugin(),
+        new ReactRefreshWebpackPlugin(),
+      ]
+    : [],
 });
 
 const extPopupConfig = getConfig({
-  target: 'electron-renderer',
+  target: 'web',
 
   entry: {},
   output: {},
 });
 
-applyEntries('app', appConfig, [
+applyEntries(appConfig, [
   ...(process.env.ENABLE_AUTOFILL ? ['form-fill', 'credentials'] : []),
   'app',
   'permissions',
@@ -42,6 +52,10 @@ applyEntries('app', appConfig, [
   'downloads-dialog',
   'add-bookmark',
   'zoom',
+  'settings',
+  'history',
+  'newtab',
+  'bookmarks',
 ]);
 
 if (process.env.ENABLE_EXTENSIONS) {

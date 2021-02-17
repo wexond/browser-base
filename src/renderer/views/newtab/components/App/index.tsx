@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { observer } from 'mobx-react-lite';
-import { hot } from 'react-hot-loader/root';
 
 import store from '../../store';
 import { ThemeProvider } from 'styled-components';
@@ -39,70 +38,68 @@ const onRefreshClick = () => {
   }, 50);
 };
 
-export default hot(
-  observer(() => {
-    return (
-      <ThemeProvider theme={{ ...store.theme }}>
-        <div>
-          <WebUIStyle />
+export default observer(() => {
+  return (
+    <ThemeProvider theme={{ ...store.theme }}>
+      <div>
+        <WebUIStyle />
 
-          <Preferences />
+        <Preferences />
 
-          <Wrapper fullSize={store.fullSizeImage}>
-            <Image src={store.imageVisible ? store.image : ''}></Image>
-            <Content>{store.topSitesVisible && <TopSites></TopSites>}</Content>
+        <Wrapper fullSize={store.fullSizeImage}>
+          <Image src={store.imageVisible ? store.image : ''}></Image>
+          <Content>{store.topSitesVisible && <TopSites></TopSites>}</Content>
 
-            <RightBar>
+          <RightBar>
+            <IconItem
+              imageSet={store.imageVisible}
+              title="Dashboard settings"
+              icon={ICON_TUNE}
+              onMouseDown={(e) => e.stopPropagation()}
+              onClick={onTuneClick}
+            ></IconItem>
+          </RightBar>
+          {store.quickMenuVisible && (
+            <Menu>
               <IconItem
                 imageSet={store.imageVisible}
-                title="Dashboard settings"
-                icon={ICON_TUNE}
-                onMouseDown={(e) => e.stopPropagation()}
-                onClick={onTuneClick}
+                title="Settings"
+                icon={ICON_SETTINGS}
+                onClick={onIconClick('settings')}
               ></IconItem>
-            </RightBar>
-            {store.quickMenuVisible && (
-              <Menu>
-                <IconItem
-                  imageSet={store.imageVisible}
-                  title="Settings"
-                  icon={ICON_SETTINGS}
-                  onClick={onIconClick('settings')}
-                ></IconItem>
-                <IconItem
-                  imageSet={store.imageVisible}
-                  title="History"
-                  icon={ICON_HISTORY}
-                  onClick={onIconClick('history')}
-                ></IconItem>
-                <IconItem
-                  imageSet={store.imageVisible}
-                  title="Bookmarks"
-                  icon={ICON_BOOKMARKS}
-                  onClick={onIconClick('bookmarks')}
-                ></IconItem>
-                <IconItem
-                  imageSet={store.imageVisible}
-                  title="Downloads"
-                  icon={ICON_DOWNLOAD}
-                  onClick={onIconClick('downloads')}
-                ></IconItem>
-                <IconItem
-                  imageSet={store.imageVisible}
-                  title="Extensions"
-                  icon={ICON_EXTENSIONS}
-                  onClick={onIconClick('extensions')}
-                ></IconItem>
-              </Menu>
-            )}
-          </Wrapper>
-          {store.newsBehavior !== 'hidden' && (
-            <Content>
-              <News></News>
-            </Content>
+              <IconItem
+                imageSet={store.imageVisible}
+                title="History"
+                icon={ICON_HISTORY}
+                onClick={onIconClick('history')}
+              ></IconItem>
+              <IconItem
+                imageSet={store.imageVisible}
+                title="Bookmarks"
+                icon={ICON_BOOKMARKS}
+                onClick={onIconClick('bookmarks')}
+              ></IconItem>
+              <IconItem
+                imageSet={store.imageVisible}
+                title="Downloads"
+                icon={ICON_DOWNLOAD}
+                onClick={onIconClick('downloads')}
+              ></IconItem>
+              <IconItem
+                imageSet={store.imageVisible}
+                title="Extensions"
+                icon={ICON_EXTENSIONS}
+                onClick={onIconClick('extensions')}
+              ></IconItem>
+            </Menu>
           )}
-        </div>
-      </ThemeProvider>
-    );
-  }),
-);
+        </Wrapper>
+        {store.newsBehavior !== 'hidden' && (
+          <Content>
+            <News></News>
+          </Content>
+        )}
+      </div>
+    </ThemeProvider>
+  );
+});
