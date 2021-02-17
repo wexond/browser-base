@@ -29,7 +29,7 @@ const extPopupConfig = getConfig({
   output: {},
 });
 
-applyEntries('app', appConfig, [
+applyEntries(appConfig, [
   ...(process.env.ENABLE_AUTOFILL ? ['form-fill', 'credentials'] : []),
   'app',
   'permissions',
