@@ -14,7 +14,10 @@ app.name = isNightly ? 'Wexond Nightly' : 'Wexond';
 (process.env as any)['ELECTRON_DISABLE_SECURITY_WARNINGS'] = true;
 
 app.commandLine.appendSwitch('--enable-transparent-visuals');
-app.commandLine.appendSwitch('--enable-parallel-downloading');
+app.commandLine.appendSwitch(
+  'enable-features',
+  'CSSColorSchemeUARendering, ImpulseScrollAnimations, ParallelDownloading',
+);
 
 if (process.env.NODE_ENV === 'development') {
   app.commandLine.appendSwitch('remote-debugging-port', '9222');
