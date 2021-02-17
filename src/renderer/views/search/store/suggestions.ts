@@ -1,4 +1,4 @@
-import { observable, computed } from 'mobx';
+import { observable, computed, makeObservable } from 'mobx';
 
 import {
   getHistorySuggestions,
@@ -16,21 +16,26 @@ const MAX_SUGGESTIONS_COUNT = 8;
 export class SuggestionsStore {
   private store: Store;
 
-  @observable
+  // Observable
   public list: ISuggestion[] = [];
 
-  @observable
   public selected = 0;
 
-  @observable
   public height = 0;
 
-  @computed
+  // Computed
   public get selectedSuggestion() {
     return this.list.find((x) => x.id === this.selected);
   }
 
   constructor(store: Store) {
+    makeObservable(this, {
+      list: observable,
+      selected: observable,
+      height: observable,
+      selectedSuggestion: computed,
+    });
+
     this.store = store;
   }
 

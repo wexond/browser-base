@@ -1,5 +1,5 @@
 import { ipcRenderer, remote } from 'electron';
-import { observable, computed } from 'mobx';
+import { observable, computed, makeObservable } from 'mobx';
 import { getTheme } from '~/utils/themes';
 import { ISettings } from '~/interfaces';
 import { DEFAULT_SETTINGS } from '~/constants';
@@ -35,6 +35,12 @@ export class DialogStore {
       persistent?: boolean;
     } = {},
   ) {
+    makeObservable(this, {
+      theme: computed,
+      settings: observable,
+      visible: observable,
+    });
+
     const { visibilityWrapper, hideOnBlur, persistent } = {
       hideOnBlur: true,
       visibilityWrapper: true,

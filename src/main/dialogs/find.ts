@@ -10,6 +10,7 @@ export const showFindDialog = (browserWindow: BrowserWindow) => {
   const dialog = Application.instance.dialogs.show({
     name: 'find',
     browserWindow,
+    devtools: true,
     getBounds: () => {
       const { width } = browserWindow.getContentBounds();
       return {

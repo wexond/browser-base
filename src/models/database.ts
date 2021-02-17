@@ -21,7 +21,7 @@ export class Database<T> {
   ): Promise<any> {
     const res = await ipcRenderer.invoke(`storage-${operation}`, {
       scope: this.scope,
-      ...toJS(data, { recurseEverything: true }),
+      ...toJS(data),
     });
 
     return res;

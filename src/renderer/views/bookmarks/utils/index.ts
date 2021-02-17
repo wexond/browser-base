@@ -1,5 +1,3 @@
-import parse from 'node-bookmarks-parser';
-
 import { IBookmark } from '~/interfaces';
 import store from '../store';
 
@@ -21,10 +19,7 @@ export const getBookmarkTitle = (item: IBookmark) => {
   return '';
 };
 
-export const addImported = async (
-  arr: ReturnType<typeof parse>,
-  parent: IBookmark = null,
-) => {
+export const addImported = async (arr: any[], parent: IBookmark = null) => {
   let order = 0;
 
   for (const item of arr) {

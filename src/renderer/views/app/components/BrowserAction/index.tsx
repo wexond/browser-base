@@ -47,6 +47,12 @@ const onContextMenu = (data: IBrowserAction) => (
   const { target } = e;
   const menu = remote.Menu.buildFromTemplate([
     {
+      label: 'Uninstall',
+      click: () => {
+        store.extensions.uninstallExtension(data.extensionId);
+      },
+    },
+    {
       label: 'Inspect popup',
       click: () => {
         const { right, bottom } = (target as any).getBoundingClientRect();

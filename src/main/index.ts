@@ -1,8 +1,11 @@
+import { ipcMain, app, webContents } from 'electron';
+import { setIpcMain } from '@wexond/rpc-electron';
+setIpcMain(ipcMain);
+
 if (process.env.NODE_ENV === 'development') {
   require('source-map-support').install();
 }
 
-import { ipcMain, app, webContents } from 'electron';
 import { platform } from 'os';
 import { Application } from './application';
 
@@ -14,7 +17,10 @@ app.name = isNightly ? 'Wexond Nightly' : 'Wexond';
 (process.env as any)['ELECTRON_DISABLE_SECURITY_WARNINGS'] = true;
 
 app.commandLine.appendSwitch('--enable-transparent-visuals');
-app.commandLine.appendSwitch('--enable-parallel-downloading');
+app.commandLine.appendSwitch(
+  'enable-features',
+  'CSSColorSchemeUARendering, ImpulseScrollAnimations, ParallelDownloading',
+);
 
 if (process.env.NODE_ENV === 'development') {
   app.commandLine.appendSwitch('remote-debugging-port', '9222');

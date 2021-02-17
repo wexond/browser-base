@@ -1,5 +1,5 @@
 import { ipcRenderer } from 'electron';
-import { observable, computed, action } from 'mobx';
+import { observable, computed, action, makeObservable } from 'mobx';
 import * as React from 'react';
 
 import store from '../store';
@@ -16,50 +16,13 @@ import { animateTab } from '../utils/tabs';
 import { NEWTAB_URL } from '~/constants/tabs';
 
 export class ITab {
-  @observable
-  public id: number;
-
-  @observable
-  public isDragging = false;
-
-  @observable
-  public isPinned = false;
-
-  @observable
-  public isMuted = false;
-
-  @observable
-  public isPlaying = false;
-
-  @observable
-  public title = 'New tab';
-
-  @observable
-  public loading = true;
-
-  @observable
-  public favicon = '';
-
-  @observable
-  public tabGroupId: number;
-
-  @observable
-  public addressbarValue: string = null;
+  public id = -1;
 
   public addressbarFocused = false;
   public addressbarSelectionRange = [0, 0];
 
   public width = 0;
   public left = 0;
-
-  @observable
-  public url = '';
-
-  @observable
-  public blockedAds = 0;
-
-  @observable
-  public hasCredentials = false;
 
   public lastUrl = '';
   public isClosing = false;
@@ -69,22 +32,45 @@ export class ITab {
 
   public marginLeft = 0;
 
-  @computed
+  // Observable
+
+  public isDragging = false;
+
+  public isPinned = false;
+
+  public isMuted = false;
+
+  public isPlaying = false;
+
+  public title = 'New tab';
+
+  public loading = true;
+
+  public favicon = '';
+
+  public tabGroupId = -1;
+
+  public addressbarValue: string = null;
+
+  public url = '';
+
+  public blockedAds = 0;
+
+  public hasCredentials = false;
+
+  // Computed
   public get isSelected() {
     return store.tabs.selectedTabId === this.id;
   }
 
-  @computed
   public get isHovered() {
     return store.tabs.hoveredTabId === this.id;
   }
 
-  @computed
   public get isExpanded() {
     return this.isHovered || this.isSelected || !store.tabs.scrollable;
   }
 
-  @computed
   public get isIconSet() {
     return this.favicon !== '' || this.loading;
   }
@@ -93,6 +79,25 @@ export class ITab {
     { active, url, pinned }: chrome.tabs.CreateProperties,
     id: number,
   ) {
+    makeObservable(this, {
+      addressbarValue: observable,
+      url: observable,
+      favicon: observable,
+      loading: observable,
+      tabGroupId: observable,
+      isDragging: observable,
+      isPinned: observable,
+      isMuted: observable,
+      isPlaying: observable,
+      title: observable,
+      blockedAds: observable,
+      hasCredentials: observable,
+      isSelected: computed,
+      isHovered: computed,
+      isExpanded: computed,
+      isIconSet: computed,
+    });
+
     this.url = url;
     this.id = id;
     this.isPinned = pinned;
@@ -220,7 +225,7 @@ export class ITab {
       );
     }
 
-    this.tabGroupId = undefined;
+    this.tabGroupId = -1;
     store.tabs.updateTabsBounds(true);
   }
 

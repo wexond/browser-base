@@ -1,15 +1,16 @@
 import { ipcRenderer } from 'electron';
-import { reaction, observable } from 'mobx';
+import { reaction, observable, makeObservable } from 'mobx';
 import { DialogStore } from '~/models/dialog-store';
 
 export class Store extends DialogStore {
   @observable
   public zoomFactor = 1;
 
-  public timer = 0;
+  public timer: any = 0;
 
   public constructor() {
     super();
+    makeObservable(this, { zoomFactor: observable });
     this.init();
   }
 

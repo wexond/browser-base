@@ -1,4 +1,4 @@
-import { observable, computed } from 'mobx';
+import { observable, computed, makeObservable } from 'mobx';
 import * as React from 'react';
 import { ISettings, ITheme, ISearchEngine } from '~/interfaces';
 import { AutoFillStore } from './autofill';
@@ -71,7 +71,7 @@ export class Store {
   public settings: ISettings = { ...(window as any).settings };
 
   @observable
-  public editedSearchEngine: ISearchEngine;
+  public editedSearchEngine: ISearchEngine = null;
 
   @computed
   public get theme(): ITheme {
@@ -84,6 +84,8 @@ export class Store {
   }
 
   constructor() {
+    makeObservable(this);
+
     (window as any).updateSettings = (settings: ISettings) => {
       this.settings = { ...this.settings, ...settings };
     };

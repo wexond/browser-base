@@ -5,6 +5,7 @@ import { WEBUI_BASE_URL, WEBUI_URL_SUFFIX } from '~/constants/files';
 import { AppWindow } from '../windows';
 import { Application } from '../application';
 import { showMenuDialog } from '../dialogs/menu';
+import { getWebUIURL } from '~/common/webui';
 
 const isMac = process.platform === 'darwin';
 
@@ -38,21 +39,21 @@ export const getMainMenu = () => {
   const template: any = [
     ...(isMac
       ? [
-        {
-          label: app.name,
-          submenu: [
-            { role: 'about' },
-            { type: 'separator' },
-            { role: 'services' },
-            { type: 'separator' },
-            { role: 'hide' },
-            { role: 'hideothers' },
-            { role: 'unhide' },
-            { type: 'separator' },
-            { role: 'quit' },
-          ],
-        },
-      ]
+          {
+            label: app.name,
+            submenu: [
+              { role: 'about' },
+              { type: 'separator' },
+              { role: 'services' },
+              { type: 'separator' },
+              { role: 'hide' },
+              { role: 'hideothers' },
+              { role: 'unhide' },
+              { type: 'separator' },
+              { role: 'quit' },
+            ],
+          },
+        ]
       : []),
     {
       label: 'File',
@@ -149,15 +150,15 @@ export const getMainMenu = () => {
         { role: 'paste' },
         ...(isMac
           ? [
-            { role: 'pasteAndMatchStyle' },
-            { role: 'delete' },
-            { role: 'selectAll' },
-            { type: 'separator' },
-            {
-              label: 'Speech',
-              submenu: [{ role: 'startspeaking' }, { role: 'stopspeaking' }],
-            },
-          ]
+              { role: 'pasteAndMatchStyle' },
+              { role: 'delete' },
+              { role: 'selectAll' },
+              { type: 'separator' },
+              {
+                label: 'Speech',
+                submenu: [{ role: 'startspeaking' }, { role: 'stopspeaking' }],
+              },
+            ]
           : [{ role: 'delete' }, { type: 'separator' }, { role: 'selectAll' }]),
         { type: 'separator' },
         ...createMenuItem(
@@ -225,7 +226,7 @@ export const getMainMenu = () => {
           isMac ? ['Cmd+Y'] : ['Ctrl+H'],
           () => {
             Application.instance.windows.current.viewManager.create({
-              url: `${WEBUI_BASE_URL}history${WEBUI_URL_SUFFIX}`,
+              url: getWebUIURL('history'),
               active: true,
             });
           },
@@ -240,7 +241,7 @@ export const getMainMenu = () => {
           isMac ? ['Cmd+Option+B'] : ['CmdOrCtrl+Shift+O'],
           () => {
             Application.instance.windows.current.viewManager.create({
-              url: `${WEBUI_BASE_URL}bookmarks${WEBUI_URL_SUFFIX}`,
+              url: getWebUIURL('bookmarks'),
               active: true,
             });
           },
@@ -335,11 +336,11 @@ export const getMainMenu = () => {
         { role: 'zoom' },
         ...(isMac
           ? [
-            { type: 'separator' },
-            { role: 'front' },
-            { type: 'separator' },
-            { role: 'window' },
-          ]
+              { type: 'separator' },
+              { role: 'front' },
+              { type: 'separator' },
+              { role: 'window' },
+            ]
           : [{ role: 'close', accelerator: '' }]),
         { type: 'separator' },
         {

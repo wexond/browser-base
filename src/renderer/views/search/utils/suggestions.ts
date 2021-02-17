@@ -1,5 +1,5 @@
+import { networkMainChannel } from '~/common/rpc/network';
 import { IHistoryItem } from '~/interfaces';
-import { requestURL } from '~/utils';
 
 import store from '../store';
 
@@ -94,12 +94,14 @@ export const getSearchSuggestions = (filter: string) =>
 
       const data = JSON.parse(
         (
-          await requestURL(
-            store.searchEngine.keywordsUrl.replace(
-              '%s',
-              encodeURIComponent(input),
-            ),
-          )
+          await networkMainChannel
+            .getInvoker()
+            .request(
+              store.searchEngine.keywordsUrl.replace(
+                '%s',
+                encodeURIComponent(input),
+              ),
+            )
         ).data,
       );
 

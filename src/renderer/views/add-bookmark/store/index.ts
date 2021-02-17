@@ -1,22 +1,21 @@
 import { ipcRenderer } from 'electron';
-import { observable } from 'mobx';
+import { makeObservable, observable } from 'mobx';
 import { IBookmark } from '~/interfaces';
 import * as React from 'react';
 import { DialogStore } from '~/models/dialog-store';
 
 export class Store extends DialogStore {
-  @observable
-  public folders: IBookmark[] = [];
-
-  @observable
-  public dialogTitle = '';
-
   public titleRef = React.createRef<HTMLInputElement>();
 
   public bookmark: IBookmark;
 
-  @observable
-  public currentFolder: IBookmark;
+  // Observable
+
+  public folders: IBookmark[] = [];
+
+  public dialogTitle = '';
+
+  public currentFolder: IBookmark = null;
 
   public constructor() {
     super();
@@ -25,6 +24,12 @@ export class Store extends DialogStore {
       this.folders = await ipcRenderer.invoke('bookmarks-get-folders');
       this.currentFolder = this.folders.find((x) => x.static === 'main');
     })();
+
+    makeObservable(this, {
+      folders: observable,
+      dialogTitle: observable,
+      currentFolder: observable,
+    });
 
     ipcRenderer.on('data', async (e, data) => {
       const { bookmark, title, url, favicon } = data;

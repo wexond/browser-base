@@ -3,6 +3,7 @@ const { getConfig, dev } = require('./webpack.config.base');
 const { spawn, execSync } = require('child_process');
 const CopyPlugin = require('copy-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 let terser = require('terser');
 /* eslint-enable */
@@ -12,7 +13,7 @@ let electronProcess;
 const mainConfig = getConfig({
   target: 'electron-main',
 
-  devtool: dev ? 'inline-source-map' : 'none',
+  devtool: dev ? 'inline-source-map' : false,
 
   watch: dev,
 
@@ -21,15 +22,16 @@ const mainConfig = getConfig({
   },
 
   plugins: [
-    // new BundleAnalyzerPlugin(),
     new CopyPlugin({
       patterns: [
         {
           from:
             'node_modules/@cliqz/adblocker-electron-preload/dist/preload.cjs.js',
           to: 'preload.js',
-          transform: (fileContent, path) => {
-            return terser.minify(fileContent.toString()).code.toString();
+          transform: async (fileContent, path) => {
+            return (
+              await terser.minify(fileContent.toString())
+            ).code.toString();
           },
         },
       ],
@@ -38,9 +40,9 @@ const mainConfig = getConfig({
 });
 
 const preloadConfig = getConfig({
-  target: 'electron-renderer',
+  target: 'web',
 
-  devtool: 'none',
+  devtool: false,
 
   watch: dev,
 

@@ -1,4 +1,4 @@
-import { observable, computed, action, toJS } from 'mobx';
+import { observable, computed, action, toJS, makeObservable } from 'mobx';
 import { ISettings, IFavicon, ITheme, IBookmark } from '~/interfaces';
 import { getTheme } from '~/utils/themes';
 import { PreloadDatabase } from '~/preloads/models/database';
@@ -7,13 +7,14 @@ import * as React from 'react';
 import { Textfield } from '~/renderer/components/Textfield';
 
 export class Store {
+  public faviconsDb = new PreloadDatabase<IFavicon>('favicons');
+
+  public nameInputRef = React.createRef<Textfield>();
+
+  public urlInputRef = React.createRef<Textfield>();
+
   @observable
   public settings: ISettings = { ...(window as any).settings };
-
-  @computed
-  public get theme(): ITheme {
-    return getTheme(this.settings.theme);
-  }
 
   @observable
   public list: IBookmark[] = [];
@@ -45,21 +46,6 @@ export class Store {
   @observable
   private _dialogVisible = false;
 
-  @computed
-  public get dialogVisible() {
-    return this._dialogVisible;
-  }
-
-  public set dialogVisible(value: boolean) {
-    if (!value) {
-      this.nameInputRef.current.value = '';
-    }
-
-    this.menuVisible = false;
-
-    this._dialogVisible = value;
-  }
-
   public showDialog(content: 'edit' | 'new-folder' | 'rename-folder') {
     this.dialogContent = content;
     this.dialogVisible = true;
@@ -78,6 +64,11 @@ export class Store {
 
   @observable
   public dialogContent: 'edit' | 'new-folder' | 'rename-folder' = 'new-folder';
+
+  @observable
+  public currentBookmark: IBookmark = null;
+
+  // Computed
 
   @computed
   public get visibleItems() {
@@ -99,16 +90,39 @@ export class Store {
       });
   }
 
-  @observable
-  public currentBookmark: IBookmark;
+  @computed
+  public get dialogVisible() {
+    return this._dialogVisible;
+  }
 
-  public faviconsDb = new PreloadDatabase<IFavicon>('favicons');
+  public set dialogVisible(value: boolean) {
+    if (!value) {
+      this.nameInputRef.current.value = '';
+    }
 
-  public nameInputRef = React.createRef<Textfield>();
+    this.menuVisible = false;
 
-  public urlInputRef = React.createRef<Textfield>();
+    this._dialogVisible = value;
+  }
+
+  @computed
+  public get theme(): ITheme {
+    return getTheme(this.settings.theme);
+  }
+
+  @computed
+  public get path() {
+    return this.getFolderPath(this.currentFolder);
+  }
+
+  @computed
+  public get folders() {
+    return this.list.filter((x) => x.isFolder);
+  }
 
   public constructor() {
+    makeObservable(this);
+
     (window as any).updateSettings = (settings: ISettings) => {
       this.settings = { ...this.settings, ...settings };
     };
@@ -127,16 +141,6 @@ export class Store {
     window.addEventListener('mousedown', () => {
       this.menuVisible = false;
     });
-  }
-
-  @computed
-  public get path() {
-    return this.getFolderPath(this.currentFolder);
-  }
-
-  @computed
-  public get folders() {
-    return this.list.filter((x) => x.isFolder);
   }
 
   public resetLoadedItems(): void {
@@ -171,10 +175,7 @@ export class Store {
     }
     this.list = this.list.filter((x) => !ids.includes(x._id));
 
-    ipcRenderer.send(
-      'bookmarks-remove',
-      toJS(ids, { recurseEverything: true }),
-    );
+    ipcRenderer.send('bookmarks-remove', toJS(ids));
   }
 
   public async addItem(item: IBookmark) {
@@ -187,11 +188,7 @@ export class Store {
   public async updateItem(id: string, change: IBookmark) {
     const index = this.list.indexOf(this.list.find((x) => x._id === id));
     this.list[index] = { ...this.list[index], ...change };
-    ipcRenderer.send(
-      'bookmarks-update',
-      id,
-      toJS(change, { recurseEverything: true }),
-    );
+    ipcRenderer.send('bookmarks-update', id, toJS(change));
   }
 
   @action

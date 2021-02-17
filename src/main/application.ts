@@ -11,6 +11,8 @@ import { getMainMenu } from './menus/main';
 import { runAutoUpdaterService } from './services';
 import { DialogsService } from './services/dialogs-service';
 import { requestAuth } from './dialogs/auth';
+import { NetworkServiceHandler } from './network/network-service-handler';
+import { ExtensionServiceHandler } from './extension-service-handler';
 
 export class Application {
   public static instance = new Application();
@@ -41,6 +43,7 @@ export class Application {
             const ext = extname(path);
 
             if (ext === '.html') {
+              this.windows.current.win.focus();
               this.windows.current.viewManager.create({
                 url: `file:///${path}`,
                 active: true,
@@ -49,6 +52,7 @@ export class Application {
           }
           return;
         } else if (isURL(path)) {
+          this.windows.current.win.focus();
           this.windows.current.viewManager.create({
             url: prefixHttp(path),
             active: true,
@@ -84,6 +88,10 @@ export class Application {
 
   private async onReady() {
     await app.whenReady();
+
+    new ExtensionServiceHandler();
+
+    NetworkServiceHandler.get();
 
     checkFiles();
 

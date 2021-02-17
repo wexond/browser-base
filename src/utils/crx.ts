@@ -1,8 +1,5 @@
 import { createHash } from 'crypto';
 
-import latin1 = require('crypto-js/enc-latin1');
-import sha256 = require('crypto-js/sha256');
-
 function calcLength(a: number, b: number, c: number, d: number) {
   let length = 0;
   length += a << 0;
@@ -57,8 +54,8 @@ function getPublicKeyFromProtoBuf(
     return val;
   }
 
-  const publicKeys = [];
-  let crxIdBin;
+  const publicKeys: string[] = [];
+  let crxIdBin: Buffer | undefined;
   while (startOffset < endOffset) {
     const key = getvarint();
     const length = getvarint();
@@ -127,12 +124,17 @@ function getPublicKeyFromProtoBuf(
     console.warn('proto: Did not find crx_id');
     return null;
   }
-  const crxIdHex = latin1.parse(getBinaryString(crxIdBin, 0, 16)).toString();
+  const crxIdHex = Buffer.from(
+    getBinaryString(crxIdBin, 0, 16),
+    'binary',
+  ).toString('hex');
 
   for (let i = 0; i < publicKeys.length; ++i) {
-    const sha256sum = sha256(latin1.parse(publicKeys[i])).toString();
+    const publicKeyBin = Buffer.from(publicKeys[i], 'binary');
+    const sha256sum = createHash('sha256').update(publicKeyBin).digest('hex');
+
     if (sha256sum.slice(0, 32) === crxIdHex) {
-      return Buffer.from(publicKeys[i], 'binary');
+      return publicKeyBin;
     }
   }
   console.warn('proto: None of the public keys matched with crx_id');
@@ -183,8 +185,7 @@ export const parseCrx = (buf: Buffer) => {
 
   const crxId = createHash('sha256')
     .update(publicKey)
-    .digest()
-    .toString('hex')
+    .digest('hex')
     .split('')
     .map((x) => (parseInt(x, 16) + 0x0a).toString(26))
     .join('')

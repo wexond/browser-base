@@ -3,30 +3,54 @@
 </p>
 
 <div align="center">
-  <h1>Wexond</h1>
+  <h1>Wexond Browser Base</h1>
 
 [![Actions Status](https://github.com/wexond/desktop/workflows/Build/badge.svg)](https://github.com/wexond/desktop/actions)
-[![Downloads](https://img.shields.io/github/downloads/wexond/desktop/total.svg?style=flat-square)](https://github.com/wexond/desktop/releases)
+[![Downloads](https://img.shields.io/github/downloads/wexond/desktop/total.svg?style=flat-square)](https://wexond.net)
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fwexond%2Fwexond.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fwexond%2Fwexond?ref=badge_shield)
 [![PayPal](https://img.shields.io/badge/PayPal-Donate-brightgreen?style=flat-square)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=VCPPFUAL4R6M6&source=url)
 [![Discord](https://discordapp.com/api/guilds/307605794680209409/widget.png?style=shield)](https://discord.gg/P7Vn4VX)
 
-Wexond is an extensible and privacy-focused web browser with a totally different user experience, built on top of `Electron` and `React`. It aims to be fast, private, beautiful, extensible and functional.
+Wexond Base is a modern web browser, built on top of modern web technologies such as `Electron` and `React`, that can also be used as a framework to create a custom web browser (see the [License](#license) section).
 
 </div>
+
+# Table of Contents:
+- [Motivation](#motivation)
+- [Features](#features)
+- [Screenshots](#screenshots)
+- [Downloads](#downloads)
+- [Contributing](#contributing)
+- [Development](#development)
+  - [Running](#running)
+- [Documentation](#documentation)
+- [License](#license)
+
+# Motivation
+
+Compiling and editing Chromium directly may be challenging and time consuming, so we decided to build Wexond with modern web technologies. Hence, the development effort and time is greatly reduced. Either way Firefox is based on Web Components and Chrome implements new dialogs in WebUI (which essentially is hosted in WebContents).
 
 # Features
 
 - **Wexond Shield** - Browse the web without any ads and don't let websites to track you. Thanks to the Wexond Shield powered by [Cliqz](https://github.com/cliqz-oss/adblocker), websites can load even 8 times faster!
 - **Chromium without Google services and low resources usage** - Since Wexond uses Electron under the hood which is based on only several and the most important Chromium components, it's not bloated with redundant Google tracking services and others.
-- **Beautiful and modern UI**
 - **Fast and fluent UI** - The animations are really smooth and their timings are perfectly balanced.
 - **Highly customizable new tab page** - Customize almost an every aspect of the new tab page!
 - **Customizable browser UI** - Choose whether Wexond should have compact or normal UI.
 - **Tab groups** - Easily group tabs, so it's hard to get lost.
 - **Scrollable tabs**
 - **Partial support for Chrome extensions** - Install some extensions directly from Chrome Web Store\* (see [#110](https://github.com/wexond/wexond/issues/110)) (WIP)
-- **Packages** - Extend Wexond for your needs, by installing or developing your own packages and themes\* ([#147](https://github.com/wexond/wexond/issues/147)) (WIP)
+
+## Other basic features
+
+- Downloads popup with currently downloaded items (download manager WebUI page is WIP)
+- History manager
+- Bookmarks bar & manager
+- Settings
+- Find in page
+- Dark and light theme
+- Omnibox with autocomplete algorithm similar to Chromium
+- State of the art tab system
 
 # Screenshots
 
@@ -47,55 +71,50 @@ UI compact variant:
 
 # Contributing
 
-If you have found any bugs or just want to see some new features in Wexond, feel free to open an issue. We're open to any suggestions. Bug reports would be really helpful for us and appreciated very much. Wexond is in heavy development and some bugs may occur. Also, please don't hesitate to open a pull request. This is really important to us and for the further development of this project.
+If you have found any bugs or just want to see some new features in Wexond, feel free to open an issue. Every suggestion is very valuable for us, as they help us improve the browsing experience. Also, please don't hesitate to open a pull request. This is really important to us and for the further development of this project.
+
+By opening a pull request, you agree to the conditions of the [Contributor License Agreement](cla.md).
+
+# Development
 
 ## Running
 
 Before running Wexond, please ensure you have **latest** [`Node.js`](https://nodejs.org/en/) and [`Yarn`](https://classic.yarnpkg.com/en/docs/install/#windows-stable) installed on your machine.
 
-When running on Windows, make sure you have build tools installed. You can install them by running this command as **administrator**:
+### Windows
+
+Make sure you have build tools installed. You can install them by running this command as **administrator**:
 
 ```bash
 $ npm i -g windows-build-tools
 ```
 
-Firstly, run this command to install all needed dependencies. If you have encountered any problems, please report it.
-
 ```bash
-$ yarn
+$ yarn # Install needed depedencies.
+$ yarn rebuild # Rebuild native modules using Electron headers.
+$ yarn dev # Run Wexond in development mode
 ```
 
-After a successful installation, the native modules need to be rebuilt using Electron headers. To do this, run:
+### More commands
 
 ```bash
-$ npm run rebuild
+$ yarn compile-win32 # Package Wexond for Windows
+$ yarn compile-linux # Package Wexond for Linux
+$ yarn compile-darwin # Package Wexond for macOS
+$ yarn lint # Runs linter
+$ yarn lint-fix # Runs linter and automatically applies fixes
 ```
 
-The given command below will run Wexond in the development mode.
-
-```bash
-$ npm run dev
-```
+More commands can be found in [`package.json`](package.json).
 
 # Documentation
 
 Guides and the API reference are located in [`docs`](docs) directory.
 
-### Sponsors
+# License
 
-[![Sponsors](https://opencollective.com/wexond/tiers/sponsor.svg?avatarHeight=48)](https://opencollective.com/wexond)
+This project is licensed under [GPL-3](LICENSE) and an additional license under [PATENTS](PATENTS) file.
 
-### Backers
-
-[![Backers](https://opencollective.com/wexond/tiers/backer.svg?avatarHeight=48)](https://opencollective.com/wexond)
-
-## License
+#### To acquire a license for commercial or proprietary purposes, please contact me on sentialx@gmail.com
 
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fwexond%2Fwexond.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fwexond%2Fwexond?ref=badge_large)
-
-# FAQ
-
-## Why Electron?
-
-Wexond has been hated by many people for using Electron by saying things like it's a web browser inside a web browser.
-It's somewhat true, but technically it doesn't matter (also please keep in mind that browsers like Firefox also have the UI built with web technologies). It doesn't make the browser any slower or heavier, it's rather the opposite based on Wexond resources usage compared to Chrome. Choosing Electron was the best option to build the browser. We can build the UI however we want and make the customization even better. We don't have enough resources to build Chromium for weeks and edit almost 25 million lines of code and search for weeks for example the code responsible for changing button icons. Instead we chose Electron which uses only several Chromium components required to properly display the external content without any of the Google services, which makes the browser much lighter. Despite using only some part of Chromium, it doesn't really affect on the browser functionalities. We can implement all of the Chromium features except the Google services.

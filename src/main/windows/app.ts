@@ -26,9 +26,11 @@ export class AppWindow {
       backgroundColor: '#ffffff',
       webPreferences: {
         plugins: true,
+        // TODO: enable sandbox, contextIsolation and disable nodeIntegration to improve security
         nodeIntegration: true,
         contextIsolation: false,
         javascript: true,
+        // TODO: get rid of the remote module in renderers
         enableRemoteModule: true,
       },
       icon: resolve(
@@ -116,7 +118,7 @@ export class AppWindow {
           type: 'question',
           title: `Quit ${app.name}?`,
           message: `Quit ${app.name}?`,
-          detail: `You have opened ${this.viewManager.views.size} tabs.`,
+          detail: `You have ${this.viewManager.views.size} tabs open.`,
           buttons: ['Close', 'Cancel'],
         });
 
@@ -217,9 +219,13 @@ export class AppWindow {
   }
 
   public updateTitle() {
-    const { title } = this.viewManager.selected;
+    const { selected } = this.viewManager;
+    if (!selected) return;
+
     this.win.setTitle(
-      title.trim() === '' ? app.name : `${title} - ${app.name}`,
+      selected.title.trim() === ''
+        ? app.name
+        : `${selected.title} - ${app.name}`,
     );
   }
 }

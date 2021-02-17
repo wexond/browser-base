@@ -1,4 +1,4 @@
-import { observable, action } from 'mobx';
+import { observable, action, makeObservable } from 'mobx';
 
 import { IFormFillData } from '~/interfaces';
 import { PreloadDatabase } from '~/preloads/models/database';
@@ -22,9 +22,11 @@ export class AutoFillStore {
   public menuLeft = 0;
 
   @observable
-  public selectedItem: IFormFillData;
+  public selectedItem: IFormFillData = null;
 
   public constructor() {
+    makeObservable(this);
+
     this.load();
 
     window.addEventListener('message', ({ data }) => {

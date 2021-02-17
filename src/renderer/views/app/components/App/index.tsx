@@ -1,5 +1,4 @@
 import { observer } from 'mobx-react-lite';
-import { hot } from 'react-hot-loader/root';
 import * as React from 'react';
 import { ThemeProvider } from 'styled-components';
 
@@ -19,25 +18,26 @@ import {
 } from '~/constants/design';
 
 const onAppLeave = () => {
-  store.barHideTimer = setTimeout(
-    function () {
-      if (Object.keys(store.dialogsVisibility).some(k => store.dialogsVisibility[k])) {
-        onAppLeave()
-      } else {
-        store.titlebarVisible = false;
-      }
-    },
-    500
-  );
-}
+  store.barHideTimer = setTimeout(function () {
+    if (
+      Object.keys(store.dialogsVisibility).some(
+        (k) => store.dialogsVisibility[k],
+      )
+    ) {
+      onAppLeave();
+    } else {
+      store.titlebarVisible = false;
+    }
+  }, 500);
+};
 
 const onAppEnter = () => {
   clearTimeout(store.barHideTimer);
-}
+};
 
 const onLineEnter = () => {
   store.titlebarVisible = true;
-}
+};
 
 const App = observer(() => {
   return (
@@ -55,7 +55,13 @@ const App = observer(() => {
         tabHeight: store.isCompact ? COMPACT_TAB_HEIGHT : DEFAULT_TAB_HEIGHT,
       }}
     >
-      <StyledApp onMouseOver={store.isFullscreen ? onAppEnter : undefined} onMouseLeave={store.isFullscreen ? onAppLeave : undefined} style={{ height: !store.isFullscreen || store.titlebarVisible ? null : 0 }}>
+      <StyledApp
+        onMouseOver={store.isFullscreen ? onAppEnter : undefined}
+        onMouseLeave={store.isFullscreen ? onAppLeave : undefined}
+        style={{
+          height: !store.isFullscreen || store.titlebarVisible ? null : 0,
+        }}
+      >
         <UIStyle />
         <Titlebar />
         {store.settings.object.topBarVariant === 'default' && <Toolbar />}
@@ -69,4 +75,4 @@ const App = observer(() => {
   );
 });
 
-export default hot(App);
+export default App;

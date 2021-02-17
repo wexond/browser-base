@@ -1,8 +1,8 @@
-import { observable, computed } from 'mobx';
+import { observable, computed, makeObservable } from 'mobx';
 import { ISettings, ITheme, IVisitedItem } from '~/interfaces';
 import { getTheme } from '~/utils/themes';
-import { requestURL } from '~/utils/network';
 import { INewsItem } from '~/interfaces/news-item';
+import { networkMainChannel } from '~/common/rpc/network';
 
 type NewsBehavior = 'on-scroll' | 'always-visible' | 'hidden';
 export type Preset = 'focused' | 'inspirational' | 'informational' | 'custom';
@@ -37,7 +37,8 @@ export class Store {
 
   @computed
   public get fullSizeImage() {
-    return this.newsBehavior === 'on-scroll' || this.newsBehavior === 'hidden';
+    // return this.newsBehavior === 'on-scroll' || this.newsBehavior === 'hidden';
+    return true;
   }
 
   @observable
@@ -138,6 +139,8 @@ export class Store {
   public topSites: IVisitedItem[] = [];
 
   public constructor() {
+    makeObservable(this);
+
     (window as any).updateSettings = (settings: ISettings) => {
       this.settings = { ...this.settings, ...settings };
     };
@@ -167,13 +170,13 @@ export class Store {
 
     this.loadTopSites();
 
-    window.onscroll = () => {
-      this.updateNews();
-    };
+    // window.onscroll = () => {
+    //   this.updateNews();
+    // };
 
-    window.onresize = () => {
-      this.updateNews();
-    };
+    // window.onresize = () => {
+    //   this.updateNews();
+    // };
   }
 
   public async loadImage() {
@@ -237,7 +240,7 @@ export class Store {
 
   public async loadNews() {
     try {
-      const { data } = await requestURL('http://80.211.255.51:7000/news'); // ?lang=
+      const { data } = await networkMainChannel.getInvoker().request(''); // ?lang=
       const json = JSON.parse(data);
 
       if (json.articles) {
