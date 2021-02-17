@@ -51,31 +51,7 @@ const BrowserActions = observer(() => {
   );
 });
 
-const onShieldContextMenu = (e: React.MouseEvent<HTMLDivElement>) => {
-  const menu = remote.Menu.buildFromTemplate([
-    {
-      checked: store.settings.object.shield,
-      label: 'Enabled',
-      type: 'checkbox',
-      click: () => {
-        store.settings.object.shield = !store.settings.object.shield;
-        store.settings.save();
-      },
-    },
-  ]);
-
-  menu.popup();
-};
-
 export const RightButtons = observer(() => {
-  const { selectedTab } = store.tabs;
-
-  let blockedAds = 0;
-
-  if (selectedTab) {
-    blockedAds = selectedTab.blockedAds;
-  }
-
   return (
     <Buttons>
       <BrowserActions />
@@ -86,14 +62,6 @@ export const RightButtons = observer(() => {
           <Separator />
         </>
       )}
-      <ToolbarButton
-        size={16}
-        badge={store.settings.object.shield && blockedAds > 0}
-        badgeText={blockedAds.toString()}
-        icon={ICON_SHIELD}
-        opacity={store.settings.object.shield ? 0.87 : 0.54}
-        onContextMenu={onShieldContextMenu}
-      ></ToolbarButton>
 
       {store.downloadsButtonVisible && (
         <ToolbarButton
