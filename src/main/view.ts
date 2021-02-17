@@ -17,6 +17,7 @@ import {
 import { TabEvent } from '~/interfaces/tabs';
 import { Queue } from '~/utils/queue';
 import { Application } from './application';
+import { getUserAgentForURL } from './user-agent';
 
 interface IAuthInfo {
   url: string;
@@ -72,11 +73,10 @@ export class View {
 
     this.incognito = incognito;
 
-    // USER-AGENT:
-    this.webContents.userAgent = this.webContents.userAgent
-      .replace(/ Wexond\\?.([^\s]+)/g, '')
-      .replace(/ Electron\\?.([^\s]+)/g, '')
-      .replace(/Chrome\\?.([^\s]+)/g, 'Chrome/87.0.4280.141');
+    this.webContents.userAgent = getUserAgentForURL(
+      this.webContents.userAgent,
+      '',
+    );
 
     (this.webContents as any).windowId = window.win.id;
 
@@ -154,6 +154,17 @@ export class View {
       this.emitEvent('load-commit', ...args);
       this.updateURL(this.webContents.getURL());
     });
+
+    this.webContents.on(
+      'did-start-navigation',
+      (e, url, isInPlace, isMainFrame) => {
+        if (!isMainFrame) return;
+        const newUA = getUserAgentForURL(this.webContents.userAgent, url);
+        if (this.webContents.userAgent !== newUA) {
+          this.webContents.userAgent = newUA;
+        }
+      },
+    );
 
     this.webContents.addListener(
       'new-window',
