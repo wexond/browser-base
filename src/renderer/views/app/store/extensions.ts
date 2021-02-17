@@ -1,12 +1,13 @@
 /* eslint @typescript-eslint/camelcase: 0 */
 
-import { makeObservable, observable } from 'mobx';
+import { action, makeObservable, observable } from 'mobx';
 import { join } from 'path';
 
 import { IBrowserAction } from '../models';
 import { promises } from 'fs';
 import { ipcRenderer } from 'electron';
 import store from '.';
+import { extensionMainChannel } from '~/common/rpc/extensions';
 
 export class ExtensionsStore {
   public browserActions: IBrowserAction[] = [];
@@ -20,6 +21,7 @@ export class ExtensionsStore {
       browserActions: observable,
       defaultBrowserActions: observable,
       currentlyToggledPopup: observable,
+      uninstallExtension: action,
     });
 
     this.load();
@@ -86,5 +88,16 @@ export class ExtensionsStore {
     );
 
     await Promise.all(extensions.map((x) => this.loadExtension(x)));
+  }
+
+  uninstallExtension(id: string) {
+    this.browserActions = this.browserActions.filter(
+      (x) => x.extensionId !== id,
+    );
+    this.defaultBrowserActions = this.defaultBrowserActions.filter(
+      (x) => x.extensionId !== id,
+    );
+
+    extensionMainChannel.getInvoker().uninstall(id);
   }
 }
