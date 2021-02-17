@@ -37,7 +37,8 @@ export class Store {
 
   @computed
   public get fullSizeImage() {
-    return this.newsBehavior === 'on-scroll' || this.newsBehavior === 'hidden';
+    // return this.newsBehavior === 'on-scroll' || this.newsBehavior === 'hidden';
+    return true;
   }
 
   @observable
@@ -169,13 +170,13 @@ export class Store {
 
     this.loadTopSites();
 
-    window.onscroll = () => {
-      this.updateNews();
-    };
+    // window.onscroll = () => {
+    //   this.updateNews();
+    // };
 
-    window.onresize = () => {
-      this.updateNews();
-    };
+    // window.onresize = () => {
+    //   this.updateNews();
+    // };
   }
 
   public async loadImage() {

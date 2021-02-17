@@ -42,12 +42,12 @@ export const GlobalNavigationDrawer = () => {
       <MenuItem name="bookmarks" icon={ICON_BOOKMARKS}>
         Bookmarks
       </MenuItem>
-      <MenuItem name="downloads" icon={ICON_DOWNLOAD}>
+      {/* <MenuItem name="downloads" icon={ICON_DOWNLOAD}>
         Downloads
       </MenuItem>
       <MenuItem name="extensions" icon={ICON_EXTENSIONS}>
         Extensions
-      </MenuItem>
+      </MenuItem> */}
     </NavigationDrawer>
   );
 };
