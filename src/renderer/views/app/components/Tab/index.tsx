@@ -238,7 +238,7 @@ const Content = observer(({ tab }: { tab: ITab }) => {
       )}
       {!tab.isPinned && (
         <StyledTitle isIcon={tab.isIconSet} selected={tab.isSelected}>
-          {tab.title}
+          {tab.isSelected && store.isCompact ? tab.url : tab.title}
         </StyledTitle>
       )}
       <ExpandedVolume tab={tab} />
