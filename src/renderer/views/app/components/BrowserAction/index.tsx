@@ -4,6 +4,7 @@ import { ToolbarButton } from '../ToolbarButton';
 import { IBrowserAction } from '../../models';
 import { ipcRenderer, remote } from 'electron';
 import store from '../../store';
+import { extensionMainChannel } from '~/common/rpc/extensions';
 
 interface Props {
   data: IBrowserAction;
@@ -62,11 +63,9 @@ const onContextMenu = (data: IBrowserAction) => (
     {
       label: 'Inspect background page',
       click: () => {
-        ipcRenderer.invoke(
-          `inspect-extension`,
-          store.isIncognito,
-          data.extensionId,
-        );
+        extensionMainChannel
+          .getInvoker()
+          .inspectBackgroundPage(data.extensionId);
       },
     },
   ]);

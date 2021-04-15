@@ -2,6 +2,8 @@ import { ipcMain, app, webContents } from 'electron';
 import { setIpcMain } from '@wexond/rpc-electron';
 setIpcMain(ipcMain);
 
+require('@electron/remote/main').initialize();
+
 if (process.env.NODE_ENV === 'development') {
   require('source-map-support').install();
 }
@@ -67,3 +69,11 @@ ipcMain.handle(
     }
   },
 );
+
+// We need to prevent extension background pages from being garbage collected.
+const backgroundPages: Electron.WebContents[] = [];
+
+app.on('web-contents-created', (e, webContents) => {
+  if (webContents.getType() === 'backgroundPage')
+    backgroundPages.push(webContents);
+});

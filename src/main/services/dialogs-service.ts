@@ -66,6 +66,7 @@ export class DialogsService {
         contextIsolation: false,
         enableRemoteModule: true,
         webviewTag: true,
+        worldSafeExecuteJavaScript: false,
       },
     });
 

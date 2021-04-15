@@ -68,6 +68,7 @@ export class View {
         nativeWindowOpen: true,
         webSecurity: true,
         javascript: true,
+        worldSafeExecuteJavaScript: false,
       },
     });
 
