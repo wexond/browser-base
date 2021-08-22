@@ -40,3 +40,9 @@ jobs:
           MAC_CERTS_PASSWORD: ${{ secrets.mac_certs_password }}
 
           RELEASE: ${{ contains(steps.log.outputs.message, 'bump version') }}
+          
+      
+      - uses: actions/upload-artifact@v2
+        with:
+          name: my-artifact
+          path: ./
