@@ -763,12 +763,7 @@
     "@types/node" "*"
     form-data "^3.0.0"
 
-"@types/node@*":
-  version "14.0.11"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.0.11.tgz#61d4886e2424da73b7b25547f59fdcb534c165a3"
-  integrity sha512-lCvvI24L21ZVeIiyIUHZ5Oflv1hhHQ5E1S25IRlKIXaRkVgmXpJMI3wUJkmym2bTbCe+WoIibQnMVAU3FguaOg==
-
-"@types/node@15.12.5":
+"@types/node@*", "@types/node@15.12.5":
   version "15.12.5"
   resolved "https://registry.nlark.com/@types/node/download/@types/node-15.12.5.tgz#9a78318a45d75c9523d2396131bd3cca54b2d185"
   integrity sha1-mngxikXXXJUj0jlhMb08ylSy0YU=
@@ -2775,10 +2770,10 @@ electron-updater@4.3.9:
     lodash.isequal "^4.5.0"
     semver "^7.3.5"
 
-electron@13.1.4:
-  version "13.1.4"
-  resolved "https://registry.nlark.com/electron/download/electron-13.1.4.tgz?cache=0&sync_timestamp=1625174434655&other_urls=https%3A%2F%2Fregistry.nlark.com%2Felectron%2Fdownload%2Felectron-13.1.4.tgz#6d20d932a0651c3cba9f09a3d08cbaf5b69aa84b"
-  integrity sha1-bSDZMqBlHDy6nwmj0Iy69baaqEs=
+electron@13.3.0:
+  version "13.3.0"
+  resolved "https://registry.yarnpkg.com/electron/-/electron-13.3.0.tgz#5f4f245723dd50fcd2c3d386a1d66fe748af404f"
+  integrity sha512-d/BvOLDjI4i7yf9tqCuLL2fFGA2TrM/D9PyRpua+rJolG0qrwp/FohP02L0m+44kmPpofIo4l3NPwLmzyKKimA==
   dependencies:
     "@electron/get" "^1.0.1"
     "@types/node" "^14.6.2"
