@@ -113,8 +113,4 @@ Guides and the API reference are located in [`docs`](docs) directory.
 
 # License
 
-This project is licensed under [GPL-3](LICENSE) and an additional license under [PATENTS](PATENTS) file.
-
-#### To acquire a license for commercial or proprietary purposes, please contact me on sentialx@gmail.com
-
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fwexond%2Fwexond.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fwexond%2Fwexond?ref=badge_large)
+#### Every usage of this project resources (code, graphics etc.) must be consulted with its author (sentialx@gmail.com).
