@@ -317,7 +317,7 @@ export default observer(({ tab }: { tab: ITab }) => {
             : defaultColor,
           borderColor:
             tab.isSelected && tab.tabGroupId !== -1 && !store.isCompact
-              ? tab.tabGroup.color
+              ? tab.tabGroup?.color
               : 'transparent',
         }}
       >
