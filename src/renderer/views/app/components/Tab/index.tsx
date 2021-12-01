@@ -120,6 +120,7 @@ const onContextMenu = (tab: ITab) => () => {
     {
       label: 'Add to a new group',
       click: () => {
+        tab.removeFromGroup();
         const tabGroup = store.tabGroups.addGroup();
         tab.tabGroupId = tabGroup.id;
         store.tabs.updateTabsBounds(true);
