@@ -3,14 +3,13 @@ import { BrowserWindow } from 'electron';
 import { Application } from '../application';
 
 export const showFindDialog = (browserWindow: BrowserWindow) => {
-  const appWindow = Application.instance.windows.fromBrowserWindow(
-    browserWindow,
-  );
+  const appWindow =
+    Application.instance.windows.fromBrowserWindow(browserWindow);
 
   const dialog = Application.instance.dialogs.show({
     name: 'find',
     browserWindow,
-    devtools: true,
+    devtools: false,
     getBounds: () => {
       const { width } = browserWindow.getContentBounds();
       return {
