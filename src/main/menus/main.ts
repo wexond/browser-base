@@ -376,5 +376,26 @@ export const getMainMenu = () => {
     }),
   );
 
+  // Ctrl+numadd - Ctrl+=
+  template[0].submenu = template[0].submenu.concat(
+    createMenuItem(['CmdOrCtrl+numadd', 'CmdOrCtrl+='], () => {
+      Application.instance.windows.current.viewManager.changeZoom('in');
+    }),
+  );
+
+  // Ctrl+numsub - Ctrl+-
+  template[0].submenu = template[0].submenu.concat(
+    createMenuItem(['CmdOrCtrl+numsub', 'CmdOrCtrl+-'], () => {
+      Application.instance.windows.current.viewManager.changeZoom('out');
+    }),
+  );
+
+  // Ctrl+0
+  template[0].submenu = template[0].submenu.concat(
+    createMenuItem(['CmdOrCtrl+0', 'CmdOrCtrl+num0'], () => {
+      Application.instance.windows.current.viewManager.resetZoom();
+    }),
+  );
+
   return Menu.buildFromTemplate(template);
 };
