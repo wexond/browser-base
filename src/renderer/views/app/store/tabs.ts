@@ -239,7 +239,8 @@ export class TabsStore {
     requestAnimationFrame(() => {
       this.updateTabsBounds(false);
       if (this.scrollable) {
-        this.containerRef.current.scrollLeft = this.containerRef.current.scrollWidth;
+        this.containerRef.current.scrollLeft =
+          this.containerRef.current.scrollWidth;
       }
     });
 
@@ -251,7 +252,8 @@ export class TabsStore {
 
     const frame = () => {
       if (!this.scrollingToEnd) return;
-      this.containerRef.current.scrollLeft = this.containerRef.current.scrollWidth;
+      this.containerRef.current.scrollLeft =
+        this.containerRef.current.scrollWidth;
       requestAnimationFrame(frame);
     };
 
@@ -457,6 +459,33 @@ export class TabsStore {
       Math.min(left, containerWidth + TABS_PADDING),
       animation,
     );
+  }
+
+  @action
+  public setTabToGroup(tab: ITab, tabGroupId: number) {
+    const tabs = [...this.list];
+
+    const tabIndex = tabs.indexOf(tab);
+    const groupFirstTabIndex = tabs.findIndex(
+      (x) => x.tabGroupId === tabGroupId,
+    );
+
+    const groupLastTab = tabs
+      .slice()
+      .reverse()
+      .find((x) => x.tabGroupId === tabGroupId);
+    const groupLastTabIndex = tabs.indexOf(groupLastTab);
+
+    const groupTabIndex =
+      tabIndex < groupFirstTabIndex
+        ? groupFirstTabIndex - 1
+        : groupLastTabIndex + 1;
+
+    tab.tabGroupId = tabGroupId;
+    tabs.splice(tabIndex, 1);
+    tabs.splice(groupTabIndex, 0, tab);
+    this.list = tabs;
+    this.updateTabsBounds(false);
   }
 
   @action
