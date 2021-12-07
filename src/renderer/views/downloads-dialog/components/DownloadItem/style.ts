@@ -43,7 +43,7 @@ export const SecondaryText = styled.div`
 `;
 
 export const Progress = styled.div`
-  height: 100%;
+  height: 5px;
   background-color: ${BLUE_500};
   border-radius: 16px;
 `;
