@@ -3,7 +3,6 @@ import { ITheme } from '~/interfaces';
 import { DialogStyle } from '~/renderer/mixins/dialogs';
 
 export const StyledApp = styled(DialogStyle)`
-  overflow: overlay;
   padding: 8px;
   font-size: 13px;
 

@@ -5,4 +5,13 @@ export interface IDownloadItem {
   savePath?: string;
   id?: string;
   completed?: boolean;
+  paused?: boolean;
+  canceled?: boolean;
+  menuIsOpen?: boolean;
+}
+
+export interface IElectronDownloadItem {
+  item?: Electron.DownloadItem;
+  webContents?: Electron.WebContents;
+  id?: string;
 }

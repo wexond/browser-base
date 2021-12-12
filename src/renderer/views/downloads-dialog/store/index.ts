@@ -1,5 +1,5 @@
 import { ipcRenderer } from 'electron';
-import { makeObservable, observable } from 'mobx';
+import { action, makeObservable, observable } from 'mobx';
 import { IDownloadItem } from '~/interfaces';
 import { DialogStore } from '~/models/dialog-store';
 
@@ -35,6 +35,17 @@ export class Store extends DialogStore {
       i.completed = true;
     });
 
+    ipcRenderer.on('download-paused', (e, id: string) => {
+      const i = this.downloads.find((x) => x.id === id);
+      i.paused = true;
+    });
+
+    ipcRenderer.on('download-canceled', (e, id: string) => {
+      const i = this.downloads.find((x) => x.id === id);
+      i.completed = false;
+      i.canceled = true;
+    });
+
     ipcRenderer.on('max-height', (e, height) => {
       this.maxHeight = height;
     });
@@ -42,6 +53,29 @@ export class Store extends DialogStore {
 
   public async init() {
     this.downloads = await ipcRenderer.invoke('get-downloads');
+  }
+
+  @action
+  public openMenu(item: IDownloadItem) {
+    const state = item.menuIsOpen;
+    this.closeAllDownloadMenu();
+    const index = this.downloads.indexOf(
+      this.downloads.find((x) => x.id === item.id),
+    );
+
+    this.downloads[index] = {
+      ...this.downloads[index],
+      menuIsOpen: !state,
+    };
+  }
+
+  @action
+  public closeAllDownloadMenu() {
+    const downloads = this.downloads.map((download) => ({
+      ...download,
+      menuIsOpen: false,
+    }));
+    this.downloads = downloads;
   }
 }
 

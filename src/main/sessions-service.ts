@@ -5,7 +5,11 @@ import { resolve, basename, parse, extname } from 'path';
 import { Application } from './application';
 import { registerProtocol } from './models/protocol';
 import * as url from 'url';
-import { IDownloadItem, BrowserActionChangeType } from '~/interfaces';
+import {
+  IDownloadItem,
+  BrowserActionChangeType,
+  IElectronDownloadItem,
+} from '~/interfaces';
 import { parseCrx } from '~/utils/crx';
 import { pathExists } from '~/utils/files';
 import { extractZip } from '~/utils/zip';
@@ -115,6 +119,17 @@ export class SessionsService {
       receivedBytes: item.getReceivedBytes(),
       totalBytes: item.getTotalBytes(),
       savePath: item.savePath,
+      paused: item.isPaused(),
+      id,
+    });
+
+    const getElectronDownloadItem = (
+      item: Electron.DownloadItem,
+      webContents: Electron.WebContents,
+      id: string,
+    ): IElectronDownloadItem => ({
+      item,
+      webContents,
       id,
     });
 
@@ -123,6 +138,22 @@ export class SessionsService {
         ?.webContents;
 
     const downloads: IDownloadItem[] = [];
+    const electronDownloads: IElectronDownloadItem[] = [];
+
+    ipcMain.on('download-pause', (e, id) => {
+      const { item } = electronDownloads.find((x) => x.id === id);
+      item.pause();
+    });
+
+    ipcMain.on('download-resume', (e, id) => {
+      const { item } = electronDownloads.find((x) => x.id === id);
+      item.resume();
+    });
+
+    ipcMain.on('download-cancel', (e, id) => {
+      const { item } = electronDownloads.find((x) => x.id === id);
+      item.cancel();
+    });
 
     ipcMain.handle('get-downloads', () => {
       return downloads;
@@ -154,14 +185,25 @@ export class SessionsService {
       const downloadItem = getDownloadItem(item, id);
       downloads.push(downloadItem);
 
+      const electronDownloadItem = getElectronDownloadItem(
+        item,
+        webContents,
+        id,
+      );
+      electronDownloads.push(electronDownloadItem);
+
       downloadsDialog()?.send('download-started', downloadItem);
       window.send('download-started', downloadItem);
 
       item.on('updated', (event, state) => {
         if (state === 'interrupted') {
+          downloadsDialog()?.send('download-paused', id);
+          window.send('download-paused', id);
           console.log('Download is interrupted but can be resumed');
         } else if (state === 'progressing') {
           if (item.isPaused()) {
+            downloadsDialog()?.send('download-paused', id);
+            window.send('download-paused', id);
             console.log('Download is paused');
           }
         }
@@ -218,6 +260,10 @@ export class SessionsService {
             window.send('load-browserAction', extension);
           }
         } else {
+          downloadItem.completed = false;
+          downloadItem.canceled = true;
+          downloadsDialog()?.send('download-canceled', id);
+          window.send('download-canceled', id);
           console.log(`Download failed: ${state}`);
         }
       });
@@ -232,14 +278,25 @@ export class SessionsService {
       const downloadItem = getDownloadItem(item, id);
       downloads.push(downloadItem);
 
+      const electronDownloadItem = getElectronDownloadItem(
+        item,
+        webContents,
+        id,
+      );
+      electronDownloads.push(electronDownloadItem);
+
       downloadsDialog()?.send('download-started', downloadItem);
       window.send('download-started', downloadItem);
 
       item.on('updated', (event, state) => {
         if (state === 'interrupted') {
+          downloadsDialog()?.send('download-paused', id);
+          window.send('download-paused', id);
           console.log('Download is interrupted but can be resumed');
         } else if (state === 'progressing') {
           if (item.isPaused()) {
+            downloadsDialog()?.send('download-paused', id);
+            window.send('download-paused', id);
             console.log('Download is paused');
           }
         }
@@ -259,6 +316,10 @@ export class SessionsService {
 
           downloadItem.completed = true;
         } else {
+          downloadItem.completed = false;
+          downloadItem.canceled = true;
+          downloadsDialog()?.send('download-canceled', id);
+          window.send('download-canceled', id);
           console.log(`Download failed: ${state}`);
         }
       });
