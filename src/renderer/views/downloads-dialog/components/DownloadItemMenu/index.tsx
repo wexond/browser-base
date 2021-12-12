@@ -2,13 +2,34 @@ import * as React from 'react';
 import { observer } from 'mobx-react-lite';
 import { IDownloadItem } from '~/interfaces';
 import { clipboard, ipcRenderer, remote, shell } from 'electron';
-import { ICON_PAUSE, ICON_RESUME, ICON_CLOSE } from '~/renderer/constants';
+import {
+  ICON_PAUSE,
+  ICON_RESUME,
+  ICON_CLOSE,
+  ICON_CHECK,
+} from '~/renderer/constants';
 import store from '../../store';
 import {
   ContextMenu,
   ContextMenuItem,
   ContextMenuSeparator,
 } from '~/renderer/components/ContextMenu';
+
+const openItem =
+  (item: IDownloadItem) => (e: React.MouseEvent<HTMLDivElement>) => {
+    if (item.completed) {
+      shell.openPath(item.savePath);
+      store.closeAllDownloadMenu();
+      e.stopPropagation();
+    }
+  };
+
+const toggleOpenWhenDone =
+  (item: IDownloadItem) => (e: React.MouseEvent<HTMLDivElement>) => {
+    store.toggleOpenWhenDone(item);
+    store.closeAllDownloadMenu();
+    e.stopPropagation();
+  };
 
 const pauseDownload =
   (item: IDownloadItem) => (e: React.MouseEvent<HTMLDivElement>) => {
@@ -43,6 +64,22 @@ export const DownloadItemMenu = observer(
         }}
         visible={visible}
       >
+        {!item.canceled &&
+          (item.completed ? (
+            <ContextMenuItem onClick={openItem(item)} icon={' '}>
+              Open file
+            </ContextMenuItem>
+          ) : (
+            <ContextMenuItem
+              onClick={toggleOpenWhenDone(item)}
+              icon={item.openWhenDone ? ICON_CHECK : ' '}
+            >
+              Open when done
+            </ContextMenuItem>
+          ))}
+
+        {!item.canceled && <ContextMenuSeparator />}
+
         {!item.completed &&
           !item.canceled &&
           (item.paused ? (

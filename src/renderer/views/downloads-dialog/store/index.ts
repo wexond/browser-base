@@ -1,4 +1,4 @@
-import { ipcRenderer } from 'electron';
+import { ipcRenderer, shell } from 'electron';
 import { action, makeObservable, observable } from 'mobx';
 import { IDownloadItem } from '~/interfaces';
 import { DialogStore } from '~/models/dialog-store';
@@ -33,6 +33,9 @@ export class Store extends DialogStore {
     ipcRenderer.on('download-completed', (e, id: string) => {
       const i = this.downloads.find((x) => x.id === id);
       i.completed = true;
+      if (i.openWhenDone) {
+        shell.openPath(i.savePath);
+      }
     });
 
     ipcRenderer.on('download-paused', (e, id: string) => {
@@ -76,6 +79,18 @@ export class Store extends DialogStore {
       menuIsOpen: false,
     }));
     this.downloads = downloads;
+  }
+
+  @action
+  public toggleOpenWhenDone(item: IDownloadItem) {
+    const index = this.downloads.indexOf(
+      this.downloads.find((x) => x.id === item.id),
+    );
+
+    this.downloads[index] = {
+      ...this.downloads[index],
+      openWhenDone: !this.downloads[index].openWhenDone,
+    };
   }
 }
 

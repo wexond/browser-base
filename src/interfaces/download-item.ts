@@ -8,6 +8,7 @@ export interface IDownloadItem {
   paused?: boolean;
   canceled?: boolean;
   menuIsOpen?: boolean;
+  openWhenDone?: boolean;
 }
 
 export interface IElectronDownloadItem {
