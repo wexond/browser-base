@@ -3,10 +3,13 @@ import { observer } from 'mobx-react-lite';
 import { IDownloadItem } from '~/interfaces';
 import { clipboard, ipcRenderer, remote, shell } from 'electron';
 import {
+  ICON_CHECK,
   ICON_PAUSE,
   ICON_RESUME,
+  ICON_FOLDER,
+  ICON_LINK,
+  ICON_TRASH,
   ICON_CLOSE,
-  ICON_CHECK,
 } from '~/renderer/constants';
 import store from '../../store';
 import {
@@ -26,7 +29,21 @@ const openItem =
 
 const toggleOpenWhenDone =
   (item: IDownloadItem) => (e: React.MouseEvent<HTMLDivElement>) => {
-    store.toggleOpenWhenDone(item);
+    ipcRenderer.send('download-open-when-done', item.id);
+    store.closeAllDownloadMenu();
+    e.stopPropagation();
+  };
+
+const showInFolder =
+  (item: IDownloadItem) => (e: React.MouseEvent<HTMLDivElement>) => {
+    remote.shell.showItemInFolder(item.savePath);
+    store.closeAllDownloadMenu();
+    e.stopPropagation();
+  };
+
+const copyLink =
+  (item: IDownloadItem) => (e: React.MouseEvent<HTMLDivElement>) => {
+    clipboard.writeText(item.url);
     store.closeAllDownloadMenu();
     e.stopPropagation();
   };
@@ -48,6 +65,41 @@ const resumeDownload =
 const cancelDownload =
   (item: IDownloadItem) => (e: React.MouseEvent<HTMLDivElement>) => {
     ipcRenderer.send('download-cancel', item.id);
+    store.closeAllDownloadMenu();
+    e.stopPropagation();
+  };
+
+const removeDownload = (item: IDownloadItem) => {
+  ipcRenderer.send('download-remove', item.id);
+};
+
+const trashDownload =
+  (item: IDownloadItem) => (e: React.MouseEvent<HTMLDivElement>) => {
+    shell
+      .trashItem(item.savePath)
+      .then((e) => {
+        removeDownload(item);
+        console.log('Downloaded item has been deleted successfully.');
+      })
+      .catch((err) => {
+        const window = remote.getCurrentWindow();
+        const dialog = remote.dialog;
+        dialog.showMessageBox(window, {
+          title: "Couldn't Delete File",
+          buttons: ['cancel'],
+          type: 'warning',
+          message:
+            "The Action can't be compeleted, Maybe the file is open or you have no delete permission. \r\n Close the file and try again.",
+        });
+        console.log("Couldn't delete downloaded item.", err);
+      });
+    store.closeAllDownloadMenu();
+    e.stopPropagation();
+  };
+
+const removeDownloadItemFromList =
+  (item: IDownloadItem) => (e: React.MouseEvent<HTMLDivElement>) => {
+    removeDownload(item);
     store.closeAllDownloadMenu();
     e.stopPropagation();
   };
@@ -91,7 +143,30 @@ export const DownloadItemMenu = observer(
               Pause
             </ContextMenuItem>
           ))}
+        {!item.canceled && (
+          <ContextMenuItem onClick={showInFolder(item)} icon={ICON_FOLDER}>
+            Show in folder
+          </ContextMenuItem>
+        )}
+        <ContextMenuItem onClick={copyLink(item)} icon={ICON_LINK}>
+          Copy download link
+        </ContextMenuItem>
+
         <ContextMenuSeparator />
+
+        {item.completed && (
+          <ContextMenuItem onClick={trashDownload(item)} icon={ICON_TRASH}>
+            Delete file
+          </ContextMenuItem>
+        )}
+        {(item.completed || item.canceled) && (
+          <ContextMenuItem
+            onClick={removeDownloadItemFromList(item)}
+            icon={ICON_CLOSE}
+          >
+            Remove from list
+          </ContextMenuItem>
+        )}
         {!item.completed && !item.canceled && (
           <ContextMenuItem onClick={cancelDownload(item)} icon={ICON_CLOSE}>
             Cancel

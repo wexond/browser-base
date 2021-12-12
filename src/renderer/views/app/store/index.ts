@@ -216,6 +216,12 @@ export class Store {
       this.downloadsButtonVisible = true;
     });
 
+    ipcRenderer.on('download-removed', (e, id: string) => {
+      const downloads = this.downloads.filter((x) => x.id !== id);
+      this.downloadsButtonVisible = downloads.length > 0;
+      this.downloads = downloads;
+    });
+
     ipcRenderer.on('download-progress', (e, item: IDownloadItem) => {
       const index = this.downloads.findIndex((x) => x.id === item.id);
       this.downloads[index] = {

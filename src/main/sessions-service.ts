@@ -119,6 +119,7 @@ export class SessionsService {
       receivedBytes: item.getReceivedBytes(),
       totalBytes: item.getTotalBytes(),
       savePath: item.savePath,
+      url: item.getURL(),
       paused: item.isPaused(),
       id,
     });
@@ -153,6 +154,43 @@ export class SessionsService {
     ipcMain.on('download-cancel', (e, id) => {
       const { item } = electronDownloads.find((x) => x.id === id);
       item.cancel();
+    });
+
+    ipcMain.on('download-remove', (e, id) => {
+      const electronDownloadsIndex = electronDownloads.findIndex(
+        (x) => x.id === id,
+      );
+
+      const window = Application.instance.windows.findByBrowserView(
+        electronDownloads[electronDownloadsIndex]?.webContents.id,
+      );
+
+      if (electronDownloadsIndex > -1) {
+        electronDownloads.splice(electronDownloadsIndex, 1);
+      }
+
+      const downloadsIndex = downloads.findIndex((x) => x.id === id);
+      if (downloadsIndex > -1) {
+        downloads.splice(downloadsIndex, 1);
+      }
+
+      downloadsDialog()?.send('download-removed', id);
+      window?.send('download-removed', id);
+
+      if (electronDownloads.length === 0 && downloads.length === 0) {
+        Application.instance.dialogs.getDynamic('downloads-dialog').hide();
+      }
+    });
+
+    ipcMain.on('download-open-when-done', (e, id) => {
+      const index = downloads.indexOf(downloads.find((x) => x.id === id));
+
+      downloads[index].openWhenDone = !downloads[index].openWhenDone;
+
+      downloadsDialog()?.send(
+        'download-open-when-done-change',
+        downloads[index],
+      );
     });
 
     ipcMain.handle('get-downloads', () => {

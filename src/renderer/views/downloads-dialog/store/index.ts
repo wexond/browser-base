@@ -49,6 +49,20 @@ export class Store extends DialogStore {
       i.canceled = true;
     });
 
+    ipcRenderer.on('download-removed', (e, id: string) => {
+      this.downloads = this.downloads.filter((x) => x.id !== id);
+    });
+
+    ipcRenderer.on(
+      'download-open-when-done-change',
+      (e, item: IDownloadItem) => {
+        const index = this.downloads.indexOf(
+          this.downloads.find((x) => x.id === item.id),
+        );
+        this.downloads[index].openWhenDone = item.openWhenDone;
+      },
+    );
+
     ipcRenderer.on('max-height', (e, height) => {
       this.maxHeight = height;
     });
@@ -79,18 +93,6 @@ export class Store extends DialogStore {
       menuIsOpen: false,
     }));
     this.downloads = downloads;
-  }
-
-  @action
-  public toggleOpenWhenDone(item: IDownloadItem) {
-    const index = this.downloads.indexOf(
-      this.downloads.find((x) => x.id === item.id),
-    );
-
-    this.downloads[index] = {
-      ...this.downloads[index],
-      openWhenDone: !this.downloads[index].openWhenDone,
-    };
   }
 }
 
