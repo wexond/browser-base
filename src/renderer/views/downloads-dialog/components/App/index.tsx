@@ -27,9 +27,12 @@ export const App = observer(() => {
         onClick={dialogClicked}
       >
         <UIStyle />
-        {store.downloads.map((item) => (
-          <DownloadItem item={item} key={item.id}></DownloadItem>
-        ))}
+        {store.downloads
+          .slice()
+          .reverse()
+          .map((item) => (
+            <DownloadItem item={item} key={item.id}></DownloadItem>
+          ))}
       </StyledApp>
     </ThemeProvider>
   );
