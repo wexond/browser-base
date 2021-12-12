@@ -232,6 +232,7 @@ export class SessionsService {
 
       downloadsDialog()?.send('download-started', downloadItem);
       window.send('download-started', downloadItem);
+      window.send('show-download-dialog');
 
       item.on('updated', (event, state) => {
         if (state === 'interrupted') {
@@ -325,6 +326,7 @@ export class SessionsService {
 
       downloadsDialog()?.send('download-started', downloadItem);
       window.send('download-started', downloadItem);
+      window.send('show-download-dialog');
 
       item.on('updated', (event, state) => {
         if (state === 'interrupted') {
