@@ -10,7 +10,6 @@ export const StyledDownloadItem = styled.div`
   display: flex;
   align-items: center;
   position: relative;
-  overflow: hidden;
   margin-top: 8px;
   transition: 0.1s background-color, 0.1s border;
 
@@ -34,6 +33,9 @@ export const StyledDownloadItem = styled.div`
 export const Title = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
+  ${({ canceled }: { canceled?: boolean }) => css`
+    text-decoration: ${canceled ? 'line-through' : 'none'};
+  `}
 `;
 
 export const SecondaryText = styled.div`
@@ -98,8 +100,9 @@ export const MoreButton = styled.div`
   border-radius: 6px;
   transition: 0.1s background-color;
 
-  ${({ theme }: { theme?: ITheme }) => css`
+  ${({ theme, toggled }: { theme?: ITheme; toggled?: boolean }) => css`
     filter: ${theme['dialog.lightForeground'] ? 'invert(100%)' : ''};
+    background-color: ${toggled ? 'rgba(0, 0, 0, 0.08)' : 'transparent'};
   `}
 
   &:hover {

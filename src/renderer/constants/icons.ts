@@ -53,6 +53,9 @@ export const ICON_MAGNIFY_MINUS = require('~/renderer/resources/icons/magnify-mi
 export const ICON_VOLUME_HIGH = require('~/renderer/resources/icons/volume-high.svg');
 export const ICON_VOLUME_OFF = require('~/renderer/resources/icons/volume-off.svg');
 export const ICON_FULLSCREEN_EXIT = require('~/renderer/resources/icons/fullscreen-exit.svg');
+export const ICON_PAUSE = require('~/renderer/resources/icons/pause.svg');
+export const ICON_RESUME = require('~/renderer/resources/icons/play.svg');
+export const ICON_LINK = require('~/renderer/resources/icons/link.svg');
 
 export const ICON_WEATHER_DAY_CLEAR = require('~/renderer/resources/icons/weather/day/clear.png');
 export const ICON_WEATHER_DAY_FEW_CLOUDS = require('~/renderer/resources/icons/weather/day/few-clouds.png');
