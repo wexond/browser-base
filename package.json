@@ -97,7 +97,7 @@
     "tsconfig-paths-webpack-plugin": "^3.5.1",
     "typescript": "^4.3.4",
     "typescript-plugin-styled-components": "^1.6.0",
-    "webpack": "5.40.0",
+    "webpack": "5.76.0",
     "webpack-bundle-analyzer": "^4.4.2",
     "webpack-cli": "4.7.2",
     "webpack-dev-server": "^3.11.2",
